@@ -1,0 +1,45 @@
+// NobleCards Database Schema
+// PostgreSQL + Prisma
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String   @id @default(uuid())
+
+  // Account information
+  email             String   @unique
+  passwordHash      String
+  firstName         String
+  lastName          String
+
+  // Contact information
+  phone             String?  @unique
+  country           String?
+  countryCode       String?
+  gender            String?
+
+  // Account status
+  isEmailVerified   Boolean  @default(false)
+  isActive          Boolean  @default(true)
+  role              UserRole @default(USER)
+
+  // Security
+  transactionPinHash String?
+
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
