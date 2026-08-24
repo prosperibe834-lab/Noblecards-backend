@@ -1,6 +1,3 @@
-// NobleCards Database Schema
-// PostgreSQL + Prisma
-
 generator client {
   provider     = "prisma-client"
   output       = "../generated/prisma"
@@ -12,31 +9,72 @@ datasource db {
 }
 
 model User {
-  id                String   @id @default(uuid())
+  id                  String                   @id @default(uuid())
+  email               String                   @unique
+  passwordHash        String
+  firstName           String
+  lastName            String
+  phone               String?                  @unique
+  country             String?
+  countryCode         String?
+  gender              String?
+  isEmailVerified     Boolean                  @default(false)
+  isActive            Boolean                  @default(true)
+  role                UserRole                 @default(USER)
+  transactionPinHash  String?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  passwordResets      PasswordResetChallenge[]
+  pendingVerification PendingRegistration?
+  refreshSessions     RefreshSession[]
+}
 
-  // Account information
-  email             String   @unique
-  passwordHash      String
-  firstName         String
-  lastName          String
+model PendingRegistration {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  passwordHash   String
+  firstName      String
+  lastName       String
+  phone          String?
+  country        String?
+  countryCode    String?
+  gender         String?
+  otpHash        String
+  otpExpiresAt   DateTime
+  otpAttempts    Int       @default(0)
+  lastOtpSentAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  existingUserId String?   @unique
+  existingUser   User?     @relation(fields: [existingUserId], references: [id], onDelete: Cascade)
 
-  // Contact information
-  phone             String?  @unique
-  country           String?
-  countryCode       String?
-  gender            String?
+  @@index([otpExpiresAt])
+}
 
-  // Account status
-  isEmailVerified   Boolean  @default(false)
-  isActive          Boolean  @default(true)
-  role              UserRole @default(USER)
+model PasswordResetChallenge {
+  id         String    @id @default(uuid())
+  userId     String
+  codeHash   String
+  expiresAt  DateTime
+  attempts   Int       @default(0)
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Security
-  transactionPinHash String?
+  @@index([userId, expiresAt])
+}
 
-  // Timestamps
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+model RefreshSession {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
 }
 
 enum UserRole {
