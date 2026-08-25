@@ -50,7 +50,7 @@ export class AuthService implements CanActivate {
       await transaction.pendingRegistration.delete({ where: { id: pending.id } });
       return created;
     });
-    return this.issueSession(user);
+    return this.issueSession(await this.users.refreshVerification(user));
   }
 
   async resendOtp(dto: ResendOtpDto) {
