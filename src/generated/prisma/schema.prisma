@@ -34,6 +34,9 @@ model User {
   passwordResets      PasswordResetChallenge[]
   pendingVerification PendingRegistration?
   refreshSessions     RefreshSession[]
+  wallet              Wallet?
+  deposits            Deposit[]
+  transactions        Transaction[]
 }
 
 model PendingRegistration {
@@ -82,6 +85,201 @@ model RefreshSession {
 
   @@index([userId, revokedAt])
   @@index([expiresAt])
+}
+
+model Wallet {
+  id            String          @id @default(uuid())
+  userId        String          @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balances      WalletBalance[]
+  deposits      Deposit[]
+  transactions  Transaction[]
+  ledgerEntries LedgerEntry[]
+
+  @@index([userId])
+}
+
+model Currency {
+  code           String          @id @db.VarChar(10)
+  name           String
+  symbol         String?
+  country        String?
+  region         String?
+  flag           String?
+  enabled        Boolean         @default(true)
+  depositEnabled Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  balances       WalletBalance[]
+  deposits       Deposit[]
+  transactions   Transaction[]
+  ledgerEntries  LedgerEntry[]
+
+  @@index([enabled, depositEnabled])
+}
+
+model WalletBalance {
+  id               String   @id @default(uuid())
+  walletId         String
+  currencyCode     String
+  availableBalance Decimal  @default(0.00) @db.Decimal(18, 2)
+  pendingBalance   Decimal  @default(0.00) @db.Decimal(18, 2)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  wallet           Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency         Currency @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+
+  @@unique([walletId, currencyCode])
+  @@index([walletId, currencyCode])
+}
+
+enum DepositStatus {
+  PENDING
+  PROCESSING
+  SUCCESSFUL
+  FAILED
+  CANCELLED
+  REFUNDED
+  REVERSED
+  EXPIRED
+  UNDER_REVIEW
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  SUCCESSFUL
+  FAILED
+  CANCELLED
+  REFUNDED
+  REVERSED
+  EXPIRED
+  UNDER_REVIEW
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+  FEE
+  REFUND
+  REVERSAL
+  PURCHASE
+  BONUS
+  ADJUSTMENT
+}
+
+enum PaymentProvider {
+  FLUTTERWAVE
+  MANUAL
+  INTERNAL
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CARD
+  USSD
+  MOBILE_MONEY
+  WALLET_TRANSFER
+  APPLE_PAY
+  GOOGLE_PAY
+  WISE
+  OTHER
+}
+
+enum LedgerEntryType {
+  CREDIT
+  DEBIT
+  HOLD
+  RELEASE
+  FEE
+  REFUND
+  REVERSAL
+  ADJUSTMENT
+}
+
+model Deposit {
+  id                    String          @id @default(uuid())
+  userId                String
+  walletId              String
+  currencyCode          String
+  amount                Decimal         @db.Decimal(18, 2)
+  fee                   Decimal         @default(0.00) @db.Decimal(18, 2)
+  netAmount             Decimal         @db.Decimal(18, 2)
+  exchangeRate          Decimal?        @db.Decimal(18, 8)
+  provider              PaymentProvider @default(FLUTTERWAVE)
+  providerTransactionId String?
+  providerReference     String?
+  paymentMethod         PaymentMethod?
+  country               String?
+  countryCode           String?
+  status                DepositStatus   @default(PENDING)
+  idempotencyKey        String?
+  metadata              Json?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transactionId         String?         @unique
+  transaction           Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, idempotencyKey])
+  @@index([userId, status, createdAt])
+  @@index([walletId, status])
+  @@index([provider, providerTransactionId])
+  @@index([currencyCode, status])
+}
+
+model Transaction {
+  id                    String            @id @default(uuid())
+  userId                String
+  walletId              String
+  currencyCode          String
+  type                  TransactionType   @default(DEPOSIT)
+  amount                Decimal           @db.Decimal(18, 2)
+  fee                   Decimal           @default(0.00) @db.Decimal(18, 2)
+  netAmount             Decimal           @db.Decimal(18, 2)
+  status                TransactionStatus @default(PENDING)
+  provider              PaymentProvider?
+  providerTransactionId String?
+  providerReference     String?
+  paymentMethod         PaymentMethod?
+  reference             String            @unique
+  metadata              Json?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency          @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  deposit               Deposit?
+  ledgerEntries         LedgerEntry[]
+
+  @@index([userId, status, createdAt])
+  @@index([walletId, status])
+  @@index([provider, providerTransactionId])
+}
+
+model LedgerEntry {
+  id            String          @id @default(uuid())
+  walletId      String
+  currencyCode  String
+  transactionId String?
+  type          LedgerEntryType
+  amount        Decimal         @db.Decimal(18, 2)
+  balanceBefore Decimal         @db.Decimal(18, 2)
+  balanceAfter  Decimal         @db.Decimal(18, 2)
+  reference     String?
+  reason        String?
+  createdAt     DateTime        @default(now())
+  wallet        Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency      Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transaction   Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@index([walletId, currencyCode, createdAt])
+  @@index([transactionId])
 }
 
 enum UserRole {

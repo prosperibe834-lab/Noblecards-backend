@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
 import { EmailCodeDto, EmailDto, LoginDto, RefreshDto, RegisterDto, ResendOtpDto, ResetPasswordDto } from './auth.dto';
 
 @Controller('auth')
@@ -14,9 +15,9 @@ export class AuthController {
   @Post('reset-password') resetPassword(@Body() dto: ResetPasswordDto) { return this.authService.resetPassword(dto); }
   @Post('refresh') refresh(@Body() dto: RefreshDto) { return this.authService.refresh(dto.refreshToken); }
 
-  @UseGuards(AuthService)
+  @UseGuards(AuthGuard)
   @Post('logout') logout(@Req() request: { user: { sessionId: string } }) { return this.authService.logout(request.user.sessionId); }
 
-  @UseGuards(AuthService)
+  @UseGuards(AuthGuard)
   @Get('me') me(@Req() request: { user: { userId: string } }) { return this.authService.me(request.user.userId); }
 }

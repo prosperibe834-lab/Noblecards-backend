@@ -4,7 +4,7 @@ import { diskStorage } from 'multer';
 import { randomBytes } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
-import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '../auth/auth.guard';
 import { UpdateProfileDto } from './users.dto';
 import { UsersService } from './users.service';
 
@@ -12,7 +12,7 @@ const uploadDirectory = join(process.cwd(), 'uploads', 'profile');
 mkdirSync(uploadDirectory, { recursive: true });
 
 @Controller('users/me')
-@UseGuards(AuthService)
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly users: UsersService) {}
 
