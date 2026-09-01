@@ -169,6 +169,215 @@ describe('FlutterwaveService webhook validation', () => {
       }
     }
   });
+
+  it('classifies the Flutterwave UK ACH amount limit as a validation error', async () => {
+    const originalSecretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    process.env.FLUTTERWAVE_SECRET_KEY = 'api-secret-key';
+
+    try {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          FlutterwaveService,
+          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
+            id: 'user-1',
+            email: 'alice@example.com',
+            phone: '08012345678',
+            firstName: 'Alice',
+            lastName: 'Jones',
+          }) } } },
+          { provide: WalletsService, useValue: {} },
+          { provide: CurrenciesService, useValue: {} },
+          { provide: TransactionsService, useValue: {} },
+          { provide: LedgerService, useValue: {} },
+        ],
+      }).compile();
+
+      const service = module.get<FlutterwaveService>(FlutterwaveService);
+      jest.spyOn(service as any, 'request').mockRejectedValue(new Error('Flutterwave 400: amount should be between 0 and 3,719'));
+
+      await expect(service.createGbpBankCharge({
+        amount: 4000,
+        currency: 'GBP',
+        reference: 'DPT-GB-001',
+        userId: 'user-1',
+        walletId: 'wallet-1',
+        depositId: 'deposit-3',
+      })).rejects.toThrow(/GBP bank transfer amount must be between £0 and £3,719/i);
+    } finally {
+      if (originalSecretKey === undefined) {
+        delete process.env.FLUTTERWAVE_SECRET_KEY;
+      } else {
+        process.env.FLUTTERWAVE_SECRET_KEY = originalSecretKey;
+      }
+    }
+  });
+
+  it('rejects GBP amounts above the Flutterwave UK limit before making the provider call', async () => {
+    const originalSecretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    process.env.FLUTTERWAVE_SECRET_KEY = 'api-secret-key';
+
+    try {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          FlutterwaveService,
+          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
+            id: 'user-1',
+            email: 'alice@example.com',
+            phone: '08012345678',
+            firstName: 'Alice',
+            lastName: 'Jones',
+          }) } } },
+          { provide: WalletsService, useValue: {} },
+          { provide: CurrenciesService, useValue: {} },
+          { provide: TransactionsService, useValue: {} },
+          { provide: LedgerService, useValue: {} },
+        ],
+      }).compile();
+
+      const service = module.get<FlutterwaveService>(FlutterwaveService);
+      const requestSpy = jest.spyOn(service as any, 'request');
+
+      await expect(service.createGbpBankCharge({
+        amount: 5000,
+        currency: 'GBP',
+        reference: 'DPT-GB-002',
+        userId: 'user-1',
+        walletId: 'wallet-1',
+        depositId: 'deposit-4',
+      })).rejects.toThrow(/GBP bank transfer amount must be between £0 and £3,719/i);
+
+      expect(requestSpy).not.toHaveBeenCalled();
+    } finally {
+      if (originalSecretKey === undefined) {
+        delete process.env.FLUTTERWAVE_SECRET_KEY;
+      } else {
+        process.env.FLUTTERWAVE_SECRET_KEY = originalSecretKey;
+      }
+    }
+  });
+
+  it('extracts the authorization URL from Flutterwave UK meta.authorization.redirect', async () => {
+    const originalSecretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    process.env.FLUTTERWAVE_SECRET_KEY = 'api-secret-key';
+
+    try {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          FlutterwaveService,
+          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
+            id: 'user-1',
+            email: 'alice@example.com',
+            phone: '08012345678',
+            firstName: 'Alice',
+            lastName: 'Jones',
+          }) } } },
+          { provide: WalletsService, useValue: {} },
+          { provide: CurrenciesService, useValue: {} },
+          { provide: TransactionsService, useValue: {} },
+          { provide: LedgerService, useValue: {} },
+        ],
+      }).compile();
+
+      const service = module.get<FlutterwaveService>(FlutterwaveService);
+      jest.spyOn(service as any, 'request').mockResolvedValue({
+        status: 'success',
+        message: 'Charge initiated',
+        data: {
+          id: 123,
+          tx_ref: 'DPT-GB-300',
+          flw_ref: 'FLW-GB-300',
+          amount: 300,
+          currency: 'GBP',
+          status: 'pending',
+          meta: {
+            authorization: {
+              mode: 'redirect',
+              redirect: 'https://secure.flutterwave.com/authorize/abc123',
+            },
+          },
+        },
+      });
+
+      await expect(service.createGbpBankCharge({
+        amount: 300,
+        currency: 'GBP',
+        reference: 'DPT-GB-300',
+        userId: 'user-1',
+        walletId: 'wallet-1',
+        depositId: 'deposit-5',
+      })).resolves.toMatchObject({
+        authorizationUrl: 'https://secure.flutterwave.com/authorize/abc123',
+        providerReference: 'DPT-GB-300',
+      });
+    } finally {
+      if (originalSecretKey === undefined) {
+        delete process.env.FLUTTERWAVE_SECRET_KEY;
+      } else {
+        process.env.FLUTTERWAVE_SECRET_KEY = originalSecretKey;
+      }
+    }
+  });
+
+  it('reads the authorization URL from the actual response body meta, not from the nested charge object', async () => {
+    const originalSecretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    process.env.FLUTTERWAVE_SECRET_KEY = 'api-secret-key';
+
+    try {
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          FlutterwaveService,
+          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
+            id: 'user-1',
+            email: 'alice@example.com',
+            phone: '08012345678',
+            firstName: 'Alice',
+            lastName: 'Jones',
+          }) } } },
+          { provide: WalletsService, useValue: {} },
+          { provide: CurrenciesService, useValue: {} },
+          { provide: TransactionsService, useValue: {} },
+          { provide: LedgerService, useValue: {} },
+        ],
+      }).compile();
+
+      const service = module.get<FlutterwaveService>(FlutterwaveService);
+      jest.spyOn(service as any, 'request').mockResolvedValue({
+        status: 'success',
+        message: 'Charge initiated',
+        data: {
+          id: 10464127,
+          tx_ref: 'DPT-1788224193050-AYC1W39E',
+          amount: 158,
+          currency: 'GBP',
+          status: 'pending',
+          payment_type: 'account-ach-uk',
+        },
+        meta: {
+          authorization: {
+            mode: 'redirect',
+            redirect: 'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
+          },
+        },
+      });
+
+      await expect(service.createGbpBankCharge({
+        amount: 158,
+        currency: 'GBP',
+        reference: 'DPT-1788224193050-AYC1W39E',
+        userId: 'user-1',
+        walletId: 'wallet-1',
+        depositId: 'deposit-6',
+      })).resolves.toMatchObject({
+        authorizationUrl: 'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
+      });
+    } finally {
+      if (originalSecretKey === undefined) {
+        delete process.env.FLUTTERWAVE_SECRET_KEY;
+      } else {
+        process.env.FLUTTERWAVE_SECRET_KEY = originalSecretKey;
+      }
+    }
+  });
 });
 
 describe('DepositsService', () => {
@@ -235,6 +444,13 @@ describe('DepositsService', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
+    prisma.currency.findUnique.mockImplementation(async ({ where }) => ({
+      code: where.code,
+      enabled: true,
+      depositEnabled: true,
+      name: where.code === 'NGN' ? 'Nigerian Naira' : where.code === 'GBP' ? 'Pound Sterling' : 'Currency',
+      symbol: where.code === 'NGN' ? '₦' : where.code === 'GBP' ? '£' : '$',
+    }));
 
     prisma.$transaction.mockImplementation(async (handler) => handler({
       deposit: {

@@ -18,7 +18,7 @@ import { FlutterwaveModule } from './flutterwave/flutterwave.module';
   imports: [ConfigModule.forRoot({
     isGlobal: true,
     envFilePath: [resolve(process.cwd(), '.env'), resolve(process.cwd(), 'noble_cards_backend', '.env')],
-  }), PrismaModule, EmailModule, UsersModule, AuthModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, DepositsModule, FlutterwaveModule],
+  }), PrismaModule, EmailModule, UsersModule, AuthModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule, DepositsModule],
   controllers: [AppController],
   providers: [AppService],
 })

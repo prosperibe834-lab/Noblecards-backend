@@ -28,6 +28,32 @@ export class FlutterwaveService {
     return secretKey;
   }
 
+  private classifyFlutterwaveError(message: string, path: string) {
+    const normalized = String(message).toLowerCase();
+
+    if (/amount should be between 0 and 3719|amount.*between 0.*3719|3719/i.test(normalized)) {
+      return 'amount_limit';
+    }
+
+    if (/merchant is not enabled to accept uk ach transactions|uk ach|account-ach-uk/i.test(normalized)) {
+      return 'merchant_not_enabled';
+    }
+
+    if (/authentication|auth|invalid key|secret key|unauthorized|forbidden|api key/i.test(normalized)) {
+      return 'auth_error';
+    }
+
+    if (/invalid request|validation|required field|missing|bad request/i.test(normalized) || /status=error/i.test(normalized)) {
+      return 'invalid_request';
+    }
+
+    if (/charges\?type=account-ach-uk|\/charges\?type=account-ach-uk/i.test(path)) {
+      return 'merchant_not_enabled';
+    }
+
+    return 'other';
+  }
+
   private async request<T>(path: string, method: 'GET' | 'POST', body?: Record<string, unknown>) {
     const secretKey = this.getSecretKey();
     const url = `${this.baseUrl}${path}`;
@@ -57,7 +83,26 @@ export class FlutterwaveService {
       this.logger.error(`[request] Flutterwave endpoint: ${path}`);
       this.logger.error(`[request] Flutterwave response text: ${text.substring(0, 1000)}`);
       const message = parsed?.message ?? text ?? 'Flutterwave request failed.';
+      const classification = this.classifyFlutterwaveError(message, path);
+      this.logger.error(`[request] Flutterwave classification: ${classification}`);
       this.logger.error(`[request] Parsed error message: ${message}`);
+
+      if (classification === 'amount_limit') {
+        throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+      }
+
+      if (classification === 'merchant_not_enabled') {
+        throw new BadRequestException('GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.');
+      }
+
+      if (classification === 'auth_error') {
+        throw new BadRequestException('GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.');
+      }
+
+      if (classification === 'invalid_request') {
+        throw new BadRequestException('GBP bank transfer request was invalid. Please check the payment details and try again.');
+      }
+
       throw new Error(`Flutterwave ${response.status}: ${message}`);
     }
 
@@ -234,6 +279,167 @@ export class FlutterwaveService {
         paymentMethod: input.paymentMethod,
         reference: input.reference,
         provider: 'FLUTTERWAVE',
+      },
+    };
+  }
+
+  async createGbpBankCharge(input: {
+    amount: number;
+    currency: string;
+    reference: string;
+    userId: string;
+    walletId: string;
+    depositId: string;
+    country?: string;
+    countryCode?: string;
+  }) {
+    const amount = Number(input.amount);
+    this.logger.log(`[createGbpBankCharge] Starting GBP bank charge creation`);
+    this.logger.log(`[createGbpBankCharge] userId=${input.userId}, amount=${amount}, currency=${input.currency}, ref=${input.reference}`);
+
+    if (input.currency?.toUpperCase() === 'GBP' && (!Number.isFinite(amount) || amount <= 0 || amount > 3719)) {
+      this.logger.warn(`[createGbpBankCharge] GBP amount validation failed. Amount=${amount} is outside allowed range 0-3719.`);
+      throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    if (!user) {
+      this.logger.error(`[createGbpBankCharge] User not found: ${input.userId}`);
+      throw new NotFoundException('User not found for GBP bank charge creation.');
+    }
+
+    const payload = {
+      type: 'account-ach-uk',
+      amount: Number(input.amount),
+      currency: input.currency,
+      email: user.email,
+      tx_ref: input.reference,
+      fullname: `${user.firstName || 'NobleCards'} ${user.lastName || 'User'}`.trim(),
+      redirect_url: process.env.FLUTTERWAVE_REDIRECT_URL ?? 'http://localhost:5173/deposit/callback',
+      meta: {
+        deposit_id: input.depositId,
+        wallet_id: input.walletId,
+        user_id: input.userId,
+        internal_reference: input.reference,
+      },
+    };
+
+    this.logger.log(`[createGbpBankCharge] Sending payload to Flutterwave /charges`);
+    this.logger.log(`[createGbpBankCharge] Payload: ${JSON.stringify(payload)}`);
+
+    let response;
+    try {
+      response = await this.request<{
+        status: string;
+        data: {
+          id?: number | string;
+          flw_ref?: string;
+          link?: string;
+          redirect_url?: string;
+          tx_ref?: string;
+          amount?: number;
+          currency?: string;
+          status?: string;
+          meta?: Record<string, any>;
+        };
+      }>('/charges?type=account-ach-uk', 'POST', payload);
+      this.logger.log(`[createGbpBankCharge] Flutterwave raw response: ${JSON.stringify(response)}`);
+      this.logger.log(`[createGbpBankCharge] Flutterwave response received successfully`);
+    } catch (error) {
+      this.logger.error(`[createGbpBankCharge] Flutterwave request failed`);
+      this.logger.error(`[createGbpBankCharge] Exception: ${error instanceof Error ? error.message : String(error)}`);
+      if (error instanceof Error) {
+        this.logger.error(`[createGbpBankCharge] Stack: ${error.stack}`);
+      }
+
+      if (error instanceof BadRequestException) {
+        const message = error.getResponse && typeof error.getResponse === 'function' ? String(error.getResponse()) : error.message;
+        const classification = this.classifyFlutterwaveError(message, '/charges?type=account-ach-uk');
+        this.logger.error(`[createGbpBankCharge] Flutterwave error classification: ${classification}`);
+        throw error;
+      }
+
+      const message = error instanceof Error ? error.message : String(error);
+      const classification = this.classifyFlutterwaveError(message, '/charges?type=account-ach-uk');
+      this.logger.error(`[createGbpBankCharge] Flutterwave error classification: ${classification}`);
+
+      if (classification === 'amount_limit') {
+        throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+      }
+
+      if (classification === 'merchant_not_enabled') {
+        throw new BadRequestException('GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.');
+      }
+
+      if (classification === 'auth_error') {
+        throw new BadRequestException('GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.');
+      }
+
+      if (classification === 'invalid_request') {
+        throw new BadRequestException('GBP bank transfer request was invalid. Please check the payment details and try again.');
+      }
+
+      throw error;
+    }
+
+    const responseBody = response ?? {};
+    const chargeData = responseBody.data ?? responseBody;
+    const authorizationUrl =
+      responseBody?.meta?.authorization?.redirect ??
+      responseBody?.meta?.authorization?.url ??
+      responseBody?.meta?.authorization_url ??
+      chargeData?.meta?.authorization?.redirect ??
+      chargeData?.meta?.authorization?.url ??
+      chargeData?.meta?.authorization_url ??
+      chargeData?.authorization?.redirect ??
+      chargeData?.authorization?.url ??
+      chargeData?.authorization_url ??
+      chargeData?.link ??
+      chargeData?.redirect_url ??
+      null;
+
+    this.logger.log(`[GBP DEBUG 1] Raw Flutterwave response: ${JSON.stringify(response)}`);
+    this.logger.log(`[createGbpBankCharge] GBP provider response body keys: ${JSON.stringify(Object.keys(responseBody || {}))}`);
+    this.logger.log(`[createGbpBankCharge] GBP provider meta: ${JSON.stringify(responseBody?.meta ?? null)}`);
+    this.logger.log(`[createGbpBankCharge] GBP bank charge created: id=${chargeData.id}, ref=${chargeData.tx_ref}`);
+    this.logger.log(`[GBP DEBUG 2] Extracted authorization URL: ${authorizationUrl ?? 'NONE'}`);
+    this.logger.log(`[GBP DEBUG 3] createGbpBankCharge return value: ${JSON.stringify({
+      authorizationUrl,
+      providerReference: chargeData.tx_ref ?? input.reference,
+      providerTransactionId: String(chargeData.id ?? chargeData.flw_ref ?? ''),
+      amount: chargeData.amount ?? input.amount,
+      currency: chargeData.currency ?? input.currency,
+      meta: {
+        configured: true,
+        paymentMethod: 'BANK_TRANSFER',
+        reference: input.reference,
+        provider: 'FLUTTERWAVE',
+        chargeType: 'account-ach-uk',
+        providerTransactionId: chargeData.id ?? chargeData.flw_ref,
+        authorizationUrl,
+      },
+    })}`);
+    this.logger.log(`[createGbpBankCharge] Authorization URL type: ${typeof authorizationUrl}`);
+
+    if (!authorizationUrl) {
+      this.logger.warn('[createGbpBankCharge] Flutterwave returned a successful GBP charge without an authorization URL. Logging the raw provider response for inspection.');
+      this.logger.warn(`[createGbpBankCharge] Raw provider response: ${JSON.stringify(response)}`);
+    }
+
+    return {
+      authorizationUrl,
+      providerReference: chargeData.tx_ref ?? input.reference,
+      providerTransactionId: String(chargeData.id ?? chargeData.flw_ref ?? ''),
+      amount: chargeData.amount ?? input.amount,
+      currency: chargeData.currency ?? input.currency,
+      meta: {
+        configured: true,
+        paymentMethod: 'BANK_TRANSFER',
+        reference: input.reference,
+        provider: 'FLUTTERWAVE',
+        chargeType: 'account-ach-uk',
+        providerTransactionId: chargeData.id ?? chargeData.flw_ref,
+        authorizationUrl,
       },
     };
   }

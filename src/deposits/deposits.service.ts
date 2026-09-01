@@ -8,7 +8,6 @@ type DepositStatus = 'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'CANCE
 type LedgerEntryType = 'CREDIT' | 'DEBIT' | 'HOLD' | 'RELEASE' | 'FEE' | 'REFUND' | 'REVERSAL' | 'ADJUSTMENT';
 type TransactionStatus = 'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'CANCELLED' | 'REFUNDED' | 'REVERSED' | 'EXPIRED' | 'UNDER_REVIEW';
 import { WalletsService } from '../wallets/wallets.service';
-import { CurrenciesService } from '../currencies/currencies.service';
 import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { FlutterwaveService } from '../flutterwave/flutterwave.service';
@@ -19,7 +18,6 @@ export class DepositsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly wallets: WalletsService,
-    private readonly currencies: CurrenciesService,
     private readonly transactions: TransactionsService,
     private readonly ledger: LedgerService,
     private readonly flutterwave: FlutterwaveService,
@@ -30,7 +28,13 @@ export class DepositsService {
     logger.log('[createDeposit] Processing deposit request');
     logger.log(`[createDeposit] userId=${userId}, currency=${dto.currency}, amount=${dto.amount}`);
     
-    const currency = await this.currencies.getCurrency(dto.currency);
+    // Get currency directly from Prisma instead of using CurrenciesService
+    const prismaClient = this.prisma as any;
+    const currency = await prismaClient.currency.findUnique({
+      where: { code: dto.currency.toUpperCase() },
+    });
+    
+    if (!currency) throw new NotFoundException(`Currency ${dto.currency.toUpperCase()} was not found.`);
     if (!currency.enabled || !currency.depositEnabled) {
       throw new BadRequestException(`Deposits are disabled for ${dto.currency}.`);
     }
@@ -39,8 +43,7 @@ export class DepositsService {
     }
 
     const normalizedKey = dto.idempotencyKey ?? `${userId}:${currency.code}:${dto.amount}:${Date.now()}`;
-    const prisma = this.prisma as any;
-    const existing = await prisma.deposit.findFirst({
+    const existing = await prismaClient.deposit.findFirst({
       where: { userId, idempotencyKey: normalizedKey },
       include: { transaction: true },
     });
@@ -83,7 +86,7 @@ export class DepositsService {
       },
     });
 
-    const deposit = await prisma.deposit.create({
+    const deposit = await prismaClient.deposit.create({
       data: {
         userId,
         walletId: wallet.id,
@@ -109,11 +112,25 @@ export class DepositsService {
 
     logger.log(`[createDeposit] Deposit row created: ${deposit.id}`);
 
-    // Route BANK_TRANSFER + NGN to Dynamic Virtual Account flow; other methods use standard redirect checkout
+    // Route BANK_TRANSFER + NGN to Dynamic Virtual Account flow
+    // Route BANK_TRANSFER + GBP to UK Bank Account Charge flow
+    // Other methods use standard redirect checkout
     let paymentIntent;
     if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'NGN') {
       logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for NGN BANK_TRANSFER`);
       paymentIntent = await this.flutterwave.createVirtualAccount({
+        amount: dto.amount,
+        currency: currency.code,
+        reference: transaction.reference,
+        userId,
+        walletId: wallet.id,
+        depositId: deposit.id,
+        country: dto.country,
+        countryCode: dto.countryCode,
+      });
+    } else if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GBP') {
+      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE GBP BANK CHARGE for GBP BANK_TRANSFER`);
+      paymentIntent = await this.flutterwave.createGbpBankCharge({
         amount: dto.amount,
         currency: currency.code,
         reference: transaction.reference,
@@ -137,7 +154,7 @@ export class DepositsService {
       });
     }
 
-    await prisma.deposit.update({
+    await prismaClient.deposit.update({
       where: { id: deposit.id },
       data: {
         providerReference: paymentIntent.providerReference,
@@ -148,6 +165,7 @@ export class DepositsService {
           providerReference: paymentIntent.providerReference,
           providerTransactionId: paymentIntent.providerTransactionId,
           ...(paymentIntent.paymentLink && { paymentLink: paymentIntent.paymentLink }),
+          ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
           ...(paymentIntent.bankName && {
             bankTransfer: {
               bankName: paymentIntent.bankName,
@@ -160,7 +178,17 @@ export class DepositsService {
       },
     });
 
-    // For bank transfer, return account details instead of payment link
+    logger.log(`[GBP DEBUG 4] DepositsService paymentIntent: ${JSON.stringify({
+      paymentMethod,
+      currency: currency.code,
+      authorizationUrl: paymentIntent.authorizationUrl ?? null,
+      providerReference: paymentIntent.providerReference,
+      providerTransactionId: paymentIntent.providerTransactionId,
+      meta: paymentIntent.meta,
+    })}`);
+    logger.log(`[GBP DEBUG 5] Final authorizationUrl before database/response: ${paymentIntent.authorizationUrl ?? 'NONE'}`);
+
+    // For NGN bank transfer, return account details instead of payment link
     if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'NGN') {
       return {
         id: deposit.id,
@@ -188,6 +216,35 @@ export class DepositsService {
           status: transaction.status,
         },
       };
+    }
+
+    // For GBP bank transfer, return authorization URL
+    if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GBP') {
+      const responsePayload = {
+        id: deposit.id,
+        status: deposit.status,
+        provider: deposit.provider,
+        currency: deposit.currencyCode,
+        amount: deposit.amount.toString(),
+        fee: deposit.fee.toString(),
+        netAmount: deposit.netAmount.toString(),
+        paymentMethod: 'BANK_TRANSFER',
+        authorizationUrl: paymentIntent.authorizationUrl,
+        providerReference: paymentIntent.providerReference,
+        providerTransactionId: paymentIntent.providerTransactionId,
+        walletId: wallet.id,
+        transaction: {
+          id: transaction.id,
+          reference: transaction.reference,
+          status: transaction.status,
+        },
+      };
+
+      logger.log(`[GBP DEBUG 6] Final POST /deposits response: ${JSON.stringify(responsePayload)}`);
+      logger.log(`[createDeposit] GBP API response authorizationUrl=${responsePayload.authorizationUrl ?? 'NONE'}`);
+      logger.log(`[createDeposit] GBP API response authorizationUrl type=${typeof responsePayload.authorizationUrl}`);
+
+      return responsePayload;
     }
 
     return {
