@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
+import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -7,18 +8,16 @@ export class WalletsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getOrCreateWallet(userId: string) {
-    const prisma = this.prisma as any;
-    return prisma.wallet.upsert({
+    return (this.prisma as any).wallet.upsert({
       where: { userId },
       update: {},
-      create: { userId },
+      create: { id: randomUUID(), userId },
     });
   }
 
   async getWallet(userId: string) {
-    const prisma = this.prisma as any;
     const wallet = await this.getOrCreateWallet(userId);
-    const balances = await prisma.walletBalance.findMany({
+    const balances = await (this.prisma as any).walletBalance.findMany({
       where: { walletId: wallet.id },
       include: { currency: true },
       orderBy: { currencyCode: 'asc' },
@@ -44,9 +43,8 @@ export class WalletsService {
   }
 
   async getBalances(userId: string) {
-    const prisma = this.prisma as any;
     const wallet = await this.getOrCreateWallet(userId);
-    const balances = await prisma.walletBalance.findMany({
+    const balances = await (this.prisma as any).walletBalance.findMany({
       where: { walletId: wallet.id },
       include: { currency: true },
       orderBy: { currencyCode: 'asc' },
@@ -65,25 +63,23 @@ export class WalletsService {
   }
 
   async getWalletById(walletId: string) {
-    const prisma = this.prisma as any;
-    const wallet = await prisma.wallet.findUnique({ where: { id: walletId } });
+    const wallet = await (this.prisma as any).wallet.findUnique({ where: { id: walletId } });
     if (!wallet) throw new NotFoundException('Wallet not found.');
     return wallet;
   }
 
   async ensureBalance(walletId: string, currencyCode: string) {
-    const prisma = this.prisma as any;
-    const existing = await prisma.walletBalance.findUnique({
+    const existing = await (this.prisma as any).walletBalance.findUnique({
       where: { walletId_currencyCode: { walletId, currencyCode } },
       include: { currency: true },
     });
 
     if (existing) return existing;
 
-    const currency = await prisma.currency.findUnique({ where: { code: currencyCode } });
+    const currency = await (this.prisma as any).currency.findUnique({ where: { code: currencyCode } });
     if (!currency) throw new NotFoundException(`Currency ${currencyCode} is not configured.`);
 
-    return prisma.walletBalance.create({
+    return (this.prisma as any).walletBalance.create({
       data: {
         walletId,
         currencyCode,

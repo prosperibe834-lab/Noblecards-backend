@@ -13,12 +13,13 @@ import { CurrenciesModule } from './currencies/currencies.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { FlutterwaveModule } from './flutterwave/flutterwave.module';
+import { ExchangeRatesModule } from './exchange-rates/exchange-rates.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal: true,
     envFilePath: [resolve(process.cwd(), '.env'), resolve(process.cwd(), 'noble_cards_backend', '.env')],
-  }), PrismaModule, EmailModule, UsersModule, AuthModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule, DepositsModule],
+  }), PrismaModule, EmailModule, UsersModule, AuthModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule, ExchangeRatesModule, DepositsModule],
   controllers: [AppController],
   providers: [AppService],
 })

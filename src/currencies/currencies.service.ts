@@ -6,39 +6,38 @@ export class CurrenciesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async listCurrencies() {
-    const prisma = this.prisma as any;
-    return prisma.currency.findMany({
-      where: { enabled: true },
-      orderBy: { name: 'asc' },
-    });
+    const result = await this.prisma.$queryRaw`
+      SELECT * FROM "Currency" WHERE "enabled" = true ORDER BY "name" ASC
+    `;
+    return result;
   }
 
   async getCurrency(code: string) {
-    const prisma = this.prisma as any;
-    const currency = await prisma.currency.findUnique({
-      where: { code: code.toUpperCase() },
-    });
-
-    if (!currency) throw new NotFoundException(`Currency ${code.toUpperCase()} was not found.`);
-    return currency;
+    const normalizedCode = code.toUpperCase();
+    const result = await this.prisma.$queryRaw`
+      SELECT * FROM "Currency" WHERE "code" = ${normalizedCode}
+    ` as any[];
+    
+    if (!result || result.length === 0) {
+      throw new NotFoundException(`Currency ${normalizedCode} was not found.`);
+    }
+    return result[0];
   }
 
   async ensureCurrency(code: string, defaults?: Partial<{ name: string; symbol: string; country: string; flag: string; enabled: boolean; depositEnabled: boolean }>) {
-    const prisma = this.prisma as any;
     const normalizedCode = code.toUpperCase();
-    const existing = await prisma.currency.findUnique({ where: { code: normalizedCode } });
-    if (existing) return existing;
+    const result = await this.prisma.$queryRaw`
+      SELECT * FROM "Currency" WHERE "code" = ${normalizedCode}
+    ` as any[];
+    
+    if (result && result.length > 0) {
+      return result[0];
+    }
 
-    return prisma.currency.create({
-      data: {
-        code: normalizedCode,
-        name: defaults?.name ?? normalizedCode,
-        symbol: defaults?.symbol ?? normalizedCode,
-        country: defaults?.country ?? null,
-        flag: defaults?.flag ?? null,
-        enabled: defaults?.enabled ?? true,
-        depositEnabled: defaults?.depositEnabled ?? false,
-      },
-    });
+    // Create new currency
+    const inserted = await this.prisma.$executeRaw`
+      INSERT INTO "Currency" (code, name, symbol, country, flag, enabled, "depositEnabled")
+      VALUES (${normalizedCode}, ${defaults?.name ?? normalizedCode}, ${defaults?.symbol ?? normalizedCode}, ${defaults?.country ?? null}, ${defaults?.flag ?? null}, ${defaults?.enabled ?? true}, ${defaults?.depositEnabled ?? false})
+    `;
   }
 }

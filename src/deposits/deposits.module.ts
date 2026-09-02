@@ -10,9 +10,10 @@ import { CurrenciesModule } from '../currencies/currencies.module';
 import { TransactionsModule } from '../transactions/transactions.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { FlutterwaveModule } from '../flutterwave/flutterwave.module';
+import { ExchangeRatesModule } from '../exchange-rates/exchange-rates.module';
 
 @Module({
-  imports: [AuthModule, EmailModule, UsersModule, PrismaModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule],
+  imports: [AuthModule, EmailModule, UsersModule, PrismaModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule, ExchangeRatesModule],
   controllers: [DepositsController],
   providers: [DepositsService],
   exports: [DepositsService],
