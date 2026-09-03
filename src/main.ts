@@ -18,14 +18,19 @@ async function bootstrap() {
   }));
   app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads/' });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  const configuredOrigins = process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ?? [
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'http://localhost:5173',
-    'http://10.0.2.2:3000',
-    'http://10.0.2.2:8080',
-    'http://10.0.2.2:5173',
-  ];
+    const defaultOrigins = [
+      'http://localhost:3000',
+      'http://localhost:8080',
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
+      'http://10.0.2.2:3000',
+      'http://10.0.2.2:8080',
+      'http://10.0.2.2:5173',
+    ];
+  const configuredOrigins = Array.from(new Set([
+    ...defaultOrigins,
+    ...(process.env.CORS_ORIGINS?.split(',').map((origin) => origin.trim()) ?? []),
+  ]));
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin || configuredOrigins.includes(origin) || /^https?:\/\/(localhost|10\.0\.2\.2):\d+$/.test(origin)) {

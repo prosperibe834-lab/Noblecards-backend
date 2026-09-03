@@ -15,7 +15,15 @@ import { LedgerService } from '../ledger/ledger.service';
 import { FlutterwaveService } from '../flutterwave/flutterwave.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
 import { ConfigService } from '@nestjs/config';
-import { CreateDepositDto, DepositPaymentMethodOption, DepositProviderOption } from './deposits.dto';
+import { CreateCardDepositDto, CreateDepositDto, DepositPaymentMethodOption, DepositProviderOption } from './deposits.dto';
+
+type CardDetails = {
+  cardNumber: string;
+  cvv: string;
+  expiryMonth: string;
+  expiryYear: string;
+  cardHolderName: string;
+};
 
 @Injectable()
 export class DepositsService {
@@ -48,7 +56,7 @@ export class DepositsService {
     };
   }
 
-  async createDeposit(userId: string, dto: CreateDepositDto) {
+  async createDeposit(userId: string, dto: CreateDepositDto, card?: CardDetails) {
     const logger = new (require('@nestjs/common').Logger)('DepositsService');
     logger.log('[createDeposit] Processing deposit request');
     logger.log('[createDeposit] userId=' + userId + ', currency=' + dto.currency + ', amount=' + dto.amount);
@@ -143,17 +151,25 @@ export class DepositsService {
       source: 'deposit-creation',
       country: dto.country ?? null,
       countryCode: dto.countryCode ?? null,
+      requestedAmount: requestedAmount.toFixed(2),
+      requestedCurrency: 'USD',
+      exchangeRate: feeBreakdown.exchangeRate.toFixed(8),
+      providerFee: feeBreakdown.providerFee.toFixed(2),
+      nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+      fee: feeBreakdown.totalFees.toFixed(2),
+      walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
+      walletCreditCurrency: 'USD',
     };
     await this.prisma.$executeRaw`
       INSERT INTO "Deposit" (
         "id", "userId", "walletId", "currencyCode", "amount", "fee", "netAmount",
         "provider", "paymentMethod", "country", "countryCode", "status",
-        "idempotencyKey", "metadata", "transactionId", "createdAt", "updatedAt"
+        "idempotencyKey", "metadata", "exchangeRate", "transactionId", "createdAt", "updatedAt"
       ) VALUES (
         ${depositId}, ${userId}, ${wallet.id}, ${currency.code}, ${amount.toString()},
         ${fee.toString()}, ${netAmount.toString()}, ${provider}, ${paymentMethod},
         ${dto.country ?? null}, ${dto.countryCode ?? null}, 'PENDING', ${normalizedKey},
-        ${JSON.stringify(depositMetadata)}, ${transaction.id}, NOW(), NOW()
+        ${JSON.stringify(depositMetadata)}, ${feeBreakdown.exchangeRate.toString()}, ${transaction.id}, NOW(), NOW()
       )
     `;
     const deposit = {
@@ -216,6 +232,16 @@ export class DepositsService {
         depositId: deposit.id,
         country: dto.country,
         countryCode: dto.countryCode,
+      });
+    } else if (paymentMethod === 'CARD' && card) {
+      paymentIntent = await this.flutterwave.createCardCharge({
+        amount: amount.toNumber(),
+        currency: currency.code,
+        reference: transaction.reference,
+        userId,
+        walletId: wallet.id,
+        depositId: deposit.id,
+        card,
       });
     } else {
       paymentIntent = await this.flutterwave.createPayment({
@@ -352,6 +378,7 @@ export class DepositsService {
       walletCreditCurrency: 'USD',
       exchangeRate: feeBreakdown.exchangeRate.toFixed(2),
       paymentLink: paymentIntent.paymentLink,
+      authorizationUrl: paymentIntent.authorizationUrl,
       providerReference: paymentIntent.providerReference,
       providerTransactionId: paymentIntent.providerTransactionId,
       walletId: wallet.id,
@@ -361,6 +388,28 @@ export class DepositsService {
         status: transaction.status,
       },
     };
+  }
+
+  async createCardDeposit(userId: string, dto: CreateCardDepositDto) {
+    const currency = dto.currency.toUpperCase();
+    if (!['NGN', 'GHS', 'GBP'].includes(currency)) {
+      throw new BadRequestException('Card deposits support NGN, GHS, and GBP only.');
+    }
+
+    const requestedAmount = new Decimal(dto.requestedAmount.toFixed(2));
+    const payableAmount = new Decimal(dto.amount.toFixed(2));
+    const feeBreakdown = await this.calculateFees(requestedAmount, currency);
+    if (!payableAmount.eq(feeBreakdown.customerPayableAmount)) {
+      throw new BadRequestException('Card payable amount does not match the current exchange rate and fee calculation.');
+    }
+
+    return this.createDeposit(userId, {
+      amount: requestedAmount.toNumber(),
+      currency,
+      provider: DepositProviderOption.FLUTTERWAVE,
+      paymentMethod: DepositPaymentMethodOption.CARD,
+      idempotencyKey: dto.idempotencyKey,
+    }, dto.card);
   }
 
   async listDeposits(userId: string, filters: { status?: string; currency?: string; provider?: string }) {
@@ -391,6 +440,82 @@ export class DepositsService {
         reference: deposit.transactionReference,
       } : null,
     }));
+  }
+
+  async getAdminDeposits() {
+    const rateMap = await this.exchangeRates.getRates();
+    const deposits = await this.prisma.$queryRaw<Array<any>>`
+      SELECT d.*, u.email, u."firstName", u."lastName", u.username, u.phone,
+        t.reference AS "transactionReference", t.status AS "transactionStatus",
+        t."providerReference" AS "transactionProviderReference",
+        t."providerTransactionId" AS "transactionProviderTransactionId",
+        l."balanceBefore" AS "ledgerBalanceBefore", l."balanceAfter" AS "ledgerBalanceAfter"
+      FROM "Deposit" d
+      JOIN "User" u ON u.id = d."userId"
+      LEFT JOIN "Transaction" t ON t.id = d."transactionId"
+      LEFT JOIN "LedgerEntry" l ON l.reference = 'deposit-' || d.id
+      ORDER BY d."createdAt" DESC
+    `;
+
+    const rows = deposits.map((deposit) => {
+      const metadata = deposit.metadata && typeof deposit.metadata === 'object' ? deposit.metadata : {};
+      const walletCredit = Number(metadata.walletCreditAmount ?? deposit.netAmount ?? 0);
+      const requestedAmount = Number(metadata.requestedAmount ?? walletCredit);
+      const localAmount = Number(deposit.amount ?? 0);
+      const storedRate = Number(metadata.exchangeRate ?? 0);
+      const currentRate = Number(rateMap.rates[String(deposit.currencyCode).toUpperCase()] ?? 1);
+      const baseRate = storedRate > 0 ? storedRate / 1.03 : currentRate;
+      const status = String(deposit.status);
+      const method = deposit.paymentMethod === 'BANK_TRANSFER' ? 'Bank Transfer' : deposit.paymentMethod === 'CARD' ? 'Card' : 'Payment Providers';
+      const feeLocal = Number(deposit.fee ?? 0);
+      const feeUsd = baseRate > 0 ? feeLocal / baseRate : feeLocal;
+      return {
+        id: deposit.id,
+        userId: deposit.userId,
+        userName: `${deposit.firstName} ${deposit.lastName}`.trim() || deposit.email,
+        userTag: deposit.username ? `@${deposit.username}` : deposit.email,
+        email: deposit.email,
+        phone: deposit.phone ?? 'N/A',
+        avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(`${deposit.firstName} ${deposit.lastName}`),
+        originalAmount: localAmount,
+        currency: deposit.currencyCode,
+        usdValue: walletCredit,
+        exchangeRate: baseRate,
+        nobleRate: baseRate,
+        markup: 0,
+        fee: feeUsd,
+        providerFee: Number(metadata.providerFee ?? 0) / (baseRate || 1),
+        netAmount: walletCredit,
+        method,
+        provider: deposit.provider,
+        providerRef: deposit.providerReference ?? metadata.providerReference ?? '',
+        paymentRef: deposit.transactionReference ?? '',
+        status: status === 'SUCCESSFUL' ? 'Completed' : status.charAt(0) + status.slice(1).toLowerCase(),
+        reconciliation: { providerAmount: walletCredit, ledgerAmount: status === 'SUCCESSFUL' ? walletCredit : 0, difference: status === 'SUCCESSFUL' ? 0 : walletCredit, status: status === 'SUCCESSFUL' ? 'Reconciled' : 'Mismatch' },
+        walletSnapshot: { balanceBefore: Number(deposit.ledgerBalanceBefore ?? 0), depositAmount: status === 'SUCCESSFUL' ? walletCredit : 0, balanceAfter: Number(deposit.ledgerBalanceAfter ?? 0) },
+        createdAt: deposit.createdAt,
+        updatedAt: deposit.updatedAt,
+        completedAt: status === 'SUCCESSFUL' ? deposit.updatedAt : null,
+        timeline: [{ step: 'Deposit Request Created', time: deposit.createdAt, completed: true }, { step: 'Wallet Ledger Credited', time: deposit.updatedAt, completed: status === 'SUCCESSFUL' }],
+        auditTrail: [{ event: status === 'SUCCESSFUL' ? 'Completed' : status, description: `${method} deposit via ${deposit.provider}`, time: deposit.updatedAt, actor: 'NobleCards Backend' }],
+        requestedAmount,
+        requestedCurrency: metadata.requestedCurrency ?? 'USD',
+        walletCreditAmount: walletCredit,
+        walletCreditCurrency: metadata.walletCreditCurrency ?? 'USD',
+        localPayableAmount: localAmount,
+        cardDetails: null,
+      };
+    });
+
+    const volume = rows.reduce((sum, row) => sum + row.usdValue, 0);
+    const byStatus = (status: string) => rows.filter((row) => row.status === status).reduce((sum, row) => sum + row.usdValue, 0);
+    const byMethod = ['Bank Transfer', 'Card', 'Payment Providers'].map((method) => ({ method, amount: rows.filter((row) => row.method === method).reduce((sum, row) => sum + row.usdValue, 0) }));
+    const byDay = Object.values(rows.reduce((groups: Record<string, { date: string; volume: number }>, row) => { const date = new Date(row.createdAt).toLocaleDateString(); groups[date] ??= { date, volume: 0 }; groups[date].volume += row.usdValue; return groups; }, {})).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return {
+      deposits: rows,
+      stats: { totalDepositsVolume: volume, todaysDepositsVolume: rows.filter((row) => new Date(row.createdAt).toDateString() === new Date().toDateString()).reduce((sum, row) => sum + row.usdValue, 0), pendingDepositsVolume: byStatus('Pending'), processingDepositsVolume: byStatus('Processing'), completedDepositsVolume: byStatus('Completed'), failedDepositsVolume: byStatus('Failed'), nobleRevenueFees: rows.reduce((sum, row) => sum + row.fee, 0), needsAttentionCount: rows.filter((row) => row.status !== 'Completed').length },
+      chartData: { volumeOverTime: byDay, statusBreakdown: ['Completed', 'Pending', 'Processing', 'Failed'].map((status, index) => ({ name: status, value: byStatus(status), color: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'][index] })).filter((item) => item.value > 0), methodBreakdown: byMethod },
+    };
   }
 
   async getDeposit(userId: string, id: string) {

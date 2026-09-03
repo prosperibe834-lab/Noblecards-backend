@@ -1,4 +1,4 @@
-import { Controller, Headers, Logger, Post, Req } from '@nestjs/common';
+import { Controller, Headers, Logger, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { FlutterwaveService } from './flutterwave.service';
 
 @Controller('flutterwave')
@@ -32,10 +32,7 @@ export class FlutterwaveController {
     const isValid = await this.flutterwave.validateWebhookSignature(signature, raw);
     if (!isValid) {
       this.logger.warn('Invalid Flutterwave webhook signature received.');
-      return {
-        ok: false,
-        message: 'Invalid Flutterwave webhook signature.',
-      };
+      throw new UnauthorizedException('Invalid Flutterwave webhook signature.');
     }
 
     const processed = await this.flutterwave.processWebhookEvent(payload);

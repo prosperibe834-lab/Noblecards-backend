@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
-import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { createCipheriv, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
 import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { WalletsService } from '../wallets/wallets.service';
@@ -27,6 +27,24 @@ export class FlutterwaveService {
       throw new Error('Flutterwave secret key is not configured.');
     }
     return secretKey;
+  }
+
+  private encryptCardPayload(payload: Record<string, unknown>) {
+    const encryptionKey = process.env.FLW_ENCRYPTION_KEY ?? process.env.FLUTTERWAVE_ENCRYPTION_KEY;
+    if (!encryptionKey) {
+      throw new Error('Flutterwave encryption key is not configured. Set FLW_ENCRYPTION_KEY.');
+    }
+
+    const key = Buffer.from(encryptionKey, 'utf8');
+    if (key.length !== 24) {
+      throw new Error('Flutterwave encryption key is invalid. FLW_ENCRYPTION_KEY must be exactly 24 bytes.');
+    }
+
+    const cipher = createCipheriv('des-ede3', key, null);
+    return Buffer.concat([
+      cipher.update(JSON.stringify(payload), 'utf8'),
+      cipher.final(),
+    ]).toString('base64');
   }
 
   private classifyFlutterwaveError(message: string, path: string) {
@@ -409,6 +427,87 @@ export class FlutterwaveService {
     };
   }
 
+  async createCardCharge(input: {
+    amount: number;
+    currency: string;
+    reference: string;
+    userId: string;
+    walletId: string;
+    depositId: string;
+    card: {
+      cardNumber: string;
+      cvv: string;
+      expiryMonth: string;
+      expiryYear: string;
+      cardHolderName: string;
+    };
+  }) {
+    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    if (!user) throw new NotFoundException('User not found for card payment creation.');
+
+    const cardPayload = {
+      card_number: input.card.cardNumber,
+      cvv: input.card.cvv,
+      expiry_month: input.card.expiryMonth,
+      expiry_year: input.card.expiryYear,
+      card_holder_name: input.card.cardHolderName,
+      email: user.email,
+      phone_number: user.phone ?? undefined,
+      amount: Number(input.amount.toFixed(2)),
+      currency: input.currency,
+      tx_ref: input.reference,
+      fullname: `${user.firstName || ''} ${user.lastName || ''}`.trim() || input.card.cardHolderName,
+      meta: {
+        deposit_id: input.depositId,
+        wallet_id: input.walletId,
+        user_id: input.userId,
+        internal_reference: input.reference,
+      },
+    };
+    const encryptedCardPayload = this.encryptCardPayload(cardPayload);
+
+    const response = await this.request<{
+      status?: string;
+      data?: {
+        id?: number | string;
+        tx_ref?: string;
+        flw_ref?: string;
+        amount?: number | string;
+        currency?: string;
+        link?: string;
+        authorization?: { redirect?: string; url?: string };
+        meta?: Record<string, any>;
+      };
+      meta?: { authorization?: { redirect?: string; url?: string }; authorization_url?: string };
+    }>('/charges?type=card', 'POST', { client: encryptedCardPayload });
+
+    const chargeData = response.data ?? (response as any);
+    const authorizationUrl = response.meta?.authorization?.redirect
+      ?? response.meta?.authorization?.url
+      ?? response.meta?.authorization_url
+      ?? chargeData.meta?.authorization?.redirect
+      ?? chargeData.meta?.authorization?.url
+      ?? chargeData.meta?.authorization_url
+      ?? chargeData.authorization?.redirect
+      ?? chargeData.authorization?.url
+      ?? chargeData.link
+      ?? null;
+
+    return {
+      authorizationUrl,
+      providerReference: chargeData.tx_ref ?? input.reference,
+      providerTransactionId: String(chargeData.id ?? chargeData.flw_ref ?? ''),
+      paymentLink: chargeData.link ?? null,
+      meta: {
+        configured: true,
+        paymentMethod: 'CARD',
+        reference: input.reference,
+        provider: 'FLUTTERWAVE',
+        authorizationUrl,
+      },
+    };
+  }
+
   async createGbpBankCharge(input: {
     amount: number;
     currency: string;
@@ -589,7 +688,7 @@ export class FlutterwaveService {
     return {
       status: data?.status ?? 'PENDING',
       verified,
-      providerReference: data?.tx_ref ?? providerReference ?? identifier,
+      providerReference: data?.tx_ref ?? null,
       providerTransactionId: String(data?.id ?? data?.transaction_id ?? identifier),
       amount: String(data?.amount ?? '0'),
       currency: data?.currency ?? 'USD',
@@ -673,6 +772,11 @@ export class FlutterwaveService {
     if (verification.currency && verification.currency.toUpperCase() !== deposit.currencyCode) {
       this.logger.warn(`Flutterwave currency mismatch for deposit ${deposit.id}.`);
       return { ok: false, processed: false, message: 'Currency mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
+    }
+
+    if (providerReference && verification.providerReference !== providerReference) {
+      this.logger.warn(`Flutterwave reference mismatch for deposit ${deposit.id}.`);
+      return { ok: false, processed: false, message: 'Reference mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
     }
 
     const result = await this.verifyAndCreditDeposit({
@@ -788,6 +892,10 @@ export class FlutterwaveService {
     const actualCurrency = (verification.currency ?? deposit.currencyCode).toUpperCase();
     if (actualCurrency !== expectedCurrency) {
       throw new BadRequestException('Currency mismatch. Flutterwave transaction does not match the NobleCards deposit currency.');
+    }
+
+    if (input.providerReference && verification.providerReference !== input.providerReference) {
+      throw new BadRequestException('Reference mismatch. Flutterwave transaction does not match the NobleCards deposit reference.');
     }
 
     const currency = await this.currencies.getCurrency('USD');

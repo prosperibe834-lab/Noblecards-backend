@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { Public } from '../auth/public.decorator';
-import { CreateDepositDto } from './deposits.dto';
+import { CreateCardDepositDto, CreateDepositDto } from './deposits.dto';
 import { DepositsService } from './deposits.service';
 
 @Controller('deposits')
@@ -31,6 +31,11 @@ export class DepositsController {
       }
       throw error;
     }
+  }
+
+  @Post('card')
+  async createCardDeposit(@Req() request: { user: { userId: string } }, @Body() dto: CreateCardDepositDto) {
+    return this.depositsService.createCardDeposit(request.user.userId, dto);
   }
 
   @Get()
