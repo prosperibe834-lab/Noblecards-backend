@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { AuthGuard } from '../auth/auth.guard';
-import { UpdateProfileDto } from './users.dto';
+import { CreateTransactionPinDto, UpdateProfileDto } from './users.dto';
 import { UsersService } from './users.service';
 
 const uploadDirectory = join(process.cwd(), 'uploads', 'profile');
@@ -20,6 +20,20 @@ export class UsersController {
   async getProfile(@Req() request: { user: { userId: string } }) {
     const user = await this.users.findById(request.user.userId);
     return { user: user ? this.users.toPublicUser(user) : null };
+  }
+
+  @Get('transaction-pin')
+  async getTransactionPinStatus(@Req() request: { user: { userId: string } }) {
+    return { hasTransactionPin: await this.users.hasTransactionPin(request.user.userId) };
+  }
+
+  @Post('transaction-pin')
+  async createTransactionPin(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: CreateTransactionPinDto,
+  ) {
+    await this.users.createTransactionPin(request.user.userId, dto.pin);
+    return { created: true, hasTransactionPin: true };
   }
 
   @Patch()

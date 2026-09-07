@@ -1,4 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './users.dto';
 
@@ -12,6 +13,33 @@ export class UsersService {
 
   findById(id: string) {
     return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async hasTransactionPin(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { transactionPinHash: true },
+    });
+    if (!user) throw new NotFoundException('User not found.');
+    return user.transactionPinHash != null;
+  }
+
+  async createTransactionPin(userId: string, pin: string) {
+    if (!/^\d{4}$/.test(pin)) {
+      throw new BadRequestException('Transaction PIN must be exactly 4 digits.');
+    }
+
+    const transactionPinHash = await bcrypt.hash(pin, 12);
+    const result = await this.prisma.user.updateMany({
+      where: { id: userId, transactionPinHash: null },
+      data: { transactionPinHash },
+    });
+
+    if (result.count === 0) {
+      const user = await this.findById(userId);
+      if (!user) throw new NotFoundException('User not found.');
+      throw new ConflictException('A transaction PIN already exists.');
+    }
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
@@ -68,7 +96,7 @@ export class UsersService {
     return this.prisma.user.update({ where: { id: user.id }, data: { isProfileComplete: complete, isVerified: user.isEmailVerified && complete }, });
   }
 
-  toPublicUser(user: { id: string; email: string; firstName: string; lastName: string; username?: string | null; displayName?: string | null; phone: string | null; country: string | null; countryCode: string | null; gender: string | null; dateOfBirth?: Date | null; bio?: string | null; address?: string | null; profileImageUrl?: string | null; role: string; isEmailVerified: boolean; isProfileComplete?: boolean; isVerified?: boolean }) {
+  toPublicUser(user: { id: string; email: string; firstName: string; lastName: string; username?: string | null; displayName?: string | null; phone: string | null; country: string | null; countryCode: string | null; gender: string | null; dateOfBirth?: Date | null; bio?: string | null; address?: string | null; profileImageUrl?: string | null; role: string; isEmailVerified: boolean; isProfileComplete?: boolean; isVerified?: boolean; transactionPinHash?: string | null }) {
     return {
       id: user.id,
       email: user.email,
@@ -88,6 +116,7 @@ export class UsersService {
       isEmailVerified: user.isEmailVerified,
       isProfileComplete: user.isProfileComplete ?? false,
       isVerified: user.isVerified ?? false,
+      hasTransactionPin: user.transactionPinHash != null,
     };
   }
 }

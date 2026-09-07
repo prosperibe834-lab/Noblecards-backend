@@ -22,3 +22,9 @@ export class UpdateProfileDto {
   @IsOptional() @IsString() @MaxLength(250) address?: string;
   @IsOptional() @IsString() @MaxLength(500) profileImageUrl?: string;
 }
+
+export class CreateTransactionPinDto {
+  @IsString()
+  @Matches(/^\d{4}$/)
+  pin!: string;
+}
