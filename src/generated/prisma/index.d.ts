@@ -63,6 +63,31 @@ export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
  * 
  */
 export type LedgerEntry = $Result.DefaultSelection<Prisma.$LedgerEntryPayload>
+/**
+ * Model Withdrawal
+ * 
+ */
+export type Withdrawal = $Result.DefaultSelection<Prisma.$WithdrawalPayload>
+/**
+ * Model WithdrawalQuote
+ * 
+ */
+export type WithdrawalQuote = $Result.DefaultSelection<Prisma.$WithdrawalQuotePayload>
+/**
+ * Model Beneficiary
+ * 
+ */
+export type Beneficiary = $Result.DefaultSelection<Prisma.$BeneficiaryPayload>
+/**
+ * Model PayoutAttempt
+ * 
+ */
+export type PayoutAttempt = $Result.DefaultSelection<Prisma.$PayoutAttemptPayload>
+/**
+ * Model ProviderWebhookEvent
+ * 
+ */
+export type ProviderWebhookEvent = $Result.DefaultSelection<Prisma.$ProviderWebhookEventPayload>
 
 /**
  * Enums
@@ -151,6 +176,44 @@ export const LedgerEntryType: {
 export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType]
 
 
+export const WithdrawalQuoteStatus: {
+  ACTIVE: 'ACTIVE',
+  USED: 'USED',
+  EXPIRED: 'EXPIRED'
+};
+
+export type WithdrawalQuoteStatus = (typeof WithdrawalQuoteStatus)[keyof typeof WithdrawalQuoteStatus]
+
+
+export const BeneficiaryType: {
+  BANK_ACCOUNT: 'BANK_ACCOUNT',
+  MOBILE_MONEY: 'MOBILE_MONEY'
+};
+
+export type BeneficiaryType = (typeof BeneficiaryType)[keyof typeof BeneficiaryType]
+
+
+export const BeneficiaryVerificationStatus: {
+  UNVERIFIED: 'UNVERIFIED',
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  FAILED: 'FAILED'
+};
+
+export type BeneficiaryVerificationStatus = (typeof BeneficiaryVerificationStatus)[keyof typeof BeneficiaryVerificationStatus]
+
+
+export const ProviderWebhookEventStatus: {
+  RECEIVED: 'RECEIVED',
+  PROCESSING: 'PROCESSING',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED',
+  IGNORED: 'IGNORED'
+};
+
+export type ProviderWebhookEventStatus = (typeof ProviderWebhookEventStatus)[keyof typeof ProviderWebhookEventStatus]
+
+
 export const UserRole: {
   USER: 'USER',
   ADMIN: 'ADMIN'
@@ -183,6 +246,22 @@ export const PaymentMethod: typeof $Enums.PaymentMethod
 export type LedgerEntryType = $Enums.LedgerEntryType
 
 export const LedgerEntryType: typeof $Enums.LedgerEntryType
+
+export type WithdrawalQuoteStatus = $Enums.WithdrawalQuoteStatus
+
+export const WithdrawalQuoteStatus: typeof $Enums.WithdrawalQuoteStatus
+
+export type BeneficiaryType = $Enums.BeneficiaryType
+
+export const BeneficiaryType: typeof $Enums.BeneficiaryType
+
+export type BeneficiaryVerificationStatus = $Enums.BeneficiaryVerificationStatus
+
+export const BeneficiaryVerificationStatus: typeof $Enums.BeneficiaryVerificationStatus
+
+export type ProviderWebhookEventStatus = $Enums.ProviderWebhookEventStatus
+
+export const ProviderWebhookEventStatus: typeof $Enums.ProviderWebhookEventStatus
 
 export type UserRole = $Enums.UserRole
 
@@ -408,6 +487,56 @@ export class PrismaClient<
     * ```
     */
   get ledgerEntry(): Prisma.LedgerEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.withdrawal`: Exposes CRUD operations for the **Withdrawal** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Withdrawals
+    * const withdrawals = await prisma.withdrawal.findMany()
+    * ```
+    */
+  get withdrawal(): Prisma.WithdrawalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.withdrawalQuote`: Exposes CRUD operations for the **WithdrawalQuote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WithdrawalQuotes
+    * const withdrawalQuotes = await prisma.withdrawalQuote.findMany()
+    * ```
+    */
+  get withdrawalQuote(): Prisma.WithdrawalQuoteDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.beneficiary`: Exposes CRUD operations for the **Beneficiary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Beneficiaries
+    * const beneficiaries = await prisma.beneficiary.findMany()
+    * ```
+    */
+  get beneficiary(): Prisma.BeneficiaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.payoutAttempt`: Exposes CRUD operations for the **PayoutAttempt** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PayoutAttempts
+    * const payoutAttempts = await prisma.payoutAttempt.findMany()
+    * ```
+    */
+  get payoutAttempt(): Prisma.PayoutAttemptDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.providerWebhookEvent`: Exposes CRUD operations for the **ProviderWebhookEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProviderWebhookEvents
+    * const providerWebhookEvents = await prisma.providerWebhookEvent.findMany()
+    * ```
+    */
+  get providerWebhookEvent(): Prisma.ProviderWebhookEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -864,7 +993,12 @@ export namespace Prisma {
     WalletBalance: 'WalletBalance',
     Deposit: 'Deposit',
     Transaction: 'Transaction',
-    LedgerEntry: 'LedgerEntry'
+    LedgerEntry: 'LedgerEntry',
+    Withdrawal: 'Withdrawal',
+    WithdrawalQuote: 'WithdrawalQuote',
+    Beneficiary: 'Beneficiary',
+    PayoutAttempt: 'PayoutAttempt',
+    ProviderWebhookEvent: 'ProviderWebhookEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -880,7 +1014,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1624,6 +1758,376 @@ export namespace Prisma {
           }
         }
       }
+      Withdrawal: {
+        payload: Prisma.$WithdrawalPayload<ExtArgs>
+        fields: Prisma.WithdrawalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WithdrawalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WithdrawalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          findFirst: {
+            args: Prisma.WithdrawalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WithdrawalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          findMany: {
+            args: Prisma.WithdrawalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>[]
+          }
+          create: {
+            args: Prisma.WithdrawalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          createMany: {
+            args: Prisma.WithdrawalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WithdrawalCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>[]
+          }
+          delete: {
+            args: Prisma.WithdrawalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          update: {
+            args: Prisma.WithdrawalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          deleteMany: {
+            args: Prisma.WithdrawalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WithdrawalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WithdrawalUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>[]
+          }
+          upsert: {
+            args: Prisma.WithdrawalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalPayload>
+          }
+          aggregate: {
+            args: Prisma.WithdrawalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWithdrawal>
+          }
+          groupBy: {
+            args: Prisma.WithdrawalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WithdrawalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WithdrawalCountArgs<ExtArgs>
+            result: $Utils.Optional<WithdrawalCountAggregateOutputType> | number
+          }
+        }
+      }
+      WithdrawalQuote: {
+        payload: Prisma.$WithdrawalQuotePayload<ExtArgs>
+        fields: Prisma.WithdrawalQuoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WithdrawalQuoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WithdrawalQuoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          findFirst: {
+            args: Prisma.WithdrawalQuoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WithdrawalQuoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          findMany: {
+            args: Prisma.WithdrawalQuoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>[]
+          }
+          create: {
+            args: Prisma.WithdrawalQuoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          createMany: {
+            args: Prisma.WithdrawalQuoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WithdrawalQuoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>[]
+          }
+          delete: {
+            args: Prisma.WithdrawalQuoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          update: {
+            args: Prisma.WithdrawalQuoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          deleteMany: {
+            args: Prisma.WithdrawalQuoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WithdrawalQuoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WithdrawalQuoteUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>[]
+          }
+          upsert: {
+            args: Prisma.WithdrawalQuoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WithdrawalQuotePayload>
+          }
+          aggregate: {
+            args: Prisma.WithdrawalQuoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWithdrawalQuote>
+          }
+          groupBy: {
+            args: Prisma.WithdrawalQuoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WithdrawalQuoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WithdrawalQuoteCountArgs<ExtArgs>
+            result: $Utils.Optional<WithdrawalQuoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      Beneficiary: {
+        payload: Prisma.$BeneficiaryPayload<ExtArgs>
+        fields: Prisma.BeneficiaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BeneficiaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BeneficiaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          findFirst: {
+            args: Prisma.BeneficiaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BeneficiaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          findMany: {
+            args: Prisma.BeneficiaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>[]
+          }
+          create: {
+            args: Prisma.BeneficiaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          createMany: {
+            args: Prisma.BeneficiaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BeneficiaryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>[]
+          }
+          delete: {
+            args: Prisma.BeneficiaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          update: {
+            args: Prisma.BeneficiaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.BeneficiaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BeneficiaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BeneficiaryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>[]
+          }
+          upsert: {
+            args: Prisma.BeneficiaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BeneficiaryPayload>
+          }
+          aggregate: {
+            args: Prisma.BeneficiaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBeneficiary>
+          }
+          groupBy: {
+            args: Prisma.BeneficiaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BeneficiaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BeneficiaryCountArgs<ExtArgs>
+            result: $Utils.Optional<BeneficiaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      PayoutAttempt: {
+        payload: Prisma.$PayoutAttemptPayload<ExtArgs>
+        fields: Prisma.PayoutAttemptFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PayoutAttemptFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PayoutAttemptFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          findFirst: {
+            args: Prisma.PayoutAttemptFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PayoutAttemptFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          findMany: {
+            args: Prisma.PayoutAttemptFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>[]
+          }
+          create: {
+            args: Prisma.PayoutAttemptCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          createMany: {
+            args: Prisma.PayoutAttemptCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PayoutAttemptCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>[]
+          }
+          delete: {
+            args: Prisma.PayoutAttemptDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          update: {
+            args: Prisma.PayoutAttemptUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          deleteMany: {
+            args: Prisma.PayoutAttemptDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PayoutAttemptUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PayoutAttemptUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>[]
+          }
+          upsert: {
+            args: Prisma.PayoutAttemptUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PayoutAttemptPayload>
+          }
+          aggregate: {
+            args: Prisma.PayoutAttemptAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePayoutAttempt>
+          }
+          groupBy: {
+            args: Prisma.PayoutAttemptGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PayoutAttemptGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PayoutAttemptCountArgs<ExtArgs>
+            result: $Utils.Optional<PayoutAttemptCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProviderWebhookEvent: {
+        payload: Prisma.$ProviderWebhookEventPayload<ExtArgs>
+        fields: Prisma.ProviderWebhookEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProviderWebhookEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProviderWebhookEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          findFirst: {
+            args: Prisma.ProviderWebhookEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProviderWebhookEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          findMany: {
+            args: Prisma.ProviderWebhookEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>[]
+          }
+          create: {
+            args: Prisma.ProviderWebhookEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          createMany: {
+            args: Prisma.ProviderWebhookEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProviderWebhookEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>[]
+          }
+          delete: {
+            args: Prisma.ProviderWebhookEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          update: {
+            args: Prisma.ProviderWebhookEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProviderWebhookEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProviderWebhookEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProviderWebhookEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProviderWebhookEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderWebhookEventPayload>
+          }
+          aggregate: {
+            args: Prisma.ProviderWebhookEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProviderWebhookEvent>
+          }
+          groupBy: {
+            args: Prisma.ProviderWebhookEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProviderWebhookEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProviderWebhookEventCountArgs<ExtArgs>
+            result: $Utils.Optional<ProviderWebhookEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1757,6 +2261,11 @@ export namespace Prisma {
     deposit?: DepositOmit
     transaction?: TransactionOmit
     ledgerEntry?: LedgerEntryOmit
+    withdrawal?: WithdrawalOmit
+    withdrawalQuote?: WithdrawalQuoteOmit
+    beneficiary?: BeneficiaryOmit
+    payoutAttempt?: PayoutAttemptOmit
+    providerWebhookEvent?: ProviderWebhookEventOmit
   }
 
   /* Types for Logging */
@@ -1841,6 +2350,9 @@ export namespace Prisma {
     refreshSessions: number
     deposits: number
     transactions: number
+    withdrawals: number
+    withdrawalQuotes: number
+    beneficiaries: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1848,6 +2360,9 @@ export namespace Prisma {
     refreshSessions?: boolean | UserCountOutputTypeCountRefreshSessionsArgs
     deposits?: boolean | UserCountOutputTypeCountDepositsArgs
     transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
+    withdrawals?: boolean | UserCountOutputTypeCountWithdrawalsArgs
+    withdrawalQuotes?: boolean | UserCountOutputTypeCountWithdrawalQuotesArgs
+    beneficiaries?: boolean | UserCountOutputTypeCountBeneficiariesArgs
   }
 
   // Custom InputTypes
@@ -1889,6 +2404,27 @@ export namespace Prisma {
     where?: TransactionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWithdrawalQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalQuoteWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBeneficiariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BeneficiaryWhereInput
+  }
+
 
   /**
    * Count Type WalletCountOutputType
@@ -1899,6 +2435,7 @@ export namespace Prisma {
     deposits: number
     transactions: number
     ledgerEntries: number
+    withdrawals: number
   }
 
   export type WalletCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1906,6 +2443,7 @@ export namespace Prisma {
     deposits?: boolean | WalletCountOutputTypeCountDepositsArgs
     transactions?: boolean | WalletCountOutputTypeCountTransactionsArgs
     ledgerEntries?: boolean | WalletCountOutputTypeCountLedgerEntriesArgs
+    withdrawals?: boolean | WalletCountOutputTypeCountWithdrawalsArgs
   }
 
   // Custom InputTypes
@@ -1947,6 +2485,13 @@ export namespace Prisma {
     where?: LedgerEntryWhereInput
   }
 
+  /**
+   * WalletCountOutputType without action
+   */
+  export type WalletCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
 
   /**
    * Count Type CurrencyCountOutputType
@@ -1957,6 +2502,11 @@ export namespace Prisma {
     deposits: number
     transactions: number
     ledgerEntries: number
+    sourceWithdrawals: number
+    destinationWithdrawals: number
+    sourceQuotes: number
+    destinationQuotes: number
+    beneficiaries: number
   }
 
   export type CurrencyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1964,6 +2514,11 @@ export namespace Prisma {
     deposits?: boolean | CurrencyCountOutputTypeCountDepositsArgs
     transactions?: boolean | CurrencyCountOutputTypeCountTransactionsArgs
     ledgerEntries?: boolean | CurrencyCountOutputTypeCountLedgerEntriesArgs
+    sourceWithdrawals?: boolean | CurrencyCountOutputTypeCountSourceWithdrawalsArgs
+    destinationWithdrawals?: boolean | CurrencyCountOutputTypeCountDestinationWithdrawalsArgs
+    sourceQuotes?: boolean | CurrencyCountOutputTypeCountSourceQuotesArgs
+    destinationQuotes?: boolean | CurrencyCountOutputTypeCountDestinationQuotesArgs
+    beneficiaries?: boolean | CurrencyCountOutputTypeCountBeneficiariesArgs
   }
 
   // Custom InputTypes
@@ -2005,6 +2560,41 @@ export namespace Prisma {
     where?: LedgerEntryWhereInput
   }
 
+  /**
+   * CurrencyCountOutputType without action
+   */
+  export type CurrencyCountOutputTypeCountSourceWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
+  /**
+   * CurrencyCountOutputType without action
+   */
+  export type CurrencyCountOutputTypeCountDestinationWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
+  /**
+   * CurrencyCountOutputType without action
+   */
+  export type CurrencyCountOutputTypeCountSourceQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalQuoteWhereInput
+  }
+
+  /**
+   * CurrencyCountOutputType without action
+   */
+  export type CurrencyCountOutputTypeCountDestinationQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalQuoteWhereInput
+  }
+
+  /**
+   * CurrencyCountOutputType without action
+   */
+  export type CurrencyCountOutputTypeCountBeneficiariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BeneficiaryWhereInput
+  }
+
 
   /**
    * Count Type TransactionCountOutputType
@@ -2038,6 +2628,108 @@ export namespace Prisma {
 
 
   /**
+   * Count Type WithdrawalCountOutputType
+   */
+
+  export type WithdrawalCountOutputType = {
+    payoutAttempts: number
+    webhookEvents: number
+  }
+
+  export type WithdrawalCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    payoutAttempts?: boolean | WithdrawalCountOutputTypeCountPayoutAttemptsArgs
+    webhookEvents?: boolean | WithdrawalCountOutputTypeCountWebhookEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WithdrawalCountOutputType without action
+   */
+  export type WithdrawalCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalCountOutputType
+     */
+    select?: WithdrawalCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WithdrawalCountOutputType without action
+   */
+  export type WithdrawalCountOutputTypeCountPayoutAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PayoutAttemptWhereInput
+  }
+
+  /**
+   * WithdrawalCountOutputType without action
+   */
+  export type WithdrawalCountOutputTypeCountWebhookEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderWebhookEventWhereInput
+  }
+
+
+  /**
+   * Count Type WithdrawalQuoteCountOutputType
+   */
+
+  export type WithdrawalQuoteCountOutputType = {
+    withdrawals: number
+  }
+
+  export type WithdrawalQuoteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawals?: boolean | WithdrawalQuoteCountOutputTypeCountWithdrawalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WithdrawalQuoteCountOutputType without action
+   */
+  export type WithdrawalQuoteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuoteCountOutputType
+     */
+    select?: WithdrawalQuoteCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WithdrawalQuoteCountOutputType without action
+   */
+  export type WithdrawalQuoteCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
+
+  /**
+   * Count Type BeneficiaryCountOutputType
+   */
+
+  export type BeneficiaryCountOutputType = {
+    withdrawals: number
+  }
+
+  export type BeneficiaryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawals?: boolean | BeneficiaryCountOutputTypeCountWithdrawalsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BeneficiaryCountOutputType
+     */
+    select?: BeneficiaryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BeneficiaryCountOutputType without action
+   */
+  export type BeneficiaryCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -2047,8 +2739,18 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    transactionPinFailedAttempts: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    transactionPinFailedAttempts: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -2073,6 +2775,8 @@ export namespace Prisma {
     isActive: boolean | null
     role: $Enums.UserRole | null
     transactionPinHash: string | null
+    transactionPinFailedAttempts: number | null
+    transactionPinLockedUntil: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2099,6 +2803,8 @@ export namespace Prisma {
     isActive: boolean | null
     role: $Enums.UserRole | null
     transactionPinHash: string | null
+    transactionPinFailedAttempts: number | null
+    transactionPinLockedUntil: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2125,11 +2831,21 @@ export namespace Prisma {
     isActive: number
     role: number
     transactionPinHash: number
+    transactionPinFailedAttempts: number
+    transactionPinLockedUntil: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    transactionPinFailedAttempts?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    transactionPinFailedAttempts?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -2153,6 +2869,8 @@ export namespace Prisma {
     isActive?: true
     role?: true
     transactionPinHash?: true
+    transactionPinFailedAttempts?: true
+    transactionPinLockedUntil?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2179,6 +2897,8 @@ export namespace Prisma {
     isActive?: true
     role?: true
     transactionPinHash?: true
+    transactionPinFailedAttempts?: true
+    transactionPinLockedUntil?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2205,6 +2925,8 @@ export namespace Prisma {
     isActive?: true
     role?: true
     transactionPinHash?: true
+    transactionPinFailedAttempts?: true
+    transactionPinLockedUntil?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2248,6 +2970,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -2278,6 +3012,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -2304,9 +3040,13 @@ export namespace Prisma {
     isActive: boolean
     role: $Enums.UserRole
     transactionPinHash: string | null
+    transactionPinFailedAttempts: number
+    transactionPinLockedUntil: Date | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -2347,6 +3087,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: boolean
     transactionPinHash?: boolean
+    transactionPinFailedAttempts?: boolean
+    transactionPinLockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
@@ -2355,6 +3097,9 @@ export namespace Prisma {
     wallet?: boolean | User$walletArgs<ExtArgs>
     deposits?: boolean | User$depositsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
+    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
+    withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
+    beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2380,6 +3125,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: boolean
     transactionPinHash?: boolean
+    transactionPinFailedAttempts?: boolean
+    transactionPinLockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2406,6 +3153,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: boolean
     transactionPinHash?: boolean
+    transactionPinFailedAttempts?: boolean
+    transactionPinLockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2432,11 +3181,13 @@ export namespace Prisma {
     isActive?: boolean
     role?: boolean
     transactionPinHash?: boolean
+    transactionPinFailedAttempts?: boolean
+    transactionPinLockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "transactionPinHash" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
     pendingVerification?: boolean | User$pendingVerificationArgs<ExtArgs>
@@ -2444,6 +3195,9 @@ export namespace Prisma {
     wallet?: boolean | User$walletArgs<ExtArgs>
     deposits?: boolean | User$depositsArgs<ExtArgs>
     transactions?: boolean | User$transactionsArgs<ExtArgs>
+    withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
+    withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
+    beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2458,6 +3212,9 @@ export namespace Prisma {
       wallet: Prisma.$WalletPayload<ExtArgs> | null
       deposits: Prisma.$DepositPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
+      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+      withdrawalQuotes: Prisma.$WithdrawalQuotePayload<ExtArgs>[]
+      beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2481,6 +3238,8 @@ export namespace Prisma {
       isActive: boolean
       role: $Enums.UserRole
       transactionPinHash: string | null
+      transactionPinFailedAttempts: number
+      transactionPinLockedUntil: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2883,6 +3642,9 @@ export namespace Prisma {
     wallet<T extends User$walletArgs<ExtArgs> = {}>(args?: Subset<T, User$walletArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     deposits<T extends User$depositsArgs<ExtArgs> = {}>(args?: Subset<T, User$depositsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    withdrawals<T extends User$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    withdrawalQuotes<T extends User$withdrawalQuotesArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    beneficiaries<T extends User$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, User$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2933,6 +3695,8 @@ export namespace Prisma {
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly transactionPinHash: FieldRef<"User", 'String'>
+    readonly transactionPinFailedAttempts: FieldRef<"User", 'Int'>
+    readonly transactionPinLockedUntil: FieldRef<"User", 'DateTime'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -3459,6 +4223,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * User.withdrawals
+   */
+  export type User$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * User.withdrawalQuotes
+   */
+  export type User$withdrawalQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    where?: WithdrawalQuoteWhereInput
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * User.beneficiaries
+   */
+  export type User$beneficiariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    where?: BeneficiaryWhereInput
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    cursor?: BeneficiaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BeneficiaryScalarFieldEnum | BeneficiaryScalarFieldEnum[]
   }
 
   /**
@@ -7099,6 +7935,7 @@ export namespace Prisma {
     deposits?: boolean | Wallet$depositsArgs<ExtArgs>
     transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Wallet$ledgerEntriesArgs<ExtArgs>
+    withdrawals?: boolean | Wallet$withdrawalsArgs<ExtArgs>
     _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["wallet"]>
 
@@ -7132,6 +7969,7 @@ export namespace Prisma {
     deposits?: boolean | Wallet$depositsArgs<ExtArgs>
     transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Wallet$ledgerEntriesArgs<ExtArgs>
+    withdrawals?: boolean | Wallet$withdrawalsArgs<ExtArgs>
     _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WalletIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7149,6 +7987,7 @@ export namespace Prisma {
       deposits: Prisma.$DepositPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
+      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7554,6 +8393,7 @@ export namespace Prisma {
     deposits<T extends Wallet$depositsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$depositsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends Wallet$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ledgerEntries<T extends Wallet$ledgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    withdrawals<T extends Wallet$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8084,6 +8924,30 @@ export namespace Prisma {
   }
 
   /**
+   * Wallet.withdrawals
+   */
+  export type Wallet$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
    * Wallet without action
    */
   export type WalletDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8310,6 +9174,11 @@ export namespace Prisma {
     deposits?: boolean | Currency$depositsArgs<ExtArgs>
     transactions?: boolean | Currency$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Currency$ledgerEntriesArgs<ExtArgs>
+    sourceWithdrawals?: boolean | Currency$sourceWithdrawalsArgs<ExtArgs>
+    destinationWithdrawals?: boolean | Currency$destinationWithdrawalsArgs<ExtArgs>
+    sourceQuotes?: boolean | Currency$sourceQuotesArgs<ExtArgs>
+    destinationQuotes?: boolean | Currency$destinationQuotesArgs<ExtArgs>
+    beneficiaries?: boolean | Currency$beneficiariesArgs<ExtArgs>
     _count?: boolean | CurrencyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["currency"]>
 
@@ -8358,6 +9227,11 @@ export namespace Prisma {
     deposits?: boolean | Currency$depositsArgs<ExtArgs>
     transactions?: boolean | Currency$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Currency$ledgerEntriesArgs<ExtArgs>
+    sourceWithdrawals?: boolean | Currency$sourceWithdrawalsArgs<ExtArgs>
+    destinationWithdrawals?: boolean | Currency$destinationWithdrawalsArgs<ExtArgs>
+    sourceQuotes?: boolean | Currency$sourceQuotesArgs<ExtArgs>
+    destinationQuotes?: boolean | Currency$destinationQuotesArgs<ExtArgs>
+    beneficiaries?: boolean | Currency$beneficiariesArgs<ExtArgs>
     _count?: boolean | CurrencyCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CurrencyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8370,6 +9244,11 @@ export namespace Prisma {
       deposits: Prisma.$DepositPayload<ExtArgs>[]
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
+      sourceWithdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+      destinationWithdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+      sourceQuotes: Prisma.$WithdrawalQuotePayload<ExtArgs>[]
+      destinationQuotes: Prisma.$WithdrawalQuotePayload<ExtArgs>[]
+      beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       code: string
@@ -8780,6 +9659,11 @@ export namespace Prisma {
     deposits<T extends Currency$depositsArgs<ExtArgs> = {}>(args?: Subset<T, Currency$depositsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     transactions<T extends Currency$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Currency$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ledgerEntries<T extends Currency$ledgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Currency$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sourceWithdrawals<T extends Currency$sourceWithdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, Currency$sourceWithdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    destinationWithdrawals<T extends Currency$destinationWithdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, Currency$destinationWithdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sourceQuotes<T extends Currency$sourceQuotesArgs<ExtArgs> = {}>(args?: Subset<T, Currency$sourceQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    destinationQuotes<T extends Currency$destinationQuotesArgs<ExtArgs> = {}>(args?: Subset<T, Currency$destinationQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    beneficiaries<T extends Currency$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, Currency$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9305,6 +10189,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LedgerEntryScalarFieldEnum | LedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Currency.sourceWithdrawals
+   */
+  export type Currency$sourceWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Currency.destinationWithdrawals
+   */
+  export type Currency$destinationWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Currency.sourceQuotes
+   */
+  export type Currency$sourceQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    where?: WithdrawalQuoteWhereInput
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * Currency.destinationQuotes
+   */
+  export type Currency$destinationQuotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    where?: WithdrawalQuoteWhereInput
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * Currency.beneficiaries
+   */
+  export type Currency$beneficiariesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    where?: BeneficiaryWhereInput
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    cursor?: BeneficiaryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BeneficiaryScalarFieldEnum | BeneficiaryScalarFieldEnum[]
   }
 
   /**
@@ -12106,6 +13110,7 @@ export namespace Prisma {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
     deposit?: boolean | Transaction$depositArgs<ExtArgs>
+    withdrawal?: boolean | Transaction$withdrawalArgs<ExtArgs>
     ledgerEntries?: boolean | Transaction$ledgerEntriesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
@@ -12182,6 +13187,7 @@ export namespace Prisma {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
     deposit?: boolean | Transaction$depositArgs<ExtArgs>
+    withdrawal?: boolean | Transaction$withdrawalArgs<ExtArgs>
     ledgerEntries?: boolean | Transaction$ledgerEntriesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -12203,6 +13209,7 @@ export namespace Prisma {
       wallet: Prisma.$WalletPayload<ExtArgs>
       currency: Prisma.$CurrencyPayload<ExtArgs>
       deposit: Prisma.$DepositPayload<ExtArgs> | null
+      withdrawal: Prisma.$WithdrawalPayload<ExtArgs> | null
       ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -12621,6 +13628,7 @@ export namespace Prisma {
     wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     currency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     deposit<T extends Transaction$depositArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$depositArgs<ExtArgs>>): Prisma__DepositClient<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    withdrawal<T extends Transaction$withdrawalArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$withdrawalArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ledgerEntries<T extends Transaction$ledgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -13088,6 +14096,25 @@ export namespace Prisma {
   }
 
   /**
+   * Transaction.withdrawal
+   */
+  export type Transaction$withdrawalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+  }
+
+  /**
    * Transaction.ledgerEntries
    */
   export type Transaction$ledgerEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13146,12 +14173,16 @@ export namespace Prisma {
     amount: Decimal | null
     balanceBefore: Decimal | null
     balanceAfter: Decimal | null
+    pendingBalanceBefore: Decimal | null
+    pendingBalanceAfter: Decimal | null
   }
 
   export type LedgerEntrySumAggregateOutputType = {
     amount: Decimal | null
     balanceBefore: Decimal | null
     balanceAfter: Decimal | null
+    pendingBalanceBefore: Decimal | null
+    pendingBalanceAfter: Decimal | null
   }
 
   export type LedgerEntryMinAggregateOutputType = {
@@ -13163,6 +14194,9 @@ export namespace Prisma {
     amount: Decimal | null
     balanceBefore: Decimal | null
     balanceAfter: Decimal | null
+    pendingBalanceBefore: Decimal | null
+    pendingBalanceAfter: Decimal | null
+    operationKey: string | null
     reference: string | null
     reason: string | null
     createdAt: Date | null
@@ -13177,6 +14211,9 @@ export namespace Prisma {
     amount: Decimal | null
     balanceBefore: Decimal | null
     balanceAfter: Decimal | null
+    pendingBalanceBefore: Decimal | null
+    pendingBalanceAfter: Decimal | null
+    operationKey: string | null
     reference: string | null
     reason: string | null
     createdAt: Date | null
@@ -13191,6 +14228,9 @@ export namespace Prisma {
     amount: number
     balanceBefore: number
     balanceAfter: number
+    pendingBalanceBefore: number
+    pendingBalanceAfter: number
+    operationKey: number
     reference: number
     reason: number
     createdAt: number
@@ -13202,12 +14242,16 @@ export namespace Prisma {
     amount?: true
     balanceBefore?: true
     balanceAfter?: true
+    pendingBalanceBefore?: true
+    pendingBalanceAfter?: true
   }
 
   export type LedgerEntrySumAggregateInputType = {
     amount?: true
     balanceBefore?: true
     balanceAfter?: true
+    pendingBalanceBefore?: true
+    pendingBalanceAfter?: true
   }
 
   export type LedgerEntryMinAggregateInputType = {
@@ -13219,6 +14263,9 @@ export namespace Prisma {
     amount?: true
     balanceBefore?: true
     balanceAfter?: true
+    pendingBalanceBefore?: true
+    pendingBalanceAfter?: true
+    operationKey?: true
     reference?: true
     reason?: true
     createdAt?: true
@@ -13233,6 +14280,9 @@ export namespace Prisma {
     amount?: true
     balanceBefore?: true
     balanceAfter?: true
+    pendingBalanceBefore?: true
+    pendingBalanceAfter?: true
+    operationKey?: true
     reference?: true
     reason?: true
     createdAt?: true
@@ -13247,6 +14297,9 @@ export namespace Prisma {
     amount?: true
     balanceBefore?: true
     balanceAfter?: true
+    pendingBalanceBefore?: true
+    pendingBalanceAfter?: true
+    operationKey?: true
     reference?: true
     reason?: true
     createdAt?: true
@@ -13348,6 +14401,9 @@ export namespace Prisma {
     amount: Decimal
     balanceBefore: Decimal
     balanceAfter: Decimal
+    pendingBalanceBefore: Decimal | null
+    pendingBalanceAfter: Decimal | null
+    operationKey: string | null
     reference: string | null
     reason: string | null
     createdAt: Date
@@ -13381,6 +14437,9 @@ export namespace Prisma {
     amount?: boolean
     balanceBefore?: boolean
     balanceAfter?: boolean
+    pendingBalanceBefore?: boolean
+    pendingBalanceAfter?: boolean
+    operationKey?: boolean
     reference?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -13398,6 +14457,9 @@ export namespace Prisma {
     amount?: boolean
     balanceBefore?: boolean
     balanceAfter?: boolean
+    pendingBalanceBefore?: boolean
+    pendingBalanceAfter?: boolean
+    operationKey?: boolean
     reference?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -13415,6 +14477,9 @@ export namespace Prisma {
     amount?: boolean
     balanceBefore?: boolean
     balanceAfter?: boolean
+    pendingBalanceBefore?: boolean
+    pendingBalanceAfter?: boolean
+    operationKey?: boolean
     reference?: boolean
     reason?: boolean
     createdAt?: boolean
@@ -13432,12 +14497,15 @@ export namespace Prisma {
     amount?: boolean
     balanceBefore?: boolean
     balanceAfter?: boolean
+    pendingBalanceBefore?: boolean
+    pendingBalanceAfter?: boolean
+    operationKey?: boolean
     reference?: boolean
     reason?: boolean
     createdAt?: boolean
   }
 
-  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "transactionId" | "type" | "amount" | "balanceBefore" | "balanceAfter" | "reference" | "reason" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
+  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "transactionId" | "type" | "amount" | "balanceBefore" | "balanceAfter" | "pendingBalanceBefore" | "pendingBalanceAfter" | "operationKey" | "reference" | "reason" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
   export type LedgerEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
@@ -13470,6 +14538,9 @@ export namespace Prisma {
       amount: Prisma.Decimal
       balanceBefore: Prisma.Decimal
       balanceAfter: Prisma.Decimal
+      pendingBalanceBefore: Prisma.Decimal | null
+      pendingBalanceAfter: Prisma.Decimal | null
+      operationKey: string | null
       reference: string | null
       reason: string | null
       createdAt: Date
@@ -13907,6 +14978,9 @@ export namespace Prisma {
     readonly amount: FieldRef<"LedgerEntry", 'Decimal'>
     readonly balanceBefore: FieldRef<"LedgerEntry", 'Decimal'>
     readonly balanceAfter: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly pendingBalanceBefore: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly pendingBalanceAfter: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly operationKey: FieldRef<"LedgerEntry", 'String'>
     readonly reference: FieldRef<"LedgerEntry", 'String'>
     readonly reason: FieldRef<"LedgerEntry", 'String'>
     readonly createdAt: FieldRef<"LedgerEntry", 'DateTime'>
@@ -14349,6 +15423,6522 @@ export namespace Prisma {
 
 
   /**
+   * Model Withdrawal
+   */
+
+  export type AggregateWithdrawal = {
+    _count: WithdrawalCountAggregateOutputType | null
+    _avg: WithdrawalAvgAggregateOutputType | null
+    _sum: WithdrawalSumAggregateOutputType | null
+    _min: WithdrawalMinAggregateOutputType | null
+    _max: WithdrawalMaxAggregateOutputType | null
+  }
+
+  export type WithdrawalAvgAggregateOutputType = {
+    sourceAmount: Decimal | null
+    destinationAmount: Decimal | null
+    exchangeRate: Decimal | null
+    fee: Decimal | null
+    amountReceived: Decimal | null
+  }
+
+  export type WithdrawalSumAggregateOutputType = {
+    sourceAmount: Decimal | null
+    destinationAmount: Decimal | null
+    exchangeRate: Decimal | null
+    fee: Decimal | null
+    amountReceived: Decimal | null
+  }
+
+  export type WithdrawalMinAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    userId: string | null
+    walletId: string | null
+    transactionId: string | null
+    sourceCurrencyCode: string | null
+    destinationCurrencyCode: string | null
+    sourceAmount: Decimal | null
+    destinationAmount: Decimal | null
+    exchangeRate: Decimal | null
+    fee: Decimal | null
+    amountReceived: Decimal | null
+    country: string | null
+    countryCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    provider: $Enums.PaymentProvider | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    quoteId: string | null
+    beneficiaryId: string | null
+    idempotencyKey: string | null
+    status: $Enums.TransactionStatus | null
+    failureReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type WithdrawalMaxAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    userId: string | null
+    walletId: string | null
+    transactionId: string | null
+    sourceCurrencyCode: string | null
+    destinationCurrencyCode: string | null
+    sourceAmount: Decimal | null
+    destinationAmount: Decimal | null
+    exchangeRate: Decimal | null
+    fee: Decimal | null
+    amountReceived: Decimal | null
+    country: string | null
+    countryCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    provider: $Enums.PaymentProvider | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    quoteId: string | null
+    beneficiaryId: string | null
+    idempotencyKey: string | null
+    status: $Enums.TransactionStatus | null
+    failureReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type WithdrawalCountAggregateOutputType = {
+    id: number
+    reference: number
+    userId: number
+    walletId: number
+    transactionId: number
+    sourceCurrencyCode: number
+    destinationCurrencyCode: number
+    sourceAmount: number
+    destinationAmount: number
+    exchangeRate: number
+    fee: number
+    amountReceived: number
+    country: number
+    countryCode: number
+    paymentMethod: number
+    provider: number
+    providerReference: number
+    providerTransactionId: number
+    quoteId: number
+    beneficiaryId: number
+    idempotencyKey: number
+    status: number
+    failureReason: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type WithdrawalAvgAggregateInputType = {
+    sourceAmount?: true
+    destinationAmount?: true
+    exchangeRate?: true
+    fee?: true
+    amountReceived?: true
+  }
+
+  export type WithdrawalSumAggregateInputType = {
+    sourceAmount?: true
+    destinationAmount?: true
+    exchangeRate?: true
+    fee?: true
+    amountReceived?: true
+  }
+
+  export type WithdrawalMinAggregateInputType = {
+    id?: true
+    reference?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    sourceAmount?: true
+    destinationAmount?: true
+    exchangeRate?: true
+    fee?: true
+    amountReceived?: true
+    country?: true
+    countryCode?: true
+    paymentMethod?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    quoteId?: true
+    beneficiaryId?: true
+    idempotencyKey?: true
+    status?: true
+    failureReason?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type WithdrawalMaxAggregateInputType = {
+    id?: true
+    reference?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    sourceAmount?: true
+    destinationAmount?: true
+    exchangeRate?: true
+    fee?: true
+    amountReceived?: true
+    country?: true
+    countryCode?: true
+    paymentMethod?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    quoteId?: true
+    beneficiaryId?: true
+    idempotencyKey?: true
+    status?: true
+    failureReason?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type WithdrawalCountAggregateInputType = {
+    id?: true
+    reference?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    sourceAmount?: true
+    destinationAmount?: true
+    exchangeRate?: true
+    fee?: true
+    amountReceived?: true
+    country?: true
+    countryCode?: true
+    paymentMethod?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    quoteId?: true
+    beneficiaryId?: true
+    idempotencyKey?: true
+    status?: true
+    failureReason?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type WithdrawalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Withdrawal to aggregate.
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdrawals to fetch.
+     */
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WithdrawalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdrawals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdrawals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Withdrawals
+    **/
+    _count?: true | WithdrawalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WithdrawalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WithdrawalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WithdrawalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WithdrawalMaxAggregateInputType
+  }
+
+  export type GetWithdrawalAggregateType<T extends WithdrawalAggregateArgs> = {
+        [P in keyof T & keyof AggregateWithdrawal]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWithdrawal[P]>
+      : GetScalarType<T[P], AggregateWithdrawal[P]>
+  }
+
+
+
+
+  export type WithdrawalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithAggregationInput | WithdrawalOrderByWithAggregationInput[]
+    by: WithdrawalScalarFieldEnum[] | WithdrawalScalarFieldEnum
+    having?: WithdrawalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WithdrawalCountAggregateInputType | true
+    _avg?: WithdrawalAvgAggregateInputType
+    _sum?: WithdrawalSumAggregateInputType
+    _min?: WithdrawalMinAggregateInputType
+    _max?: WithdrawalMaxAggregateInputType
+  }
+
+  export type WithdrawalGroupByOutputType = {
+    id: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal
+    destinationAmount: Decimal
+    exchangeRate: Decimal
+    fee: Decimal
+    amountReceived: Decimal
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider: $Enums.PaymentProvider | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    quoteId: string | null
+    beneficiaryId: string | null
+    idempotencyKey: string
+    status: $Enums.TransactionStatus
+    failureReason: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    completedAt: Date | null
+    _count: WithdrawalCountAggregateOutputType | null
+    _avg: WithdrawalAvgAggregateOutputType | null
+    _sum: WithdrawalSumAggregateOutputType | null
+    _min: WithdrawalMinAggregateOutputType | null
+    _max: WithdrawalMaxAggregateOutputType | null
+  }
+
+  type GetWithdrawalGroupByPayload<T extends WithdrawalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WithdrawalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WithdrawalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WithdrawalGroupByOutputType[P]>
+            : GetScalarType<T[P], WithdrawalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WithdrawalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    sourceAmount?: boolean
+    destinationAmount?: boolean
+    exchangeRate?: boolean
+    fee?: boolean
+    amountReceived?: boolean
+    country?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    quoteId?: boolean
+    beneficiaryId?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+    payoutAttempts?: boolean | Withdrawal$payoutAttemptsArgs<ExtArgs>
+    webhookEvents?: boolean | Withdrawal$webhookEventsArgs<ExtArgs>
+    _count?: boolean | WithdrawalCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawal"]>
+
+  export type WithdrawalSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    sourceAmount?: boolean
+    destinationAmount?: boolean
+    exchangeRate?: boolean
+    fee?: boolean
+    amountReceived?: boolean
+    country?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    quoteId?: boolean
+    beneficiaryId?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawal"]>
+
+  export type WithdrawalSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    sourceAmount?: boolean
+    destinationAmount?: boolean
+    exchangeRate?: boolean
+    fee?: boolean
+    amountReceived?: boolean
+    country?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    quoteId?: boolean
+    beneficiaryId?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawal"]>
+
+  export type WithdrawalSelectScalar = {
+    id?: boolean
+    reference?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    sourceAmount?: boolean
+    destinationAmount?: boolean
+    exchangeRate?: boolean
+    fee?: boolean
+    amountReceived?: boolean
+    country?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    quoteId?: boolean
+    beneficiaryId?: boolean
+    idempotencyKey?: boolean
+    status?: boolean
+    failureReason?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type WithdrawalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "userId" | "walletId" | "transactionId" | "sourceCurrencyCode" | "destinationCurrencyCode" | "sourceAmount" | "destinationAmount" | "exchangeRate" | "fee" | "amountReceived" | "country" | "countryCode" | "paymentMethod" | "provider" | "providerReference" | "providerTransactionId" | "quoteId" | "beneficiaryId" | "idempotencyKey" | "status" | "failureReason" | "metadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["withdrawal"]>
+  export type WithdrawalInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+    payoutAttempts?: boolean | Withdrawal$payoutAttemptsArgs<ExtArgs>
+    webhookEvents?: boolean | Withdrawal$webhookEventsArgs<ExtArgs>
+    _count?: boolean | WithdrawalCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WithdrawalIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+  }
+  export type WithdrawalIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    quote?: boolean | Withdrawal$quoteArgs<ExtArgs>
+    beneficiary?: boolean | Withdrawal$beneficiaryArgs<ExtArgs>
+  }
+
+  export type $WithdrawalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Withdrawal"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      wallet: Prisma.$WalletPayload<ExtArgs>
+      transaction: Prisma.$TransactionPayload<ExtArgs>
+      sourceCurrency: Prisma.$CurrencyPayload<ExtArgs>
+      destinationCurrency: Prisma.$CurrencyPayload<ExtArgs>
+      quote: Prisma.$WithdrawalQuotePayload<ExtArgs> | null
+      beneficiary: Prisma.$BeneficiaryPayload<ExtArgs> | null
+      payoutAttempts: Prisma.$PayoutAttemptPayload<ExtArgs>[]
+      webhookEvents: Prisma.$ProviderWebhookEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reference: string
+      userId: string
+      walletId: string
+      transactionId: string
+      sourceCurrencyCode: string
+      destinationCurrencyCode: string
+      sourceAmount: Prisma.Decimal
+      destinationAmount: Prisma.Decimal
+      exchangeRate: Prisma.Decimal
+      fee: Prisma.Decimal
+      amountReceived: Prisma.Decimal
+      country: string
+      countryCode: string
+      paymentMethod: $Enums.PaymentMethod
+      provider: $Enums.PaymentProvider | null
+      providerReference: string | null
+      providerTransactionId: string | null
+      quoteId: string | null
+      beneficiaryId: string | null
+      idempotencyKey: string
+      status: $Enums.TransactionStatus
+      failureReason: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["withdrawal"]>
+    composites: {}
+  }
+
+  type WithdrawalGetPayload<S extends boolean | null | undefined | WithdrawalDefaultArgs> = $Result.GetResult<Prisma.$WithdrawalPayload, S>
+
+  type WithdrawalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WithdrawalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WithdrawalCountAggregateInputType | true
+    }
+
+  export interface WithdrawalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Withdrawal'], meta: { name: 'Withdrawal' } }
+    /**
+     * Find zero or one Withdrawal that matches the filter.
+     * @param {WithdrawalFindUniqueArgs} args - Arguments to find a Withdrawal
+     * @example
+     * // Get one Withdrawal
+     * const withdrawal = await prisma.withdrawal.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WithdrawalFindUniqueArgs>(args: SelectSubset<T, WithdrawalFindUniqueArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Withdrawal that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WithdrawalFindUniqueOrThrowArgs} args - Arguments to find a Withdrawal
+     * @example
+     * // Get one Withdrawal
+     * const withdrawal = await prisma.withdrawal.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WithdrawalFindUniqueOrThrowArgs>(args: SelectSubset<T, WithdrawalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Withdrawal that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalFindFirstArgs} args - Arguments to find a Withdrawal
+     * @example
+     * // Get one Withdrawal
+     * const withdrawal = await prisma.withdrawal.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WithdrawalFindFirstArgs>(args?: SelectSubset<T, WithdrawalFindFirstArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Withdrawal that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalFindFirstOrThrowArgs} args - Arguments to find a Withdrawal
+     * @example
+     * // Get one Withdrawal
+     * const withdrawal = await prisma.withdrawal.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WithdrawalFindFirstOrThrowArgs>(args?: SelectSubset<T, WithdrawalFindFirstOrThrowArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Withdrawals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Withdrawals
+     * const withdrawals = await prisma.withdrawal.findMany()
+     * 
+     * // Get first 10 Withdrawals
+     * const withdrawals = await prisma.withdrawal.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const withdrawalWithIdOnly = await prisma.withdrawal.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WithdrawalFindManyArgs>(args?: SelectSubset<T, WithdrawalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Withdrawal.
+     * @param {WithdrawalCreateArgs} args - Arguments to create a Withdrawal.
+     * @example
+     * // Create one Withdrawal
+     * const Withdrawal = await prisma.withdrawal.create({
+     *   data: {
+     *     // ... data to create a Withdrawal
+     *   }
+     * })
+     * 
+     */
+    create<T extends WithdrawalCreateArgs>(args: SelectSubset<T, WithdrawalCreateArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Withdrawals.
+     * @param {WithdrawalCreateManyArgs} args - Arguments to create many Withdrawals.
+     * @example
+     * // Create many Withdrawals
+     * const withdrawal = await prisma.withdrawal.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WithdrawalCreateManyArgs>(args?: SelectSubset<T, WithdrawalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Withdrawals and returns the data saved in the database.
+     * @param {WithdrawalCreateManyAndReturnArgs} args - Arguments to create many Withdrawals.
+     * @example
+     * // Create many Withdrawals
+     * const withdrawal = await prisma.withdrawal.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Withdrawals and only return the `id`
+     * const withdrawalWithIdOnly = await prisma.withdrawal.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WithdrawalCreateManyAndReturnArgs>(args?: SelectSubset<T, WithdrawalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Withdrawal.
+     * @param {WithdrawalDeleteArgs} args - Arguments to delete one Withdrawal.
+     * @example
+     * // Delete one Withdrawal
+     * const Withdrawal = await prisma.withdrawal.delete({
+     *   where: {
+     *     // ... filter to delete one Withdrawal
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WithdrawalDeleteArgs>(args: SelectSubset<T, WithdrawalDeleteArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Withdrawal.
+     * @param {WithdrawalUpdateArgs} args - Arguments to update one Withdrawal.
+     * @example
+     * // Update one Withdrawal
+     * const withdrawal = await prisma.withdrawal.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WithdrawalUpdateArgs>(args: SelectSubset<T, WithdrawalUpdateArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Withdrawals.
+     * @param {WithdrawalDeleteManyArgs} args - Arguments to filter Withdrawals to delete.
+     * @example
+     * // Delete a few Withdrawals
+     * const { count } = await prisma.withdrawal.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WithdrawalDeleteManyArgs>(args?: SelectSubset<T, WithdrawalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Withdrawals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Withdrawals
+     * const withdrawal = await prisma.withdrawal.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WithdrawalUpdateManyArgs>(args: SelectSubset<T, WithdrawalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Withdrawals and returns the data updated in the database.
+     * @param {WithdrawalUpdateManyAndReturnArgs} args - Arguments to update many Withdrawals.
+     * @example
+     * // Update many Withdrawals
+     * const withdrawal = await prisma.withdrawal.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Withdrawals and only return the `id`
+     * const withdrawalWithIdOnly = await prisma.withdrawal.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WithdrawalUpdateManyAndReturnArgs>(args: SelectSubset<T, WithdrawalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Withdrawal.
+     * @param {WithdrawalUpsertArgs} args - Arguments to update or create a Withdrawal.
+     * @example
+     * // Update or create a Withdrawal
+     * const withdrawal = await prisma.withdrawal.upsert({
+     *   create: {
+     *     // ... data to create a Withdrawal
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Withdrawal we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WithdrawalUpsertArgs>(args: SelectSubset<T, WithdrawalUpsertArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Withdrawals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalCountArgs} args - Arguments to filter Withdrawals to count.
+     * @example
+     * // Count the number of Withdrawals
+     * const count = await prisma.withdrawal.count({
+     *   where: {
+     *     // ... the filter for the Withdrawals we want to count
+     *   }
+     * })
+    **/
+    count<T extends WithdrawalCountArgs>(
+      args?: Subset<T, WithdrawalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WithdrawalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Withdrawal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WithdrawalAggregateArgs>(args: Subset<T, WithdrawalAggregateArgs>): Prisma.PrismaPromise<GetWithdrawalAggregateType<T>>
+
+    /**
+     * Group by Withdrawal.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WithdrawalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WithdrawalGroupByArgs['orderBy'] }
+        : { orderBy?: WithdrawalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WithdrawalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWithdrawalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Withdrawal model
+   */
+  readonly fields: WithdrawalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Withdrawal.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WithdrawalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transaction<T extends TransactionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TransactionDefaultArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sourceCurrency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    destinationCurrency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    quote<T extends Withdrawal$quoteArgs<ExtArgs> = {}>(args?: Subset<T, Withdrawal$quoteArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    beneficiary<T extends Withdrawal$beneficiaryArgs<ExtArgs> = {}>(args?: Subset<T, Withdrawal$beneficiaryArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    payoutAttempts<T extends Withdrawal$payoutAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, Withdrawal$payoutAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    webhookEvents<T extends Withdrawal$webhookEventsArgs<ExtArgs> = {}>(args?: Subset<T, Withdrawal$webhookEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Withdrawal model
+   */
+  interface WithdrawalFieldRefs {
+    readonly id: FieldRef<"Withdrawal", 'String'>
+    readonly reference: FieldRef<"Withdrawal", 'String'>
+    readonly userId: FieldRef<"Withdrawal", 'String'>
+    readonly walletId: FieldRef<"Withdrawal", 'String'>
+    readonly transactionId: FieldRef<"Withdrawal", 'String'>
+    readonly sourceCurrencyCode: FieldRef<"Withdrawal", 'String'>
+    readonly destinationCurrencyCode: FieldRef<"Withdrawal", 'String'>
+    readonly sourceAmount: FieldRef<"Withdrawal", 'Decimal'>
+    readonly destinationAmount: FieldRef<"Withdrawal", 'Decimal'>
+    readonly exchangeRate: FieldRef<"Withdrawal", 'Decimal'>
+    readonly fee: FieldRef<"Withdrawal", 'Decimal'>
+    readonly amountReceived: FieldRef<"Withdrawal", 'Decimal'>
+    readonly country: FieldRef<"Withdrawal", 'String'>
+    readonly countryCode: FieldRef<"Withdrawal", 'String'>
+    readonly paymentMethod: FieldRef<"Withdrawal", 'PaymentMethod'>
+    readonly provider: FieldRef<"Withdrawal", 'PaymentProvider'>
+    readonly providerReference: FieldRef<"Withdrawal", 'String'>
+    readonly providerTransactionId: FieldRef<"Withdrawal", 'String'>
+    readonly quoteId: FieldRef<"Withdrawal", 'String'>
+    readonly beneficiaryId: FieldRef<"Withdrawal", 'String'>
+    readonly idempotencyKey: FieldRef<"Withdrawal", 'String'>
+    readonly status: FieldRef<"Withdrawal", 'TransactionStatus'>
+    readonly failureReason: FieldRef<"Withdrawal", 'String'>
+    readonly metadata: FieldRef<"Withdrawal", 'Json'>
+    readonly createdAt: FieldRef<"Withdrawal", 'DateTime'>
+    readonly updatedAt: FieldRef<"Withdrawal", 'DateTime'>
+    readonly completedAt: FieldRef<"Withdrawal", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Withdrawal findUnique
+   */
+  export type WithdrawalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter, which Withdrawal to fetch.
+     */
+    where: WithdrawalWhereUniqueInput
+  }
+
+  /**
+   * Withdrawal findUniqueOrThrow
+   */
+  export type WithdrawalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter, which Withdrawal to fetch.
+     */
+    where: WithdrawalWhereUniqueInput
+  }
+
+  /**
+   * Withdrawal findFirst
+   */
+  export type WithdrawalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter, which Withdrawal to fetch.
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdrawals to fetch.
+     */
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Withdrawals.
+     */
+    cursor?: WithdrawalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdrawals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdrawals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Withdrawals.
+     */
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Withdrawal findFirstOrThrow
+   */
+  export type WithdrawalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter, which Withdrawal to fetch.
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdrawals to fetch.
+     */
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Withdrawals.
+     */
+    cursor?: WithdrawalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdrawals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdrawals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Withdrawals.
+     */
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Withdrawal findMany
+   */
+  export type WithdrawalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter, which Withdrawals to fetch.
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdrawals to fetch.
+     */
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Withdrawals.
+     */
+    cursor?: WithdrawalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdrawals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdrawals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Withdrawals.
+     */
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Withdrawal create
+   */
+  export type WithdrawalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Withdrawal.
+     */
+    data: XOR<WithdrawalCreateInput, WithdrawalUncheckedCreateInput>
+  }
+
+  /**
+   * Withdrawal createMany
+   */
+  export type WithdrawalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Withdrawals.
+     */
+    data: WithdrawalCreateManyInput | WithdrawalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Withdrawal createManyAndReturn
+   */
+  export type WithdrawalCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * The data used to create many Withdrawals.
+     */
+    data: WithdrawalCreateManyInput | WithdrawalCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Withdrawal update
+   */
+  export type WithdrawalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Withdrawal.
+     */
+    data: XOR<WithdrawalUpdateInput, WithdrawalUncheckedUpdateInput>
+    /**
+     * Choose, which Withdrawal to update.
+     */
+    where: WithdrawalWhereUniqueInput
+  }
+
+  /**
+   * Withdrawal updateMany
+   */
+  export type WithdrawalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Withdrawals.
+     */
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyInput>
+    /**
+     * Filter which Withdrawals to update
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * Limit how many Withdrawals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Withdrawal updateManyAndReturn
+   */
+  export type WithdrawalUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * The data used to update Withdrawals.
+     */
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyInput>
+    /**
+     * Filter which Withdrawals to update
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * Limit how many Withdrawals to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Withdrawal upsert
+   */
+  export type WithdrawalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Withdrawal to update in case it exists.
+     */
+    where: WithdrawalWhereUniqueInput
+    /**
+     * In case the Withdrawal found by the `where` argument doesn't exist, create a new Withdrawal with this data.
+     */
+    create: XOR<WithdrawalCreateInput, WithdrawalUncheckedCreateInput>
+    /**
+     * In case the Withdrawal was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WithdrawalUpdateInput, WithdrawalUncheckedUpdateInput>
+  }
+
+  /**
+   * Withdrawal delete
+   */
+  export type WithdrawalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    /**
+     * Filter which Withdrawal to delete.
+     */
+    where: WithdrawalWhereUniqueInput
+  }
+
+  /**
+   * Withdrawal deleteMany
+   */
+  export type WithdrawalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Withdrawals to delete
+     */
+    where?: WithdrawalWhereInput
+    /**
+     * Limit how many Withdrawals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Withdrawal.quote
+   */
+  export type Withdrawal$quoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    where?: WithdrawalQuoteWhereInput
+  }
+
+  /**
+   * Withdrawal.beneficiary
+   */
+  export type Withdrawal$beneficiaryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    where?: BeneficiaryWhereInput
+  }
+
+  /**
+   * Withdrawal.payoutAttempts
+   */
+  export type Withdrawal$payoutAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    where?: PayoutAttemptWhereInput
+    orderBy?: PayoutAttemptOrderByWithRelationInput | PayoutAttemptOrderByWithRelationInput[]
+    cursor?: PayoutAttemptWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PayoutAttemptScalarFieldEnum | PayoutAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * Withdrawal.webhookEvents
+   */
+  export type Withdrawal$webhookEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    where?: ProviderWebhookEventWhereInput
+    orderBy?: ProviderWebhookEventOrderByWithRelationInput | ProviderWebhookEventOrderByWithRelationInput[]
+    cursor?: ProviderWebhookEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProviderWebhookEventScalarFieldEnum | ProviderWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * Withdrawal without action
+   */
+  export type WithdrawalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model WithdrawalQuote
+   */
+
+  export type AggregateWithdrawalQuote = {
+    _count: WithdrawalQuoteCountAggregateOutputType | null
+    _avg: WithdrawalQuoteAvgAggregateOutputType | null
+    _sum: WithdrawalQuoteSumAggregateOutputType | null
+    _min: WithdrawalQuoteMinAggregateOutputType | null
+    _max: WithdrawalQuoteMaxAggregateOutputType | null
+  }
+
+  export type WithdrawalQuoteAvgAggregateOutputType = {
+    sourceAmount: Decimal | null
+    exchangeRate: Decimal | null
+    destinationAmount: Decimal | null
+    providerFee: Decimal | null
+    nobleCardsFee: Decimal | null
+    totalFee: Decimal | null
+    amountReceived: Decimal | null
+  }
+
+  export type WithdrawalQuoteSumAggregateOutputType = {
+    sourceAmount: Decimal | null
+    exchangeRate: Decimal | null
+    destinationAmount: Decimal | null
+    providerFee: Decimal | null
+    nobleCardsFee: Decimal | null
+    totalFee: Decimal | null
+    amountReceived: Decimal | null
+  }
+
+  export type WithdrawalQuoteMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sourceCurrencyCode: string | null
+    destinationCurrencyCode: string | null
+    countryCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    sourceAmount: Decimal | null
+    exchangeRate: Decimal | null
+    destinationAmount: Decimal | null
+    providerFee: Decimal | null
+    nobleCardsFee: Decimal | null
+    totalFee: Decimal | null
+    amountReceived: Decimal | null
+    status: $Enums.WithdrawalQuoteStatus | null
+    createdAt: Date | null
+    expiresAt: Date | null
+    usedAt: Date | null
+  }
+
+  export type WithdrawalQuoteMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sourceCurrencyCode: string | null
+    destinationCurrencyCode: string | null
+    countryCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    sourceAmount: Decimal | null
+    exchangeRate: Decimal | null
+    destinationAmount: Decimal | null
+    providerFee: Decimal | null
+    nobleCardsFee: Decimal | null
+    totalFee: Decimal | null
+    amountReceived: Decimal | null
+    status: $Enums.WithdrawalQuoteStatus | null
+    createdAt: Date | null
+    expiresAt: Date | null
+    usedAt: Date | null
+  }
+
+  export type WithdrawalQuoteCountAggregateOutputType = {
+    id: number
+    userId: number
+    sourceCurrencyCode: number
+    destinationCurrencyCode: number
+    countryCode: number
+    paymentMethod: number
+    sourceAmount: number
+    exchangeRate: number
+    destinationAmount: number
+    providerFee: number
+    nobleCardsFee: number
+    totalFee: number
+    amountReceived: number
+    status: number
+    createdAt: number
+    expiresAt: number
+    usedAt: number
+    _all: number
+  }
+
+
+  export type WithdrawalQuoteAvgAggregateInputType = {
+    sourceAmount?: true
+    exchangeRate?: true
+    destinationAmount?: true
+    providerFee?: true
+    nobleCardsFee?: true
+    totalFee?: true
+    amountReceived?: true
+  }
+
+  export type WithdrawalQuoteSumAggregateInputType = {
+    sourceAmount?: true
+    exchangeRate?: true
+    destinationAmount?: true
+    providerFee?: true
+    nobleCardsFee?: true
+    totalFee?: true
+    amountReceived?: true
+  }
+
+  export type WithdrawalQuoteMinAggregateInputType = {
+    id?: true
+    userId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    countryCode?: true
+    paymentMethod?: true
+    sourceAmount?: true
+    exchangeRate?: true
+    destinationAmount?: true
+    providerFee?: true
+    nobleCardsFee?: true
+    totalFee?: true
+    amountReceived?: true
+    status?: true
+    createdAt?: true
+    expiresAt?: true
+    usedAt?: true
+  }
+
+  export type WithdrawalQuoteMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    countryCode?: true
+    paymentMethod?: true
+    sourceAmount?: true
+    exchangeRate?: true
+    destinationAmount?: true
+    providerFee?: true
+    nobleCardsFee?: true
+    totalFee?: true
+    amountReceived?: true
+    status?: true
+    createdAt?: true
+    expiresAt?: true
+    usedAt?: true
+  }
+
+  export type WithdrawalQuoteCountAggregateInputType = {
+    id?: true
+    userId?: true
+    sourceCurrencyCode?: true
+    destinationCurrencyCode?: true
+    countryCode?: true
+    paymentMethod?: true
+    sourceAmount?: true
+    exchangeRate?: true
+    destinationAmount?: true
+    providerFee?: true
+    nobleCardsFee?: true
+    totalFee?: true
+    amountReceived?: true
+    status?: true
+    createdAt?: true
+    expiresAt?: true
+    usedAt?: true
+    _all?: true
+  }
+
+  export type WithdrawalQuoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WithdrawalQuote to aggregate.
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WithdrawalQuotes to fetch.
+     */
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WithdrawalQuotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WithdrawalQuotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WithdrawalQuotes
+    **/
+    _count?: true | WithdrawalQuoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WithdrawalQuoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WithdrawalQuoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WithdrawalQuoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WithdrawalQuoteMaxAggregateInputType
+  }
+
+  export type GetWithdrawalQuoteAggregateType<T extends WithdrawalQuoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateWithdrawalQuote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWithdrawalQuote[P]>
+      : GetScalarType<T[P], AggregateWithdrawalQuote[P]>
+  }
+
+
+
+
+  export type WithdrawalQuoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WithdrawalQuoteWhereInput
+    orderBy?: WithdrawalQuoteOrderByWithAggregationInput | WithdrawalQuoteOrderByWithAggregationInput[]
+    by: WithdrawalQuoteScalarFieldEnum[] | WithdrawalQuoteScalarFieldEnum
+    having?: WithdrawalQuoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WithdrawalQuoteCountAggregateInputType | true
+    _avg?: WithdrawalQuoteAvgAggregateInputType
+    _sum?: WithdrawalQuoteSumAggregateInputType
+    _min?: WithdrawalQuoteMinAggregateInputType
+    _max?: WithdrawalQuoteMaxAggregateInputType
+  }
+
+  export type WithdrawalQuoteGroupByOutputType = {
+    id: string
+    userId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal
+    exchangeRate: Decimal
+    destinationAmount: Decimal
+    providerFee: Decimal
+    nobleCardsFee: Decimal
+    totalFee: Decimal
+    amountReceived: Decimal
+    status: $Enums.WithdrawalQuoteStatus
+    createdAt: Date
+    expiresAt: Date
+    usedAt: Date | null
+    _count: WithdrawalQuoteCountAggregateOutputType | null
+    _avg: WithdrawalQuoteAvgAggregateOutputType | null
+    _sum: WithdrawalQuoteSumAggregateOutputType | null
+    _min: WithdrawalQuoteMinAggregateOutputType | null
+    _max: WithdrawalQuoteMaxAggregateOutputType | null
+  }
+
+  type GetWithdrawalQuoteGroupByPayload<T extends WithdrawalQuoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WithdrawalQuoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WithdrawalQuoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WithdrawalQuoteGroupByOutputType[P]>
+            : GetScalarType<T[P], WithdrawalQuoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WithdrawalQuoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    sourceAmount?: boolean
+    exchangeRate?: boolean
+    destinationAmount?: boolean
+    providerFee?: boolean
+    nobleCardsFee?: boolean
+    totalFee?: boolean
+    amountReceived?: boolean
+    status?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    withdrawals?: boolean | WithdrawalQuote$withdrawalsArgs<ExtArgs>
+    _count?: boolean | WithdrawalQuoteCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawalQuote"]>
+
+  export type WithdrawalQuoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    sourceAmount?: boolean
+    exchangeRate?: boolean
+    destinationAmount?: boolean
+    providerFee?: boolean
+    nobleCardsFee?: boolean
+    totalFee?: boolean
+    amountReceived?: boolean
+    status?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawalQuote"]>
+
+  export type WithdrawalQuoteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    sourceAmount?: boolean
+    exchangeRate?: boolean
+    destinationAmount?: boolean
+    providerFee?: boolean
+    nobleCardsFee?: boolean
+    totalFee?: boolean
+    amountReceived?: boolean
+    status?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["withdrawalQuote"]>
+
+  export type WithdrawalQuoteSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    sourceCurrencyCode?: boolean
+    destinationCurrencyCode?: boolean
+    countryCode?: boolean
+    paymentMethod?: boolean
+    sourceAmount?: boolean
+    exchangeRate?: boolean
+    destinationAmount?: boolean
+    providerFee?: boolean
+    nobleCardsFee?: boolean
+    totalFee?: boolean
+    amountReceived?: boolean
+    status?: boolean
+    createdAt?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+  }
+
+  export type WithdrawalQuoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "sourceCurrencyCode" | "destinationCurrencyCode" | "countryCode" | "paymentMethod" | "sourceAmount" | "exchangeRate" | "destinationAmount" | "providerFee" | "nobleCardsFee" | "totalFee" | "amountReceived" | "status" | "createdAt" | "expiresAt" | "usedAt", ExtArgs["result"]["withdrawalQuote"]>
+  export type WithdrawalQuoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    withdrawals?: boolean | WithdrawalQuote$withdrawalsArgs<ExtArgs>
+    _count?: boolean | WithdrawalQuoteCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WithdrawalQuoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }
+  export type WithdrawalQuoteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    destinationCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }
+
+  export type $WithdrawalQuotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WithdrawalQuote"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      sourceCurrency: Prisma.$CurrencyPayload<ExtArgs>
+      destinationCurrency: Prisma.$CurrencyPayload<ExtArgs>
+      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      sourceCurrencyCode: string
+      destinationCurrencyCode: string
+      countryCode: string
+      paymentMethod: $Enums.PaymentMethod
+      sourceAmount: Prisma.Decimal
+      exchangeRate: Prisma.Decimal
+      destinationAmount: Prisma.Decimal
+      providerFee: Prisma.Decimal
+      nobleCardsFee: Prisma.Decimal
+      totalFee: Prisma.Decimal
+      amountReceived: Prisma.Decimal
+      status: $Enums.WithdrawalQuoteStatus
+      createdAt: Date
+      expiresAt: Date
+      usedAt: Date | null
+    }, ExtArgs["result"]["withdrawalQuote"]>
+    composites: {}
+  }
+
+  type WithdrawalQuoteGetPayload<S extends boolean | null | undefined | WithdrawalQuoteDefaultArgs> = $Result.GetResult<Prisma.$WithdrawalQuotePayload, S>
+
+  type WithdrawalQuoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WithdrawalQuoteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WithdrawalQuoteCountAggregateInputType | true
+    }
+
+  export interface WithdrawalQuoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WithdrawalQuote'], meta: { name: 'WithdrawalQuote' } }
+    /**
+     * Find zero or one WithdrawalQuote that matches the filter.
+     * @param {WithdrawalQuoteFindUniqueArgs} args - Arguments to find a WithdrawalQuote
+     * @example
+     * // Get one WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WithdrawalQuoteFindUniqueArgs>(args: SelectSubset<T, WithdrawalQuoteFindUniqueArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WithdrawalQuote that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WithdrawalQuoteFindUniqueOrThrowArgs} args - Arguments to find a WithdrawalQuote
+     * @example
+     * // Get one WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WithdrawalQuoteFindUniqueOrThrowArgs>(args: SelectSubset<T, WithdrawalQuoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WithdrawalQuote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteFindFirstArgs} args - Arguments to find a WithdrawalQuote
+     * @example
+     * // Get one WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WithdrawalQuoteFindFirstArgs>(args?: SelectSubset<T, WithdrawalQuoteFindFirstArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WithdrawalQuote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteFindFirstOrThrowArgs} args - Arguments to find a WithdrawalQuote
+     * @example
+     * // Get one WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WithdrawalQuoteFindFirstOrThrowArgs>(args?: SelectSubset<T, WithdrawalQuoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WithdrawalQuotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WithdrawalQuotes
+     * const withdrawalQuotes = await prisma.withdrawalQuote.findMany()
+     * 
+     * // Get first 10 WithdrawalQuotes
+     * const withdrawalQuotes = await prisma.withdrawalQuote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const withdrawalQuoteWithIdOnly = await prisma.withdrawalQuote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WithdrawalQuoteFindManyArgs>(args?: SelectSubset<T, WithdrawalQuoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WithdrawalQuote.
+     * @param {WithdrawalQuoteCreateArgs} args - Arguments to create a WithdrawalQuote.
+     * @example
+     * // Create one WithdrawalQuote
+     * const WithdrawalQuote = await prisma.withdrawalQuote.create({
+     *   data: {
+     *     // ... data to create a WithdrawalQuote
+     *   }
+     * })
+     * 
+     */
+    create<T extends WithdrawalQuoteCreateArgs>(args: SelectSubset<T, WithdrawalQuoteCreateArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WithdrawalQuotes.
+     * @param {WithdrawalQuoteCreateManyArgs} args - Arguments to create many WithdrawalQuotes.
+     * @example
+     * // Create many WithdrawalQuotes
+     * const withdrawalQuote = await prisma.withdrawalQuote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WithdrawalQuoteCreateManyArgs>(args?: SelectSubset<T, WithdrawalQuoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WithdrawalQuotes and returns the data saved in the database.
+     * @param {WithdrawalQuoteCreateManyAndReturnArgs} args - Arguments to create many WithdrawalQuotes.
+     * @example
+     * // Create many WithdrawalQuotes
+     * const withdrawalQuote = await prisma.withdrawalQuote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WithdrawalQuotes and only return the `id`
+     * const withdrawalQuoteWithIdOnly = await prisma.withdrawalQuote.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WithdrawalQuoteCreateManyAndReturnArgs>(args?: SelectSubset<T, WithdrawalQuoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WithdrawalQuote.
+     * @param {WithdrawalQuoteDeleteArgs} args - Arguments to delete one WithdrawalQuote.
+     * @example
+     * // Delete one WithdrawalQuote
+     * const WithdrawalQuote = await prisma.withdrawalQuote.delete({
+     *   where: {
+     *     // ... filter to delete one WithdrawalQuote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WithdrawalQuoteDeleteArgs>(args: SelectSubset<T, WithdrawalQuoteDeleteArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WithdrawalQuote.
+     * @param {WithdrawalQuoteUpdateArgs} args - Arguments to update one WithdrawalQuote.
+     * @example
+     * // Update one WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WithdrawalQuoteUpdateArgs>(args: SelectSubset<T, WithdrawalQuoteUpdateArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WithdrawalQuotes.
+     * @param {WithdrawalQuoteDeleteManyArgs} args - Arguments to filter WithdrawalQuotes to delete.
+     * @example
+     * // Delete a few WithdrawalQuotes
+     * const { count } = await prisma.withdrawalQuote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WithdrawalQuoteDeleteManyArgs>(args?: SelectSubset<T, WithdrawalQuoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WithdrawalQuotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WithdrawalQuotes
+     * const withdrawalQuote = await prisma.withdrawalQuote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WithdrawalQuoteUpdateManyArgs>(args: SelectSubset<T, WithdrawalQuoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WithdrawalQuotes and returns the data updated in the database.
+     * @param {WithdrawalQuoteUpdateManyAndReturnArgs} args - Arguments to update many WithdrawalQuotes.
+     * @example
+     * // Update many WithdrawalQuotes
+     * const withdrawalQuote = await prisma.withdrawalQuote.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WithdrawalQuotes and only return the `id`
+     * const withdrawalQuoteWithIdOnly = await prisma.withdrawalQuote.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WithdrawalQuoteUpdateManyAndReturnArgs>(args: SelectSubset<T, WithdrawalQuoteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WithdrawalQuote.
+     * @param {WithdrawalQuoteUpsertArgs} args - Arguments to update or create a WithdrawalQuote.
+     * @example
+     * // Update or create a WithdrawalQuote
+     * const withdrawalQuote = await prisma.withdrawalQuote.upsert({
+     *   create: {
+     *     // ... data to create a WithdrawalQuote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WithdrawalQuote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WithdrawalQuoteUpsertArgs>(args: SelectSubset<T, WithdrawalQuoteUpsertArgs<ExtArgs>>): Prisma__WithdrawalQuoteClient<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WithdrawalQuotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteCountArgs} args - Arguments to filter WithdrawalQuotes to count.
+     * @example
+     * // Count the number of WithdrawalQuotes
+     * const count = await prisma.withdrawalQuote.count({
+     *   where: {
+     *     // ... the filter for the WithdrawalQuotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends WithdrawalQuoteCountArgs>(
+      args?: Subset<T, WithdrawalQuoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WithdrawalQuoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WithdrawalQuote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WithdrawalQuoteAggregateArgs>(args: Subset<T, WithdrawalQuoteAggregateArgs>): Prisma.PrismaPromise<GetWithdrawalQuoteAggregateType<T>>
+
+    /**
+     * Group by WithdrawalQuote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawalQuoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WithdrawalQuoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WithdrawalQuoteGroupByArgs['orderBy'] }
+        : { orderBy?: WithdrawalQuoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WithdrawalQuoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWithdrawalQuoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WithdrawalQuote model
+   */
+  readonly fields: WithdrawalQuoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WithdrawalQuote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WithdrawalQuoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    sourceCurrency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    destinationCurrency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    withdrawals<T extends WithdrawalQuote$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, WithdrawalQuote$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WithdrawalQuote model
+   */
+  interface WithdrawalQuoteFieldRefs {
+    readonly id: FieldRef<"WithdrawalQuote", 'String'>
+    readonly userId: FieldRef<"WithdrawalQuote", 'String'>
+    readonly sourceCurrencyCode: FieldRef<"WithdrawalQuote", 'String'>
+    readonly destinationCurrencyCode: FieldRef<"WithdrawalQuote", 'String'>
+    readonly countryCode: FieldRef<"WithdrawalQuote", 'String'>
+    readonly paymentMethod: FieldRef<"WithdrawalQuote", 'PaymentMethod'>
+    readonly sourceAmount: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly exchangeRate: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly destinationAmount: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly providerFee: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly nobleCardsFee: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly totalFee: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly amountReceived: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly status: FieldRef<"WithdrawalQuote", 'WithdrawalQuoteStatus'>
+    readonly createdAt: FieldRef<"WithdrawalQuote", 'DateTime'>
+    readonly expiresAt: FieldRef<"WithdrawalQuote", 'DateTime'>
+    readonly usedAt: FieldRef<"WithdrawalQuote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WithdrawalQuote findUnique
+   */
+  export type WithdrawalQuoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter, which WithdrawalQuote to fetch.
+     */
+    where: WithdrawalQuoteWhereUniqueInput
+  }
+
+  /**
+   * WithdrawalQuote findUniqueOrThrow
+   */
+  export type WithdrawalQuoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter, which WithdrawalQuote to fetch.
+     */
+    where: WithdrawalQuoteWhereUniqueInput
+  }
+
+  /**
+   * WithdrawalQuote findFirst
+   */
+  export type WithdrawalQuoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter, which WithdrawalQuote to fetch.
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WithdrawalQuotes to fetch.
+     */
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WithdrawalQuotes.
+     */
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WithdrawalQuotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WithdrawalQuotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WithdrawalQuotes.
+     */
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * WithdrawalQuote findFirstOrThrow
+   */
+  export type WithdrawalQuoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter, which WithdrawalQuote to fetch.
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WithdrawalQuotes to fetch.
+     */
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WithdrawalQuotes.
+     */
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WithdrawalQuotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WithdrawalQuotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WithdrawalQuotes.
+     */
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * WithdrawalQuote findMany
+   */
+  export type WithdrawalQuoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter, which WithdrawalQuotes to fetch.
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WithdrawalQuotes to fetch.
+     */
+    orderBy?: WithdrawalQuoteOrderByWithRelationInput | WithdrawalQuoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WithdrawalQuotes.
+     */
+    cursor?: WithdrawalQuoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WithdrawalQuotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WithdrawalQuotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WithdrawalQuotes.
+     */
+    distinct?: WithdrawalQuoteScalarFieldEnum | WithdrawalQuoteScalarFieldEnum[]
+  }
+
+  /**
+   * WithdrawalQuote create
+   */
+  export type WithdrawalQuoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WithdrawalQuote.
+     */
+    data: XOR<WithdrawalQuoteCreateInput, WithdrawalQuoteUncheckedCreateInput>
+  }
+
+  /**
+   * WithdrawalQuote createMany
+   */
+  export type WithdrawalQuoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WithdrawalQuotes.
+     */
+    data: WithdrawalQuoteCreateManyInput | WithdrawalQuoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WithdrawalQuote createManyAndReturn
+   */
+  export type WithdrawalQuoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * The data used to create many WithdrawalQuotes.
+     */
+    data: WithdrawalQuoteCreateManyInput | WithdrawalQuoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WithdrawalQuote update
+   */
+  export type WithdrawalQuoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WithdrawalQuote.
+     */
+    data: XOR<WithdrawalQuoteUpdateInput, WithdrawalQuoteUncheckedUpdateInput>
+    /**
+     * Choose, which WithdrawalQuote to update.
+     */
+    where: WithdrawalQuoteWhereUniqueInput
+  }
+
+  /**
+   * WithdrawalQuote updateMany
+   */
+  export type WithdrawalQuoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WithdrawalQuotes.
+     */
+    data: XOR<WithdrawalQuoteUpdateManyMutationInput, WithdrawalQuoteUncheckedUpdateManyInput>
+    /**
+     * Filter which WithdrawalQuotes to update
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * Limit how many WithdrawalQuotes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WithdrawalQuote updateManyAndReturn
+   */
+  export type WithdrawalQuoteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * The data used to update WithdrawalQuotes.
+     */
+    data: XOR<WithdrawalQuoteUpdateManyMutationInput, WithdrawalQuoteUncheckedUpdateManyInput>
+    /**
+     * Filter which WithdrawalQuotes to update
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * Limit how many WithdrawalQuotes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WithdrawalQuote upsert
+   */
+  export type WithdrawalQuoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WithdrawalQuote to update in case it exists.
+     */
+    where: WithdrawalQuoteWhereUniqueInput
+    /**
+     * In case the WithdrawalQuote found by the `where` argument doesn't exist, create a new WithdrawalQuote with this data.
+     */
+    create: XOR<WithdrawalQuoteCreateInput, WithdrawalQuoteUncheckedCreateInput>
+    /**
+     * In case the WithdrawalQuote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WithdrawalQuoteUpdateInput, WithdrawalQuoteUncheckedUpdateInput>
+  }
+
+  /**
+   * WithdrawalQuote delete
+   */
+  export type WithdrawalQuoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+    /**
+     * Filter which WithdrawalQuote to delete.
+     */
+    where: WithdrawalQuoteWhereUniqueInput
+  }
+
+  /**
+   * WithdrawalQuote deleteMany
+   */
+  export type WithdrawalQuoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WithdrawalQuotes to delete
+     */
+    where?: WithdrawalQuoteWhereInput
+    /**
+     * Limit how many WithdrawalQuotes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WithdrawalQuote.withdrawals
+   */
+  export type WithdrawalQuote$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * WithdrawalQuote without action
+   */
+  export type WithdrawalQuoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WithdrawalQuote
+     */
+    select?: WithdrawalQuoteSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WithdrawalQuote
+     */
+    omit?: WithdrawalQuoteOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalQuoteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Beneficiary
+   */
+
+  export type AggregateBeneficiary = {
+    _count: BeneficiaryCountAggregateOutputType | null
+    _min: BeneficiaryMinAggregateOutputType | null
+    _max: BeneficiaryMaxAggregateOutputType | null
+  }
+
+  export type BeneficiaryMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    country: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    type: $Enums.BeneficiaryType | null
+    institutionName: string | null
+    providerBankCode: string | null
+    accountHolderName: string | null
+    accountLast4: string | null
+    mobileMoneyProvider: string | null
+    providerRecipientReference: string | null
+    detailsFingerprint: string | null
+    verificationStatus: $Enums.BeneficiaryVerificationStatus | null
+    verifiedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BeneficiaryMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    country: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    type: $Enums.BeneficiaryType | null
+    institutionName: string | null
+    providerBankCode: string | null
+    accountHolderName: string | null
+    accountLast4: string | null
+    mobileMoneyProvider: string | null
+    providerRecipientReference: string | null
+    detailsFingerprint: string | null
+    verificationStatus: $Enums.BeneficiaryVerificationStatus | null
+    verifiedAt: Date | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BeneficiaryCountAggregateOutputType = {
+    id: number
+    userId: number
+    country: number
+    countryCode: number
+    currencyCode: number
+    paymentMethod: number
+    type: number
+    institutionName: number
+    providerBankCode: number
+    accountHolderName: number
+    accountLast4: number
+    mobileMoneyProvider: number
+    providerRecipientReference: number
+    encryptedDetails: number
+    detailsFingerprint: number
+    verificationStatus: number
+    verifiedAt: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BeneficiaryMinAggregateInputType = {
+    id?: true
+    userId?: true
+    country?: true
+    countryCode?: true
+    currencyCode?: true
+    paymentMethod?: true
+    type?: true
+    institutionName?: true
+    providerBankCode?: true
+    accountHolderName?: true
+    accountLast4?: true
+    mobileMoneyProvider?: true
+    providerRecipientReference?: true
+    detailsFingerprint?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BeneficiaryMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    country?: true
+    countryCode?: true
+    currencyCode?: true
+    paymentMethod?: true
+    type?: true
+    institutionName?: true
+    providerBankCode?: true
+    accountHolderName?: true
+    accountLast4?: true
+    mobileMoneyProvider?: true
+    providerRecipientReference?: true
+    detailsFingerprint?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BeneficiaryCountAggregateInputType = {
+    id?: true
+    userId?: true
+    country?: true
+    countryCode?: true
+    currencyCode?: true
+    paymentMethod?: true
+    type?: true
+    institutionName?: true
+    providerBankCode?: true
+    accountHolderName?: true
+    accountLast4?: true
+    mobileMoneyProvider?: true
+    providerRecipientReference?: true
+    encryptedDetails?: true
+    detailsFingerprint?: true
+    verificationStatus?: true
+    verifiedAt?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BeneficiaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Beneficiary to aggregate.
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Beneficiaries to fetch.
+     */
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BeneficiaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Beneficiaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Beneficiaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Beneficiaries
+    **/
+    _count?: true | BeneficiaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BeneficiaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BeneficiaryMaxAggregateInputType
+  }
+
+  export type GetBeneficiaryAggregateType<T extends BeneficiaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateBeneficiary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBeneficiary[P]>
+      : GetScalarType<T[P], AggregateBeneficiary[P]>
+  }
+
+
+
+
+  export type BeneficiaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BeneficiaryWhereInput
+    orderBy?: BeneficiaryOrderByWithAggregationInput | BeneficiaryOrderByWithAggregationInput[]
+    by: BeneficiaryScalarFieldEnum[] | BeneficiaryScalarFieldEnum
+    having?: BeneficiaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BeneficiaryCountAggregateInputType | true
+    _min?: BeneficiaryMinAggregateInputType
+    _max?: BeneficiaryMaxAggregateInputType
+  }
+
+  export type BeneficiaryGroupByOutputType = {
+    id: string
+    userId: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName: string | null
+    providerBankCode: string | null
+    accountHolderName: string | null
+    accountLast4: string | null
+    mobileMoneyProvider: string | null
+    providerRecipientReference: string | null
+    encryptedDetails: JsonValue | null
+    detailsFingerprint: string | null
+    verificationStatus: $Enums.BeneficiaryVerificationStatus
+    verifiedAt: Date | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: BeneficiaryCountAggregateOutputType | null
+    _min: BeneficiaryMinAggregateOutputType | null
+    _max: BeneficiaryMaxAggregateOutputType | null
+  }
+
+  type GetBeneficiaryGroupByPayload<T extends BeneficiaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BeneficiaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BeneficiaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BeneficiaryGroupByOutputType[P]>
+            : GetScalarType<T[P], BeneficiaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BeneficiarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    country?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    paymentMethod?: boolean
+    type?: boolean
+    institutionName?: boolean
+    providerBankCode?: boolean
+    accountHolderName?: boolean
+    accountLast4?: boolean
+    mobileMoneyProvider?: boolean
+    providerRecipientReference?: boolean
+    encryptedDetails?: boolean
+    detailsFingerprint?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    withdrawals?: boolean | Beneficiary$withdrawalsArgs<ExtArgs>
+    _count?: boolean | BeneficiaryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiary"]>
+
+  export type BeneficiarySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    country?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    paymentMethod?: boolean
+    type?: boolean
+    institutionName?: boolean
+    providerBankCode?: boolean
+    accountHolderName?: boolean
+    accountLast4?: boolean
+    mobileMoneyProvider?: boolean
+    providerRecipientReference?: boolean
+    encryptedDetails?: boolean
+    detailsFingerprint?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiary"]>
+
+  export type BeneficiarySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    country?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    paymentMethod?: boolean
+    type?: boolean
+    institutionName?: boolean
+    providerBankCode?: boolean
+    accountHolderName?: boolean
+    accountLast4?: boolean
+    mobileMoneyProvider?: boolean
+    providerRecipientReference?: boolean
+    encryptedDetails?: boolean
+    detailsFingerprint?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["beneficiary"]>
+
+  export type BeneficiarySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    country?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    paymentMethod?: boolean
+    type?: boolean
+    institutionName?: boolean
+    providerBankCode?: boolean
+    accountHolderName?: boolean
+    accountLast4?: boolean
+    mobileMoneyProvider?: boolean
+    providerRecipientReference?: boolean
+    encryptedDetails?: boolean
+    detailsFingerprint?: boolean
+    verificationStatus?: boolean
+    verifiedAt?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BeneficiaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "country" | "countryCode" | "currencyCode" | "paymentMethod" | "type" | "institutionName" | "providerBankCode" | "accountHolderName" | "accountLast4" | "mobileMoneyProvider" | "providerRecipientReference" | "encryptedDetails" | "detailsFingerprint" | "verificationStatus" | "verifiedAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["beneficiary"]>
+  export type BeneficiaryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+    withdrawals?: boolean | Beneficiary$withdrawalsArgs<ExtArgs>
+    _count?: boolean | BeneficiaryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BeneficiaryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }
+  export type BeneficiaryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    currency?: boolean | CurrencyDefaultArgs<ExtArgs>
+  }
+
+  export type $BeneficiaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Beneficiary"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      currency: Prisma.$CurrencyPayload<ExtArgs>
+      withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      country: string
+      countryCode: string
+      currencyCode: string
+      paymentMethod: $Enums.PaymentMethod
+      type: $Enums.BeneficiaryType
+      institutionName: string | null
+      providerBankCode: string | null
+      accountHolderName: string | null
+      accountLast4: string | null
+      mobileMoneyProvider: string | null
+      providerRecipientReference: string | null
+      encryptedDetails: Prisma.JsonValue | null
+      detailsFingerprint: string | null
+      verificationStatus: $Enums.BeneficiaryVerificationStatus
+      verifiedAt: Date | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["beneficiary"]>
+    composites: {}
+  }
+
+  type BeneficiaryGetPayload<S extends boolean | null | undefined | BeneficiaryDefaultArgs> = $Result.GetResult<Prisma.$BeneficiaryPayload, S>
+
+  type BeneficiaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BeneficiaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BeneficiaryCountAggregateInputType | true
+    }
+
+  export interface BeneficiaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Beneficiary'], meta: { name: 'Beneficiary' } }
+    /**
+     * Find zero or one Beneficiary that matches the filter.
+     * @param {BeneficiaryFindUniqueArgs} args - Arguments to find a Beneficiary
+     * @example
+     * // Get one Beneficiary
+     * const beneficiary = await prisma.beneficiary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BeneficiaryFindUniqueArgs>(args: SelectSubset<T, BeneficiaryFindUniqueArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Beneficiary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BeneficiaryFindUniqueOrThrowArgs} args - Arguments to find a Beneficiary
+     * @example
+     * // Get one Beneficiary
+     * const beneficiary = await prisma.beneficiary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BeneficiaryFindUniqueOrThrowArgs>(args: SelectSubset<T, BeneficiaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Beneficiary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryFindFirstArgs} args - Arguments to find a Beneficiary
+     * @example
+     * // Get one Beneficiary
+     * const beneficiary = await prisma.beneficiary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BeneficiaryFindFirstArgs>(args?: SelectSubset<T, BeneficiaryFindFirstArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Beneficiary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryFindFirstOrThrowArgs} args - Arguments to find a Beneficiary
+     * @example
+     * // Get one Beneficiary
+     * const beneficiary = await prisma.beneficiary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BeneficiaryFindFirstOrThrowArgs>(args?: SelectSubset<T, BeneficiaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Beneficiaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Beneficiaries
+     * const beneficiaries = await prisma.beneficiary.findMany()
+     * 
+     * // Get first 10 Beneficiaries
+     * const beneficiaries = await prisma.beneficiary.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const beneficiaryWithIdOnly = await prisma.beneficiary.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BeneficiaryFindManyArgs>(args?: SelectSubset<T, BeneficiaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Beneficiary.
+     * @param {BeneficiaryCreateArgs} args - Arguments to create a Beneficiary.
+     * @example
+     * // Create one Beneficiary
+     * const Beneficiary = await prisma.beneficiary.create({
+     *   data: {
+     *     // ... data to create a Beneficiary
+     *   }
+     * })
+     * 
+     */
+    create<T extends BeneficiaryCreateArgs>(args: SelectSubset<T, BeneficiaryCreateArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Beneficiaries.
+     * @param {BeneficiaryCreateManyArgs} args - Arguments to create many Beneficiaries.
+     * @example
+     * // Create many Beneficiaries
+     * const beneficiary = await prisma.beneficiary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BeneficiaryCreateManyArgs>(args?: SelectSubset<T, BeneficiaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Beneficiaries and returns the data saved in the database.
+     * @param {BeneficiaryCreateManyAndReturnArgs} args - Arguments to create many Beneficiaries.
+     * @example
+     * // Create many Beneficiaries
+     * const beneficiary = await prisma.beneficiary.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Beneficiaries and only return the `id`
+     * const beneficiaryWithIdOnly = await prisma.beneficiary.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BeneficiaryCreateManyAndReturnArgs>(args?: SelectSubset<T, BeneficiaryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Beneficiary.
+     * @param {BeneficiaryDeleteArgs} args - Arguments to delete one Beneficiary.
+     * @example
+     * // Delete one Beneficiary
+     * const Beneficiary = await prisma.beneficiary.delete({
+     *   where: {
+     *     // ... filter to delete one Beneficiary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BeneficiaryDeleteArgs>(args: SelectSubset<T, BeneficiaryDeleteArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Beneficiary.
+     * @param {BeneficiaryUpdateArgs} args - Arguments to update one Beneficiary.
+     * @example
+     * // Update one Beneficiary
+     * const beneficiary = await prisma.beneficiary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BeneficiaryUpdateArgs>(args: SelectSubset<T, BeneficiaryUpdateArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Beneficiaries.
+     * @param {BeneficiaryDeleteManyArgs} args - Arguments to filter Beneficiaries to delete.
+     * @example
+     * // Delete a few Beneficiaries
+     * const { count } = await prisma.beneficiary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BeneficiaryDeleteManyArgs>(args?: SelectSubset<T, BeneficiaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Beneficiaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Beneficiaries
+     * const beneficiary = await prisma.beneficiary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BeneficiaryUpdateManyArgs>(args: SelectSubset<T, BeneficiaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Beneficiaries and returns the data updated in the database.
+     * @param {BeneficiaryUpdateManyAndReturnArgs} args - Arguments to update many Beneficiaries.
+     * @example
+     * // Update many Beneficiaries
+     * const beneficiary = await prisma.beneficiary.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Beneficiaries and only return the `id`
+     * const beneficiaryWithIdOnly = await prisma.beneficiary.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BeneficiaryUpdateManyAndReturnArgs>(args: SelectSubset<T, BeneficiaryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Beneficiary.
+     * @param {BeneficiaryUpsertArgs} args - Arguments to update or create a Beneficiary.
+     * @example
+     * // Update or create a Beneficiary
+     * const beneficiary = await prisma.beneficiary.upsert({
+     *   create: {
+     *     // ... data to create a Beneficiary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Beneficiary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BeneficiaryUpsertArgs>(args: SelectSubset<T, BeneficiaryUpsertArgs<ExtArgs>>): Prisma__BeneficiaryClient<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Beneficiaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryCountArgs} args - Arguments to filter Beneficiaries to count.
+     * @example
+     * // Count the number of Beneficiaries
+     * const count = await prisma.beneficiary.count({
+     *   where: {
+     *     // ... the filter for the Beneficiaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends BeneficiaryCountArgs>(
+      args?: Subset<T, BeneficiaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BeneficiaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Beneficiary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BeneficiaryAggregateArgs>(args: Subset<T, BeneficiaryAggregateArgs>): Prisma.PrismaPromise<GetBeneficiaryAggregateType<T>>
+
+    /**
+     * Group by Beneficiary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BeneficiaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BeneficiaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BeneficiaryGroupByArgs['orderBy'] }
+        : { orderBy?: BeneficiaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BeneficiaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBeneficiaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Beneficiary model
+   */
+  readonly fields: BeneficiaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Beneficiary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BeneficiaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    currency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    withdrawals<T extends Beneficiary$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, Beneficiary$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Beneficiary model
+   */
+  interface BeneficiaryFieldRefs {
+    readonly id: FieldRef<"Beneficiary", 'String'>
+    readonly userId: FieldRef<"Beneficiary", 'String'>
+    readonly country: FieldRef<"Beneficiary", 'String'>
+    readonly countryCode: FieldRef<"Beneficiary", 'String'>
+    readonly currencyCode: FieldRef<"Beneficiary", 'String'>
+    readonly paymentMethod: FieldRef<"Beneficiary", 'PaymentMethod'>
+    readonly type: FieldRef<"Beneficiary", 'BeneficiaryType'>
+    readonly institutionName: FieldRef<"Beneficiary", 'String'>
+    readonly providerBankCode: FieldRef<"Beneficiary", 'String'>
+    readonly accountHolderName: FieldRef<"Beneficiary", 'String'>
+    readonly accountLast4: FieldRef<"Beneficiary", 'String'>
+    readonly mobileMoneyProvider: FieldRef<"Beneficiary", 'String'>
+    readonly providerRecipientReference: FieldRef<"Beneficiary", 'String'>
+    readonly encryptedDetails: FieldRef<"Beneficiary", 'Json'>
+    readonly detailsFingerprint: FieldRef<"Beneficiary", 'String'>
+    readonly verificationStatus: FieldRef<"Beneficiary", 'BeneficiaryVerificationStatus'>
+    readonly verifiedAt: FieldRef<"Beneficiary", 'DateTime'>
+    readonly isActive: FieldRef<"Beneficiary", 'Boolean'>
+    readonly createdAt: FieldRef<"Beneficiary", 'DateTime'>
+    readonly updatedAt: FieldRef<"Beneficiary", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Beneficiary findUnique
+   */
+  export type BeneficiaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter, which Beneficiary to fetch.
+     */
+    where: BeneficiaryWhereUniqueInput
+  }
+
+  /**
+   * Beneficiary findUniqueOrThrow
+   */
+  export type BeneficiaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter, which Beneficiary to fetch.
+     */
+    where: BeneficiaryWhereUniqueInput
+  }
+
+  /**
+   * Beneficiary findFirst
+   */
+  export type BeneficiaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter, which Beneficiary to fetch.
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Beneficiaries to fetch.
+     */
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Beneficiaries.
+     */
+    cursor?: BeneficiaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Beneficiaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Beneficiaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Beneficiaries.
+     */
+    distinct?: BeneficiaryScalarFieldEnum | BeneficiaryScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary findFirstOrThrow
+   */
+  export type BeneficiaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter, which Beneficiary to fetch.
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Beneficiaries to fetch.
+     */
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Beneficiaries.
+     */
+    cursor?: BeneficiaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Beneficiaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Beneficiaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Beneficiaries.
+     */
+    distinct?: BeneficiaryScalarFieldEnum | BeneficiaryScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary findMany
+   */
+  export type BeneficiaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter, which Beneficiaries to fetch.
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Beneficiaries to fetch.
+     */
+    orderBy?: BeneficiaryOrderByWithRelationInput | BeneficiaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Beneficiaries.
+     */
+    cursor?: BeneficiaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Beneficiaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Beneficiaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Beneficiaries.
+     */
+    distinct?: BeneficiaryScalarFieldEnum | BeneficiaryScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary create
+   */
+  export type BeneficiaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Beneficiary.
+     */
+    data: XOR<BeneficiaryCreateInput, BeneficiaryUncheckedCreateInput>
+  }
+
+  /**
+   * Beneficiary createMany
+   */
+  export type BeneficiaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Beneficiaries.
+     */
+    data: BeneficiaryCreateManyInput | BeneficiaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Beneficiary createManyAndReturn
+   */
+  export type BeneficiaryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * The data used to create many Beneficiaries.
+     */
+    data: BeneficiaryCreateManyInput | BeneficiaryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Beneficiary update
+   */
+  export type BeneficiaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Beneficiary.
+     */
+    data: XOR<BeneficiaryUpdateInput, BeneficiaryUncheckedUpdateInput>
+    /**
+     * Choose, which Beneficiary to update.
+     */
+    where: BeneficiaryWhereUniqueInput
+  }
+
+  /**
+   * Beneficiary updateMany
+   */
+  export type BeneficiaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Beneficiaries.
+     */
+    data: XOR<BeneficiaryUpdateManyMutationInput, BeneficiaryUncheckedUpdateManyInput>
+    /**
+     * Filter which Beneficiaries to update
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * Limit how many Beneficiaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Beneficiary updateManyAndReturn
+   */
+  export type BeneficiaryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * The data used to update Beneficiaries.
+     */
+    data: XOR<BeneficiaryUpdateManyMutationInput, BeneficiaryUncheckedUpdateManyInput>
+    /**
+     * Filter which Beneficiaries to update
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * Limit how many Beneficiaries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Beneficiary upsert
+   */
+  export type BeneficiaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Beneficiary to update in case it exists.
+     */
+    where: BeneficiaryWhereUniqueInput
+    /**
+     * In case the Beneficiary found by the `where` argument doesn't exist, create a new Beneficiary with this data.
+     */
+    create: XOR<BeneficiaryCreateInput, BeneficiaryUncheckedCreateInput>
+    /**
+     * In case the Beneficiary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BeneficiaryUpdateInput, BeneficiaryUncheckedUpdateInput>
+  }
+
+  /**
+   * Beneficiary delete
+   */
+  export type BeneficiaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+    /**
+     * Filter which Beneficiary to delete.
+     */
+    where: BeneficiaryWhereUniqueInput
+  }
+
+  /**
+   * Beneficiary deleteMany
+   */
+  export type BeneficiaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Beneficiaries to delete
+     */
+    where?: BeneficiaryWhereInput
+    /**
+     * Limit how many Beneficiaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Beneficiary.withdrawals
+   */
+  export type Beneficiary$withdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+    orderBy?: WithdrawalOrderByWithRelationInput | WithdrawalOrderByWithRelationInput[]
+    cursor?: WithdrawalWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Beneficiary without action
+   */
+  export type BeneficiaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Beneficiary
+     */
+    select?: BeneficiarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Beneficiary
+     */
+    omit?: BeneficiaryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BeneficiaryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PayoutAttempt
+   */
+
+  export type AggregatePayoutAttempt = {
+    _count: PayoutAttemptCountAggregateOutputType | null
+    _avg: PayoutAttemptAvgAggregateOutputType | null
+    _sum: PayoutAttemptSumAggregateOutputType | null
+    _min: PayoutAttemptMinAggregateOutputType | null
+    _max: PayoutAttemptMaxAggregateOutputType | null
+  }
+
+  export type PayoutAttemptAvgAggregateOutputType = {
+    attemptNumber: number | null
+  }
+
+  export type PayoutAttemptSumAggregateOutputType = {
+    attemptNumber: number | null
+  }
+
+  export type PayoutAttemptMinAggregateOutputType = {
+    id: string | null
+    withdrawalId: string | null
+    provider: $Enums.PaymentProvider | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    attemptNumber: number | null
+    status: $Enums.TransactionStatus | null
+    errorCode: string | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PayoutAttemptMaxAggregateOutputType = {
+    id: string | null
+    withdrawalId: string | null
+    provider: $Enums.PaymentProvider | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    attemptNumber: number | null
+    status: $Enums.TransactionStatus | null
+    errorCode: string | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PayoutAttemptCountAggregateOutputType = {
+    id: number
+    withdrawalId: number
+    provider: number
+    providerReference: number
+    providerTransactionId: number
+    attemptNumber: number
+    status: number
+    requestMetadata: number
+    responseMetadata: number
+    errorCode: number
+    errorMessage: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PayoutAttemptAvgAggregateInputType = {
+    attemptNumber?: true
+  }
+
+  export type PayoutAttemptSumAggregateInputType = {
+    attemptNumber?: true
+  }
+
+  export type PayoutAttemptMinAggregateInputType = {
+    id?: true
+    withdrawalId?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    attemptNumber?: true
+    status?: true
+    errorCode?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PayoutAttemptMaxAggregateInputType = {
+    id?: true
+    withdrawalId?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    attemptNumber?: true
+    status?: true
+    errorCode?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PayoutAttemptCountAggregateInputType = {
+    id?: true
+    withdrawalId?: true
+    provider?: true
+    providerReference?: true
+    providerTransactionId?: true
+    attemptNumber?: true
+    status?: true
+    requestMetadata?: true
+    responseMetadata?: true
+    errorCode?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PayoutAttemptAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PayoutAttempt to aggregate.
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PayoutAttempts to fetch.
+     */
+    orderBy?: PayoutAttemptOrderByWithRelationInput | PayoutAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PayoutAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PayoutAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PayoutAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PayoutAttempts
+    **/
+    _count?: true | PayoutAttemptCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PayoutAttemptAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PayoutAttemptSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PayoutAttemptMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PayoutAttemptMaxAggregateInputType
+  }
+
+  export type GetPayoutAttemptAggregateType<T extends PayoutAttemptAggregateArgs> = {
+        [P in keyof T & keyof AggregatePayoutAttempt]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePayoutAttempt[P]>
+      : GetScalarType<T[P], AggregatePayoutAttempt[P]>
+  }
+
+
+
+
+  export type PayoutAttemptGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PayoutAttemptWhereInput
+    orderBy?: PayoutAttemptOrderByWithAggregationInput | PayoutAttemptOrderByWithAggregationInput[]
+    by: PayoutAttemptScalarFieldEnum[] | PayoutAttemptScalarFieldEnum
+    having?: PayoutAttemptScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PayoutAttemptCountAggregateInputType | true
+    _avg?: PayoutAttemptAvgAggregateInputType
+    _sum?: PayoutAttemptSumAggregateInputType
+    _min?: PayoutAttemptMinAggregateInputType
+    _max?: PayoutAttemptMaxAggregateInputType
+  }
+
+  export type PayoutAttemptGroupByOutputType = {
+    id: string
+    withdrawalId: string
+    provider: $Enums.PaymentProvider
+    providerReference: string | null
+    providerTransactionId: string | null
+    attemptNumber: number
+    status: $Enums.TransactionStatus
+    requestMetadata: JsonValue | null
+    responseMetadata: JsonValue | null
+    errorCode: string | null
+    errorMessage: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PayoutAttemptCountAggregateOutputType | null
+    _avg: PayoutAttemptAvgAggregateOutputType | null
+    _sum: PayoutAttemptSumAggregateOutputType | null
+    _min: PayoutAttemptMinAggregateOutputType | null
+    _max: PayoutAttemptMaxAggregateOutputType | null
+  }
+
+  type GetPayoutAttemptGroupByPayload<T extends PayoutAttemptGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PayoutAttemptGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PayoutAttemptGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PayoutAttemptGroupByOutputType[P]>
+            : GetScalarType<T[P], PayoutAttemptGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PayoutAttemptSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    withdrawalId?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    attemptNumber?: boolean
+    status?: boolean
+    requestMetadata?: boolean
+    responseMetadata?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["payoutAttempt"]>
+
+  export type PayoutAttemptSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    withdrawalId?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    attemptNumber?: boolean
+    status?: boolean
+    requestMetadata?: boolean
+    responseMetadata?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["payoutAttempt"]>
+
+  export type PayoutAttemptSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    withdrawalId?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    attemptNumber?: boolean
+    status?: boolean
+    requestMetadata?: boolean
+    responseMetadata?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["payoutAttempt"]>
+
+  export type PayoutAttemptSelectScalar = {
+    id?: boolean
+    withdrawalId?: boolean
+    provider?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    attemptNumber?: boolean
+    status?: boolean
+    requestMetadata?: boolean
+    responseMetadata?: boolean
+    errorCode?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PayoutAttemptOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "withdrawalId" | "provider" | "providerReference" | "providerTransactionId" | "attemptNumber" | "status" | "requestMetadata" | "responseMetadata" | "errorCode" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["payoutAttempt"]>
+  export type PayoutAttemptInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }
+  export type PayoutAttemptIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }
+  export type PayoutAttemptIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | WithdrawalDefaultArgs<ExtArgs>
+  }
+
+  export type $PayoutAttemptPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PayoutAttempt"
+    objects: {
+      withdrawal: Prisma.$WithdrawalPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      withdrawalId: string
+      provider: $Enums.PaymentProvider
+      providerReference: string | null
+      providerTransactionId: string | null
+      attemptNumber: number
+      status: $Enums.TransactionStatus
+      requestMetadata: Prisma.JsonValue | null
+      responseMetadata: Prisma.JsonValue | null
+      errorCode: string | null
+      errorMessage: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["payoutAttempt"]>
+    composites: {}
+  }
+
+  type PayoutAttemptGetPayload<S extends boolean | null | undefined | PayoutAttemptDefaultArgs> = $Result.GetResult<Prisma.$PayoutAttemptPayload, S>
+
+  type PayoutAttemptCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PayoutAttemptFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PayoutAttemptCountAggregateInputType | true
+    }
+
+  export interface PayoutAttemptDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PayoutAttempt'], meta: { name: 'PayoutAttempt' } }
+    /**
+     * Find zero or one PayoutAttempt that matches the filter.
+     * @param {PayoutAttemptFindUniqueArgs} args - Arguments to find a PayoutAttempt
+     * @example
+     * // Get one PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PayoutAttemptFindUniqueArgs>(args: SelectSubset<T, PayoutAttemptFindUniqueArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PayoutAttempt that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PayoutAttemptFindUniqueOrThrowArgs} args - Arguments to find a PayoutAttempt
+     * @example
+     * // Get one PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PayoutAttemptFindUniqueOrThrowArgs>(args: SelectSubset<T, PayoutAttemptFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PayoutAttempt that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptFindFirstArgs} args - Arguments to find a PayoutAttempt
+     * @example
+     * // Get one PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PayoutAttemptFindFirstArgs>(args?: SelectSubset<T, PayoutAttemptFindFirstArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PayoutAttempt that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptFindFirstOrThrowArgs} args - Arguments to find a PayoutAttempt
+     * @example
+     * // Get one PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PayoutAttemptFindFirstOrThrowArgs>(args?: SelectSubset<T, PayoutAttemptFindFirstOrThrowArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PayoutAttempts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PayoutAttempts
+     * const payoutAttempts = await prisma.payoutAttempt.findMany()
+     * 
+     * // Get first 10 PayoutAttempts
+     * const payoutAttempts = await prisma.payoutAttempt.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const payoutAttemptWithIdOnly = await prisma.payoutAttempt.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PayoutAttemptFindManyArgs>(args?: SelectSubset<T, PayoutAttemptFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PayoutAttempt.
+     * @param {PayoutAttemptCreateArgs} args - Arguments to create a PayoutAttempt.
+     * @example
+     * // Create one PayoutAttempt
+     * const PayoutAttempt = await prisma.payoutAttempt.create({
+     *   data: {
+     *     // ... data to create a PayoutAttempt
+     *   }
+     * })
+     * 
+     */
+    create<T extends PayoutAttemptCreateArgs>(args: SelectSubset<T, PayoutAttemptCreateArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PayoutAttempts.
+     * @param {PayoutAttemptCreateManyArgs} args - Arguments to create many PayoutAttempts.
+     * @example
+     * // Create many PayoutAttempts
+     * const payoutAttempt = await prisma.payoutAttempt.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PayoutAttemptCreateManyArgs>(args?: SelectSubset<T, PayoutAttemptCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PayoutAttempts and returns the data saved in the database.
+     * @param {PayoutAttemptCreateManyAndReturnArgs} args - Arguments to create many PayoutAttempts.
+     * @example
+     * // Create many PayoutAttempts
+     * const payoutAttempt = await prisma.payoutAttempt.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PayoutAttempts and only return the `id`
+     * const payoutAttemptWithIdOnly = await prisma.payoutAttempt.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PayoutAttemptCreateManyAndReturnArgs>(args?: SelectSubset<T, PayoutAttemptCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PayoutAttempt.
+     * @param {PayoutAttemptDeleteArgs} args - Arguments to delete one PayoutAttempt.
+     * @example
+     * // Delete one PayoutAttempt
+     * const PayoutAttempt = await prisma.payoutAttempt.delete({
+     *   where: {
+     *     // ... filter to delete one PayoutAttempt
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PayoutAttemptDeleteArgs>(args: SelectSubset<T, PayoutAttemptDeleteArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PayoutAttempt.
+     * @param {PayoutAttemptUpdateArgs} args - Arguments to update one PayoutAttempt.
+     * @example
+     * // Update one PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PayoutAttemptUpdateArgs>(args: SelectSubset<T, PayoutAttemptUpdateArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PayoutAttempts.
+     * @param {PayoutAttemptDeleteManyArgs} args - Arguments to filter PayoutAttempts to delete.
+     * @example
+     * // Delete a few PayoutAttempts
+     * const { count } = await prisma.payoutAttempt.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PayoutAttemptDeleteManyArgs>(args?: SelectSubset<T, PayoutAttemptDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PayoutAttempts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PayoutAttempts
+     * const payoutAttempt = await prisma.payoutAttempt.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PayoutAttemptUpdateManyArgs>(args: SelectSubset<T, PayoutAttemptUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PayoutAttempts and returns the data updated in the database.
+     * @param {PayoutAttemptUpdateManyAndReturnArgs} args - Arguments to update many PayoutAttempts.
+     * @example
+     * // Update many PayoutAttempts
+     * const payoutAttempt = await prisma.payoutAttempt.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PayoutAttempts and only return the `id`
+     * const payoutAttemptWithIdOnly = await prisma.payoutAttempt.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PayoutAttemptUpdateManyAndReturnArgs>(args: SelectSubset<T, PayoutAttemptUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PayoutAttempt.
+     * @param {PayoutAttemptUpsertArgs} args - Arguments to update or create a PayoutAttempt.
+     * @example
+     * // Update or create a PayoutAttempt
+     * const payoutAttempt = await prisma.payoutAttempt.upsert({
+     *   create: {
+     *     // ... data to create a PayoutAttempt
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PayoutAttempt we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PayoutAttemptUpsertArgs>(args: SelectSubset<T, PayoutAttemptUpsertArgs<ExtArgs>>): Prisma__PayoutAttemptClient<$Result.GetResult<Prisma.$PayoutAttemptPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PayoutAttempts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptCountArgs} args - Arguments to filter PayoutAttempts to count.
+     * @example
+     * // Count the number of PayoutAttempts
+     * const count = await prisma.payoutAttempt.count({
+     *   where: {
+     *     // ... the filter for the PayoutAttempts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PayoutAttemptCountArgs>(
+      args?: Subset<T, PayoutAttemptCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PayoutAttemptCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PayoutAttempt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PayoutAttemptAggregateArgs>(args: Subset<T, PayoutAttemptAggregateArgs>): Prisma.PrismaPromise<GetPayoutAttemptAggregateType<T>>
+
+    /**
+     * Group by PayoutAttempt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PayoutAttemptGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PayoutAttemptGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PayoutAttemptGroupByArgs['orderBy'] }
+        : { orderBy?: PayoutAttemptGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PayoutAttemptGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPayoutAttemptGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PayoutAttempt model
+   */
+  readonly fields: PayoutAttemptFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PayoutAttempt.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PayoutAttemptClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    withdrawal<T extends WithdrawalDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WithdrawalDefaultArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PayoutAttempt model
+   */
+  interface PayoutAttemptFieldRefs {
+    readonly id: FieldRef<"PayoutAttempt", 'String'>
+    readonly withdrawalId: FieldRef<"PayoutAttempt", 'String'>
+    readonly provider: FieldRef<"PayoutAttempt", 'PaymentProvider'>
+    readonly providerReference: FieldRef<"PayoutAttempt", 'String'>
+    readonly providerTransactionId: FieldRef<"PayoutAttempt", 'String'>
+    readonly attemptNumber: FieldRef<"PayoutAttempt", 'Int'>
+    readonly status: FieldRef<"PayoutAttempt", 'TransactionStatus'>
+    readonly requestMetadata: FieldRef<"PayoutAttempt", 'Json'>
+    readonly responseMetadata: FieldRef<"PayoutAttempt", 'Json'>
+    readonly errorCode: FieldRef<"PayoutAttempt", 'String'>
+    readonly errorMessage: FieldRef<"PayoutAttempt", 'String'>
+    readonly createdAt: FieldRef<"PayoutAttempt", 'DateTime'>
+    readonly updatedAt: FieldRef<"PayoutAttempt", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PayoutAttempt findUnique
+   */
+  export type PayoutAttemptFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which PayoutAttempt to fetch.
+     */
+    where: PayoutAttemptWhereUniqueInput
+  }
+
+  /**
+   * PayoutAttempt findUniqueOrThrow
+   */
+  export type PayoutAttemptFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which PayoutAttempt to fetch.
+     */
+    where: PayoutAttemptWhereUniqueInput
+  }
+
+  /**
+   * PayoutAttempt findFirst
+   */
+  export type PayoutAttemptFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which PayoutAttempt to fetch.
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PayoutAttempts to fetch.
+     */
+    orderBy?: PayoutAttemptOrderByWithRelationInput | PayoutAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PayoutAttempts.
+     */
+    cursor?: PayoutAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PayoutAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PayoutAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PayoutAttempts.
+     */
+    distinct?: PayoutAttemptScalarFieldEnum | PayoutAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * PayoutAttempt findFirstOrThrow
+   */
+  export type PayoutAttemptFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which PayoutAttempt to fetch.
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PayoutAttempts to fetch.
+     */
+    orderBy?: PayoutAttemptOrderByWithRelationInput | PayoutAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PayoutAttempts.
+     */
+    cursor?: PayoutAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PayoutAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PayoutAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PayoutAttempts.
+     */
+    distinct?: PayoutAttemptScalarFieldEnum | PayoutAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * PayoutAttempt findMany
+   */
+  export type PayoutAttemptFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which PayoutAttempts to fetch.
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PayoutAttempts to fetch.
+     */
+    orderBy?: PayoutAttemptOrderByWithRelationInput | PayoutAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PayoutAttempts.
+     */
+    cursor?: PayoutAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PayoutAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PayoutAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PayoutAttempts.
+     */
+    distinct?: PayoutAttemptScalarFieldEnum | PayoutAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * PayoutAttempt create
+   */
+  export type PayoutAttemptCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PayoutAttempt.
+     */
+    data: XOR<PayoutAttemptCreateInput, PayoutAttemptUncheckedCreateInput>
+  }
+
+  /**
+   * PayoutAttempt createMany
+   */
+  export type PayoutAttemptCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PayoutAttempts.
+     */
+    data: PayoutAttemptCreateManyInput | PayoutAttemptCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PayoutAttempt createManyAndReturn
+   */
+  export type PayoutAttemptCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * The data used to create many PayoutAttempts.
+     */
+    data: PayoutAttemptCreateManyInput | PayoutAttemptCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PayoutAttempt update
+   */
+  export type PayoutAttemptUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PayoutAttempt.
+     */
+    data: XOR<PayoutAttemptUpdateInput, PayoutAttemptUncheckedUpdateInput>
+    /**
+     * Choose, which PayoutAttempt to update.
+     */
+    where: PayoutAttemptWhereUniqueInput
+  }
+
+  /**
+   * PayoutAttempt updateMany
+   */
+  export type PayoutAttemptUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PayoutAttempts.
+     */
+    data: XOR<PayoutAttemptUpdateManyMutationInput, PayoutAttemptUncheckedUpdateManyInput>
+    /**
+     * Filter which PayoutAttempts to update
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * Limit how many PayoutAttempts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PayoutAttempt updateManyAndReturn
+   */
+  export type PayoutAttemptUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * The data used to update PayoutAttempts.
+     */
+    data: XOR<PayoutAttemptUpdateManyMutationInput, PayoutAttemptUncheckedUpdateManyInput>
+    /**
+     * Filter which PayoutAttempts to update
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * Limit how many PayoutAttempts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PayoutAttempt upsert
+   */
+  export type PayoutAttemptUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PayoutAttempt to update in case it exists.
+     */
+    where: PayoutAttemptWhereUniqueInput
+    /**
+     * In case the PayoutAttempt found by the `where` argument doesn't exist, create a new PayoutAttempt with this data.
+     */
+    create: XOR<PayoutAttemptCreateInput, PayoutAttemptUncheckedCreateInput>
+    /**
+     * In case the PayoutAttempt was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PayoutAttemptUpdateInput, PayoutAttemptUncheckedUpdateInput>
+  }
+
+  /**
+   * PayoutAttempt delete
+   */
+  export type PayoutAttemptDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+    /**
+     * Filter which PayoutAttempt to delete.
+     */
+    where: PayoutAttemptWhereUniqueInput
+  }
+
+  /**
+   * PayoutAttempt deleteMany
+   */
+  export type PayoutAttemptDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PayoutAttempts to delete
+     */
+    where?: PayoutAttemptWhereInput
+    /**
+     * Limit how many PayoutAttempts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PayoutAttempt without action
+   */
+  export type PayoutAttemptDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PayoutAttempt
+     */
+    select?: PayoutAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PayoutAttempt
+     */
+    omit?: PayoutAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PayoutAttemptInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProviderWebhookEvent
+   */
+
+  export type AggregateProviderWebhookEvent = {
+    _count: ProviderWebhookEventCountAggregateOutputType | null
+    _min: ProviderWebhookEventMinAggregateOutputType | null
+    _max: ProviderWebhookEventMaxAggregateOutputType | null
+  }
+
+  export type ProviderWebhookEventMinAggregateOutputType = {
+    id: string | null
+    provider: $Enums.PaymentProvider | null
+    eventId: string | null
+    eventType: string | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    withdrawalId: string | null
+    receivedAt: Date | null
+    processedAt: Date | null
+    status: $Enums.ProviderWebhookEventStatus | null
+    errorMessage: string | null
+  }
+
+  export type ProviderWebhookEventMaxAggregateOutputType = {
+    id: string | null
+    provider: $Enums.PaymentProvider | null
+    eventId: string | null
+    eventType: string | null
+    providerReference: string | null
+    providerTransactionId: string | null
+    withdrawalId: string | null
+    receivedAt: Date | null
+    processedAt: Date | null
+    status: $Enums.ProviderWebhookEventStatus | null
+    errorMessage: string | null
+  }
+
+  export type ProviderWebhookEventCountAggregateOutputType = {
+    id: number
+    provider: number
+    eventId: number
+    eventType: number
+    providerReference: number
+    providerTransactionId: number
+    withdrawalId: number
+    receivedAt: number
+    processedAt: number
+    status: number
+    errorMessage: number
+    metadata: number
+    _all: number
+  }
+
+
+  export type ProviderWebhookEventMinAggregateInputType = {
+    id?: true
+    provider?: true
+    eventId?: true
+    eventType?: true
+    providerReference?: true
+    providerTransactionId?: true
+    withdrawalId?: true
+    receivedAt?: true
+    processedAt?: true
+    status?: true
+    errorMessage?: true
+  }
+
+  export type ProviderWebhookEventMaxAggregateInputType = {
+    id?: true
+    provider?: true
+    eventId?: true
+    eventType?: true
+    providerReference?: true
+    providerTransactionId?: true
+    withdrawalId?: true
+    receivedAt?: true
+    processedAt?: true
+    status?: true
+    errorMessage?: true
+  }
+
+  export type ProviderWebhookEventCountAggregateInputType = {
+    id?: true
+    provider?: true
+    eventId?: true
+    eventType?: true
+    providerReference?: true
+    providerTransactionId?: true
+    withdrawalId?: true
+    receivedAt?: true
+    processedAt?: true
+    status?: true
+    errorMessage?: true
+    metadata?: true
+    _all?: true
+  }
+
+  export type ProviderWebhookEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProviderWebhookEvent to aggregate.
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderWebhookEvents to fetch.
+     */
+    orderBy?: ProviderWebhookEventOrderByWithRelationInput | ProviderWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProviderWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProviderWebhookEvents
+    **/
+    _count?: true | ProviderWebhookEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProviderWebhookEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProviderWebhookEventMaxAggregateInputType
+  }
+
+  export type GetProviderWebhookEventAggregateType<T extends ProviderWebhookEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateProviderWebhookEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProviderWebhookEvent[P]>
+      : GetScalarType<T[P], AggregateProviderWebhookEvent[P]>
+  }
+
+
+
+
+  export type ProviderWebhookEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderWebhookEventWhereInput
+    orderBy?: ProviderWebhookEventOrderByWithAggregationInput | ProviderWebhookEventOrderByWithAggregationInput[]
+    by: ProviderWebhookEventScalarFieldEnum[] | ProviderWebhookEventScalarFieldEnum
+    having?: ProviderWebhookEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProviderWebhookEventCountAggregateInputType | true
+    _min?: ProviderWebhookEventMinAggregateInputType
+    _max?: ProviderWebhookEventMaxAggregateInputType
+  }
+
+  export type ProviderWebhookEventGroupByOutputType = {
+    id: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference: string | null
+    providerTransactionId: string | null
+    withdrawalId: string | null
+    receivedAt: Date
+    processedAt: Date | null
+    status: $Enums.ProviderWebhookEventStatus
+    errorMessage: string | null
+    metadata: JsonValue | null
+    _count: ProviderWebhookEventCountAggregateOutputType | null
+    _min: ProviderWebhookEventMinAggregateOutputType | null
+    _max: ProviderWebhookEventMaxAggregateOutputType | null
+  }
+
+  type GetProviderWebhookEventGroupByPayload<T extends ProviderWebhookEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProviderWebhookEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProviderWebhookEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProviderWebhookEventGroupByOutputType[P]>
+            : GetScalarType<T[P], ProviderWebhookEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProviderWebhookEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    eventId?: boolean
+    eventType?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    withdrawalId?: boolean
+    receivedAt?: boolean
+    processedAt?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }, ExtArgs["result"]["providerWebhookEvent"]>
+
+  export type ProviderWebhookEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    eventId?: boolean
+    eventType?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    withdrawalId?: boolean
+    receivedAt?: boolean
+    processedAt?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }, ExtArgs["result"]["providerWebhookEvent"]>
+
+  export type ProviderWebhookEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    eventId?: boolean
+    eventType?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    withdrawalId?: boolean
+    receivedAt?: boolean
+    processedAt?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }, ExtArgs["result"]["providerWebhookEvent"]>
+
+  export type ProviderWebhookEventSelectScalar = {
+    id?: boolean
+    provider?: boolean
+    eventId?: boolean
+    eventType?: boolean
+    providerReference?: boolean
+    providerTransactionId?: boolean
+    withdrawalId?: boolean
+    receivedAt?: boolean
+    processedAt?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+  }
+
+  export type ProviderWebhookEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "provider" | "eventId" | "eventType" | "providerReference" | "providerTransactionId" | "withdrawalId" | "receivedAt" | "processedAt" | "status" | "errorMessage" | "metadata", ExtArgs["result"]["providerWebhookEvent"]>
+  export type ProviderWebhookEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }
+  export type ProviderWebhookEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }
+  export type ProviderWebhookEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    withdrawal?: boolean | ProviderWebhookEvent$withdrawalArgs<ExtArgs>
+  }
+
+  export type $ProviderWebhookEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProviderWebhookEvent"
+    objects: {
+      withdrawal: Prisma.$WithdrawalPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      provider: $Enums.PaymentProvider
+      eventId: string
+      eventType: string
+      providerReference: string | null
+      providerTransactionId: string | null
+      withdrawalId: string | null
+      receivedAt: Date
+      processedAt: Date | null
+      status: $Enums.ProviderWebhookEventStatus
+      errorMessage: string | null
+      metadata: Prisma.JsonValue | null
+    }, ExtArgs["result"]["providerWebhookEvent"]>
+    composites: {}
+  }
+
+  type ProviderWebhookEventGetPayload<S extends boolean | null | undefined | ProviderWebhookEventDefaultArgs> = $Result.GetResult<Prisma.$ProviderWebhookEventPayload, S>
+
+  type ProviderWebhookEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProviderWebhookEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProviderWebhookEventCountAggregateInputType | true
+    }
+
+  export interface ProviderWebhookEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProviderWebhookEvent'], meta: { name: 'ProviderWebhookEvent' } }
+    /**
+     * Find zero or one ProviderWebhookEvent that matches the filter.
+     * @param {ProviderWebhookEventFindUniqueArgs} args - Arguments to find a ProviderWebhookEvent
+     * @example
+     * // Get one ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProviderWebhookEventFindUniqueArgs>(args: SelectSubset<T, ProviderWebhookEventFindUniqueArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProviderWebhookEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProviderWebhookEventFindUniqueOrThrowArgs} args - Arguments to find a ProviderWebhookEvent
+     * @example
+     * // Get one ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProviderWebhookEventFindUniqueOrThrowArgs>(args: SelectSubset<T, ProviderWebhookEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProviderWebhookEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventFindFirstArgs} args - Arguments to find a ProviderWebhookEvent
+     * @example
+     * // Get one ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProviderWebhookEventFindFirstArgs>(args?: SelectSubset<T, ProviderWebhookEventFindFirstArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProviderWebhookEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventFindFirstOrThrowArgs} args - Arguments to find a ProviderWebhookEvent
+     * @example
+     * // Get one ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProviderWebhookEventFindFirstOrThrowArgs>(args?: SelectSubset<T, ProviderWebhookEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProviderWebhookEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProviderWebhookEvents
+     * const providerWebhookEvents = await prisma.providerWebhookEvent.findMany()
+     * 
+     * // Get first 10 ProviderWebhookEvents
+     * const providerWebhookEvents = await prisma.providerWebhookEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const providerWebhookEventWithIdOnly = await prisma.providerWebhookEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProviderWebhookEventFindManyArgs>(args?: SelectSubset<T, ProviderWebhookEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProviderWebhookEvent.
+     * @param {ProviderWebhookEventCreateArgs} args - Arguments to create a ProviderWebhookEvent.
+     * @example
+     * // Create one ProviderWebhookEvent
+     * const ProviderWebhookEvent = await prisma.providerWebhookEvent.create({
+     *   data: {
+     *     // ... data to create a ProviderWebhookEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProviderWebhookEventCreateArgs>(args: SelectSubset<T, ProviderWebhookEventCreateArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProviderWebhookEvents.
+     * @param {ProviderWebhookEventCreateManyArgs} args - Arguments to create many ProviderWebhookEvents.
+     * @example
+     * // Create many ProviderWebhookEvents
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProviderWebhookEventCreateManyArgs>(args?: SelectSubset<T, ProviderWebhookEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProviderWebhookEvents and returns the data saved in the database.
+     * @param {ProviderWebhookEventCreateManyAndReturnArgs} args - Arguments to create many ProviderWebhookEvents.
+     * @example
+     * // Create many ProviderWebhookEvents
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProviderWebhookEvents and only return the `id`
+     * const providerWebhookEventWithIdOnly = await prisma.providerWebhookEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProviderWebhookEventCreateManyAndReturnArgs>(args?: SelectSubset<T, ProviderWebhookEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProviderWebhookEvent.
+     * @param {ProviderWebhookEventDeleteArgs} args - Arguments to delete one ProviderWebhookEvent.
+     * @example
+     * // Delete one ProviderWebhookEvent
+     * const ProviderWebhookEvent = await prisma.providerWebhookEvent.delete({
+     *   where: {
+     *     // ... filter to delete one ProviderWebhookEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProviderWebhookEventDeleteArgs>(args: SelectSubset<T, ProviderWebhookEventDeleteArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProviderWebhookEvent.
+     * @param {ProviderWebhookEventUpdateArgs} args - Arguments to update one ProviderWebhookEvent.
+     * @example
+     * // Update one ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProviderWebhookEventUpdateArgs>(args: SelectSubset<T, ProviderWebhookEventUpdateArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProviderWebhookEvents.
+     * @param {ProviderWebhookEventDeleteManyArgs} args - Arguments to filter ProviderWebhookEvents to delete.
+     * @example
+     * // Delete a few ProviderWebhookEvents
+     * const { count } = await prisma.providerWebhookEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProviderWebhookEventDeleteManyArgs>(args?: SelectSubset<T, ProviderWebhookEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProviderWebhookEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProviderWebhookEvents
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProviderWebhookEventUpdateManyArgs>(args: SelectSubset<T, ProviderWebhookEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProviderWebhookEvents and returns the data updated in the database.
+     * @param {ProviderWebhookEventUpdateManyAndReturnArgs} args - Arguments to update many ProviderWebhookEvents.
+     * @example
+     * // Update many ProviderWebhookEvents
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProviderWebhookEvents and only return the `id`
+     * const providerWebhookEventWithIdOnly = await prisma.providerWebhookEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProviderWebhookEventUpdateManyAndReturnArgs>(args: SelectSubset<T, ProviderWebhookEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProviderWebhookEvent.
+     * @param {ProviderWebhookEventUpsertArgs} args - Arguments to update or create a ProviderWebhookEvent.
+     * @example
+     * // Update or create a ProviderWebhookEvent
+     * const providerWebhookEvent = await prisma.providerWebhookEvent.upsert({
+     *   create: {
+     *     // ... data to create a ProviderWebhookEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProviderWebhookEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProviderWebhookEventUpsertArgs>(args: SelectSubset<T, ProviderWebhookEventUpsertArgs<ExtArgs>>): Prisma__ProviderWebhookEventClient<$Result.GetResult<Prisma.$ProviderWebhookEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProviderWebhookEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventCountArgs} args - Arguments to filter ProviderWebhookEvents to count.
+     * @example
+     * // Count the number of ProviderWebhookEvents
+     * const count = await prisma.providerWebhookEvent.count({
+     *   where: {
+     *     // ... the filter for the ProviderWebhookEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProviderWebhookEventCountArgs>(
+      args?: Subset<T, ProviderWebhookEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProviderWebhookEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProviderWebhookEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProviderWebhookEventAggregateArgs>(args: Subset<T, ProviderWebhookEventAggregateArgs>): Prisma.PrismaPromise<GetProviderWebhookEventAggregateType<T>>
+
+    /**
+     * Group by ProviderWebhookEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProviderWebhookEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProviderWebhookEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProviderWebhookEventGroupByArgs['orderBy'] }
+        : { orderBy?: ProviderWebhookEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProviderWebhookEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProviderWebhookEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProviderWebhookEvent model
+   */
+  readonly fields: ProviderWebhookEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProviderWebhookEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProviderWebhookEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    withdrawal<T extends ProviderWebhookEvent$withdrawalArgs<ExtArgs> = {}>(args?: Subset<T, ProviderWebhookEvent$withdrawalArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProviderWebhookEvent model
+   */
+  interface ProviderWebhookEventFieldRefs {
+    readonly id: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly provider: FieldRef<"ProviderWebhookEvent", 'PaymentProvider'>
+    readonly eventId: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly eventType: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly providerReference: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly providerTransactionId: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly withdrawalId: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly receivedAt: FieldRef<"ProviderWebhookEvent", 'DateTime'>
+    readonly processedAt: FieldRef<"ProviderWebhookEvent", 'DateTime'>
+    readonly status: FieldRef<"ProviderWebhookEvent", 'ProviderWebhookEventStatus'>
+    readonly errorMessage: FieldRef<"ProviderWebhookEvent", 'String'>
+    readonly metadata: FieldRef<"ProviderWebhookEvent", 'Json'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProviderWebhookEvent findUnique
+   */
+  export type ProviderWebhookEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderWebhookEvent to fetch.
+     */
+    where: ProviderWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ProviderWebhookEvent findUniqueOrThrow
+   */
+  export type ProviderWebhookEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderWebhookEvent to fetch.
+     */
+    where: ProviderWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ProviderWebhookEvent findFirst
+   */
+  export type ProviderWebhookEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderWebhookEvent to fetch.
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderWebhookEvents to fetch.
+     */
+    orderBy?: ProviderWebhookEventOrderByWithRelationInput | ProviderWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProviderWebhookEvents.
+     */
+    cursor?: ProviderWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProviderWebhookEvents.
+     */
+    distinct?: ProviderWebhookEventScalarFieldEnum | ProviderWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderWebhookEvent findFirstOrThrow
+   */
+  export type ProviderWebhookEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderWebhookEvent to fetch.
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderWebhookEvents to fetch.
+     */
+    orderBy?: ProviderWebhookEventOrderByWithRelationInput | ProviderWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProviderWebhookEvents.
+     */
+    cursor?: ProviderWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProviderWebhookEvents.
+     */
+    distinct?: ProviderWebhookEventScalarFieldEnum | ProviderWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderWebhookEvent findMany
+   */
+  export type ProviderWebhookEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ProviderWebhookEvents to fetch.
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProviderWebhookEvents to fetch.
+     */
+    orderBy?: ProviderWebhookEventOrderByWithRelationInput | ProviderWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProviderWebhookEvents.
+     */
+    cursor?: ProviderWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProviderWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProviderWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProviderWebhookEvents.
+     */
+    distinct?: ProviderWebhookEventScalarFieldEnum | ProviderWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ProviderWebhookEvent create
+   */
+  export type ProviderWebhookEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProviderWebhookEvent.
+     */
+    data: XOR<ProviderWebhookEventCreateInput, ProviderWebhookEventUncheckedCreateInput>
+  }
+
+  /**
+   * ProviderWebhookEvent createMany
+   */
+  export type ProviderWebhookEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProviderWebhookEvents.
+     */
+    data: ProviderWebhookEventCreateManyInput | ProviderWebhookEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProviderWebhookEvent createManyAndReturn
+   */
+  export type ProviderWebhookEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProviderWebhookEvents.
+     */
+    data: ProviderWebhookEventCreateManyInput | ProviderWebhookEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProviderWebhookEvent update
+   */
+  export type ProviderWebhookEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProviderWebhookEvent.
+     */
+    data: XOR<ProviderWebhookEventUpdateInput, ProviderWebhookEventUncheckedUpdateInput>
+    /**
+     * Choose, which ProviderWebhookEvent to update.
+     */
+    where: ProviderWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ProviderWebhookEvent updateMany
+   */
+  export type ProviderWebhookEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProviderWebhookEvents.
+     */
+    data: XOR<ProviderWebhookEventUpdateManyMutationInput, ProviderWebhookEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ProviderWebhookEvents to update
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * Limit how many ProviderWebhookEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProviderWebhookEvent updateManyAndReturn
+   */
+  export type ProviderWebhookEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * The data used to update ProviderWebhookEvents.
+     */
+    data: XOR<ProviderWebhookEventUpdateManyMutationInput, ProviderWebhookEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ProviderWebhookEvents to update
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * Limit how many ProviderWebhookEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProviderWebhookEvent upsert
+   */
+  export type ProviderWebhookEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProviderWebhookEvent to update in case it exists.
+     */
+    where: ProviderWebhookEventWhereUniqueInput
+    /**
+     * In case the ProviderWebhookEvent found by the `where` argument doesn't exist, create a new ProviderWebhookEvent with this data.
+     */
+    create: XOR<ProviderWebhookEventCreateInput, ProviderWebhookEventUncheckedCreateInput>
+    /**
+     * In case the ProviderWebhookEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProviderWebhookEventUpdateInput, ProviderWebhookEventUncheckedUpdateInput>
+  }
+
+  /**
+   * ProviderWebhookEvent delete
+   */
+  export type ProviderWebhookEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+    /**
+     * Filter which ProviderWebhookEvent to delete.
+     */
+    where: ProviderWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ProviderWebhookEvent deleteMany
+   */
+  export type ProviderWebhookEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProviderWebhookEvents to delete
+     */
+    where?: ProviderWebhookEventWhereInput
+    /**
+     * Limit how many ProviderWebhookEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProviderWebhookEvent.withdrawal
+   */
+  export type ProviderWebhookEvent$withdrawalArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Withdrawal
+     */
+    select?: WithdrawalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Withdrawal
+     */
+    omit?: WithdrawalOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WithdrawalInclude<ExtArgs> | null
+    where?: WithdrawalWhereInput
+  }
+
+  /**
+   * ProviderWebhookEvent without action
+   */
+  export type ProviderWebhookEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProviderWebhookEvent
+     */
+    select?: ProviderWebhookEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProviderWebhookEvent
+     */
+    omit?: ProviderWebhookEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProviderWebhookEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -14384,6 +21974,8 @@ export namespace Prisma {
     isActive: 'isActive',
     role: 'role',
     transactionPinHash: 'transactionPinHash',
+    transactionPinFailedAttempts: 'transactionPinFailedAttempts',
+    transactionPinLockedUntil: 'transactionPinLockedUntil',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14535,12 +22127,134 @@ export namespace Prisma {
     amount: 'amount',
     balanceBefore: 'balanceBefore',
     balanceAfter: 'balanceAfter',
+    pendingBalanceBefore: 'pendingBalanceBefore',
+    pendingBalanceAfter: 'pendingBalanceAfter',
+    operationKey: 'operationKey',
     reference: 'reference',
     reason: 'reason',
     createdAt: 'createdAt'
   };
 
   export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+  export const WithdrawalScalarFieldEnum: {
+    id: 'id',
+    reference: 'reference',
+    userId: 'userId',
+    walletId: 'walletId',
+    transactionId: 'transactionId',
+    sourceCurrencyCode: 'sourceCurrencyCode',
+    destinationCurrencyCode: 'destinationCurrencyCode',
+    sourceAmount: 'sourceAmount',
+    destinationAmount: 'destinationAmount',
+    exchangeRate: 'exchangeRate',
+    fee: 'fee',
+    amountReceived: 'amountReceived',
+    country: 'country',
+    countryCode: 'countryCode',
+    paymentMethod: 'paymentMethod',
+    provider: 'provider',
+    providerReference: 'providerReference',
+    providerTransactionId: 'providerTransactionId',
+    quoteId: 'quoteId',
+    beneficiaryId: 'beneficiaryId',
+    idempotencyKey: 'idempotencyKey',
+    status: 'status',
+    failureReason: 'failureReason',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type WithdrawalScalarFieldEnum = (typeof WithdrawalScalarFieldEnum)[keyof typeof WithdrawalScalarFieldEnum]
+
+
+  export const WithdrawalQuoteScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    sourceCurrencyCode: 'sourceCurrencyCode',
+    destinationCurrencyCode: 'destinationCurrencyCode',
+    countryCode: 'countryCode',
+    paymentMethod: 'paymentMethod',
+    sourceAmount: 'sourceAmount',
+    exchangeRate: 'exchangeRate',
+    destinationAmount: 'destinationAmount',
+    providerFee: 'providerFee',
+    nobleCardsFee: 'nobleCardsFee',
+    totalFee: 'totalFee',
+    amountReceived: 'amountReceived',
+    status: 'status',
+    createdAt: 'createdAt',
+    expiresAt: 'expiresAt',
+    usedAt: 'usedAt'
+  };
+
+  export type WithdrawalQuoteScalarFieldEnum = (typeof WithdrawalQuoteScalarFieldEnum)[keyof typeof WithdrawalQuoteScalarFieldEnum]
+
+
+  export const BeneficiaryScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    country: 'country',
+    countryCode: 'countryCode',
+    currencyCode: 'currencyCode',
+    paymentMethod: 'paymentMethod',
+    type: 'type',
+    institutionName: 'institutionName',
+    providerBankCode: 'providerBankCode',
+    accountHolderName: 'accountHolderName',
+    accountLast4: 'accountLast4',
+    mobileMoneyProvider: 'mobileMoneyProvider',
+    providerRecipientReference: 'providerRecipientReference',
+    encryptedDetails: 'encryptedDetails',
+    detailsFingerprint: 'detailsFingerprint',
+    verificationStatus: 'verificationStatus',
+    verifiedAt: 'verifiedAt',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BeneficiaryScalarFieldEnum = (typeof BeneficiaryScalarFieldEnum)[keyof typeof BeneficiaryScalarFieldEnum]
+
+
+  export const PayoutAttemptScalarFieldEnum: {
+    id: 'id',
+    withdrawalId: 'withdrawalId',
+    provider: 'provider',
+    providerReference: 'providerReference',
+    providerTransactionId: 'providerTransactionId',
+    attemptNumber: 'attemptNumber',
+    status: 'status',
+    requestMetadata: 'requestMetadata',
+    responseMetadata: 'responseMetadata',
+    errorCode: 'errorCode',
+    errorMessage: 'errorMessage',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PayoutAttemptScalarFieldEnum = (typeof PayoutAttemptScalarFieldEnum)[keyof typeof PayoutAttemptScalarFieldEnum]
+
+
+  export const ProviderWebhookEventScalarFieldEnum: {
+    id: 'id',
+    provider: 'provider',
+    eventId: 'eventId',
+    eventType: 'eventType',
+    providerReference: 'providerReference',
+    providerTransactionId: 'providerTransactionId',
+    withdrawalId: 'withdrawalId',
+    receivedAt: 'receivedAt',
+    processedAt: 'processedAt',
+    status: 'status',
+    errorMessage: 'errorMessage',
+    metadata: 'metadata'
+  };
+
+  export type ProviderWebhookEventScalarFieldEnum = (typeof ProviderWebhookEventScalarFieldEnum)[keyof typeof ProviderWebhookEventScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14765,6 +22479,62 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'WithdrawalQuoteStatus'
+   */
+  export type EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithdrawalQuoteStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'WithdrawalQuoteStatus[]'
+   */
+  export type ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithdrawalQuoteStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BeneficiaryType'
+   */
+  export type EnumBeneficiaryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BeneficiaryType'>
+    
+
+
+  /**
+   * Reference to a field of type 'BeneficiaryType[]'
+   */
+  export type ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BeneficiaryType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BeneficiaryVerificationStatus'
+   */
+  export type EnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BeneficiaryVerificationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BeneficiaryVerificationStatus[]'
+   */
+  export type ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BeneficiaryVerificationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProviderWebhookEventStatus'
+   */
+  export type EnumProviderWebhookEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProviderWebhookEventStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ProviderWebhookEventStatus[]'
+   */
+  export type ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProviderWebhookEventStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14806,6 +22576,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     transactionPinHash?: StringNullableFilter<"User"> | string | null
+    transactionPinFailedAttempts?: IntFilter<"User"> | number
+    transactionPinLockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
@@ -14814,6 +22586,9 @@ export namespace Prisma {
     wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
+    withdrawalQuotes?: WithdrawalQuoteListRelationFilter
+    beneficiaries?: BeneficiaryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14838,6 +22613,8 @@ export namespace Prisma {
     isActive?: SortOrder
     role?: SortOrder
     transactionPinHash?: SortOrderInput | SortOrder
+    transactionPinFailedAttempts?: SortOrder
+    transactionPinLockedUntil?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     passwordResets?: PasswordResetChallengeOrderByRelationAggregateInput
@@ -14846,6 +22623,9 @@ export namespace Prisma {
     wallet?: WalletOrderByWithRelationInput
     deposits?: DepositOrderByRelationAggregateInput
     transactions?: TransactionOrderByRelationAggregateInput
+    withdrawals?: WithdrawalOrderByRelationAggregateInput
+    withdrawalQuotes?: WithdrawalQuoteOrderByRelationAggregateInput
+    beneficiaries?: BeneficiaryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14873,6 +22653,8 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     transactionPinHash?: StringNullableFilter<"User"> | string | null
+    transactionPinFailedAttempts?: IntFilter<"User"> | number
+    transactionPinLockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
@@ -14881,6 +22663,9 @@ export namespace Prisma {
     wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
+    withdrawalQuotes?: WithdrawalQuoteListRelationFilter
+    beneficiaries?: BeneficiaryListRelationFilter
   }, "id" | "email" | "username" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -14905,11 +22690,15 @@ export namespace Prisma {
     isActive?: SortOrder
     role?: SortOrder
     transactionPinHash?: SortOrderInput | SortOrder
+    transactionPinFailedAttempts?: SortOrder
+    transactionPinLockedUntil?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -14937,6 +22726,8 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     transactionPinHash?: StringNullableWithAggregatesFilter<"User"> | string | null
+    transactionPinFailedAttempts?: IntWithAggregatesFilter<"User"> | number
+    transactionPinLockedUntil?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -15193,6 +22984,7 @@ export namespace Prisma {
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
   }
 
   export type WalletOrderByWithRelationInput = {
@@ -15205,6 +22997,7 @@ export namespace Prisma {
     deposits?: DepositOrderByRelationAggregateInput
     transactions?: TransactionOrderByRelationAggregateInput
     ledgerEntries?: LedgerEntryOrderByRelationAggregateInput
+    withdrawals?: WithdrawalOrderByRelationAggregateInput
   }
 
   export type WalletWhereUniqueInput = Prisma.AtLeast<{
@@ -15220,6 +23013,7 @@ export namespace Prisma {
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
+    withdrawals?: WithdrawalListRelationFilter
   }, "id" | "userId">
 
   export type WalletOrderByWithAggregationInput = {
@@ -15260,6 +23054,11 @@ export namespace Prisma {
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
+    sourceWithdrawals?: WithdrawalListRelationFilter
+    destinationWithdrawals?: WithdrawalListRelationFilter
+    sourceQuotes?: WithdrawalQuoteListRelationFilter
+    destinationQuotes?: WithdrawalQuoteListRelationFilter
+    beneficiaries?: BeneficiaryListRelationFilter
   }
 
   export type CurrencyOrderByWithRelationInput = {
@@ -15277,6 +23076,11 @@ export namespace Prisma {
     deposits?: DepositOrderByRelationAggregateInput
     transactions?: TransactionOrderByRelationAggregateInput
     ledgerEntries?: LedgerEntryOrderByRelationAggregateInput
+    sourceWithdrawals?: WithdrawalOrderByRelationAggregateInput
+    destinationWithdrawals?: WithdrawalOrderByRelationAggregateInput
+    sourceQuotes?: WithdrawalQuoteOrderByRelationAggregateInput
+    destinationQuotes?: WithdrawalQuoteOrderByRelationAggregateInput
+    beneficiaries?: BeneficiaryOrderByRelationAggregateInput
   }
 
   export type CurrencyWhereUniqueInput = Prisma.AtLeast<{
@@ -15297,6 +23101,11 @@ export namespace Prisma {
     deposits?: DepositListRelationFilter
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
+    sourceWithdrawals?: WithdrawalListRelationFilter
+    destinationWithdrawals?: WithdrawalListRelationFilter
+    sourceQuotes?: WithdrawalQuoteListRelationFilter
+    destinationQuotes?: WithdrawalQuoteListRelationFilter
+    beneficiaries?: BeneficiaryListRelationFilter
   }, "code">
 
   export type CurrencyOrderByWithAggregationInput = {
@@ -15569,6 +23378,7 @@ export namespace Prisma {
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     deposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
+    withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
     ledgerEntries?: LedgerEntryListRelationFilter
   }
 
@@ -15594,6 +23404,7 @@ export namespace Prisma {
     wallet?: WalletOrderByWithRelationInput
     currency?: CurrencyOrderByWithRelationInput
     deposit?: DepositOrderByWithRelationInput
+    withdrawal?: WithdrawalOrderByWithRelationInput
     ledgerEntries?: LedgerEntryOrderByRelationAggregateInput
   }
 
@@ -15622,6 +23433,7 @@ export namespace Prisma {
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     deposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
+    withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
     ledgerEntries?: LedgerEntryListRelationFilter
   }, "id" | "reference">
 
@@ -15685,6 +23497,9 @@ export namespace Prisma {
     amount?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    operationKey?: StringNullableFilter<"LedgerEntry"> | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
@@ -15702,6 +23517,9 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrderInput | SortOrder
+    pendingBalanceAfter?: SortOrderInput | SortOrder
+    operationKey?: SortOrderInput | SortOrder
     reference?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -15712,6 +23530,7 @@ export namespace Prisma {
 
   export type LedgerEntryWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    operationKey?: string
     AND?: LedgerEntryWhereInput | LedgerEntryWhereInput[]
     OR?: LedgerEntryWhereInput[]
     NOT?: LedgerEntryWhereInput | LedgerEntryWhereInput[]
@@ -15722,13 +23541,15 @@ export namespace Prisma {
     amount?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
-  }, "id">
+  }, "id" | "operationKey">
 
   export type LedgerEntryOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15739,6 +23560,9 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrderInput | SortOrder
+    pendingBalanceAfter?: SortOrderInput | SortOrder
+    operationKey?: SortOrderInput | SortOrder
     reference?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -15761,9 +23585,660 @@ export namespace Prisma {
     amount?: DecimalWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    operationKey?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     reference?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     reason?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LedgerEntry"> | Date | string
+  }
+
+  export type WithdrawalWhereInput = {
+    AND?: WithdrawalWhereInput | WithdrawalWhereInput[]
+    OR?: WithdrawalWhereInput[]
+    NOT?: WithdrawalWhereInput | WithdrawalWhereInput[]
+    id?: StringFilter<"Withdrawal"> | string
+    reference?: StringFilter<"Withdrawal"> | string
+    userId?: StringFilter<"Withdrawal"> | string
+    walletId?: StringFilter<"Withdrawal"> | string
+    transactionId?: StringFilter<"Withdrawal"> | string
+    sourceCurrencyCode?: StringFilter<"Withdrawal"> | string
+    destinationCurrencyCode?: StringFilter<"Withdrawal"> | string
+    sourceAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    country?: StringFilter<"Withdrawal"> | string
+    countryCode?: StringFilter<"Withdrawal"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Withdrawal"> | $Enums.PaymentMethod
+    provider?: EnumPaymentProviderNullableFilter<"Withdrawal"> | $Enums.PaymentProvider | null
+    providerReference?: StringNullableFilter<"Withdrawal"> | string | null
+    providerTransactionId?: StringNullableFilter<"Withdrawal"> | string | null
+    quoteId?: StringNullableFilter<"Withdrawal"> | string | null
+    beneficiaryId?: StringNullableFilter<"Withdrawal"> | string | null
+    idempotencyKey?: StringFilter<"Withdrawal"> | string
+    status?: EnumTransactionStatusFilter<"Withdrawal"> | $Enums.TransactionStatus
+    failureReason?: StringNullableFilter<"Withdrawal"> | string | null
+    metadata?: JsonNullableFilter<"Withdrawal">
+    createdAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    updatedAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    sourceCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    destinationCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    quote?: XOR<WithdrawalQuoteNullableScalarRelationFilter, WithdrawalQuoteWhereInput> | null
+    beneficiary?: XOR<BeneficiaryNullableScalarRelationFilter, BeneficiaryWhereInput> | null
+    payoutAttempts?: PayoutAttemptListRelationFilter
+    webhookEvents?: ProviderWebhookEventListRelationFilter
+  }
+
+  export type WithdrawalOrderByWithRelationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    provider?: SortOrderInput | SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    quoteId?: SortOrderInput | SortOrder
+    beneficiaryId?: SortOrderInput | SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    wallet?: WalletOrderByWithRelationInput
+    transaction?: TransactionOrderByWithRelationInput
+    sourceCurrency?: CurrencyOrderByWithRelationInput
+    destinationCurrency?: CurrencyOrderByWithRelationInput
+    quote?: WithdrawalQuoteOrderByWithRelationInput
+    beneficiary?: BeneficiaryOrderByWithRelationInput
+    payoutAttempts?: PayoutAttemptOrderByRelationAggregateInput
+    webhookEvents?: ProviderWebhookEventOrderByRelationAggregateInput
+  }
+
+  export type WithdrawalWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    transactionId?: string
+    userId_idempotencyKey?: WithdrawalUserIdIdempotencyKeyCompoundUniqueInput
+    provider_providerReference?: WithdrawalProviderProviderReferenceCompoundUniqueInput
+    provider_providerTransactionId?: WithdrawalProviderProviderTransactionIdCompoundUniqueInput
+    AND?: WithdrawalWhereInput | WithdrawalWhereInput[]
+    OR?: WithdrawalWhereInput[]
+    NOT?: WithdrawalWhereInput | WithdrawalWhereInput[]
+    userId?: StringFilter<"Withdrawal"> | string
+    walletId?: StringFilter<"Withdrawal"> | string
+    sourceCurrencyCode?: StringFilter<"Withdrawal"> | string
+    destinationCurrencyCode?: StringFilter<"Withdrawal"> | string
+    sourceAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    country?: StringFilter<"Withdrawal"> | string
+    countryCode?: StringFilter<"Withdrawal"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Withdrawal"> | $Enums.PaymentMethod
+    provider?: EnumPaymentProviderNullableFilter<"Withdrawal"> | $Enums.PaymentProvider | null
+    providerReference?: StringNullableFilter<"Withdrawal"> | string | null
+    providerTransactionId?: StringNullableFilter<"Withdrawal"> | string | null
+    quoteId?: StringNullableFilter<"Withdrawal"> | string | null
+    beneficiaryId?: StringNullableFilter<"Withdrawal"> | string | null
+    idempotencyKey?: StringFilter<"Withdrawal"> | string
+    status?: EnumTransactionStatusFilter<"Withdrawal"> | $Enums.TransactionStatus
+    failureReason?: StringNullableFilter<"Withdrawal"> | string | null
+    metadata?: JsonNullableFilter<"Withdrawal">
+    createdAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    updatedAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    sourceCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    destinationCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    quote?: XOR<WithdrawalQuoteNullableScalarRelationFilter, WithdrawalQuoteWhereInput> | null
+    beneficiary?: XOR<BeneficiaryNullableScalarRelationFilter, BeneficiaryWhereInput> | null
+    payoutAttempts?: PayoutAttemptListRelationFilter
+    webhookEvents?: ProviderWebhookEventListRelationFilter
+  }, "id" | "reference" | "transactionId" | "userId_idempotencyKey" | "provider_providerReference" | "provider_providerTransactionId">
+
+  export type WithdrawalOrderByWithAggregationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    provider?: SortOrderInput | SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    quoteId?: SortOrderInput | SortOrder
+    beneficiaryId?: SortOrderInput | SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    failureReason?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: WithdrawalCountOrderByAggregateInput
+    _avg?: WithdrawalAvgOrderByAggregateInput
+    _max?: WithdrawalMaxOrderByAggregateInput
+    _min?: WithdrawalMinOrderByAggregateInput
+    _sum?: WithdrawalSumOrderByAggregateInput
+  }
+
+  export type WithdrawalScalarWhereWithAggregatesInput = {
+    AND?: WithdrawalScalarWhereWithAggregatesInput | WithdrawalScalarWhereWithAggregatesInput[]
+    OR?: WithdrawalScalarWhereWithAggregatesInput[]
+    NOT?: WithdrawalScalarWhereWithAggregatesInput | WithdrawalScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Withdrawal"> | string
+    reference?: StringWithAggregatesFilter<"Withdrawal"> | string
+    userId?: StringWithAggregatesFilter<"Withdrawal"> | string
+    walletId?: StringWithAggregatesFilter<"Withdrawal"> | string
+    transactionId?: StringWithAggregatesFilter<"Withdrawal"> | string
+    sourceCurrencyCode?: StringWithAggregatesFilter<"Withdrawal"> | string
+    destinationCurrencyCode?: StringWithAggregatesFilter<"Withdrawal"> | string
+    sourceAmount?: DecimalWithAggregatesFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalWithAggregatesFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalWithAggregatesFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalWithAggregatesFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalWithAggregatesFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    country?: StringWithAggregatesFilter<"Withdrawal"> | string
+    countryCode?: StringWithAggregatesFilter<"Withdrawal"> | string
+    paymentMethod?: EnumPaymentMethodWithAggregatesFilter<"Withdrawal"> | $Enums.PaymentMethod
+    provider?: EnumPaymentProviderNullableWithAggregatesFilter<"Withdrawal"> | $Enums.PaymentProvider | null
+    providerReference?: StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+    providerTransactionId?: StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+    quoteId?: StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+    beneficiaryId?: StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+    idempotencyKey?: StringWithAggregatesFilter<"Withdrawal"> | string
+    status?: EnumTransactionStatusWithAggregatesFilter<"Withdrawal"> | $Enums.TransactionStatus
+    failureReason?: StringNullableWithAggregatesFilter<"Withdrawal"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"Withdrawal">
+    createdAt?: DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Withdrawal"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"Withdrawal"> | Date | string | null
+  }
+
+  export type WithdrawalQuoteWhereInput = {
+    AND?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
+    OR?: WithdrawalQuoteWhereInput[]
+    NOT?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
+    id?: StringFilter<"WithdrawalQuote"> | string
+    userId?: StringFilter<"WithdrawalQuote"> | string
+    sourceCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    destinationCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    countryCode?: StringFilter<"WithdrawalQuote"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"WithdrawalQuote"> | $Enums.PaymentMethod
+    sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    expiresAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    usedAt?: DateTimeNullableFilter<"WithdrawalQuote"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sourceCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    destinationCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    withdrawals?: WithdrawalListRelationFilter
+  }
+
+  export type WithdrawalQuoteOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    sourceCurrency?: CurrencyOrderByWithRelationInput
+    destinationCurrency?: CurrencyOrderByWithRelationInput
+    withdrawals?: WithdrawalOrderByRelationAggregateInput
+  }
+
+  export type WithdrawalQuoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
+    OR?: WithdrawalQuoteWhereInput[]
+    NOT?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
+    userId?: StringFilter<"WithdrawalQuote"> | string
+    sourceCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    destinationCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    countryCode?: StringFilter<"WithdrawalQuote"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"WithdrawalQuote"> | $Enums.PaymentMethod
+    sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    expiresAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    usedAt?: DateTimeNullableFilter<"WithdrawalQuote"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    sourceCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    destinationCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    withdrawals?: WithdrawalListRelationFilter
+  }, "id">
+
+  export type WithdrawalQuoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    _count?: WithdrawalQuoteCountOrderByAggregateInput
+    _avg?: WithdrawalQuoteAvgOrderByAggregateInput
+    _max?: WithdrawalQuoteMaxOrderByAggregateInput
+    _min?: WithdrawalQuoteMinOrderByAggregateInput
+    _sum?: WithdrawalQuoteSumOrderByAggregateInput
+  }
+
+  export type WithdrawalQuoteScalarWhereWithAggregatesInput = {
+    AND?: WithdrawalQuoteScalarWhereWithAggregatesInput | WithdrawalQuoteScalarWhereWithAggregatesInput[]
+    OR?: WithdrawalQuoteScalarWhereWithAggregatesInput[]
+    NOT?: WithdrawalQuoteScalarWhereWithAggregatesInput | WithdrawalQuoteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WithdrawalQuote"> | string
+    userId?: StringWithAggregatesFilter<"WithdrawalQuote"> | string
+    sourceCurrencyCode?: StringWithAggregatesFilter<"WithdrawalQuote"> | string
+    destinationCurrencyCode?: StringWithAggregatesFilter<"WithdrawalQuote"> | string
+    countryCode?: StringWithAggregatesFilter<"WithdrawalQuote"> | string
+    paymentMethod?: EnumPaymentMethodWithAggregatesFilter<"WithdrawalQuote"> | $Enums.PaymentMethod
+    sourceAmount?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusWithAggregatesFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeWithAggregatesFilter<"WithdrawalQuote"> | Date | string
+    expiresAt?: DateTimeWithAggregatesFilter<"WithdrawalQuote"> | Date | string
+    usedAt?: DateTimeNullableWithAggregatesFilter<"WithdrawalQuote"> | Date | string | null
+  }
+
+  export type BeneficiaryWhereInput = {
+    AND?: BeneficiaryWhereInput | BeneficiaryWhereInput[]
+    OR?: BeneficiaryWhereInput[]
+    NOT?: BeneficiaryWhereInput | BeneficiaryWhereInput[]
+    id?: StringFilter<"Beneficiary"> | string
+    userId?: StringFilter<"Beneficiary"> | string
+    country?: StringFilter<"Beneficiary"> | string
+    countryCode?: StringFilter<"Beneficiary"> | string
+    currencyCode?: StringFilter<"Beneficiary"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Beneficiary"> | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFilter<"Beneficiary"> | $Enums.BeneficiaryType
+    institutionName?: StringNullableFilter<"Beneficiary"> | string | null
+    providerBankCode?: StringNullableFilter<"Beneficiary"> | string | null
+    accountHolderName?: StringNullableFilter<"Beneficiary"> | string | null
+    accountLast4?: StringNullableFilter<"Beneficiary"> | string | null
+    mobileMoneyProvider?: StringNullableFilter<"Beneficiary"> | string | null
+    providerRecipientReference?: StringNullableFilter<"Beneficiary"> | string | null
+    encryptedDetails?: JsonNullableFilter<"Beneficiary">
+    detailsFingerprint?: StringNullableFilter<"Beneficiary"> | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFilter<"Beneficiary"> | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"Beneficiary"> | Date | string | null
+    isActive?: BoolFilter<"Beneficiary"> | boolean
+    createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
+    updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    withdrawals?: WithdrawalListRelationFilter
+  }
+
+  export type BeneficiaryOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    paymentMethod?: SortOrder
+    type?: SortOrder
+    institutionName?: SortOrderInput | SortOrder
+    providerBankCode?: SortOrderInput | SortOrder
+    accountHolderName?: SortOrderInput | SortOrder
+    accountLast4?: SortOrderInput | SortOrder
+    mobileMoneyProvider?: SortOrderInput | SortOrder
+    providerRecipientReference?: SortOrderInput | SortOrder
+    encryptedDetails?: SortOrderInput | SortOrder
+    detailsFingerprint?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    currency?: CurrencyOrderByWithRelationInput
+    withdrawals?: WithdrawalOrderByRelationAggregateInput
+  }
+
+  export type BeneficiaryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_providerRecipientReference?: BeneficiaryUserIdProviderRecipientReferenceCompoundUniqueInput
+    AND?: BeneficiaryWhereInput | BeneficiaryWhereInput[]
+    OR?: BeneficiaryWhereInput[]
+    NOT?: BeneficiaryWhereInput | BeneficiaryWhereInput[]
+    userId?: StringFilter<"Beneficiary"> | string
+    country?: StringFilter<"Beneficiary"> | string
+    countryCode?: StringFilter<"Beneficiary"> | string
+    currencyCode?: StringFilter<"Beneficiary"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Beneficiary"> | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFilter<"Beneficiary"> | $Enums.BeneficiaryType
+    institutionName?: StringNullableFilter<"Beneficiary"> | string | null
+    providerBankCode?: StringNullableFilter<"Beneficiary"> | string | null
+    accountHolderName?: StringNullableFilter<"Beneficiary"> | string | null
+    accountLast4?: StringNullableFilter<"Beneficiary"> | string | null
+    mobileMoneyProvider?: StringNullableFilter<"Beneficiary"> | string | null
+    providerRecipientReference?: StringNullableFilter<"Beneficiary"> | string | null
+    encryptedDetails?: JsonNullableFilter<"Beneficiary">
+    detailsFingerprint?: StringNullableFilter<"Beneficiary"> | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFilter<"Beneficiary"> | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"Beneficiary"> | Date | string | null
+    isActive?: BoolFilter<"Beneficiary"> | boolean
+    createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
+    updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
+    withdrawals?: WithdrawalListRelationFilter
+  }, "id" | "userId_providerRecipientReference">
+
+  export type BeneficiaryOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    paymentMethod?: SortOrder
+    type?: SortOrder
+    institutionName?: SortOrderInput | SortOrder
+    providerBankCode?: SortOrderInput | SortOrder
+    accountHolderName?: SortOrderInput | SortOrder
+    accountLast4?: SortOrderInput | SortOrder
+    mobileMoneyProvider?: SortOrderInput | SortOrder
+    providerRecipientReference?: SortOrderInput | SortOrder
+    encryptedDetails?: SortOrderInput | SortOrder
+    detailsFingerprint?: SortOrderInput | SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BeneficiaryCountOrderByAggregateInput
+    _max?: BeneficiaryMaxOrderByAggregateInput
+    _min?: BeneficiaryMinOrderByAggregateInput
+  }
+
+  export type BeneficiaryScalarWhereWithAggregatesInput = {
+    AND?: BeneficiaryScalarWhereWithAggregatesInput | BeneficiaryScalarWhereWithAggregatesInput[]
+    OR?: BeneficiaryScalarWhereWithAggregatesInput[]
+    NOT?: BeneficiaryScalarWhereWithAggregatesInput | BeneficiaryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Beneficiary"> | string
+    userId?: StringWithAggregatesFilter<"Beneficiary"> | string
+    country?: StringWithAggregatesFilter<"Beneficiary"> | string
+    countryCode?: StringWithAggregatesFilter<"Beneficiary"> | string
+    currencyCode?: StringWithAggregatesFilter<"Beneficiary"> | string
+    paymentMethod?: EnumPaymentMethodWithAggregatesFilter<"Beneficiary"> | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeWithAggregatesFilter<"Beneficiary"> | $Enums.BeneficiaryType
+    institutionName?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    providerBankCode?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    accountHolderName?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    accountLast4?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    mobileMoneyProvider?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    providerRecipientReference?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    encryptedDetails?: JsonNullableWithAggregatesFilter<"Beneficiary">
+    detailsFingerprint?: StringNullableWithAggregatesFilter<"Beneficiary"> | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusWithAggregatesFilter<"Beneficiary"> | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"Beneficiary"> | Date | string | null
+    isActive?: BoolWithAggregatesFilter<"Beneficiary"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Beneficiary"> | Date | string
+  }
+
+  export type PayoutAttemptWhereInput = {
+    AND?: PayoutAttemptWhereInput | PayoutAttemptWhereInput[]
+    OR?: PayoutAttemptWhereInput[]
+    NOT?: PayoutAttemptWhereInput | PayoutAttemptWhereInput[]
+    id?: StringFilter<"PayoutAttempt"> | string
+    withdrawalId?: StringFilter<"PayoutAttempt"> | string
+    provider?: EnumPaymentProviderFilter<"PayoutAttempt"> | $Enums.PaymentProvider
+    providerReference?: StringNullableFilter<"PayoutAttempt"> | string | null
+    providerTransactionId?: StringNullableFilter<"PayoutAttempt"> | string | null
+    attemptNumber?: IntFilter<"PayoutAttempt"> | number
+    status?: EnumTransactionStatusFilter<"PayoutAttempt"> | $Enums.TransactionStatus
+    requestMetadata?: JsonNullableFilter<"PayoutAttempt">
+    responseMetadata?: JsonNullableFilter<"PayoutAttempt">
+    errorCode?: StringNullableFilter<"PayoutAttempt"> | string | null
+    errorMessage?: StringNullableFilter<"PayoutAttempt"> | string | null
+    createdAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+    updatedAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+    withdrawal?: XOR<WithdrawalScalarRelationFilter, WithdrawalWhereInput>
+  }
+
+  export type PayoutAttemptOrderByWithRelationInput = {
+    id?: SortOrder
+    withdrawalId?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    attemptNumber?: SortOrder
+    status?: SortOrder
+    requestMetadata?: SortOrderInput | SortOrder
+    responseMetadata?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    withdrawal?: WithdrawalOrderByWithRelationInput
+  }
+
+  export type PayoutAttemptWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    withdrawalId_attemptNumber?: PayoutAttemptWithdrawalIdAttemptNumberCompoundUniqueInput
+    provider_providerReference?: PayoutAttemptProviderProviderReferenceCompoundUniqueInput
+    provider_providerTransactionId?: PayoutAttemptProviderProviderTransactionIdCompoundUniqueInput
+    AND?: PayoutAttemptWhereInput | PayoutAttemptWhereInput[]
+    OR?: PayoutAttemptWhereInput[]
+    NOT?: PayoutAttemptWhereInput | PayoutAttemptWhereInput[]
+    withdrawalId?: StringFilter<"PayoutAttempt"> | string
+    provider?: EnumPaymentProviderFilter<"PayoutAttempt"> | $Enums.PaymentProvider
+    providerReference?: StringNullableFilter<"PayoutAttempt"> | string | null
+    providerTransactionId?: StringNullableFilter<"PayoutAttempt"> | string | null
+    attemptNumber?: IntFilter<"PayoutAttempt"> | number
+    status?: EnumTransactionStatusFilter<"PayoutAttempt"> | $Enums.TransactionStatus
+    requestMetadata?: JsonNullableFilter<"PayoutAttempt">
+    responseMetadata?: JsonNullableFilter<"PayoutAttempt">
+    errorCode?: StringNullableFilter<"PayoutAttempt"> | string | null
+    errorMessage?: StringNullableFilter<"PayoutAttempt"> | string | null
+    createdAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+    updatedAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+    withdrawal?: XOR<WithdrawalScalarRelationFilter, WithdrawalWhereInput>
+  }, "id" | "withdrawalId_attemptNumber" | "provider_providerReference" | "provider_providerTransactionId">
+
+  export type PayoutAttemptOrderByWithAggregationInput = {
+    id?: SortOrder
+    withdrawalId?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    attemptNumber?: SortOrder
+    status?: SortOrder
+    requestMetadata?: SortOrderInput | SortOrder
+    responseMetadata?: SortOrderInput | SortOrder
+    errorCode?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PayoutAttemptCountOrderByAggregateInput
+    _avg?: PayoutAttemptAvgOrderByAggregateInput
+    _max?: PayoutAttemptMaxOrderByAggregateInput
+    _min?: PayoutAttemptMinOrderByAggregateInput
+    _sum?: PayoutAttemptSumOrderByAggregateInput
+  }
+
+  export type PayoutAttemptScalarWhereWithAggregatesInput = {
+    AND?: PayoutAttemptScalarWhereWithAggregatesInput | PayoutAttemptScalarWhereWithAggregatesInput[]
+    OR?: PayoutAttemptScalarWhereWithAggregatesInput[]
+    NOT?: PayoutAttemptScalarWhereWithAggregatesInput | PayoutAttemptScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PayoutAttempt"> | string
+    withdrawalId?: StringWithAggregatesFilter<"PayoutAttempt"> | string
+    provider?: EnumPaymentProviderWithAggregatesFilter<"PayoutAttempt"> | $Enums.PaymentProvider
+    providerReference?: StringNullableWithAggregatesFilter<"PayoutAttempt"> | string | null
+    providerTransactionId?: StringNullableWithAggregatesFilter<"PayoutAttempt"> | string | null
+    attemptNumber?: IntWithAggregatesFilter<"PayoutAttempt"> | number
+    status?: EnumTransactionStatusWithAggregatesFilter<"PayoutAttempt"> | $Enums.TransactionStatus
+    requestMetadata?: JsonNullableWithAggregatesFilter<"PayoutAttempt">
+    responseMetadata?: JsonNullableWithAggregatesFilter<"PayoutAttempt">
+    errorCode?: StringNullableWithAggregatesFilter<"PayoutAttempt"> | string | null
+    errorMessage?: StringNullableWithAggregatesFilter<"PayoutAttempt"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"PayoutAttempt"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"PayoutAttempt"> | Date | string
+  }
+
+  export type ProviderWebhookEventWhereInput = {
+    AND?: ProviderWebhookEventWhereInput | ProviderWebhookEventWhereInput[]
+    OR?: ProviderWebhookEventWhereInput[]
+    NOT?: ProviderWebhookEventWhereInput | ProviderWebhookEventWhereInput[]
+    id?: StringFilter<"ProviderWebhookEvent"> | string
+    provider?: EnumPaymentProviderFilter<"ProviderWebhookEvent"> | $Enums.PaymentProvider
+    eventId?: StringFilter<"ProviderWebhookEvent"> | string
+    eventType?: StringFilter<"ProviderWebhookEvent"> | string
+    providerReference?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    providerTransactionId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    withdrawalId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    receivedAt?: DateTimeFilter<"ProviderWebhookEvent"> | Date | string
+    processedAt?: DateTimeNullableFilter<"ProviderWebhookEvent"> | Date | string | null
+    status?: EnumProviderWebhookEventStatusFilter<"ProviderWebhookEvent"> | $Enums.ProviderWebhookEventStatus
+    errorMessage?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    metadata?: JsonNullableFilter<"ProviderWebhookEvent">
+    withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
+  }
+
+  export type ProviderWebhookEventOrderByWithRelationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    eventId?: SortOrder
+    eventType?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    withdrawalId?: SortOrderInput | SortOrder
+    receivedAt?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    withdrawal?: WithdrawalOrderByWithRelationInput
+  }
+
+  export type ProviderWebhookEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    provider_eventId?: ProviderWebhookEventProviderEventIdCompoundUniqueInput
+    AND?: ProviderWebhookEventWhereInput | ProviderWebhookEventWhereInput[]
+    OR?: ProviderWebhookEventWhereInput[]
+    NOT?: ProviderWebhookEventWhereInput | ProviderWebhookEventWhereInput[]
+    provider?: EnumPaymentProviderFilter<"ProviderWebhookEvent"> | $Enums.PaymentProvider
+    eventId?: StringFilter<"ProviderWebhookEvent"> | string
+    eventType?: StringFilter<"ProviderWebhookEvent"> | string
+    providerReference?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    providerTransactionId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    withdrawalId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    receivedAt?: DateTimeFilter<"ProviderWebhookEvent"> | Date | string
+    processedAt?: DateTimeNullableFilter<"ProviderWebhookEvent"> | Date | string | null
+    status?: EnumProviderWebhookEventStatusFilter<"ProviderWebhookEvent"> | $Enums.ProviderWebhookEventStatus
+    errorMessage?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    metadata?: JsonNullableFilter<"ProviderWebhookEvent">
+    withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
+  }, "id" | "provider_eventId">
+
+  export type ProviderWebhookEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    eventId?: SortOrder
+    eventType?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerTransactionId?: SortOrderInput | SortOrder
+    withdrawalId?: SortOrderInput | SortOrder
+    receivedAt?: SortOrder
+    processedAt?: SortOrderInput | SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    _count?: ProviderWebhookEventCountOrderByAggregateInput
+    _max?: ProviderWebhookEventMaxOrderByAggregateInput
+    _min?: ProviderWebhookEventMinOrderByAggregateInput
+  }
+
+  export type ProviderWebhookEventScalarWhereWithAggregatesInput = {
+    AND?: ProviderWebhookEventScalarWhereWithAggregatesInput | ProviderWebhookEventScalarWhereWithAggregatesInput[]
+    OR?: ProviderWebhookEventScalarWhereWithAggregatesInput[]
+    NOT?: ProviderWebhookEventScalarWhereWithAggregatesInput | ProviderWebhookEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProviderWebhookEvent"> | string
+    provider?: EnumPaymentProviderWithAggregatesFilter<"ProviderWebhookEvent"> | $Enums.PaymentProvider
+    eventId?: StringWithAggregatesFilter<"ProviderWebhookEvent"> | string
+    eventType?: StringWithAggregatesFilter<"ProviderWebhookEvent"> | string
+    providerReference?: StringNullableWithAggregatesFilter<"ProviderWebhookEvent"> | string | null
+    providerTransactionId?: StringNullableWithAggregatesFilter<"ProviderWebhookEvent"> | string | null
+    withdrawalId?: StringNullableWithAggregatesFilter<"ProviderWebhookEvent"> | string | null
+    receivedAt?: DateTimeWithAggregatesFilter<"ProviderWebhookEvent"> | Date | string
+    processedAt?: DateTimeNullableWithAggregatesFilter<"ProviderWebhookEvent"> | Date | string | null
+    status?: EnumProviderWebhookEventStatusWithAggregatesFilter<"ProviderWebhookEvent"> | $Enums.ProviderWebhookEventStatus
+    errorMessage?: StringNullableWithAggregatesFilter<"ProviderWebhookEvent"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"ProviderWebhookEvent">
   }
 
   export type UserCreateInput = {
@@ -15788,6 +24263,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -15796,6 +24273,9 @@ export namespace Prisma {
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15820,6 +24300,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -15828,6 +24310,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15852,6 +24337,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -15860,6 +24347,9 @@ export namespace Prisma {
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15884,6 +24374,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -15892,6 +24384,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15916,6 +24411,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15942,6 +24439,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15968,6 +24467,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16244,6 +24745,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateInput = {
@@ -16255,6 +24757,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUpdateInput = {
@@ -16266,6 +24769,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateInput = {
@@ -16277,6 +24781,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletCreateManyInput = {
@@ -16314,6 +24819,11 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUncheckedCreateInput = {
@@ -16331,6 +24841,11 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUpdateInput = {
@@ -16348,6 +24863,11 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyUncheckedUpdateInput = {
@@ -16365,6 +24885,11 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyCreateManyInput = {
@@ -16650,6 +25175,7 @@ export namespace Prisma {
     wallet: WalletCreateNestedOneWithoutTransactionsInput
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -16672,6 +25198,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -16694,6 +25221,7 @@ export namespace Prisma {
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -16716,6 +25244,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -16782,6 +25311,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -16799,6 +25331,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -16810,6 +25345,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16827,6 +25365,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16841,6 +25382,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -16852,6 +25396,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16866,9 +25413,742 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WithdrawalCreateInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalCreateManyInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalQuoteCreateInput = {
+    id?: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalQuotesInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceQuotesInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationQuotesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteUncheckedCreateInput = {
+    id?: string
+    userId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalQuotesNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceQuotesNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationQuotesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteCreateManyInput = {
+    id?: string
+    userId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+  }
+
+  export type WithdrawalQuoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BeneficiaryCreateInput = {
+    id?: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBeneficiariesInput
+    currency: CurrencyCreateNestedOneWithoutBeneficiariesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateInput = {
+    id?: string
+    userId: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBeneficiariesNestedInput
+    currency?: CurrencyUpdateOneRequiredWithoutBeneficiariesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryCreateManyInput = {
+    id?: string
+    userId: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BeneficiaryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptCreateInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    withdrawal: WithdrawalCreateNestedOneWithoutPayoutAttemptsInput
+  }
+
+  export type PayoutAttemptUncheckedCreateInput = {
+    id?: string
+    withdrawalId: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PayoutAttemptUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    withdrawal?: WithdrawalUpdateOneRequiredWithoutPayoutAttemptsNestedInput
+  }
+
+  export type PayoutAttemptUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    withdrawalId?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptCreateManyInput = {
+    id?: string
+    withdrawalId: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PayoutAttemptUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    withdrawalId?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderWebhookEventCreateInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    withdrawal?: WithdrawalCreateNestedOneWithoutWebhookEventsInput
+  }
+
+  export type ProviderWebhookEventUncheckedCreateInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    withdrawalId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    withdrawal?: WithdrawalUpdateOneWithoutWebhookEventsNestedInput
+  }
+
+  export type ProviderWebhookEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawalId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventCreateManyInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    withdrawalId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawalId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -16924,6 +26204,17 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -16969,6 +26260,24 @@ export namespace Prisma {
     none?: TransactionWhereInput
   }
 
+  export type WithdrawalListRelationFilter = {
+    every?: WithdrawalWhereInput
+    some?: WithdrawalWhereInput
+    none?: WithdrawalWhereInput
+  }
+
+  export type WithdrawalQuoteListRelationFilter = {
+    every?: WithdrawalQuoteWhereInput
+    some?: WithdrawalQuoteWhereInput
+    none?: WithdrawalQuoteWhereInput
+  }
+
+  export type BeneficiaryListRelationFilter = {
+    every?: BeneficiaryWhereInput
+    some?: BeneficiaryWhereInput
+    none?: BeneficiaryWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -16987,6 +26296,18 @@ export namespace Prisma {
   }
 
   export type TransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WithdrawalOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WithdrawalQuoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BeneficiaryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17012,8 +26333,14 @@ export namespace Prisma {
     isActive?: SortOrder
     role?: SortOrder
     transactionPinHash?: SortOrder
+    transactionPinFailedAttempts?: SortOrder
+    transactionPinLockedUntil?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    transactionPinFailedAttempts?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -17038,6 +26365,8 @@ export namespace Prisma {
     isActive?: SortOrder
     role?: SortOrder
     transactionPinHash?: SortOrder
+    transactionPinFailedAttempts?: SortOrder
+    transactionPinLockedUntil?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17064,8 +26393,14 @@ export namespace Prisma {
     isActive?: SortOrder
     role?: SortOrder
     transactionPinHash?: SortOrder
+    transactionPinFailedAttempts?: SortOrder
+    transactionPinLockedUntil?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    transactionPinFailedAttempts?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -17136,6 +26471,22 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -17148,17 +26499,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -17229,22 +26569,6 @@ export namespace Prisma {
 
   export type PendingRegistrationSumOrderByAggregateInput = {
     otpAttempts?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -17723,6 +27047,11 @@ export namespace Prisma {
     isNot?: DepositWhereInput | null
   }
 
+  export type WithdrawalNullableScalarRelationFilter = {
+    is?: WithdrawalWhereInput | null
+    isNot?: WithdrawalWhereInput | null
+  }
+
   export type TransactionCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -17839,6 +27168,9 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrder
+    pendingBalanceAfter?: SortOrder
+    operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -17848,6 +27180,8 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrder
+    pendingBalanceAfter?: SortOrder
   }
 
   export type LedgerEntryMaxOrderByAggregateInput = {
@@ -17859,6 +27193,9 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrder
+    pendingBalanceAfter?: SortOrder
+    operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -17873,6 +27210,9 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrder
+    pendingBalanceAfter?: SortOrder
+    operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
     createdAt?: SortOrder
@@ -17882,6 +27222,8 @@ export namespace Prisma {
     amount?: SortOrder
     balanceBefore?: SortOrder
     balanceAfter?: SortOrder
+    pendingBalanceBefore?: SortOrder
+    pendingBalanceAfter?: SortOrder
   }
 
   export type EnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -17892,6 +27234,517 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
     _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
+  export type TransactionScalarRelationFilter = {
+    is?: TransactionWhereInput
+    isNot?: TransactionWhereInput
+  }
+
+  export type WithdrawalQuoteNullableScalarRelationFilter = {
+    is?: WithdrawalQuoteWhereInput | null
+    isNot?: WithdrawalQuoteWhereInput | null
+  }
+
+  export type BeneficiaryNullableScalarRelationFilter = {
+    is?: BeneficiaryWhereInput | null
+    isNot?: BeneficiaryWhereInput | null
+  }
+
+  export type PayoutAttemptListRelationFilter = {
+    every?: PayoutAttemptWhereInput
+    some?: PayoutAttemptWhereInput
+    none?: PayoutAttemptWhereInput
+  }
+
+  export type ProviderWebhookEventListRelationFilter = {
+    every?: ProviderWebhookEventWhereInput
+    some?: ProviderWebhookEventWhereInput
+    none?: ProviderWebhookEventWhereInput
+  }
+
+  export type PayoutAttemptOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProviderWebhookEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WithdrawalUserIdIdempotencyKeyCompoundUniqueInput = {
+    userId: string
+    idempotencyKey: string
+  }
+
+  export type WithdrawalProviderProviderReferenceCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    providerReference: string
+  }
+
+  export type WithdrawalProviderProviderTransactionIdCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    providerTransactionId: string
+  }
+
+  export type WithdrawalCountOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    quoteId?: SortOrder
+    beneficiaryId?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    failureReason?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type WithdrawalAvgOrderByAggregateInput = {
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+  }
+
+  export type WithdrawalMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    quoteId?: SortOrder
+    beneficiaryId?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    failureReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type WithdrawalMinOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    quoteId?: SortOrder
+    beneficiaryId?: SortOrder
+    idempotencyKey?: SortOrder
+    status?: SortOrder
+    failureReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type WithdrawalSumOrderByAggregateInput = {
+    sourceAmount?: SortOrder
+    destinationAmount?: SortOrder
+    exchangeRate?: SortOrder
+    fee?: SortOrder
+    amountReceived?: SortOrder
+  }
+
+  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type EnumWithdrawalQuoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WithdrawalQuoteStatus | EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel> | $Enums.WithdrawalQuoteStatus
+  }
+
+  export type WithdrawalQuoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+  }
+
+  export type WithdrawalQuoteAvgOrderByAggregateInput = {
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+  }
+
+  export type WithdrawalQuoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+  }
+
+  export type WithdrawalQuoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sourceCurrencyCode?: SortOrder
+    destinationCurrencyCode?: SortOrder
+    countryCode?: SortOrder
+    paymentMethod?: SortOrder
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+  }
+
+  export type WithdrawalQuoteSumOrderByAggregateInput = {
+    sourceAmount?: SortOrder
+    exchangeRate?: SortOrder
+    destinationAmount?: SortOrder
+    providerFee?: SortOrder
+    nobleCardsFee?: SortOrder
+    totalFee?: SortOrder
+    amountReceived?: SortOrder
+  }
+
+  export type EnumWithdrawalQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WithdrawalQuoteStatus | EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWithdrawalQuoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.WithdrawalQuoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel>
+  }
+
+  export type EnumBeneficiaryTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryType | EnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryTypeFilter<$PrismaModel> | $Enums.BeneficiaryType
+  }
+
+  export type EnumBeneficiaryVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryVerificationStatus | EnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel> | $Enums.BeneficiaryVerificationStatus
+  }
+
+  export type BeneficiaryUserIdProviderRecipientReferenceCompoundUniqueInput = {
+    userId: string
+    providerRecipientReference: string
+  }
+
+  export type BeneficiaryCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    paymentMethod?: SortOrder
+    type?: SortOrder
+    institutionName?: SortOrder
+    providerBankCode?: SortOrder
+    accountHolderName?: SortOrder
+    accountLast4?: SortOrder
+    mobileMoneyProvider?: SortOrder
+    providerRecipientReference?: SortOrder
+    encryptedDetails?: SortOrder
+    detailsFingerprint?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BeneficiaryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    paymentMethod?: SortOrder
+    type?: SortOrder
+    institutionName?: SortOrder
+    providerBankCode?: SortOrder
+    accountHolderName?: SortOrder
+    accountLast4?: SortOrder
+    mobileMoneyProvider?: SortOrder
+    providerRecipientReference?: SortOrder
+    detailsFingerprint?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BeneficiaryMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    country?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    paymentMethod?: SortOrder
+    type?: SortOrder
+    institutionName?: SortOrder
+    providerBankCode?: SortOrder
+    accountHolderName?: SortOrder
+    accountLast4?: SortOrder
+    mobileMoneyProvider?: SortOrder
+    providerRecipientReference?: SortOrder
+    detailsFingerprint?: SortOrder
+    verificationStatus?: SortOrder
+    verifiedAt?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumBeneficiaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryType | EnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.BeneficiaryType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBeneficiaryTypeFilter<$PrismaModel>
+    _max?: NestedEnumBeneficiaryTypeFilter<$PrismaModel>
+  }
+
+  export type EnumBeneficiaryVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryVerificationStatus | EnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.BeneficiaryVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type WithdrawalScalarRelationFilter = {
+    is?: WithdrawalWhereInput
+    isNot?: WithdrawalWhereInput
+  }
+
+  export type PayoutAttemptWithdrawalIdAttemptNumberCompoundUniqueInput = {
+    withdrawalId: string
+    attemptNumber: number
+  }
+
+  export type PayoutAttemptProviderProviderReferenceCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    providerReference: string
+  }
+
+  export type PayoutAttemptProviderProviderTransactionIdCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    providerTransactionId: string
+  }
+
+  export type PayoutAttemptCountOrderByAggregateInput = {
+    id?: SortOrder
+    withdrawalId?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    attemptNumber?: SortOrder
+    status?: SortOrder
+    requestMetadata?: SortOrder
+    responseMetadata?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PayoutAttemptAvgOrderByAggregateInput = {
+    attemptNumber?: SortOrder
+  }
+
+  export type PayoutAttemptMaxOrderByAggregateInput = {
+    id?: SortOrder
+    withdrawalId?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    attemptNumber?: SortOrder
+    status?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PayoutAttemptMinOrderByAggregateInput = {
+    id?: SortOrder
+    withdrawalId?: SortOrder
+    provider?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    attemptNumber?: SortOrder
+    status?: SortOrder
+    errorCode?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PayoutAttemptSumOrderByAggregateInput = {
+    attemptNumber?: SortOrder
+  }
+
+  export type EnumProviderWebhookEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderWebhookEventStatus | EnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel> | $Enums.ProviderWebhookEventStatus
+  }
+
+  export type ProviderWebhookEventProviderEventIdCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    eventId: string
+  }
+
+  export type ProviderWebhookEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    eventId?: SortOrder
+    eventType?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    withdrawalId?: SortOrder
+    receivedAt?: SortOrder
+    processedAt?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    metadata?: SortOrder
+  }
+
+  export type ProviderWebhookEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    eventId?: SortOrder
+    eventType?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    withdrawalId?: SortOrder
+    receivedAt?: SortOrder
+    processedAt?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+  }
+
+  export type ProviderWebhookEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    eventId?: SortOrder
+    eventType?: SortOrder
+    providerReference?: SortOrder
+    providerTransactionId?: SortOrder
+    withdrawalId?: SortOrder
+    receivedAt?: SortOrder
+    processedAt?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+  }
+
+  export type EnumProviderWebhookEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderWebhookEventStatus | EnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderWebhookEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProviderWebhookEventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel>
   }
 
   export type PasswordResetChallengeCreateNestedManyWithoutUserInput = {
@@ -17934,6 +27787,27 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
+  export type WithdrawalCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput> | WithdrawalQuoteCreateWithoutUserInput[] | WithdrawalQuoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutUserInput | WithdrawalQuoteCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalQuoteCreateManyUserInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type BeneficiaryCreateNestedManyWithoutUserInput = {
+    create?: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput> | BeneficiaryCreateWithoutUserInput[] | BeneficiaryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutUserInput | BeneficiaryCreateOrConnectWithoutUserInput[]
+    createMany?: BeneficiaryCreateManyUserInputEnvelope
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+  }
+
   export type PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<PasswordResetChallengeCreateWithoutUserInput, PasswordResetChallengeUncheckedCreateWithoutUserInput> | PasswordResetChallengeCreateWithoutUserInput[] | PasswordResetChallengeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
@@ -17974,6 +27848,27 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
   }
 
+  export type WithdrawalUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput> | WithdrawalQuoteCreateWithoutUserInput[] | WithdrawalQuoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutUserInput | WithdrawalQuoteCreateOrConnectWithoutUserInput[]
+    createMany?: WithdrawalQuoteCreateManyUserInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type BeneficiaryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput> | BeneficiaryCreateWithoutUserInput[] | BeneficiaryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutUserInput | BeneficiaryCreateOrConnectWithoutUserInput[]
+    createMany?: BeneficiaryCreateManyUserInputEnvelope
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -17992,6 +27887,14 @@ export namespace Prisma {
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -18074,6 +27977,48 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
+  export type WithdrawalUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput> | WithdrawalQuoteCreateWithoutUserInput[] | WithdrawalQuoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutUserInput | WithdrawalQuoteCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutUserInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalQuoteCreateManyUserInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutUserInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutUserInput | WithdrawalQuoteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type BeneficiaryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput> | BeneficiaryCreateWithoutUserInput[] | BeneficiaryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutUserInput | BeneficiaryCreateOrConnectWithoutUserInput[]
+    upsert?: BeneficiaryUpsertWithWhereUniqueWithoutUserInput | BeneficiaryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BeneficiaryCreateManyUserInputEnvelope
+    set?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    disconnect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    delete?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    update?: BeneficiaryUpdateWithWhereUniqueWithoutUserInput | BeneficiaryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BeneficiaryUpdateManyWithWhereWithoutUserInput | BeneficiaryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
+  }
+
   export type PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<PasswordResetChallengeCreateWithoutUserInput, PasswordResetChallengeUncheckedCreateWithoutUserInput> | PasswordResetChallengeCreateWithoutUserInput[] | PasswordResetChallengeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
@@ -18150,18 +28095,52 @@ export namespace Prisma {
     deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
   }
 
+  export type WithdrawalUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput> | WithdrawalCreateWithoutUserInput[] | WithdrawalUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutUserInput | WithdrawalCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutUserInput | WithdrawalUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalCreateManyUserInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutUserInput | WithdrawalUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutUserInput | WithdrawalUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput> | WithdrawalQuoteCreateWithoutUserInput[] | WithdrawalQuoteUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutUserInput | WithdrawalQuoteCreateOrConnectWithoutUserInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutUserInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: WithdrawalQuoteCreateManyUserInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutUserInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutUserInput | WithdrawalQuoteUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type BeneficiaryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput> | BeneficiaryCreateWithoutUserInput[] | BeneficiaryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutUserInput | BeneficiaryCreateOrConnectWithoutUserInput[]
+    upsert?: BeneficiaryUpsertWithWhereUniqueWithoutUserInput | BeneficiaryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BeneficiaryCreateManyUserInputEnvelope
+    set?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    disconnect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    delete?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    update?: BeneficiaryUpdateWithWhereUniqueWithoutUserInput | BeneficiaryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BeneficiaryUpdateManyWithWhereWithoutUserInput | BeneficiaryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutPendingVerificationInput = {
     create?: XOR<UserCreateWithoutPendingVerificationInput, UserUncheckedCreateWithoutPendingVerificationInput>
     connectOrCreate?: UserCreateOrConnectWithoutPendingVerificationInput
     connect?: UserWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateOneWithoutPendingVerificationNestedInput = {
@@ -18236,6 +28215,13 @@ export namespace Prisma {
     connect?: LedgerEntryWhereUniqueInput | LedgerEntryWhereUniqueInput[]
   }
 
+  export type WithdrawalCreateNestedManyWithoutWalletInput = {
+    create?: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput> | WithdrawalCreateWithoutWalletInput[] | WithdrawalUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWalletInput | WithdrawalCreateOrConnectWithoutWalletInput[]
+    createMany?: WithdrawalCreateManyWalletInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
   export type WalletBalanceUncheckedCreateNestedManyWithoutWalletInput = {
     create?: XOR<WalletBalanceCreateWithoutWalletInput, WalletBalanceUncheckedCreateWithoutWalletInput> | WalletBalanceCreateWithoutWalletInput[] | WalletBalanceUncheckedCreateWithoutWalletInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutWalletInput | WalletBalanceCreateOrConnectWithoutWalletInput[]
@@ -18262,6 +28248,13 @@ export namespace Prisma {
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutWalletInput | LedgerEntryCreateOrConnectWithoutWalletInput[]
     createMany?: LedgerEntryCreateManyWalletInputEnvelope
     connect?: LedgerEntryWhereUniqueInput | LedgerEntryWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutWalletInput = {
+    create?: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput> | WithdrawalCreateWithoutWalletInput[] | WithdrawalUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWalletInput | WithdrawalCreateOrConnectWithoutWalletInput[]
+    createMany?: WithdrawalCreateManyWalletInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutWalletNestedInput = {
@@ -18328,6 +28321,20 @@ export namespace Prisma {
     deleteMany?: LedgerEntryScalarWhereInput | LedgerEntryScalarWhereInput[]
   }
 
+  export type WithdrawalUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput> | WithdrawalCreateWithoutWalletInput[] | WithdrawalUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWalletInput | WithdrawalCreateOrConnectWithoutWalletInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutWalletInput | WithdrawalUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: WithdrawalCreateManyWalletInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutWalletInput | WithdrawalUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutWalletInput | WithdrawalUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
   export type WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput = {
     create?: XOR<WalletBalanceCreateWithoutWalletInput, WalletBalanceUncheckedCreateWithoutWalletInput> | WalletBalanceCreateWithoutWalletInput[] | WalletBalanceUncheckedCreateWithoutWalletInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutWalletInput | WalletBalanceCreateOrConnectWithoutWalletInput[]
@@ -18384,6 +28391,20 @@ export namespace Prisma {
     deleteMany?: LedgerEntryScalarWhereInput | LedgerEntryScalarWhereInput[]
   }
 
+  export type WithdrawalUncheckedUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput> | WithdrawalCreateWithoutWalletInput[] | WithdrawalUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWalletInput | WithdrawalCreateOrConnectWithoutWalletInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutWalletInput | WithdrawalUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: WithdrawalCreateManyWalletInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutWalletInput | WithdrawalUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutWalletInput | WithdrawalUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
   export type WalletBalanceCreateNestedManyWithoutCurrencyInput = {
     create?: XOR<WalletBalanceCreateWithoutCurrencyInput, WalletBalanceUncheckedCreateWithoutCurrencyInput> | WalletBalanceCreateWithoutCurrencyInput[] | WalletBalanceUncheckedCreateWithoutCurrencyInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutCurrencyInput | WalletBalanceCreateOrConnectWithoutCurrencyInput[]
@@ -18412,6 +28433,41 @@ export namespace Prisma {
     connect?: LedgerEntryWhereUniqueInput | LedgerEntryWhereUniqueInput[]
   }
 
+  export type WithdrawalCreateNestedManyWithoutSourceCurrencyInput = {
+    create?: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalCreateWithoutSourceCurrencyInput[] | WithdrawalUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutSourceCurrencyInput | WithdrawalCreateOrConnectWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalCreateManySourceCurrencyInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalCreateNestedManyWithoutDestinationCurrencyInput = {
+    create?: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalCreateWithoutDestinationCurrencyInput[] | WithdrawalUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalCreateOrConnectWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalCreateManyDestinationCurrencyInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalQuoteCreateWithoutSourceCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManySourceCurrencyInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalQuoteCreateWithoutDestinationCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManyDestinationCurrencyInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type BeneficiaryCreateNestedManyWithoutCurrencyInput = {
+    create?: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput> | BeneficiaryCreateWithoutCurrencyInput[] | BeneficiaryUncheckedCreateWithoutCurrencyInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutCurrencyInput | BeneficiaryCreateOrConnectWithoutCurrencyInput[]
+    createMany?: BeneficiaryCreateManyCurrencyInputEnvelope
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+  }
+
   export type WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput = {
     create?: XOR<WalletBalanceCreateWithoutCurrencyInput, WalletBalanceUncheckedCreateWithoutCurrencyInput> | WalletBalanceCreateWithoutCurrencyInput[] | WalletBalanceUncheckedCreateWithoutCurrencyInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutCurrencyInput | WalletBalanceCreateOrConnectWithoutCurrencyInput[]
@@ -18438,6 +28494,41 @@ export namespace Prisma {
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutCurrencyInput | LedgerEntryCreateOrConnectWithoutCurrencyInput[]
     createMany?: LedgerEntryCreateManyCurrencyInputEnvelope
     connect?: LedgerEntryWhereUniqueInput | LedgerEntryWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput = {
+    create?: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalCreateWithoutSourceCurrencyInput[] | WithdrawalUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutSourceCurrencyInput | WithdrawalCreateOrConnectWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalCreateManySourceCurrencyInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput = {
+    create?: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalCreateWithoutDestinationCurrencyInput[] | WithdrawalUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalCreateOrConnectWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalCreateManyDestinationCurrencyInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalQuoteCreateWithoutSourceCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManySourceCurrencyInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalQuoteCreateWithoutDestinationCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManyDestinationCurrencyInputEnvelope
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+  }
+
+  export type BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput = {
+    create?: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput> | BeneficiaryCreateWithoutCurrencyInput[] | BeneficiaryUncheckedCreateWithoutCurrencyInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutCurrencyInput | BeneficiaryCreateOrConnectWithoutCurrencyInput[]
+    createMany?: BeneficiaryCreateManyCurrencyInputEnvelope
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
   }
 
   export type WalletBalanceUpdateManyWithoutCurrencyNestedInput = {
@@ -18496,6 +28587,76 @@ export namespace Prisma {
     deleteMany?: LedgerEntryScalarWhereInput | LedgerEntryScalarWhereInput[]
   }
 
+  export type WithdrawalUpdateManyWithoutSourceCurrencyNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalCreateWithoutSourceCurrencyInput[] | WithdrawalUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutSourceCurrencyInput | WithdrawalCreateOrConnectWithoutSourceCurrencyInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalUpsertWithWhereUniqueWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalCreateManySourceCurrencyInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalUpdateWithWhereUniqueWithoutSourceCurrencyInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutSourceCurrencyInput | WithdrawalUpdateManyWithWhereWithoutSourceCurrencyInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalCreateWithoutDestinationCurrencyInput[] | WithdrawalUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalCreateOrConnectWithoutDestinationCurrencyInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalUpsertWithWhereUniqueWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalCreateManyDestinationCurrencyInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalUpdateWithWhereUniqueWithoutDestinationCurrencyInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutDestinationCurrencyInput | WithdrawalUpdateManyWithWhereWithoutDestinationCurrencyInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalQuoteCreateWithoutSourceCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManySourceCurrencyInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutSourceCurrencyInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutSourceCurrencyInput | WithdrawalQuoteUpdateManyWithWhereWithoutSourceCurrencyInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalQuoteCreateWithoutDestinationCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManyDestinationCurrencyInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutDestinationCurrencyInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutDestinationCurrencyInput | WithdrawalQuoteUpdateManyWithWhereWithoutDestinationCurrencyInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type BeneficiaryUpdateManyWithoutCurrencyNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput> | BeneficiaryCreateWithoutCurrencyInput[] | BeneficiaryUncheckedCreateWithoutCurrencyInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutCurrencyInput | BeneficiaryCreateOrConnectWithoutCurrencyInput[]
+    upsert?: BeneficiaryUpsertWithWhereUniqueWithoutCurrencyInput | BeneficiaryUpsertWithWhereUniqueWithoutCurrencyInput[]
+    createMany?: BeneficiaryCreateManyCurrencyInputEnvelope
+    set?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    disconnect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    delete?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    update?: BeneficiaryUpdateWithWhereUniqueWithoutCurrencyInput | BeneficiaryUpdateWithWhereUniqueWithoutCurrencyInput[]
+    updateMany?: BeneficiaryUpdateManyWithWhereWithoutCurrencyInput | BeneficiaryUpdateManyWithWhereWithoutCurrencyInput[]
+    deleteMany?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
+  }
+
   export type WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput = {
     create?: XOR<WalletBalanceCreateWithoutCurrencyInput, WalletBalanceUncheckedCreateWithoutCurrencyInput> | WalletBalanceCreateWithoutCurrencyInput[] | WalletBalanceUncheckedCreateWithoutCurrencyInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutCurrencyInput | WalletBalanceCreateOrConnectWithoutCurrencyInput[]
@@ -18550,6 +28711,76 @@ export namespace Prisma {
     update?: LedgerEntryUpdateWithWhereUniqueWithoutCurrencyInput | LedgerEntryUpdateWithWhereUniqueWithoutCurrencyInput[]
     updateMany?: LedgerEntryUpdateManyWithWhereWithoutCurrencyInput | LedgerEntryUpdateManyWithWhereWithoutCurrencyInput[]
     deleteMany?: LedgerEntryScalarWhereInput | LedgerEntryScalarWhereInput[]
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalCreateWithoutSourceCurrencyInput[] | WithdrawalUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutSourceCurrencyInput | WithdrawalCreateOrConnectWithoutSourceCurrencyInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalUpsertWithWhereUniqueWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalCreateManySourceCurrencyInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalUpdateWithWhereUniqueWithoutSourceCurrencyInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutSourceCurrencyInput | WithdrawalUpdateManyWithWhereWithoutSourceCurrencyInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalCreateWithoutDestinationCurrencyInput[] | WithdrawalUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalCreateOrConnectWithoutDestinationCurrencyInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalUpsertWithWhereUniqueWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalCreateManyDestinationCurrencyInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalUpdateWithWhereUniqueWithoutDestinationCurrencyInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutDestinationCurrencyInput | WithdrawalUpdateManyWithWhereWithoutDestinationCurrencyInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput> | WithdrawalQuoteCreateWithoutSourceCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutSourceCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManySourceCurrencyInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutSourceCurrencyInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutSourceCurrencyInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutSourceCurrencyInput | WithdrawalQuoteUpdateManyWithWhereWithoutSourceCurrencyInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput> | WithdrawalQuoteCreateWithoutDestinationCurrencyInput[] | WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput[]
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput | WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput[]
+    upsert?: WithdrawalQuoteUpsertWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalQuoteUpsertWithWhereUniqueWithoutDestinationCurrencyInput[]
+    createMany?: WithdrawalQuoteCreateManyDestinationCurrencyInputEnvelope
+    set?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    disconnect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    delete?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    connect?: WithdrawalQuoteWhereUniqueInput | WithdrawalQuoteWhereUniqueInput[]
+    update?: WithdrawalQuoteUpdateWithWhereUniqueWithoutDestinationCurrencyInput | WithdrawalQuoteUpdateWithWhereUniqueWithoutDestinationCurrencyInput[]
+    updateMany?: WithdrawalQuoteUpdateManyWithWhereWithoutDestinationCurrencyInput | WithdrawalQuoteUpdateManyWithWhereWithoutDestinationCurrencyInput[]
+    deleteMany?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+  }
+
+  export type BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput> | BeneficiaryCreateWithoutCurrencyInput[] | BeneficiaryUncheckedCreateWithoutCurrencyInput[]
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutCurrencyInput | BeneficiaryCreateOrConnectWithoutCurrencyInput[]
+    upsert?: BeneficiaryUpsertWithWhereUniqueWithoutCurrencyInput | BeneficiaryUpsertWithWhereUniqueWithoutCurrencyInput[]
+    createMany?: BeneficiaryCreateManyCurrencyInputEnvelope
+    set?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    disconnect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    delete?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    connect?: BeneficiaryWhereUniqueInput | BeneficiaryWhereUniqueInput[]
+    update?: BeneficiaryUpdateWithWhereUniqueWithoutCurrencyInput | BeneficiaryUpdateWithWhereUniqueWithoutCurrencyInput[]
+    updateMany?: BeneficiaryUpdateManyWithWhereWithoutCurrencyInput | BeneficiaryUpdateManyWithWhereWithoutCurrencyInput[]
+    deleteMany?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
   }
 
   export type WalletCreateNestedOneWithoutBalancesInput = {
@@ -18690,6 +28921,12 @@ export namespace Prisma {
     connect?: DepositWhereUniqueInput
   }
 
+  export type WithdrawalCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutTransactionInput
+    connect?: WithdrawalWhereUniqueInput
+  }
+
   export type LedgerEntryCreateNestedManyWithoutTransactionInput = {
     create?: XOR<LedgerEntryCreateWithoutTransactionInput, LedgerEntryUncheckedCreateWithoutTransactionInput> | LedgerEntryCreateWithoutTransactionInput[] | LedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutTransactionInput | LedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -18701,6 +28938,12 @@ export namespace Prisma {
     create?: XOR<DepositCreateWithoutTransactionInput, DepositUncheckedCreateWithoutTransactionInput>
     connectOrCreate?: DepositCreateOrConnectWithoutTransactionInput
     connect?: DepositWhereUniqueInput
+  }
+
+  export type WithdrawalUncheckedCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutTransactionInput
+    connect?: WithdrawalWhereUniqueInput
   }
 
   export type LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput = {
@@ -18756,6 +28999,16 @@ export namespace Prisma {
     update?: XOR<XOR<DepositUpdateToOneWithWhereWithoutTransactionInput, DepositUpdateWithoutTransactionInput>, DepositUncheckedUpdateWithoutTransactionInput>
   }
 
+  export type WithdrawalUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutTransactionInput
+    upsert?: WithdrawalUpsertWithoutTransactionInput
+    disconnect?: WithdrawalWhereInput | boolean
+    delete?: WithdrawalWhereInput | boolean
+    connect?: WithdrawalWhereUniqueInput
+    update?: XOR<XOR<WithdrawalUpdateToOneWithWhereWithoutTransactionInput, WithdrawalUpdateWithoutTransactionInput>, WithdrawalUncheckedUpdateWithoutTransactionInput>
+  }
+
   export type LedgerEntryUpdateManyWithoutTransactionNestedInput = {
     create?: XOR<LedgerEntryCreateWithoutTransactionInput, LedgerEntryUncheckedCreateWithoutTransactionInput> | LedgerEntryCreateWithoutTransactionInput[] | LedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutTransactionInput | LedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -18778,6 +29031,16 @@ export namespace Prisma {
     delete?: DepositWhereInput | boolean
     connect?: DepositWhereUniqueInput
     update?: XOR<XOR<DepositUpdateToOneWithWhereWithoutTransactionInput, DepositUpdateWithoutTransactionInput>, DepositUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutTransactionInput
+    upsert?: WithdrawalUpsertWithoutTransactionInput
+    disconnect?: WithdrawalWhereInput | boolean
+    delete?: WithdrawalWhereInput | boolean
+    connect?: WithdrawalWhereUniqueInput
+    update?: XOR<XOR<WithdrawalUpdateToOneWithWhereWithoutTransactionInput, WithdrawalUpdateWithoutTransactionInput>, WithdrawalUncheckedUpdateWithoutTransactionInput>
   }
 
   export type LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput = {
@@ -18842,6 +29105,396 @@ export namespace Prisma {
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutLedgerEntriesInput, TransactionUpdateWithoutLedgerEntriesInput>, TransactionUncheckedUpdateWithoutLedgerEntriesInput>
   }
 
+  export type UserCreateNestedOneWithoutWithdrawalsInput = {
+    create?: XOR<UserCreateWithoutWithdrawalsInput, UserUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWithdrawalsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type WalletCreateNestedOneWithoutWithdrawalsInput = {
+    create?: XOR<WalletCreateWithoutWithdrawalsInput, WalletUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutWithdrawalsInput
+    connect?: WalletWhereUniqueInput
+  }
+
+  export type TransactionCreateNestedOneWithoutWithdrawalInput = {
+    create?: XOR<TransactionCreateWithoutWithdrawalInput, TransactionUncheckedCreateWithoutWithdrawalInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutWithdrawalInput
+    connect?: TransactionWhereUniqueInput
+  }
+
+  export type CurrencyCreateNestedOneWithoutSourceWithdrawalsInput = {
+    create?: XOR<CurrencyCreateWithoutSourceWithdrawalsInput, CurrencyUncheckedCreateWithoutSourceWithdrawalsInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutSourceWithdrawalsInput
+    connect?: CurrencyWhereUniqueInput
+  }
+
+  export type CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput = {
+    create?: XOR<CurrencyCreateWithoutDestinationWithdrawalsInput, CurrencyUncheckedCreateWithoutDestinationWithdrawalsInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutDestinationWithdrawalsInput
+    connect?: CurrencyWhereUniqueInput
+  }
+
+  export type WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutWithdrawalsInput
+    connect?: WithdrawalQuoteWhereUniqueInput
+  }
+
+  export type BeneficiaryCreateNestedOneWithoutWithdrawalsInput = {
+    create?: XOR<BeneficiaryCreateWithoutWithdrawalsInput, BeneficiaryUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutWithdrawalsInput
+    connect?: BeneficiaryWhereUniqueInput
+  }
+
+  export type PayoutAttemptCreateNestedManyWithoutWithdrawalInput = {
+    create?: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput> | PayoutAttemptCreateWithoutWithdrawalInput[] | PayoutAttemptUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: PayoutAttemptCreateOrConnectWithoutWithdrawalInput | PayoutAttemptCreateOrConnectWithoutWithdrawalInput[]
+    createMany?: PayoutAttemptCreateManyWithdrawalInputEnvelope
+    connect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+  }
+
+  export type ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput = {
+    create?: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput> | ProviderWebhookEventCreateWithoutWithdrawalInput[] | ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput | ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput[]
+    createMany?: ProviderWebhookEventCreateManyWithdrawalInputEnvelope
+    connect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+  }
+
+  export type PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput = {
+    create?: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput> | PayoutAttemptCreateWithoutWithdrawalInput[] | PayoutAttemptUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: PayoutAttemptCreateOrConnectWithoutWithdrawalInput | PayoutAttemptCreateOrConnectWithoutWithdrawalInput[]
+    createMany?: PayoutAttemptCreateManyWithdrawalInputEnvelope
+    connect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+  }
+
+  export type ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput = {
+    create?: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput> | ProviderWebhookEventCreateWithoutWithdrawalInput[] | ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput | ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput[]
+    createMany?: ProviderWebhookEventCreateManyWithdrawalInputEnvelope
+    connect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+  }
+
+  export type EnumPaymentMethodFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMethod
+  }
+
+  export type UserUpdateOneRequiredWithoutWithdrawalsNestedInput = {
+    create?: XOR<UserCreateWithoutWithdrawalsInput, UserUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWithdrawalsInput
+    upsert?: UserUpsertWithoutWithdrawalsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWithdrawalsInput, UserUpdateWithoutWithdrawalsInput>, UserUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type WalletUpdateOneRequiredWithoutWithdrawalsNestedInput = {
+    create?: XOR<WalletCreateWithoutWithdrawalsInput, WalletUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutWithdrawalsInput
+    upsert?: WalletUpsertWithoutWithdrawalsInput
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutWithdrawalsInput, WalletUpdateWithoutWithdrawalsInput>, WalletUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type TransactionUpdateOneRequiredWithoutWithdrawalNestedInput = {
+    create?: XOR<TransactionCreateWithoutWithdrawalInput, TransactionUncheckedCreateWithoutWithdrawalInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutWithdrawalInput
+    upsert?: TransactionUpsertWithoutWithdrawalInput
+    connect?: TransactionWhereUniqueInput
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutWithdrawalInput, TransactionUpdateWithoutWithdrawalInput>, TransactionUncheckedUpdateWithoutWithdrawalInput>
+  }
+
+  export type CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput = {
+    create?: XOR<CurrencyCreateWithoutSourceWithdrawalsInput, CurrencyUncheckedCreateWithoutSourceWithdrawalsInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutSourceWithdrawalsInput
+    upsert?: CurrencyUpsertWithoutSourceWithdrawalsInput
+    connect?: CurrencyWhereUniqueInput
+    update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutSourceWithdrawalsInput, CurrencyUpdateWithoutSourceWithdrawalsInput>, CurrencyUncheckedUpdateWithoutSourceWithdrawalsInput>
+  }
+
+  export type CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput = {
+    create?: XOR<CurrencyCreateWithoutDestinationWithdrawalsInput, CurrencyUncheckedCreateWithoutDestinationWithdrawalsInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutDestinationWithdrawalsInput
+    upsert?: CurrencyUpsertWithoutDestinationWithdrawalsInput
+    connect?: CurrencyWhereUniqueInput
+    update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutDestinationWithdrawalsInput, CurrencyUpdateWithoutDestinationWithdrawalsInput>, CurrencyUncheckedUpdateWithoutDestinationWithdrawalsInput>
+  }
+
+  export type WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput = {
+    create?: XOR<WithdrawalQuoteCreateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: WithdrawalQuoteCreateOrConnectWithoutWithdrawalsInput
+    upsert?: WithdrawalQuoteUpsertWithoutWithdrawalsInput
+    disconnect?: WithdrawalQuoteWhereInput | boolean
+    delete?: WithdrawalQuoteWhereInput | boolean
+    connect?: WithdrawalQuoteWhereUniqueInput
+    update?: XOR<XOR<WithdrawalQuoteUpdateToOneWithWhereWithoutWithdrawalsInput, WithdrawalQuoteUpdateWithoutWithdrawalsInput>, WithdrawalQuoteUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type BeneficiaryUpdateOneWithoutWithdrawalsNestedInput = {
+    create?: XOR<BeneficiaryCreateWithoutWithdrawalsInput, BeneficiaryUncheckedCreateWithoutWithdrawalsInput>
+    connectOrCreate?: BeneficiaryCreateOrConnectWithoutWithdrawalsInput
+    upsert?: BeneficiaryUpsertWithoutWithdrawalsInput
+    disconnect?: BeneficiaryWhereInput | boolean
+    delete?: BeneficiaryWhereInput | boolean
+    connect?: BeneficiaryWhereUniqueInput
+    update?: XOR<XOR<BeneficiaryUpdateToOneWithWhereWithoutWithdrawalsInput, BeneficiaryUpdateWithoutWithdrawalsInput>, BeneficiaryUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type PayoutAttemptUpdateManyWithoutWithdrawalNestedInput = {
+    create?: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput> | PayoutAttemptCreateWithoutWithdrawalInput[] | PayoutAttemptUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: PayoutAttemptCreateOrConnectWithoutWithdrawalInput | PayoutAttemptCreateOrConnectWithoutWithdrawalInput[]
+    upsert?: PayoutAttemptUpsertWithWhereUniqueWithoutWithdrawalInput | PayoutAttemptUpsertWithWhereUniqueWithoutWithdrawalInput[]
+    createMany?: PayoutAttemptCreateManyWithdrawalInputEnvelope
+    set?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    disconnect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    delete?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    connect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    update?: PayoutAttemptUpdateWithWhereUniqueWithoutWithdrawalInput | PayoutAttemptUpdateWithWhereUniqueWithoutWithdrawalInput[]
+    updateMany?: PayoutAttemptUpdateManyWithWhereWithoutWithdrawalInput | PayoutAttemptUpdateManyWithWhereWithoutWithdrawalInput[]
+    deleteMany?: PayoutAttemptScalarWhereInput | PayoutAttemptScalarWhereInput[]
+  }
+
+  export type ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput = {
+    create?: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput> | ProviderWebhookEventCreateWithoutWithdrawalInput[] | ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput | ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput[]
+    upsert?: ProviderWebhookEventUpsertWithWhereUniqueWithoutWithdrawalInput | ProviderWebhookEventUpsertWithWhereUniqueWithoutWithdrawalInput[]
+    createMany?: ProviderWebhookEventCreateManyWithdrawalInputEnvelope
+    set?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    disconnect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    delete?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    connect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    update?: ProviderWebhookEventUpdateWithWhereUniqueWithoutWithdrawalInput | ProviderWebhookEventUpdateWithWhereUniqueWithoutWithdrawalInput[]
+    updateMany?: ProviderWebhookEventUpdateManyWithWhereWithoutWithdrawalInput | ProviderWebhookEventUpdateManyWithWhereWithoutWithdrawalInput[]
+    deleteMany?: ProviderWebhookEventScalarWhereInput | ProviderWebhookEventScalarWhereInput[]
+  }
+
+  export type PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput = {
+    create?: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput> | PayoutAttemptCreateWithoutWithdrawalInput[] | PayoutAttemptUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: PayoutAttemptCreateOrConnectWithoutWithdrawalInput | PayoutAttemptCreateOrConnectWithoutWithdrawalInput[]
+    upsert?: PayoutAttemptUpsertWithWhereUniqueWithoutWithdrawalInput | PayoutAttemptUpsertWithWhereUniqueWithoutWithdrawalInput[]
+    createMany?: PayoutAttemptCreateManyWithdrawalInputEnvelope
+    set?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    disconnect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    delete?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    connect?: PayoutAttemptWhereUniqueInput | PayoutAttemptWhereUniqueInput[]
+    update?: PayoutAttemptUpdateWithWhereUniqueWithoutWithdrawalInput | PayoutAttemptUpdateWithWhereUniqueWithoutWithdrawalInput[]
+    updateMany?: PayoutAttemptUpdateManyWithWhereWithoutWithdrawalInput | PayoutAttemptUpdateManyWithWhereWithoutWithdrawalInput[]
+    deleteMany?: PayoutAttemptScalarWhereInput | PayoutAttemptScalarWhereInput[]
+  }
+
+  export type ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput = {
+    create?: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput> | ProviderWebhookEventCreateWithoutWithdrawalInput[] | ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput[]
+    connectOrCreate?: ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput | ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput[]
+    upsert?: ProviderWebhookEventUpsertWithWhereUniqueWithoutWithdrawalInput | ProviderWebhookEventUpsertWithWhereUniqueWithoutWithdrawalInput[]
+    createMany?: ProviderWebhookEventCreateManyWithdrawalInputEnvelope
+    set?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    disconnect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    delete?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    connect?: ProviderWebhookEventWhereUniqueInput | ProviderWebhookEventWhereUniqueInput[]
+    update?: ProviderWebhookEventUpdateWithWhereUniqueWithoutWithdrawalInput | ProviderWebhookEventUpdateWithWhereUniqueWithoutWithdrawalInput[]
+    updateMany?: ProviderWebhookEventUpdateManyWithWhereWithoutWithdrawalInput | ProviderWebhookEventUpdateManyWithWhereWithoutWithdrawalInput[]
+    deleteMany?: ProviderWebhookEventScalarWhereInput | ProviderWebhookEventScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutWithdrawalQuotesInput = {
+    create?: XOR<UserCreateWithoutWithdrawalQuotesInput, UserUncheckedCreateWithoutWithdrawalQuotesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWithdrawalQuotesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CurrencyCreateNestedOneWithoutSourceQuotesInput = {
+    create?: XOR<CurrencyCreateWithoutSourceQuotesInput, CurrencyUncheckedCreateWithoutSourceQuotesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutSourceQuotesInput
+    connect?: CurrencyWhereUniqueInput
+  }
+
+  export type CurrencyCreateNestedOneWithoutDestinationQuotesInput = {
+    create?: XOR<CurrencyCreateWithoutDestinationQuotesInput, CurrencyUncheckedCreateWithoutDestinationQuotesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutDestinationQuotesInput
+    connect?: CurrencyWhereUniqueInput
+  }
+
+  export type WithdrawalCreateNestedManyWithoutQuoteInput = {
+    create?: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput> | WithdrawalCreateWithoutQuoteInput[] | WithdrawalUncheckedCreateWithoutQuoteInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutQuoteInput | WithdrawalCreateOrConnectWithoutQuoteInput[]
+    createMany?: WithdrawalCreateManyQuoteInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutQuoteInput = {
+    create?: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput> | WithdrawalCreateWithoutQuoteInput[] | WithdrawalUncheckedCreateWithoutQuoteInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutQuoteInput | WithdrawalCreateOrConnectWithoutQuoteInput[]
+    createMany?: WithdrawalCreateManyQuoteInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type EnumWithdrawalQuoteStatusFieldUpdateOperationsInput = {
+    set?: $Enums.WithdrawalQuoteStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutWithdrawalQuotesNestedInput = {
+    create?: XOR<UserCreateWithoutWithdrawalQuotesInput, UserUncheckedCreateWithoutWithdrawalQuotesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWithdrawalQuotesInput
+    upsert?: UserUpsertWithoutWithdrawalQuotesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWithdrawalQuotesInput, UserUpdateWithoutWithdrawalQuotesInput>, UserUncheckedUpdateWithoutWithdrawalQuotesInput>
+  }
+
+  export type CurrencyUpdateOneRequiredWithoutSourceQuotesNestedInput = {
+    create?: XOR<CurrencyCreateWithoutSourceQuotesInput, CurrencyUncheckedCreateWithoutSourceQuotesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutSourceQuotesInput
+    upsert?: CurrencyUpsertWithoutSourceQuotesInput
+    connect?: CurrencyWhereUniqueInput
+    update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutSourceQuotesInput, CurrencyUpdateWithoutSourceQuotesInput>, CurrencyUncheckedUpdateWithoutSourceQuotesInput>
+  }
+
+  export type CurrencyUpdateOneRequiredWithoutDestinationQuotesNestedInput = {
+    create?: XOR<CurrencyCreateWithoutDestinationQuotesInput, CurrencyUncheckedCreateWithoutDestinationQuotesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutDestinationQuotesInput
+    upsert?: CurrencyUpsertWithoutDestinationQuotesInput
+    connect?: CurrencyWhereUniqueInput
+    update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutDestinationQuotesInput, CurrencyUpdateWithoutDestinationQuotesInput>, CurrencyUncheckedUpdateWithoutDestinationQuotesInput>
+  }
+
+  export type WithdrawalUpdateManyWithoutQuoteNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput> | WithdrawalCreateWithoutQuoteInput[] | WithdrawalUncheckedCreateWithoutQuoteInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutQuoteInput | WithdrawalCreateOrConnectWithoutQuoteInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutQuoteInput | WithdrawalUpsertWithWhereUniqueWithoutQuoteInput[]
+    createMany?: WithdrawalCreateManyQuoteInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutQuoteInput | WithdrawalUpdateWithWhereUniqueWithoutQuoteInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutQuoteInput | WithdrawalUpdateManyWithWhereWithoutQuoteInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutQuoteNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput> | WithdrawalCreateWithoutQuoteInput[] | WithdrawalUncheckedCreateWithoutQuoteInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutQuoteInput | WithdrawalCreateOrConnectWithoutQuoteInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutQuoteInput | WithdrawalUpsertWithWhereUniqueWithoutQuoteInput[]
+    createMany?: WithdrawalCreateManyQuoteInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutQuoteInput | WithdrawalUpdateWithWhereUniqueWithoutQuoteInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutQuoteInput | WithdrawalUpdateManyWithWhereWithoutQuoteInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutBeneficiariesInput = {
+    create?: XOR<UserCreateWithoutBeneficiariesInput, UserUncheckedCreateWithoutBeneficiariesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBeneficiariesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CurrencyCreateNestedOneWithoutBeneficiariesInput = {
+    create?: XOR<CurrencyCreateWithoutBeneficiariesInput, CurrencyUncheckedCreateWithoutBeneficiariesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutBeneficiariesInput
+    connect?: CurrencyWhereUniqueInput
+  }
+
+  export type WithdrawalCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput> | WithdrawalCreateWithoutBeneficiaryInput[] | WithdrawalUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutBeneficiaryInput | WithdrawalCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: WithdrawalCreateManyBeneficiaryInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type WithdrawalUncheckedCreateNestedManyWithoutBeneficiaryInput = {
+    create?: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput> | WithdrawalCreateWithoutBeneficiaryInput[] | WithdrawalUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutBeneficiaryInput | WithdrawalCreateOrConnectWithoutBeneficiaryInput[]
+    createMany?: WithdrawalCreateManyBeneficiaryInputEnvelope
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type EnumBeneficiaryTypeFieldUpdateOperationsInput = {
+    set?: $Enums.BeneficiaryType
+  }
+
+  export type EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BeneficiaryVerificationStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutBeneficiariesNestedInput = {
+    create?: XOR<UserCreateWithoutBeneficiariesInput, UserUncheckedCreateWithoutBeneficiariesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBeneficiariesInput
+    upsert?: UserUpsertWithoutBeneficiariesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBeneficiariesInput, UserUpdateWithoutBeneficiariesInput>, UserUncheckedUpdateWithoutBeneficiariesInput>
+  }
+
+  export type CurrencyUpdateOneRequiredWithoutBeneficiariesNestedInput = {
+    create?: XOR<CurrencyCreateWithoutBeneficiariesInput, CurrencyUncheckedCreateWithoutBeneficiariesInput>
+    connectOrCreate?: CurrencyCreateOrConnectWithoutBeneficiariesInput
+    upsert?: CurrencyUpsertWithoutBeneficiariesInput
+    connect?: CurrencyWhereUniqueInput
+    update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutBeneficiariesInput, CurrencyUpdateWithoutBeneficiariesInput>, CurrencyUncheckedUpdateWithoutBeneficiariesInput>
+  }
+
+  export type WithdrawalUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput> | WithdrawalCreateWithoutBeneficiaryInput[] | WithdrawalUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutBeneficiaryInput | WithdrawalCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutBeneficiaryInput | WithdrawalUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: WithdrawalCreateManyBeneficiaryInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutBeneficiaryInput | WithdrawalUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutBeneficiaryInput | WithdrawalUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutBeneficiaryNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput> | WithdrawalCreateWithoutBeneficiaryInput[] | WithdrawalUncheckedCreateWithoutBeneficiaryInput[]
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutBeneficiaryInput | WithdrawalCreateOrConnectWithoutBeneficiaryInput[]
+    upsert?: WithdrawalUpsertWithWhereUniqueWithoutBeneficiaryInput | WithdrawalUpsertWithWhereUniqueWithoutBeneficiaryInput[]
+    createMany?: WithdrawalCreateManyBeneficiaryInputEnvelope
+    set?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    disconnect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    delete?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+    update?: WithdrawalUpdateWithWhereUniqueWithoutBeneficiaryInput | WithdrawalUpdateWithWhereUniqueWithoutBeneficiaryInput[]
+    updateMany?: WithdrawalUpdateManyWithWhereWithoutBeneficiaryInput | WithdrawalUpdateManyWithWhereWithoutBeneficiaryInput[]
+    deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type WithdrawalCreateNestedOneWithoutPayoutAttemptsInput = {
+    create?: XOR<WithdrawalCreateWithoutPayoutAttemptsInput, WithdrawalUncheckedCreateWithoutPayoutAttemptsInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutPayoutAttemptsInput
+    connect?: WithdrawalWhereUniqueInput
+  }
+
+  export type WithdrawalUpdateOneRequiredWithoutPayoutAttemptsNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutPayoutAttemptsInput, WithdrawalUncheckedCreateWithoutPayoutAttemptsInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutPayoutAttemptsInput
+    upsert?: WithdrawalUpsertWithoutPayoutAttemptsInput
+    connect?: WithdrawalWhereUniqueInput
+    update?: XOR<XOR<WithdrawalUpdateToOneWithWhereWithoutPayoutAttemptsInput, WithdrawalUpdateWithoutPayoutAttemptsInput>, WithdrawalUncheckedUpdateWithoutPayoutAttemptsInput>
+  }
+
+  export type WithdrawalCreateNestedOneWithoutWebhookEventsInput = {
+    create?: XOR<WithdrawalCreateWithoutWebhookEventsInput, WithdrawalUncheckedCreateWithoutWebhookEventsInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWebhookEventsInput
+    connect?: WithdrawalWhereUniqueInput
+  }
+
+  export type EnumProviderWebhookEventStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProviderWebhookEventStatus
+  }
+
+  export type WithdrawalUpdateOneWithoutWebhookEventsNestedInput = {
+    create?: XOR<WithdrawalCreateWithoutWebhookEventsInput, WithdrawalUncheckedCreateWithoutWebhookEventsInput>
+    connectOrCreate?: WithdrawalCreateOrConnectWithoutWebhookEventsInput
+    upsert?: WithdrawalUpsertWithoutWebhookEventsInput
+    disconnect?: WithdrawalWhereInput | boolean
+    delete?: WithdrawalWhereInput | boolean
+    connect?: WithdrawalWhereUniqueInput
+    update?: XOR<XOR<WithdrawalUpdateToOneWithWhereWithoutWebhookEventsInput, WithdrawalUpdateWithoutWebhookEventsInput>, WithdrawalUncheckedUpdateWithoutWebhookEventsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18893,6 +29546,17 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -18919,17 +29583,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -18992,20 +29645,6 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -19031,6 +29670,20 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -19229,6 +29882,91 @@ export namespace Prisma {
     _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
+  export type NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel> | $Enums.PaymentMethod
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
+  }
+
+  export type NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.WithdrawalQuoteStatus | EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel> | $Enums.WithdrawalQuoteStatus
+  }
+
+  export type NestedEnumWithdrawalQuoteStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.WithdrawalQuoteStatus | EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.WithdrawalQuoteStatus[] | ListEnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumWithdrawalQuoteStatusWithAggregatesFilter<$PrismaModel> | $Enums.WithdrawalQuoteStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel>
+    _max?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBeneficiaryTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryType | EnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryTypeFilter<$PrismaModel> | $Enums.BeneficiaryType
+  }
+
+  export type NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryVerificationStatus | EnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel> | $Enums.BeneficiaryVerificationStatus
+  }
+
+  export type NestedEnumBeneficiaryTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryType | EnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryType[] | ListEnumBeneficiaryTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryTypeWithAggregatesFilter<$PrismaModel> | $Enums.BeneficiaryType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBeneficiaryTypeFilter<$PrismaModel>
+    _max?: NestedEnumBeneficiaryTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBeneficiaryVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BeneficiaryVerificationStatus | EnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BeneficiaryVerificationStatus[] | ListEnumBeneficiaryVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBeneficiaryVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.BeneficiaryVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumBeneficiaryVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumProviderWebhookEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderWebhookEventStatus | EnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel> | $Enums.ProviderWebhookEventStatus
+  }
+
+  export type NestedEnumProviderWebhookEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderWebhookEventStatus | EnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProviderWebhookEventStatus[] | ListEnumProviderWebhookEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProviderWebhookEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProviderWebhookEventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumProviderWebhookEventStatusFilter<$PrismaModel>
+  }
+
   export type PasswordResetChallengeCreateWithoutUserInput = {
     id?: string
     codeHash: string
@@ -19332,6 +30070,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutUserInput = {
@@ -19342,6 +30081,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutUserInput = {
@@ -19421,6 +30161,7 @@ export namespace Prisma {
     wallet: WalletCreateNestedOneWithoutTransactionsInput
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -19442,6 +30183,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -19452,6 +30194,184 @@ export namespace Prisma {
 
   export type TransactionCreateManyUserInputEnvelope = {
     data: TransactionCreateManyUserInput | TransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalCreateWithoutUserInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutUserInput = {
+    id?: string
+    reference: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutUserInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput>
+  }
+
+  export type WithdrawalCreateManyUserInputEnvelope = {
+    data: WithdrawalCreateManyUserInput | WithdrawalCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalQuoteCreateWithoutUserInput = {
+    id?: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceQuotesInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationQuotesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteUncheckedCreateWithoutUserInput = {
+    id?: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteCreateOrConnectWithoutUserInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    create: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput>
+  }
+
+  export type WithdrawalQuoteCreateManyUserInputEnvelope = {
+    data: WithdrawalQuoteCreateManyUserInput | WithdrawalQuoteCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BeneficiaryCreateWithoutUserInput = {
+    id?: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    currency: CurrencyCreateNestedOneWithoutBeneficiariesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutUserInput = {
+    id?: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutUserInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput>
+  }
+
+  export type BeneficiaryCreateManyUserInputEnvelope = {
+    data: BeneficiaryCreateManyUserInput | BeneficiaryCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -19578,6 +30498,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutUserInput = {
@@ -19588,6 +30509,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type DepositUpsertWithWhereUniqueWithoutUserInput = {
@@ -19671,6 +30593,136 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Transaction"> | Date | string
   }
 
+  export type WithdrawalUpsertWithWhereUniqueWithoutUserInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutUserInput, WithdrawalUncheckedUpdateWithoutUserInput>
+    create: XOR<WithdrawalCreateWithoutUserInput, WithdrawalUncheckedCreateWithoutUserInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutUserInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutUserInput, WithdrawalUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutUserInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type WithdrawalScalarWhereInput = {
+    AND?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+    OR?: WithdrawalScalarWhereInput[]
+    NOT?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+    id?: StringFilter<"Withdrawal"> | string
+    reference?: StringFilter<"Withdrawal"> | string
+    userId?: StringFilter<"Withdrawal"> | string
+    walletId?: StringFilter<"Withdrawal"> | string
+    transactionId?: StringFilter<"Withdrawal"> | string
+    sourceCurrencyCode?: StringFilter<"Withdrawal"> | string
+    destinationCurrencyCode?: StringFilter<"Withdrawal"> | string
+    sourceAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"Withdrawal"> | Decimal | DecimalJsLike | number | string
+    country?: StringFilter<"Withdrawal"> | string
+    countryCode?: StringFilter<"Withdrawal"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Withdrawal"> | $Enums.PaymentMethod
+    provider?: EnumPaymentProviderNullableFilter<"Withdrawal"> | $Enums.PaymentProvider | null
+    providerReference?: StringNullableFilter<"Withdrawal"> | string | null
+    providerTransactionId?: StringNullableFilter<"Withdrawal"> | string | null
+    quoteId?: StringNullableFilter<"Withdrawal"> | string | null
+    beneficiaryId?: StringNullableFilter<"Withdrawal"> | string | null
+    idempotencyKey?: StringFilter<"Withdrawal"> | string
+    status?: EnumTransactionStatusFilter<"Withdrawal"> | $Enums.TransactionStatus
+    failureReason?: StringNullableFilter<"Withdrawal"> | string | null
+    metadata?: JsonNullableFilter<"Withdrawal">
+    createdAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    updatedAt?: DateTimeFilter<"Withdrawal"> | Date | string
+    completedAt?: DateTimeNullableFilter<"Withdrawal"> | Date | string | null
+  }
+
+  export type WithdrawalQuoteUpsertWithWhereUniqueWithoutUserInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    update: XOR<WithdrawalQuoteUpdateWithoutUserInput, WithdrawalQuoteUncheckedUpdateWithoutUserInput>
+    create: XOR<WithdrawalQuoteCreateWithoutUserInput, WithdrawalQuoteUncheckedCreateWithoutUserInput>
+  }
+
+  export type WithdrawalQuoteUpdateWithWhereUniqueWithoutUserInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    data: XOR<WithdrawalQuoteUpdateWithoutUserInput, WithdrawalQuoteUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WithdrawalQuoteUpdateManyWithWhereWithoutUserInput = {
+    where: WithdrawalQuoteScalarWhereInput
+    data: XOR<WithdrawalQuoteUpdateManyMutationInput, WithdrawalQuoteUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type WithdrawalQuoteScalarWhereInput = {
+    AND?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+    OR?: WithdrawalQuoteScalarWhereInput[]
+    NOT?: WithdrawalQuoteScalarWhereInput | WithdrawalQuoteScalarWhereInput[]
+    id?: StringFilter<"WithdrawalQuote"> | string
+    userId?: StringFilter<"WithdrawalQuote"> | string
+    sourceCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    destinationCurrencyCode?: StringFilter<"WithdrawalQuote"> | string
+    countryCode?: StringFilter<"WithdrawalQuote"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"WithdrawalQuote"> | $Enums.PaymentMethod
+    sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    expiresAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
+    usedAt?: DateTimeNullableFilter<"WithdrawalQuote"> | Date | string | null
+  }
+
+  export type BeneficiaryUpsertWithWhereUniqueWithoutUserInput = {
+    where: BeneficiaryWhereUniqueInput
+    update: XOR<BeneficiaryUpdateWithoutUserInput, BeneficiaryUncheckedUpdateWithoutUserInput>
+    create: XOR<BeneficiaryCreateWithoutUserInput, BeneficiaryUncheckedCreateWithoutUserInput>
+  }
+
+  export type BeneficiaryUpdateWithWhereUniqueWithoutUserInput = {
+    where: BeneficiaryWhereUniqueInput
+    data: XOR<BeneficiaryUpdateWithoutUserInput, BeneficiaryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BeneficiaryUpdateManyWithWhereWithoutUserInput = {
+    where: BeneficiaryScalarWhereInput
+    data: XOR<BeneficiaryUpdateManyMutationInput, BeneficiaryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BeneficiaryScalarWhereInput = {
+    AND?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
+    OR?: BeneficiaryScalarWhereInput[]
+    NOT?: BeneficiaryScalarWhereInput | BeneficiaryScalarWhereInput[]
+    id?: StringFilter<"Beneficiary"> | string
+    userId?: StringFilter<"Beneficiary"> | string
+    country?: StringFilter<"Beneficiary"> | string
+    countryCode?: StringFilter<"Beneficiary"> | string
+    currencyCode?: StringFilter<"Beneficiary"> | string
+    paymentMethod?: EnumPaymentMethodFilter<"Beneficiary"> | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFilter<"Beneficiary"> | $Enums.BeneficiaryType
+    institutionName?: StringNullableFilter<"Beneficiary"> | string | null
+    providerBankCode?: StringNullableFilter<"Beneficiary"> | string | null
+    accountHolderName?: StringNullableFilter<"Beneficiary"> | string | null
+    accountLast4?: StringNullableFilter<"Beneficiary"> | string | null
+    mobileMoneyProvider?: StringNullableFilter<"Beneficiary"> | string | null
+    providerRecipientReference?: StringNullableFilter<"Beneficiary"> | string | null
+    encryptedDetails?: JsonNullableFilter<"Beneficiary">
+    detailsFingerprint?: StringNullableFilter<"Beneficiary"> | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFilter<"Beneficiary"> | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: DateTimeNullableFilter<"Beneficiary"> | Date | string | null
+    isActive?: BoolFilter<"Beneficiary"> | boolean
+    createdAt?: DateTimeFilter<"Beneficiary"> | Date | string
+    updatedAt?: DateTimeFilter<"Beneficiary"> | Date | string
+  }
+
   export type UserCreateWithoutPendingVerificationInput = {
     id?: string
     email: string
@@ -19693,6 +30745,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -19700,6 +30754,9 @@ export namespace Prisma {
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPendingVerificationInput = {
@@ -19724,6 +30781,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -19731,6 +30790,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPendingVerificationInput = {
@@ -19771,6 +30833,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -19778,6 +30842,9 @@ export namespace Prisma {
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPendingVerificationInput = {
@@ -19802,6 +30869,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -19809,6 +30878,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPasswordResetsInput = {
@@ -19833,6 +30905,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
@@ -19840,6 +30914,9 @@ export namespace Prisma {
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetsInput = {
@@ -19864,6 +30941,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
@@ -19871,6 +30950,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetsInput = {
@@ -19911,6 +30993,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
@@ -19918,6 +31002,9 @@ export namespace Prisma {
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetsInput = {
@@ -19942,6 +31029,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
@@ -19949,6 +31038,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutRefreshSessionsInput = {
@@ -19973,6 +31065,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -19980,6 +31074,9 @@ export namespace Prisma {
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -20004,6 +31101,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -20011,6 +31110,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -20051,6 +31153,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -20058,6 +31162,9 @@ export namespace Prisma {
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -20082,6 +31189,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -20089,6 +31198,9 @@ export namespace Prisma {
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWalletInput = {
@@ -20113,6 +31225,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -20120,6 +31234,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWalletInput = {
@@ -20144,6 +31261,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -20151,6 +31270,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWalletInput = {
@@ -20258,6 +31380,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTransactionsInput
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -20279,6 +31402,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -20298,6 +31422,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -20313,6 +31440,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -20325,6 +31455,78 @@ export namespace Prisma {
 
   export type LedgerEntryCreateManyWalletInputEnvelope = {
     data: LedgerEntryCreateManyWalletInput | LedgerEntryCreateManyWalletInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalCreateWithoutWalletInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutWalletInput = {
+    id?: string
+    reference: string
+    userId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutWalletInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput>
+  }
+
+  export type WithdrawalCreateManyWalletInputEnvelope = {
+    data: WithdrawalCreateManyWalletInput | WithdrawalCreateManyWalletInput[]
     skipDuplicates?: boolean
   }
 
@@ -20361,6 +31563,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -20368,6 +31572,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWalletInput = {
@@ -20392,6 +31599,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -20399,6 +31608,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletBalanceUpsertWithWhereUniqueWithoutWalletInput = {
@@ -20490,9 +31702,28 @@ export namespace Prisma {
     amount?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    operationKey?: StringNullableFilter<"LedgerEntry"> | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
+  }
+
+  export type WithdrawalUpsertWithWhereUniqueWithoutWalletInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutWalletInput, WithdrawalUncheckedUpdateWithoutWalletInput>
+    create: XOR<WithdrawalCreateWithoutWalletInput, WithdrawalUncheckedCreateWithoutWalletInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutWalletInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutWalletInput, WithdrawalUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutWalletInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutWalletInput>
   }
 
   export type WalletBalanceCreateWithoutCurrencyInput = {
@@ -20595,6 +31826,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTransactionsInput
     wallet: WalletCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -20616,6 +31848,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -20635,6 +31868,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -20650,6 +31886,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -20662,6 +31901,306 @@ export namespace Prisma {
 
   export type LedgerEntryCreateManyCurrencyInputEnvelope = {
     data: LedgerEntryCreateManyCurrencyInput | LedgerEntryCreateManyCurrencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalCreateWithoutSourceCurrencyInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutSourceCurrencyInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutSourceCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalCreateManySourceCurrencyInputEnvelope = {
+    data: WithdrawalCreateManySourceCurrencyInput | WithdrawalCreateManySourceCurrencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalCreateWithoutDestinationCurrencyInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutDestinationCurrencyInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutDestinationCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalCreateManyDestinationCurrencyInputEnvelope = {
+    data: WithdrawalCreateManyDestinationCurrencyInput | WithdrawalCreateManyDestinationCurrencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalQuoteCreateWithoutSourceCurrencyInput = {
+    id?: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalQuotesInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationQuotesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput = {
+    id?: string
+    userId: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteCreateOrConnectWithoutSourceCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    create: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalQuoteCreateManySourceCurrencyInputEnvelope = {
+    data: WithdrawalQuoteCreateManySourceCurrencyInput | WithdrawalQuoteCreateManySourceCurrencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WithdrawalQuoteCreateWithoutDestinationCurrencyInput = {
+    id?: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalQuotesInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceQuotesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput = {
+    id?: string
+    userId: string
+    sourceCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutQuoteInput
+  }
+
+  export type WithdrawalQuoteCreateOrConnectWithoutDestinationCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    create: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalQuoteCreateManyDestinationCurrencyInputEnvelope = {
+    data: WithdrawalQuoteCreateManyDestinationCurrencyInput | WithdrawalQuoteCreateManyDestinationCurrencyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BeneficiaryCreateWithoutCurrencyInput = {
+    id?: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBeneficiariesInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutCurrencyInput = {
+    id?: string
+    userId: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutBeneficiaryInput
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutCurrencyInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput>
+  }
+
+  export type BeneficiaryCreateManyCurrencyInputEnvelope = {
+    data: BeneficiaryCreateManyCurrencyInput | BeneficiaryCreateManyCurrencyInput[]
     skipDuplicates?: boolean
   }
 
@@ -20729,6 +32268,86 @@ export namespace Prisma {
     data: XOR<LedgerEntryUpdateManyMutationInput, LedgerEntryUncheckedUpdateManyWithoutCurrencyInput>
   }
 
+  export type WithdrawalUpsertWithWhereUniqueWithoutSourceCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutSourceCurrencyInput, WithdrawalUncheckedUpdateWithoutSourceCurrencyInput>
+    create: XOR<WithdrawalCreateWithoutSourceCurrencyInput, WithdrawalUncheckedCreateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutSourceCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutSourceCurrencyInput, WithdrawalUncheckedUpdateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutSourceCurrencyInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalUpsertWithWhereUniqueWithoutDestinationCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutDestinationCurrencyInput, WithdrawalUncheckedUpdateWithoutDestinationCurrencyInput>
+    create: XOR<WithdrawalCreateWithoutDestinationCurrencyInput, WithdrawalUncheckedCreateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutDestinationCurrencyInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutDestinationCurrencyInput, WithdrawalUncheckedUpdateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutDestinationCurrencyInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpsertWithWhereUniqueWithoutSourceCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    update: XOR<WithdrawalQuoteUpdateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedUpdateWithoutSourceCurrencyInput>
+    create: XOR<WithdrawalQuoteCreateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpdateWithWhereUniqueWithoutSourceCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    data: XOR<WithdrawalQuoteUpdateWithoutSourceCurrencyInput, WithdrawalQuoteUncheckedUpdateWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpdateManyWithWhereWithoutSourceCurrencyInput = {
+    where: WithdrawalQuoteScalarWhereInput
+    data: XOR<WithdrawalQuoteUpdateManyMutationInput, WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpsertWithWhereUniqueWithoutDestinationCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    update: XOR<WithdrawalQuoteUpdateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedUpdateWithoutDestinationCurrencyInput>
+    create: XOR<WithdrawalQuoteCreateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedCreateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpdateWithWhereUniqueWithoutDestinationCurrencyInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    data: XOR<WithdrawalQuoteUpdateWithoutDestinationCurrencyInput, WithdrawalQuoteUncheckedUpdateWithoutDestinationCurrencyInput>
+  }
+
+  export type WithdrawalQuoteUpdateManyWithWhereWithoutDestinationCurrencyInput = {
+    where: WithdrawalQuoteScalarWhereInput
+    data: XOR<WithdrawalQuoteUpdateManyMutationInput, WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyInput>
+  }
+
+  export type BeneficiaryUpsertWithWhereUniqueWithoutCurrencyInput = {
+    where: BeneficiaryWhereUniqueInput
+    update: XOR<BeneficiaryUpdateWithoutCurrencyInput, BeneficiaryUncheckedUpdateWithoutCurrencyInput>
+    create: XOR<BeneficiaryCreateWithoutCurrencyInput, BeneficiaryUncheckedCreateWithoutCurrencyInput>
+  }
+
+  export type BeneficiaryUpdateWithWhereUniqueWithoutCurrencyInput = {
+    where: BeneficiaryWhereUniqueInput
+    data: XOR<BeneficiaryUpdateWithoutCurrencyInput, BeneficiaryUncheckedUpdateWithoutCurrencyInput>
+  }
+
+  export type BeneficiaryUpdateManyWithWhereWithoutCurrencyInput = {
+    where: BeneficiaryScalarWhereInput
+    data: XOR<BeneficiaryUpdateManyMutationInput, BeneficiaryUncheckedUpdateManyWithoutCurrencyInput>
+  }
+
   export type WalletCreateWithoutBalancesInput = {
     id?: string
     createdAt?: Date | string
@@ -20737,6 +32356,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutBalancesInput = {
@@ -20747,6 +32367,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutBalancesInput = {
@@ -20768,6 +32389,11 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUncheckedCreateWithoutBalancesInput = {
@@ -20784,6 +32410,11 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyCreateOrConnectWithoutBalancesInput = {
@@ -20810,6 +32441,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutBalancesInput = {
@@ -20820,6 +32452,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutBalancesInput = {
@@ -20847,6 +32480,11 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyUncheckedUpdateWithoutBalancesInput = {
@@ -20863,6 +32501,11 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
   export type UserCreateWithoutDepositsInput = {
@@ -20887,6 +32530,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -20894,6 +32539,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
     transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepositsInput = {
@@ -20918,6 +32566,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -20925,6 +32575,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepositsInput = {
@@ -20940,6 +32593,7 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutDepositsInput = {
@@ -20950,6 +32604,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutDepositsInput = {
@@ -20971,6 +32626,11 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUncheckedCreateWithoutDepositsInput = {
@@ -20987,6 +32647,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyCreateOrConnectWithoutDepositsInput = {
@@ -21012,6 +32677,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutTransactionsInput
     wallet: WalletCreateNestedOneWithoutTransactionsInput
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -21033,6 +32699,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -21074,6 +32741,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -21081,6 +32750,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
     transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepositsInput = {
@@ -21105,6 +32777,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -21112,6 +32786,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletUpsertWithoutDepositsInput = {
@@ -21133,6 +32810,7 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutDepositsInput = {
@@ -21143,6 +32821,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutDepositsInput = {
@@ -21170,6 +32849,11 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyUncheckedUpdateWithoutDepositsInput = {
@@ -21186,6 +32870,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
   export type TransactionUpsertWithoutDepositInput = {
@@ -21217,6 +32906,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -21238,6 +32928,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -21263,6 +32954,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -21270,6 +32963,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -21294,6 +32990,8 @@ export namespace Prisma {
     isActive?: boolean
     role?: $Enums.UserRole
     transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -21301,6 +32999,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -21316,6 +33017,7 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutWalletInput
     deposits?: DepositCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutTransactionsInput = {
@@ -21326,6 +33028,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutWalletInput
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutTransactionsInput = {
@@ -21347,6 +33050,11 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
     deposits?: DepositCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUncheckedCreateWithoutTransactionsInput = {
@@ -21363,6 +33071,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
     deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyCreateOrConnectWithoutTransactionsInput = {
@@ -21419,12 +33132,82 @@ export namespace Prisma {
     create: XOR<DepositCreateWithoutTransactionInput, DepositUncheckedCreateWithoutTransactionInput>
   }
 
+  export type WithdrawalCreateWithoutTransactionInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutTransactionInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutTransactionInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+  }
+
   export type LedgerEntryCreateWithoutTransactionInput = {
     id?: string
     type: $Enums.LedgerEntryType
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -21440,6 +33223,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -21488,6 +33274,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -21495,6 +33283,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -21519,6 +33310,8 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -21526,6 +33319,9 @@ export namespace Prisma {
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletUpsertWithoutTransactionsInput = {
@@ -21547,6 +33343,7 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutWalletNestedInput
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutTransactionsInput = {
@@ -21557,6 +33354,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutTransactionsInput = {
@@ -21584,6 +33382,11 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
     deposits?: DepositUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyUncheckedUpdateWithoutTransactionsInput = {
@@ -21600,6 +33403,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
   export type DepositUpsertWithoutTransactionInput = {
@@ -21657,6 +33465,79 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WithdrawalUpsertWithoutTransactionInput = {
+    update: XOR<WithdrawalUpdateWithoutTransactionInput, WithdrawalUncheckedUpdateWithoutTransactionInput>
+    create: XOR<WithdrawalCreateWithoutTransactionInput, WithdrawalUncheckedCreateWithoutTransactionInput>
+    where?: WithdrawalWhereInput
+  }
+
+  export type WithdrawalUpdateToOneWithWhereWithoutTransactionInput = {
+    where?: WithdrawalWhereInput
+    data: XOR<WithdrawalUpdateWithoutTransactionInput, WithdrawalUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type WithdrawalUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
   export type LedgerEntryUpsertWithWhereUniqueWithoutTransactionInput = {
     where: LedgerEntryWhereUniqueInput
     update: XOR<LedgerEntryUpdateWithoutTransactionInput, LedgerEntryUncheckedUpdateWithoutTransactionInput>
@@ -21681,6 +33562,7 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutWalletInput
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutLedgerEntriesInput = {
@@ -21691,6 +33573,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutWalletInput
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutLedgerEntriesInput = {
@@ -21712,6 +33595,11 @@ export namespace Prisma {
     balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
     deposits?: DepositCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyUncheckedCreateWithoutLedgerEntriesInput = {
@@ -21728,6 +33616,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
     deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
   }
 
   export type CurrencyCreateOrConnectWithoutLedgerEntriesInput = {
@@ -21754,6 +33647,7 @@ export namespace Prisma {
     wallet: WalletCreateNestedOneWithoutTransactionsInput
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutLedgerEntriesInput = {
@@ -21775,6 +33669,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutLedgerEntriesInput = {
@@ -21801,6 +33696,7 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutWalletNestedInput
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -21811,6 +33707,7 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutLedgerEntriesInput = {
@@ -21838,6 +33735,11 @@ export namespace Prisma {
     balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
     deposits?: DepositUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
   }
 
   export type CurrencyUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -21854,6 +33756,11 @@ export namespace Prisma {
     balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
   }
 
   export type TransactionUpsertWithoutLedgerEntriesInput = {
@@ -21886,6 +33793,7 @@ export namespace Prisma {
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -21907,6 +33815,1958 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
+  }
+
+  export type UserCreateWithoutWithdrawalsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWithdrawalsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWithdrawalsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWithdrawalsInput, UserUncheckedCreateWithoutWithdrawalsInput>
+  }
+
+  export type WalletCreateWithoutWithdrawalsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutWalletInput
+    balances?: WalletBalanceCreateNestedManyWithoutWalletInput
+    deposits?: DepositCreateNestedManyWithoutWalletInput
+    transactions?: TransactionCreateNestedManyWithoutWalletInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateWithoutWithdrawalsInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutWalletInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletCreateOrConnectWithoutWithdrawalsInput = {
+    where: WalletWhereUniqueInput
+    create: XOR<WalletCreateWithoutWithdrawalsInput, WalletUncheckedCreateWithoutWithdrawalsInput>
+  }
+
+  export type TransactionCreateWithoutWithdrawalInput = {
+    id?: string
+    type?: $Enums.TransactionType
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TransactionStatus
+    provider?: $Enums.PaymentProvider | null
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    reference: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTransactionsInput
+    wallet: WalletCreateNestedOneWithoutTransactionsInput
+    currency: CurrencyCreateNestedOneWithoutTransactionsInput
+    deposit?: DepositCreateNestedOneWithoutTransactionInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionUncheckedCreateWithoutWithdrawalInput = {
+    id?: string
+    userId: string
+    walletId: string
+    currencyCode: string
+    type?: $Enums.TransactionType
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TransactionStatus
+    provider?: $Enums.PaymentProvider | null
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    reference: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionCreateOrConnectWithoutWithdrawalInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutWithdrawalInput, TransactionUncheckedCreateWithoutWithdrawalInput>
+  }
+
+  export type CurrencyCreateWithoutSourceWithdrawalsInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyUncheckedCreateWithoutSourceWithdrawalsInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyCreateOrConnectWithoutSourceWithdrawalsInput = {
+    where: CurrencyWhereUniqueInput
+    create: XOR<CurrencyCreateWithoutSourceWithdrawalsInput, CurrencyUncheckedCreateWithoutSourceWithdrawalsInput>
+  }
+
+  export type CurrencyCreateWithoutDestinationWithdrawalsInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyUncheckedCreateWithoutDestinationWithdrawalsInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyCreateOrConnectWithoutDestinationWithdrawalsInput = {
+    where: CurrencyWhereUniqueInput
+    create: XOR<CurrencyCreateWithoutDestinationWithdrawalsInput, CurrencyUncheckedCreateWithoutDestinationWithdrawalsInput>
+  }
+
+  export type WithdrawalQuoteCreateWithoutWithdrawalsInput = {
+    id?: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalQuotesInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceQuotesInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationQuotesInput
+  }
+
+  export type WithdrawalQuoteUncheckedCreateWithoutWithdrawalsInput = {
+    id?: string
+    userId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+  }
+
+  export type WithdrawalQuoteCreateOrConnectWithoutWithdrawalsInput = {
+    where: WithdrawalQuoteWhereUniqueInput
+    create: XOR<WithdrawalQuoteCreateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedCreateWithoutWithdrawalsInput>
+  }
+
+  export type BeneficiaryCreateWithoutWithdrawalsInput = {
+    id?: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutBeneficiariesInput
+    currency: CurrencyCreateNestedOneWithoutBeneficiariesInput
+  }
+
+  export type BeneficiaryUncheckedCreateWithoutWithdrawalsInput = {
+    id?: string
+    userId: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BeneficiaryCreateOrConnectWithoutWithdrawalsInput = {
+    where: BeneficiaryWhereUniqueInput
+    create: XOR<BeneficiaryCreateWithoutWithdrawalsInput, BeneficiaryUncheckedCreateWithoutWithdrawalsInput>
+  }
+
+  export type PayoutAttemptCreateWithoutWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PayoutAttemptUncheckedCreateWithoutWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PayoutAttemptCreateOrConnectWithoutWithdrawalInput = {
+    where: PayoutAttemptWhereUniqueInput
+    create: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput>
+  }
+
+  export type PayoutAttemptCreateManyWithdrawalInputEnvelope = {
+    data: PayoutAttemptCreateManyWithdrawalInput | PayoutAttemptCreateManyWithdrawalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProviderWebhookEventCreateWithoutWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventCreateOrConnectWithoutWithdrawalInput = {
+    where: ProviderWebhookEventWhereUniqueInput
+    create: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput>
+  }
+
+  export type ProviderWebhookEventCreateManyWithdrawalInputEnvelope = {
+    data: ProviderWebhookEventCreateManyWithdrawalInput | ProviderWebhookEventCreateManyWithdrawalInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutWithdrawalsInput = {
+    update: XOR<UserUpdateWithoutWithdrawalsInput, UserUncheckedUpdateWithoutWithdrawalsInput>
+    create: XOR<UserCreateWithoutWithdrawalsInput, UserUncheckedCreateWithoutWithdrawalsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWithdrawalsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWithdrawalsInput, UserUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type UserUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type WalletUpsertWithoutWithdrawalsInput = {
+    update: XOR<WalletUpdateWithoutWithdrawalsInput, WalletUncheckedUpdateWithoutWithdrawalsInput>
+    create: XOR<WalletCreateWithoutWithdrawalsInput, WalletUncheckedCreateWithoutWithdrawalsInput>
+    where?: WalletWhereInput
+  }
+
+  export type WalletUpdateToOneWithWhereWithoutWithdrawalsInput = {
+    where?: WalletWhereInput
+    data: XOR<WalletUpdateWithoutWithdrawalsInput, WalletUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type WalletUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWalletNestedInput
+    balances?: WalletBalanceUpdateManyWithoutWalletNestedInput
+    deposits?: DepositUpdateManyWithoutWalletNestedInput
+    transactions?: TransactionUpdateManyWithoutWalletNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+  }
+
+  export type TransactionUpsertWithoutWithdrawalInput = {
+    update: XOR<TransactionUpdateWithoutWithdrawalInput, TransactionUncheckedUpdateWithoutWithdrawalInput>
+    create: XOR<TransactionCreateWithoutWithdrawalInput, TransactionUncheckedCreateWithoutWithdrawalInput>
+    where?: TransactionWhereInput
+  }
+
+  export type TransactionUpdateToOneWithWhereWithoutWithdrawalInput = {
+    where?: TransactionWhereInput
+    data: XOR<TransactionUpdateWithoutWithdrawalInput, TransactionUncheckedUpdateWithoutWithdrawalInput>
+  }
+
+  export type TransactionUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    reference?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
+    currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
+    deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    reference?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type CurrencyUpsertWithoutSourceWithdrawalsInput = {
+    update: XOR<CurrencyUpdateWithoutSourceWithdrawalsInput, CurrencyUncheckedUpdateWithoutSourceWithdrawalsInput>
+    create: XOR<CurrencyCreateWithoutSourceWithdrawalsInput, CurrencyUncheckedCreateWithoutSourceWithdrawalsInput>
+    where?: CurrencyWhereInput
+  }
+
+  export type CurrencyUpdateToOneWithWhereWithoutSourceWithdrawalsInput = {
+    where?: CurrencyWhereInput
+    data: XOR<CurrencyUpdateWithoutSourceWithdrawalsInput, CurrencyUncheckedUpdateWithoutSourceWithdrawalsInput>
+  }
+
+  export type CurrencyUpdateWithoutSourceWithdrawalsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUncheckedUpdateWithoutSourceWithdrawalsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUpsertWithoutDestinationWithdrawalsInput = {
+    update: XOR<CurrencyUpdateWithoutDestinationWithdrawalsInput, CurrencyUncheckedUpdateWithoutDestinationWithdrawalsInput>
+    create: XOR<CurrencyCreateWithoutDestinationWithdrawalsInput, CurrencyUncheckedCreateWithoutDestinationWithdrawalsInput>
+    where?: CurrencyWhereInput
+  }
+
+  export type CurrencyUpdateToOneWithWhereWithoutDestinationWithdrawalsInput = {
+    where?: CurrencyWhereInput
+    data: XOR<CurrencyUpdateWithoutDestinationWithdrawalsInput, CurrencyUncheckedUpdateWithoutDestinationWithdrawalsInput>
+  }
+
+  export type CurrencyUpdateWithoutDestinationWithdrawalsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUncheckedUpdateWithoutDestinationWithdrawalsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type WithdrawalQuoteUpsertWithoutWithdrawalsInput = {
+    update: XOR<WithdrawalQuoteUpdateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedUpdateWithoutWithdrawalsInput>
+    create: XOR<WithdrawalQuoteCreateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedCreateWithoutWithdrawalsInput>
+    where?: WithdrawalQuoteWhereInput
+  }
+
+  export type WithdrawalQuoteUpdateToOneWithWhereWithoutWithdrawalsInput = {
+    where?: WithdrawalQuoteWhereInput
+    data: XOR<WithdrawalQuoteUpdateWithoutWithdrawalsInput, WithdrawalQuoteUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type WithdrawalQuoteUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalQuotesNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceQuotesNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationQuotesNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BeneficiaryUpsertWithoutWithdrawalsInput = {
+    update: XOR<BeneficiaryUpdateWithoutWithdrawalsInput, BeneficiaryUncheckedUpdateWithoutWithdrawalsInput>
+    create: XOR<BeneficiaryCreateWithoutWithdrawalsInput, BeneficiaryUncheckedCreateWithoutWithdrawalsInput>
+    where?: BeneficiaryWhereInput
+  }
+
+  export type BeneficiaryUpdateToOneWithWhereWithoutWithdrawalsInput = {
+    where?: BeneficiaryWhereInput
+    data: XOR<BeneficiaryUpdateWithoutWithdrawalsInput, BeneficiaryUncheckedUpdateWithoutWithdrawalsInput>
+  }
+
+  export type BeneficiaryUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBeneficiariesNestedInput
+    currency?: CurrencyUpdateOneRequiredWithoutBeneficiariesNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutWithdrawalsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptUpsertWithWhereUniqueWithoutWithdrawalInput = {
+    where: PayoutAttemptWhereUniqueInput
+    update: XOR<PayoutAttemptUpdateWithoutWithdrawalInput, PayoutAttemptUncheckedUpdateWithoutWithdrawalInput>
+    create: XOR<PayoutAttemptCreateWithoutWithdrawalInput, PayoutAttemptUncheckedCreateWithoutWithdrawalInput>
+  }
+
+  export type PayoutAttemptUpdateWithWhereUniqueWithoutWithdrawalInput = {
+    where: PayoutAttemptWhereUniqueInput
+    data: XOR<PayoutAttemptUpdateWithoutWithdrawalInput, PayoutAttemptUncheckedUpdateWithoutWithdrawalInput>
+  }
+
+  export type PayoutAttemptUpdateManyWithWhereWithoutWithdrawalInput = {
+    where: PayoutAttemptScalarWhereInput
+    data: XOR<PayoutAttemptUpdateManyMutationInput, PayoutAttemptUncheckedUpdateManyWithoutWithdrawalInput>
+  }
+
+  export type PayoutAttemptScalarWhereInput = {
+    AND?: PayoutAttemptScalarWhereInput | PayoutAttemptScalarWhereInput[]
+    OR?: PayoutAttemptScalarWhereInput[]
+    NOT?: PayoutAttemptScalarWhereInput | PayoutAttemptScalarWhereInput[]
+    id?: StringFilter<"PayoutAttempt"> | string
+    withdrawalId?: StringFilter<"PayoutAttempt"> | string
+    provider?: EnumPaymentProviderFilter<"PayoutAttempt"> | $Enums.PaymentProvider
+    providerReference?: StringNullableFilter<"PayoutAttempt"> | string | null
+    providerTransactionId?: StringNullableFilter<"PayoutAttempt"> | string | null
+    attemptNumber?: IntFilter<"PayoutAttempt"> | number
+    status?: EnumTransactionStatusFilter<"PayoutAttempt"> | $Enums.TransactionStatus
+    requestMetadata?: JsonNullableFilter<"PayoutAttempt">
+    responseMetadata?: JsonNullableFilter<"PayoutAttempt">
+    errorCode?: StringNullableFilter<"PayoutAttempt"> | string | null
+    errorMessage?: StringNullableFilter<"PayoutAttempt"> | string | null
+    createdAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+    updatedAt?: DateTimeFilter<"PayoutAttempt"> | Date | string
+  }
+
+  export type ProviderWebhookEventUpsertWithWhereUniqueWithoutWithdrawalInput = {
+    where: ProviderWebhookEventWhereUniqueInput
+    update: XOR<ProviderWebhookEventUpdateWithoutWithdrawalInput, ProviderWebhookEventUncheckedUpdateWithoutWithdrawalInput>
+    create: XOR<ProviderWebhookEventCreateWithoutWithdrawalInput, ProviderWebhookEventUncheckedCreateWithoutWithdrawalInput>
+  }
+
+  export type ProviderWebhookEventUpdateWithWhereUniqueWithoutWithdrawalInput = {
+    where: ProviderWebhookEventWhereUniqueInput
+    data: XOR<ProviderWebhookEventUpdateWithoutWithdrawalInput, ProviderWebhookEventUncheckedUpdateWithoutWithdrawalInput>
+  }
+
+  export type ProviderWebhookEventUpdateManyWithWhereWithoutWithdrawalInput = {
+    where: ProviderWebhookEventScalarWhereInput
+    data: XOR<ProviderWebhookEventUpdateManyMutationInput, ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalInput>
+  }
+
+  export type ProviderWebhookEventScalarWhereInput = {
+    AND?: ProviderWebhookEventScalarWhereInput | ProviderWebhookEventScalarWhereInput[]
+    OR?: ProviderWebhookEventScalarWhereInput[]
+    NOT?: ProviderWebhookEventScalarWhereInput | ProviderWebhookEventScalarWhereInput[]
+    id?: StringFilter<"ProviderWebhookEvent"> | string
+    provider?: EnumPaymentProviderFilter<"ProviderWebhookEvent"> | $Enums.PaymentProvider
+    eventId?: StringFilter<"ProviderWebhookEvent"> | string
+    eventType?: StringFilter<"ProviderWebhookEvent"> | string
+    providerReference?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    providerTransactionId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    withdrawalId?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    receivedAt?: DateTimeFilter<"ProviderWebhookEvent"> | Date | string
+    processedAt?: DateTimeNullableFilter<"ProviderWebhookEvent"> | Date | string | null
+    status?: EnumProviderWebhookEventStatusFilter<"ProviderWebhookEvent"> | $Enums.ProviderWebhookEventStatus
+    errorMessage?: StringNullableFilter<"ProviderWebhookEvent"> | string | null
+    metadata?: JsonNullableFilter<"ProviderWebhookEvent">
+  }
+
+  export type UserCreateWithoutWithdrawalQuotesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWithdrawalQuotesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWithdrawalQuotesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWithdrawalQuotesInput, UserUncheckedCreateWithoutWithdrawalQuotesInput>
+  }
+
+  export type CurrencyCreateWithoutSourceQuotesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyUncheckedCreateWithoutSourceQuotesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyCreateOrConnectWithoutSourceQuotesInput = {
+    where: CurrencyWhereUniqueInput
+    create: XOR<CurrencyCreateWithoutSourceQuotesInput, CurrencyUncheckedCreateWithoutSourceQuotesInput>
+  }
+
+  export type CurrencyCreateWithoutDestinationQuotesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyUncheckedCreateWithoutDestinationQuotesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutCurrencyInput
+  }
+
+  export type CurrencyCreateOrConnectWithoutDestinationQuotesInput = {
+    where: CurrencyWhereUniqueInput
+    create: XOR<CurrencyCreateWithoutDestinationQuotesInput, CurrencyUncheckedCreateWithoutDestinationQuotesInput>
+  }
+
+  export type WithdrawalCreateWithoutQuoteInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutQuoteInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutQuoteInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput>
+  }
+
+  export type WithdrawalCreateManyQuoteInputEnvelope = {
+    data: WithdrawalCreateManyQuoteInput | WithdrawalCreateManyQuoteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutWithdrawalQuotesInput = {
+    update: XOR<UserUpdateWithoutWithdrawalQuotesInput, UserUncheckedUpdateWithoutWithdrawalQuotesInput>
+    create: XOR<UserCreateWithoutWithdrawalQuotesInput, UserUncheckedCreateWithoutWithdrawalQuotesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWithdrawalQuotesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWithdrawalQuotesInput, UserUncheckedUpdateWithoutWithdrawalQuotesInput>
+  }
+
+  export type UserUpdateWithoutWithdrawalQuotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWithdrawalQuotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CurrencyUpsertWithoutSourceQuotesInput = {
+    update: XOR<CurrencyUpdateWithoutSourceQuotesInput, CurrencyUncheckedUpdateWithoutSourceQuotesInput>
+    create: XOR<CurrencyCreateWithoutSourceQuotesInput, CurrencyUncheckedCreateWithoutSourceQuotesInput>
+    where?: CurrencyWhereInput
+  }
+
+  export type CurrencyUpdateToOneWithWhereWithoutSourceQuotesInput = {
+    where?: CurrencyWhereInput
+    data: XOR<CurrencyUpdateWithoutSourceQuotesInput, CurrencyUncheckedUpdateWithoutSourceQuotesInput>
+  }
+
+  export type CurrencyUpdateWithoutSourceQuotesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUncheckedUpdateWithoutSourceQuotesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUpsertWithoutDestinationQuotesInput = {
+    update: XOR<CurrencyUpdateWithoutDestinationQuotesInput, CurrencyUncheckedUpdateWithoutDestinationQuotesInput>
+    create: XOR<CurrencyCreateWithoutDestinationQuotesInput, CurrencyUncheckedCreateWithoutDestinationQuotesInput>
+    where?: CurrencyWhereInput
+  }
+
+  export type CurrencyUpdateToOneWithWhereWithoutDestinationQuotesInput = {
+    where?: CurrencyWhereInput
+    data: XOR<CurrencyUpdateWithoutDestinationQuotesInput, CurrencyUncheckedUpdateWithoutDestinationQuotesInput>
+  }
+
+  export type CurrencyUpdateWithoutDestinationQuotesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type CurrencyUncheckedUpdateWithoutDestinationQuotesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutCurrencyNestedInput
+  }
+
+  export type WithdrawalUpsertWithWhereUniqueWithoutQuoteInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutQuoteInput, WithdrawalUncheckedUpdateWithoutQuoteInput>
+    create: XOR<WithdrawalCreateWithoutQuoteInput, WithdrawalUncheckedCreateWithoutQuoteInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutQuoteInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutQuoteInput, WithdrawalUncheckedUpdateWithoutQuoteInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutQuoteInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutQuoteInput>
+  }
+
+  export type UserCreateWithoutBeneficiariesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBeneficiariesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBeneficiariesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBeneficiariesInput, UserUncheckedCreateWithoutBeneficiariesInput>
+  }
+
+  export type CurrencyCreateWithoutBeneficiariesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteCreateNestedManyWithoutDestinationCurrencyInput
+  }
+
+  export type CurrencyUncheckedCreateWithoutBeneficiariesInput = {
+    code: string
+    name: string
+    symbol?: string | null
+    country?: string | null
+    region?: string | null
+    flag?: string | null
+    enabled?: boolean
+    depositEnabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutCurrencyInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutCurrencyInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutCurrencyInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutCurrencyInput
+    sourceWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationWithdrawals?: WithdrawalUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+    sourceQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutSourceCurrencyInput
+    destinationQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutDestinationCurrencyInput
+  }
+
+  export type CurrencyCreateOrConnectWithoutBeneficiariesInput = {
+    where: CurrencyWhereUniqueInput
+    create: XOR<CurrencyCreateWithoutBeneficiariesInput, CurrencyUncheckedCreateWithoutBeneficiariesInput>
+  }
+
+  export type WithdrawalCreateWithoutBeneficiaryInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutBeneficiaryInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutBeneficiaryInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type WithdrawalCreateManyBeneficiaryInputEnvelope = {
+    data: WithdrawalCreateManyBeneficiaryInput | WithdrawalCreateManyBeneficiaryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutBeneficiariesInput = {
+    update: XOR<UserUpdateWithoutBeneficiariesInput, UserUncheckedUpdateWithoutBeneficiariesInput>
+    create: XOR<UserCreateWithoutBeneficiariesInput, UserUncheckedCreateWithoutBeneficiariesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBeneficiariesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBeneficiariesInput, UserUncheckedUpdateWithoutBeneficiariesInput>
+  }
+
+  export type UserUpdateWithoutBeneficiariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBeneficiariesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CurrencyUpsertWithoutBeneficiariesInput = {
+    update: XOR<CurrencyUpdateWithoutBeneficiariesInput, CurrencyUncheckedUpdateWithoutBeneficiariesInput>
+    create: XOR<CurrencyCreateWithoutBeneficiariesInput, CurrencyUncheckedCreateWithoutBeneficiariesInput>
+    where?: CurrencyWhereInput
+  }
+
+  export type CurrencyUpdateToOneWithWhereWithoutBeneficiariesInput = {
+    where?: CurrencyWhereInput
+    data: XOR<CurrencyUpdateWithoutBeneficiariesInput, CurrencyUncheckedUpdateWithoutBeneficiariesInput>
+  }
+
+  export type CurrencyUpdateWithoutBeneficiariesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUpdateManyWithoutDestinationCurrencyNestedInput
+  }
+
+  export type CurrencyUncheckedUpdateWithoutBeneficiariesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    region?: NullableStringFieldUpdateOperationsInput | string | null
+    flag?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    depositEnabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutCurrencyNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutCurrencyNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutCurrencyNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutCurrencyNestedInput
+    sourceWithdrawals?: WithdrawalUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationWithdrawals?: WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+    sourceQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyNestedInput
+    destinationQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyNestedInput
+  }
+
+  export type WithdrawalUpsertWithWhereUniqueWithoutBeneficiaryInput = {
+    where: WithdrawalWhereUniqueInput
+    update: XOR<WithdrawalUpdateWithoutBeneficiaryInput, WithdrawalUncheckedUpdateWithoutBeneficiaryInput>
+    create: XOR<WithdrawalCreateWithoutBeneficiaryInput, WithdrawalUncheckedCreateWithoutBeneficiaryInput>
+  }
+
+  export type WithdrawalUpdateWithWhereUniqueWithoutBeneficiaryInput = {
+    where: WithdrawalWhereUniqueInput
+    data: XOR<WithdrawalUpdateWithoutBeneficiaryInput, WithdrawalUncheckedUpdateWithoutBeneficiaryInput>
+  }
+
+  export type WithdrawalUpdateManyWithWhereWithoutBeneficiaryInput = {
+    where: WithdrawalScalarWhereInput
+    data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutBeneficiaryInput>
+  }
+
+  export type WithdrawalCreateWithoutPayoutAttemptsInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    webhookEvents?: ProviderWebhookEventCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutPayoutAttemptsInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    webhookEvents?: ProviderWebhookEventUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutPayoutAttemptsInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutPayoutAttemptsInput, WithdrawalUncheckedCreateWithoutPayoutAttemptsInput>
+  }
+
+  export type WithdrawalUpsertWithoutPayoutAttemptsInput = {
+    update: XOR<WithdrawalUpdateWithoutPayoutAttemptsInput, WithdrawalUncheckedUpdateWithoutPayoutAttemptsInput>
+    create: XOR<WithdrawalCreateWithoutPayoutAttemptsInput, WithdrawalUncheckedCreateWithoutPayoutAttemptsInput>
+    where?: WithdrawalWhereInput
+  }
+
+  export type WithdrawalUpdateToOneWithWhereWithoutPayoutAttemptsInput = {
+    where?: WithdrawalWhereInput
+    data: XOR<WithdrawalUpdateWithoutPayoutAttemptsInput, WithdrawalUncheckedUpdateWithoutPayoutAttemptsInput>
+  }
+
+  export type WithdrawalUpdateWithoutPayoutAttemptsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutPayoutAttemptsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalCreateWithoutWebhookEventsInput = {
+    id?: string
+    reference: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutWithdrawalsInput
+    wallet: WalletCreateNestedOneWithoutWithdrawalsInput
+    transaction: TransactionCreateNestedOneWithoutWithdrawalInput
+    sourceCurrency: CurrencyCreateNestedOneWithoutSourceWithdrawalsInput
+    destinationCurrency: CurrencyCreateNestedOneWithoutDestinationWithdrawalsInput
+    quote?: WithdrawalQuoteCreateNestedOneWithoutWithdrawalsInput
+    beneficiary?: BeneficiaryCreateNestedOneWithoutWithdrawalsInput
+    payoutAttempts?: PayoutAttemptCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalUncheckedCreateWithoutWebhookEventsInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedCreateNestedManyWithoutWithdrawalInput
+  }
+
+  export type WithdrawalCreateOrConnectWithoutWebhookEventsInput = {
+    where: WithdrawalWhereUniqueInput
+    create: XOR<WithdrawalCreateWithoutWebhookEventsInput, WithdrawalUncheckedCreateWithoutWebhookEventsInput>
+  }
+
+  export type WithdrawalUpsertWithoutWebhookEventsInput = {
+    update: XOR<WithdrawalUpdateWithoutWebhookEventsInput, WithdrawalUncheckedUpdateWithoutWebhookEventsInput>
+    create: XOR<WithdrawalCreateWithoutWebhookEventsInput, WithdrawalUncheckedCreateWithoutWebhookEventsInput>
+    where?: WithdrawalWhereInput
+  }
+
+  export type WithdrawalUpdateToOneWithWhereWithoutWebhookEventsInput = {
+    where?: WithdrawalWhereInput
+    data: XOR<WithdrawalUpdateWithoutWebhookEventsInput, WithdrawalUncheckedUpdateWithoutWebhookEventsInput>
+  }
+
+  export type WithdrawalUpdateWithoutWebhookEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutWebhookEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
   }
 
   export type PasswordResetChallengeCreateManyUserInput = {
@@ -21963,6 +35823,76 @@ export namespace Prisma {
     paymentMethod?: $Enums.PaymentMethod | null
     reference: string
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WithdrawalCreateManyUserInput = {
+    id?: string
+    reference: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalQuoteCreateManyUserInput = {
+    id?: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+  }
+
+  export type BeneficiaryCreateManyUserInput = {
+    id?: string
+    country: string
+    countryCode: string
+    currencyCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -22102,6 +36032,7 @@ export namespace Prisma {
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22123,6 +36054,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22141,6 +36073,224 @@ export namespace Prisma {
     paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
     reference?: StringFieldUpdateOperationsInput | string
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WithdrawalUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalQuoteUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceQuotesNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationQuotesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BeneficiaryUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    currency?: CurrencyUpdateOneRequiredWithoutBeneficiariesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -22203,9 +36353,41 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
+  }
+
+  export type WithdrawalCreateManyWalletInput = {
+    id?: string
+    reference: string
+    userId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
   }
 
   export type WalletBalanceUpdateWithoutWalletInput = {
@@ -22319,6 +36501,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22340,6 +36523,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22368,6 +36552,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22383,6 +36570,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22396,9 +36586,103 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WithdrawalUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type WalletBalanceCreateManyCurrencyInput = {
@@ -22459,9 +36743,130 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
+  }
+
+  export type WithdrawalCreateManySourceCurrencyInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalCreateManyDestinationCurrencyInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalQuoteCreateManySourceCurrencyInput = {
+    id?: string
+    userId: string
+    destinationCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+  }
+
+  export type WithdrawalQuoteCreateManyDestinationCurrencyInput = {
+    id?: string
+    userId: string
+    sourceCurrencyCode: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    providerFee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string
+    totalFee?: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    status?: $Enums.WithdrawalQuoteStatus
+    createdAt?: Date | string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+  }
+
+  export type BeneficiaryCreateManyCurrencyInput = {
+    id?: string
+    userId: string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    type: $Enums.BeneficiaryType
+    institutionName?: string | null
+    providerBankCode?: string | null
+    accountHolderName?: string | null
+    accountLast4?: string | null
+    mobileMoneyProvider?: string | null
+    providerRecipientReference?: string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: string | null
+    verificationStatus?: $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: Date | string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WalletBalanceUpdateWithoutCurrencyInput = {
@@ -22575,6 +36980,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
     wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22596,6 +37002,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -22624,6 +37031,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22639,6 +37049,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22652,9 +37065,380 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WithdrawalUpdateWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalUpdateWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalQuoteUpdateWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalQuotesNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationQuotesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutSourceCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalQuoteUpdateWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalQuotesNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceQuotesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutQuoteNestedInput
+  }
+
+  export type WithdrawalQuoteUncheckedUpdateManyWithoutDestinationCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BeneficiaryUpdateWithoutCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutBeneficiariesNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateWithoutCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutBeneficiaryNestedInput
+  }
+
+  export type BeneficiaryUncheckedUpdateManyWithoutCurrencyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    type?: EnumBeneficiaryTypeFieldUpdateOperationsInput | $Enums.BeneficiaryType
+    institutionName?: NullableStringFieldUpdateOperationsInput | string | null
+    providerBankCode?: NullableStringFieldUpdateOperationsInput | string | null
+    accountHolderName?: NullableStringFieldUpdateOperationsInput | string | null
+    accountLast4?: NullableStringFieldUpdateOperationsInput | string | null
+    mobileMoneyProvider?: NullableStringFieldUpdateOperationsInput | string | null
+    providerRecipientReference?: NullableStringFieldUpdateOperationsInput | string | null
+    encryptedDetails?: NullableJsonNullValueInput | InputJsonValue
+    detailsFingerprint?: NullableStringFieldUpdateOperationsInput | string | null
+    verificationStatus?: EnumBeneficiaryVerificationStatusFieldUpdateOperationsInput | $Enums.BeneficiaryVerificationStatus
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LedgerEntryCreateManyTransactionInput = {
@@ -22665,6 +37449,9 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     balanceBefore: Decimal | DecimalJsLike | number | string
     balanceAfter: Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    operationKey?: string | null
     reference?: string | null
     reason?: string | null
     createdAt?: Date | string
@@ -22676,6 +37463,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22691,6 +37481,9 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22704,9 +37497,368 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceBefore?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptCreateManyWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    attemptNumber: number
+    status?: $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: string | null
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProviderWebhookEventCreateManyWithdrawalInput = {
+    id?: string
+    provider: $Enums.PaymentProvider
+    eventId: string
+    eventType: string
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    receivedAt?: Date | string
+    processedAt?: Date | string | null
+    status?: $Enums.ProviderWebhookEventStatus
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type PayoutAttemptUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptUncheckedUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PayoutAttemptUncheckedUpdateManyWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    attemptNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    requestMetadata?: NullableJsonNullValueInput | InputJsonValue
+    responseMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorCode?: NullableStringFieldUpdateOperationsInput | string | null
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProviderWebhookEventUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUncheckedUpdateWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    eventId?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumProviderWebhookEventStatusFieldUpdateOperationsInput | $Enums.ProviderWebhookEventStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type WithdrawalCreateManyQuoteInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    beneficiaryId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    beneficiary?: BeneficiaryUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutQuoteInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    beneficiaryId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type WithdrawalCreateManyBeneficiaryInput = {
+    id?: string
+    reference: string
+    userId: string
+    walletId: string
+    transactionId: string
+    sourceCurrencyCode: string
+    destinationCurrencyCode: string
+    sourceAmount: Decimal | DecimalJsLike | number | string
+    destinationAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate: Decimal | DecimalJsLike | number | string
+    fee: Decimal | DecimalJsLike | number | string
+    amountReceived: Decimal | DecimalJsLike | number | string
+    country: string
+    countryCode: string
+    paymentMethod: $Enums.PaymentMethod
+    provider?: $Enums.PaymentProvider | null
+    providerReference?: string | null
+    providerTransactionId?: string | null
+    quoteId?: string | null
+    idempotencyKey: string
+    status?: $Enums.TransactionStatus
+    failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type WithdrawalUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutWithdrawalsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutWithdrawalsNestedInput
+    transaction?: TransactionUpdateOneRequiredWithoutWithdrawalNestedInput
+    sourceCurrency?: CurrencyUpdateOneRequiredWithoutSourceWithdrawalsNestedInput
+    destinationCurrency?: CurrencyUpdateOneRequiredWithoutDestinationWithdrawalsNestedInput
+    quote?: WithdrawalQuoteUpdateOneWithoutWithdrawalsNestedInput
+    payoutAttempts?: PayoutAttemptUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payoutAttempts?: PayoutAttemptUncheckedUpdateManyWithoutWithdrawalNestedInput
+    webhookEvents?: ProviderWebhookEventUncheckedUpdateManyWithoutWithdrawalNestedInput
+  }
+
+  export type WithdrawalUncheckedUpdateManyWithoutBeneficiaryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    sourceCurrencyCode?: StringFieldUpdateOperationsInput | string
+    destinationCurrencyCode?: StringFieldUpdateOperationsInput | string
+    sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    country?: StringFieldUpdateOperationsInput | string
+    countryCode?: StringFieldUpdateOperationsInput | string
+    paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    quoteId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { AuthGuard } from '../auth/auth.guard';
-import { CreateTransactionPinDto, UpdateProfileDto } from './users.dto';
+import { CreateTransactionPinDto, UpdateProfileDto, VerifyTransactionPinDto } from './users.dto';
 import { UsersService } from './users.service';
 
 const uploadDirectory = join(process.cwd(), 'uploads', 'profile');
@@ -34,6 +34,15 @@ export class UsersController {
   ) {
     await this.users.createTransactionPin(request.user.userId, dto.pin);
     return { created: true, hasTransactionPin: true };
+  }
+
+  @Post('transaction-pin/verify')
+  async verifyTransactionPin(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: VerifyTransactionPinDto,
+  ) {
+    await this.users.verifyTransactionPin(request.user.userId, dto.pin);
+    return { verified: true };
   }
 
   @Patch()

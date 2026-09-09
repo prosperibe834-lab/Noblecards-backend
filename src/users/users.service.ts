@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './users.dto';
@@ -32,7 +32,7 @@ export class UsersService {
     const transactionPinHash = await bcrypt.hash(pin, 12);
     const result = await this.prisma.user.updateMany({
       where: { id: userId, transactionPinHash: null },
-      data: { transactionPinHash },
+      data: { transactionPinHash, transactionPinFailedAttempts: 0, transactionPinLockedUntil: null },
     });
 
     if (result.count === 0) {
@@ -42,6 +42,50 @@ export class UsersService {
     }
   }
 
+  async verifyTransactionPin(userId: string, pin: string) {
+    if (!/^\d{4}$/.test(pin)) {
+      throw new BadRequestException('Transaction PIN must be exactly 4 digits.');
+    }
+
+    return this.prisma.$transaction(async (transaction) => {
+      const rows = await transaction.$queryRaw<Array<{
+        transactionPinHash: string | null;
+        transactionPinFailedAttempts: number;
+        transactionPinLockedUntil: Date | null;
+      }>>`
+        SELECT "transactionPinHash", "transactionPinFailedAttempts", "transactionPinLockedUntil"
+        FROM "User"
+        WHERE "id" = ${userId}
+        FOR UPDATE
+      `;
+      const user = rows[0];
+      if (!user) throw new NotFoundException('User not found.');
+      if (!user.transactionPinHash) throw new BadRequestException('Transaction PIN is not configured.');
+      if (user.transactionPinLockedUntil && user.transactionPinLockedUntil > new Date()) {
+        throw new HttpException('Transaction PIN is temporarily locked.', HttpStatus.TOO_MANY_REQUESTS);
+      }
+
+      const valid = await bcrypt.compare(pin, user.transactionPinHash);
+      if (valid) {
+        await transaction.user.update({
+          where: { id: userId },
+          data: { transactionPinFailedAttempts: 0, transactionPinLockedUntil: null },
+        });
+        return true;
+      }
+
+      const failedAttempts = user.transactionPinFailedAttempts + 1;
+      await transaction.user.update({
+        where: { id: userId },
+        data: {
+          transactionPinFailedAttempts: failedAttempts,
+          transactionPinLockedUntil: failedAttempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : null,
+        },
+      });
+      throw new BadRequestException('Invalid transaction PIN.');
+    });
+  }
+
   async updateProfile(userId: string, dto: UpdateProfileDto) {
     const user = await this.findById(userId);
     if (!user) throw new NotFoundException('User not found.');
@@ -49,14 +93,9 @@ export class UsersService {
       const existing = await this.prisma.user.findFirst({ where: { username: dto.username, NOT: { id: userId } } });
       if (existing) throw new ConflictException('That username is already in use.');
     }
-    if (dto.email && dto.email.toLowerCase() !== user.email.toLowerCase()) {
-      const existing = await this.findByEmail(dto.email);
-      if (existing && existing.id !== userId) throw new ConflictException('That email address is already in use.');
-    }
     const updated = await this.prisma.user.update({
       where: { id: userId },
       data: {
-        email: dto.email?.trim().toLowerCase(),
         firstName: dto.firstName?.trim(),
         lastName: dto.lastName?.trim(),
         username: dto.username?.trim().toLowerCase(),

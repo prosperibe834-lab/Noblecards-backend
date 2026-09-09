@@ -142,6 +142,8 @@ exports.Prisma.UserScalarFieldEnum = {
   isActive: 'isActive',
   role: 'role',
   transactionPinHash: 'transactionPinHash',
+  transactionPinFailedAttempts: 'transactionPinFailedAttempts',
+  transactionPinLockedUntil: 'transactionPinLockedUntil',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -266,9 +268,116 @@ exports.Prisma.LedgerEntryScalarFieldEnum = {
   amount: 'amount',
   balanceBefore: 'balanceBefore',
   balanceAfter: 'balanceAfter',
+  pendingBalanceBefore: 'pendingBalanceBefore',
+  pendingBalanceAfter: 'pendingBalanceAfter',
+  operationKey: 'operationKey',
   reference: 'reference',
   reason: 'reason',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.WithdrawalScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  userId: 'userId',
+  walletId: 'walletId',
+  transactionId: 'transactionId',
+  sourceCurrencyCode: 'sourceCurrencyCode',
+  destinationCurrencyCode: 'destinationCurrencyCode',
+  sourceAmount: 'sourceAmount',
+  destinationAmount: 'destinationAmount',
+  exchangeRate: 'exchangeRate',
+  fee: 'fee',
+  amountReceived: 'amountReceived',
+  country: 'country',
+  countryCode: 'countryCode',
+  paymentMethod: 'paymentMethod',
+  provider: 'provider',
+  providerReference: 'providerReference',
+  providerTransactionId: 'providerTransactionId',
+  quoteId: 'quoteId',
+  beneficiaryId: 'beneficiaryId',
+  idempotencyKey: 'idempotencyKey',
+  status: 'status',
+  failureReason: 'failureReason',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.WithdrawalQuoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sourceCurrencyCode: 'sourceCurrencyCode',
+  destinationCurrencyCode: 'destinationCurrencyCode',
+  countryCode: 'countryCode',
+  paymentMethod: 'paymentMethod',
+  sourceAmount: 'sourceAmount',
+  exchangeRate: 'exchangeRate',
+  destinationAmount: 'destinationAmount',
+  providerFee: 'providerFee',
+  nobleCardsFee: 'nobleCardsFee',
+  totalFee: 'totalFee',
+  amountReceived: 'amountReceived',
+  status: 'status',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt'
+};
+
+exports.Prisma.BeneficiaryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  country: 'country',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  paymentMethod: 'paymentMethod',
+  type: 'type',
+  institutionName: 'institutionName',
+  providerBankCode: 'providerBankCode',
+  accountHolderName: 'accountHolderName',
+  accountLast4: 'accountLast4',
+  mobileMoneyProvider: 'mobileMoneyProvider',
+  providerRecipientReference: 'providerRecipientReference',
+  encryptedDetails: 'encryptedDetails',
+  detailsFingerprint: 'detailsFingerprint',
+  verificationStatus: 'verificationStatus',
+  verifiedAt: 'verifiedAt',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PayoutAttemptScalarFieldEnum = {
+  id: 'id',
+  withdrawalId: 'withdrawalId',
+  provider: 'provider',
+  providerReference: 'providerReference',
+  providerTransactionId: 'providerTransactionId',
+  attemptNumber: 'attemptNumber',
+  status: 'status',
+  requestMetadata: 'requestMetadata',
+  responseMetadata: 'responseMetadata',
+  errorCode: 'errorCode',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProviderWebhookEventScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  eventId: 'eventId',
+  eventType: 'eventType',
+  providerReference: 'providerReference',
+  providerTransactionId: 'providerTransactionId',
+  withdrawalId: 'withdrawalId',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata'
 };
 
 exports.Prisma.SortOrder = {
@@ -366,6 +475,32 @@ exports.LedgerEntryType = exports.$Enums.LedgerEntryType = {
   ADJUSTMENT: 'ADJUSTMENT'
 };
 
+exports.WithdrawalQuoteStatus = exports.$Enums.WithdrawalQuoteStatus = {
+  ACTIVE: 'ACTIVE',
+  USED: 'USED',
+  EXPIRED: 'EXPIRED'
+};
+
+exports.BeneficiaryType = exports.$Enums.BeneficiaryType = {
+  BANK_ACCOUNT: 'BANK_ACCOUNT',
+  MOBILE_MONEY: 'MOBILE_MONEY'
+};
+
+exports.BeneficiaryVerificationStatus = exports.$Enums.BeneficiaryVerificationStatus = {
+  UNVERIFIED: 'UNVERIFIED',
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  FAILED: 'FAILED'
+};
+
+exports.ProviderWebhookEventStatus = exports.$Enums.ProviderWebhookEventStatus = {
+  RECEIVED: 'RECEIVED',
+  PROCESSING: 'PROCESSING',
+  PROCESSED: 'PROCESSED',
+  FAILED: 'FAILED',
+  IGNORED: 'IGNORED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   PendingRegistration: 'PendingRegistration',
@@ -376,7 +511,12 @@ exports.Prisma.ModelName = {
   WalletBalance: 'WalletBalance',
   Deposit: 'Deposit',
   Transaction: 'Transaction',
-  LedgerEntry: 'LedgerEntry'
+  LedgerEntry: 'LedgerEntry',
+  Withdrawal: 'Withdrawal',
+  WithdrawalQuote: 'WithdrawalQuote',
+  Beneficiary: 'Beneficiary',
+  PayoutAttempt: 'PayoutAttempt',
+  ProviderWebhookEvent: 'ProviderWebhookEvent'
 };
 
 /**

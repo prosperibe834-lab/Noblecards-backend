@@ -9,6 +9,7 @@ import { join } from 'node:path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use('/flutterwave/webhook', express.raw({ type: '*/*', limit: '1mb' }));
+  app.use('/withdrawals/webhooks/flutterwave', express.raw({ type: '*/*', limit: '1mb' }));
   app.use(express.json({
     verify: (req: any, _res, buffer) => {
       if (req.originalUrl === '/flutterwave/webhook') {

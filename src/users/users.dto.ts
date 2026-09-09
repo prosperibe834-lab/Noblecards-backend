@@ -1,5 +1,4 @@
 import {
-  IsEmail,
   IsOptional,
   IsString,
   Length,
@@ -8,7 +7,6 @@ import {
 } from 'class-validator';
 
 export class UpdateProfileDto {
-    @IsOptional() @IsEmail() email?: string;
   @IsOptional() @IsString() @Length(1, 80) firstName?: string;
   @IsOptional() @IsString() @Length(1, 80) lastName?: string;
   @IsOptional() @Matches(/^[a-zA-Z0-9_]{3,30}$/) username?: string;
@@ -24,6 +22,12 @@ export class UpdateProfileDto {
 }
 
 export class CreateTransactionPinDto {
+  @IsString()
+  @Matches(/^\d{4}$/)
+  pin!: string;
+}
+
+export class VerifyTransactionPinDto {
   @IsString()
   @Matches(/^\d{4}$/)
   pin!: string;

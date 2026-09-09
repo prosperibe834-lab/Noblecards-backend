@@ -530,6 +530,8 @@ export type UserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   transactionPinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionPinFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  transactionPinLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResets?: Prisma.PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -559,6 +561,8 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   transactionPinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionPinFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  transactionPinLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResets?: Prisma.PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -614,6 +618,8 @@ export type UserUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   transactionPinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionPinFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  transactionPinLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -640,6 +646,8 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   transactionPinHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  transactionPinFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  transactionPinLockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }

@@ -15,11 +15,14 @@ export class LedgerService {
     amount: Decimal | string | number;
     balanceBefore: Decimal | string | number;
     balanceAfter: Decimal | string | number;
+    pendingBalanceBefore?: Decimal | string | number | null;
+    pendingBalanceAfter?: Decimal | string | number | null;
     transactionId?: string | null;
     reference?: string | null;
+    operationKey?: string | null;
     reason?: string | null;
-  }) {
-    return (this.prisma as any).ledgerEntry.create({
+  }, client: any = this.prisma) {
+    return client.ledgerEntry.create({
       data: {
         walletId: input.walletId,
         currencyCode: input.currencyCode,
@@ -28,7 +31,10 @@ export class LedgerService {
         amount: input.amount instanceof Decimal ? input.amount : new Decimal(String(input.amount)),
         balanceBefore: input.balanceBefore instanceof Decimal ? input.balanceBefore : new Decimal(String(input.balanceBefore)),
         balanceAfter: input.balanceAfter instanceof Decimal ? input.balanceAfter : new Decimal(String(input.balanceAfter)),
+        pendingBalanceBefore: input.pendingBalanceBefore == null ? null : input.pendingBalanceBefore instanceof Decimal ? input.pendingBalanceBefore : new Decimal(String(input.pendingBalanceBefore)),
+        pendingBalanceAfter: input.pendingBalanceAfter == null ? null : input.pendingBalanceAfter instanceof Decimal ? input.pendingBalanceAfter : new Decimal(String(input.pendingBalanceAfter)),
         reference: input.reference ?? null,
+        operationKey: input.operationKey ?? null,
         reason: input.reason ?? null,
       },
     });

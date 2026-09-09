@@ -4,12 +4,7 @@ import { UsersService } from './users.service';
 
 describe('UsersService transaction PIN', () => {
   const userId = 'user-1';
-  let prisma: {
-    user: {
-      findUnique: jest.Mock;
-      updateMany: jest.Mock;
-    };
-  };
+  let prisma: any;
   let service: UsersService;
 
   beforeEach(() => {
@@ -17,7 +12,10 @@ describe('UsersService transaction PIN', () => {
       user: {
         findUnique: jest.fn(),
         updateMany: jest.fn(),
+        update: jest.fn(),
       },
+      $transaction: jest.fn((callback: (tx: any) => unknown) => callback(prisma)),
+      $queryRaw: jest.fn(),
     };
     service = new UsersService(prisma as never);
   });
@@ -65,5 +63,53 @@ describe('UsersService transaction PIN', () => {
 
     expect(publicUser.hasTransactionPin).toBe(true);
     expect(publicUser).not.toHaveProperty('transactionPinHash');
+  });
+
+  it('verifies the correct PIN and resets failed attempts and lockout', async () => {
+    prisma.$queryRaw.mockResolvedValue([{
+      transactionPinHash: await bcrypt.hash('1234', 4),
+      transactionPinFailedAttempts: 3,
+      transactionPinLockedUntil: null,
+    }]);
+
+    await expect(service.verifyTransactionPin(userId, '1234')).resolves.toBe(true);
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: userId },
+      data: { transactionPinFailedAttempts: 0, transactionPinLockedUntil: null },
+    });
+  });
+
+  it('increments failed attempts and locks after five failures', async () => {
+    prisma.$queryRaw.mockResolvedValue([{
+      transactionPinHash: await bcrypt.hash('1234', 4),
+      transactionPinFailedAttempts: 4,
+      transactionPinLockedUntil: null,
+    }]);
+
+    await expect(service.verifyTransactionPin(userId, '9999')).rejects.toThrow('Invalid transaction PIN.');
+    const update = prisma.user.update.mock.calls[0][0];
+    expect(update.data.transactionPinFailedAttempts).toBe(5);
+    expect(update.data.transactionPinLockedUntil.getTime()).toBeGreaterThan(Date.now());
+  });
+
+  it('rejects a PIN while the temporary lock is active', async () => {
+    prisma.$queryRaw.mockResolvedValue([{
+      transactionPinHash: await bcrypt.hash('1234', 4),
+      transactionPinFailedAttempts: 5,
+      transactionPinLockedUntil: new Date(Date.now() + 60_000),
+    }]);
+
+    await expect(service.verifyTransactionPin(userId, '1234')).rejects.toMatchObject({ status: 429 });
+    expect(prisma.user.update).not.toHaveBeenCalled();
+  });
+
+  it('rejects verification when no transaction PIN is configured', async () => {
+    prisma.$queryRaw.mockResolvedValue([{
+      transactionPinHash: null,
+      transactionPinFailedAttempts: 0,
+      transactionPinLockedUntil: null,
+    }]);
+
+    await expect(service.verifyTransactionPin(userId, '1234')).rejects.toThrow('Transaction PIN is not configured.');
   });
 });
