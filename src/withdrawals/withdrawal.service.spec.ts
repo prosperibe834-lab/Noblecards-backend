@@ -85,6 +85,7 @@ describe('WithdrawalService', () => {
       reference: expect.stringContaining('withdrawal:'),
     }), prisma);
     expect(result.reference).toMatch(/^WD-/);
+    expect(result.reference).toMatch(/_PMCKDU_1$/);
     expect(result.status).toBe(TransactionStatus.PENDING);
     expect(result.quoteId).toBe('quote-1');
   });

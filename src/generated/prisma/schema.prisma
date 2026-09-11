@@ -292,9 +292,12 @@ model WithdrawalQuote {
   sourceAmount            Decimal               @db.Decimal(18, 2)
   exchangeRate            Decimal               @db.Decimal(18, 8)
   destinationAmount       Decimal               @db.Decimal(18, 2)
+  idempotencyKey          String?
   providerFee             Decimal               @default(0.00) @db.Decimal(18, 2)
   nobleCardsFee           Decimal               @default(0.00) @db.Decimal(18, 2)
   totalFee                Decimal               @default(0.00) @db.Decimal(18, 2)
+  destinationFee          Decimal               @default(0.00) @db.Decimal(18, 2)
+  recipientAmount         Decimal               @db.Decimal(18, 2)
   amountReceived          Decimal               @db.Decimal(18, 2)
   status                  WithdrawalQuoteStatus @default(ACTIVE)
   createdAt               DateTime              @default(now())
@@ -305,6 +308,7 @@ model WithdrawalQuote {
   destinationCurrency     Currency              @relation("QuoteDestinationCurrency", fields: [destinationCurrencyCode], references: [code], onDelete: Restrict)
   withdrawals             Withdrawal[]
 
+  @@unique([userId, idempotencyKey])
   @@index([userId, createdAt])
   @@index([userId, status, expiresAt])
   @@index([expiresAt])

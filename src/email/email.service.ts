@@ -34,6 +34,37 @@ export class EmailService {
     `);
   }
 
+  async sendWithdrawalCreatedEmail(email: string, reference: string, amount: string, currency: string): Promise<void> {
+    await this.send(email, 'Your NobleCards withdrawal is processing', `
+      <h2>Withdrawal request received</h2>
+      <p>Your NobleCards withdrawal request has been received and is being processed.</p>
+      <p><strong>Amount:</strong> ${amount} ${currency}</p>
+      <p><strong>Reference:</strong> ${reference}</p>
+      <p>We will send another update when the transfer status changes.</p>
+    `);
+  }
+
+  async sendWithdrawalSuccessEmail(email: string, details: {
+    sourceAmount: string;
+    sourceCurrency: string;
+    destinationAmount: string;
+    destinationCurrency: string;
+    destination: string;
+    reference: string;
+    completedAt: Date;
+  }): Promise<void> {
+    await this.send(email, 'Your NobleCards withdrawal was successful', `
+      <h2>Withdrawal successful</h2>
+      <p>Your NobleCards withdrawal has been completed successfully.</p>
+      <p><strong>Amount sent:</strong> ${details.sourceAmount} ${details.sourceCurrency}</p>
+      <p><strong>Amount delivered:</strong> ${details.destinationAmount} ${details.destinationCurrency}</p>
+      <p><strong>Destination:</strong> ${details.destination}</p>
+      <p><strong>Reference:</strong> ${details.reference}</p>
+      <p><strong>Completed:</strong> ${details.completedAt.toISOString()}</p>
+      <p>Thank you for using NobleCards.</p>
+    `);
+  }
+
   private async send(to: string, subject: string, html: string): Promise<void> {
     if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !this.smtpPassword) {
       throw new ServiceUnavailableException('Email delivery is not configured.');

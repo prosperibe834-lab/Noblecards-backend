@@ -16980,6 +16980,8 @@ export namespace Prisma {
     providerFee: Decimal | null
     nobleCardsFee: Decimal | null
     totalFee: Decimal | null
+    destinationFee: Decimal | null
+    recipientAmount: Decimal | null
     amountReceived: Decimal | null
   }
 
@@ -16990,6 +16992,8 @@ export namespace Prisma {
     providerFee: Decimal | null
     nobleCardsFee: Decimal | null
     totalFee: Decimal | null
+    destinationFee: Decimal | null
+    recipientAmount: Decimal | null
     amountReceived: Decimal | null
   }
 
@@ -17003,9 +17007,12 @@ export namespace Prisma {
     sourceAmount: Decimal | null
     exchangeRate: Decimal | null
     destinationAmount: Decimal | null
+    idempotencyKey: string | null
     providerFee: Decimal | null
     nobleCardsFee: Decimal | null
     totalFee: Decimal | null
+    destinationFee: Decimal | null
+    recipientAmount: Decimal | null
     amountReceived: Decimal | null
     status: $Enums.WithdrawalQuoteStatus | null
     createdAt: Date | null
@@ -17023,9 +17030,12 @@ export namespace Prisma {
     sourceAmount: Decimal | null
     exchangeRate: Decimal | null
     destinationAmount: Decimal | null
+    idempotencyKey: string | null
     providerFee: Decimal | null
     nobleCardsFee: Decimal | null
     totalFee: Decimal | null
+    destinationFee: Decimal | null
+    recipientAmount: Decimal | null
     amountReceived: Decimal | null
     status: $Enums.WithdrawalQuoteStatus | null
     createdAt: Date | null
@@ -17043,9 +17053,12 @@ export namespace Prisma {
     sourceAmount: number
     exchangeRate: number
     destinationAmount: number
+    idempotencyKey: number
     providerFee: number
     nobleCardsFee: number
     totalFee: number
+    destinationFee: number
+    recipientAmount: number
     amountReceived: number
     status: number
     createdAt: number
@@ -17062,6 +17075,8 @@ export namespace Prisma {
     providerFee?: true
     nobleCardsFee?: true
     totalFee?: true
+    destinationFee?: true
+    recipientAmount?: true
     amountReceived?: true
   }
 
@@ -17072,6 +17087,8 @@ export namespace Prisma {
     providerFee?: true
     nobleCardsFee?: true
     totalFee?: true
+    destinationFee?: true
+    recipientAmount?: true
     amountReceived?: true
   }
 
@@ -17085,9 +17102,12 @@ export namespace Prisma {
     sourceAmount?: true
     exchangeRate?: true
     destinationAmount?: true
+    idempotencyKey?: true
     providerFee?: true
     nobleCardsFee?: true
     totalFee?: true
+    destinationFee?: true
+    recipientAmount?: true
     amountReceived?: true
     status?: true
     createdAt?: true
@@ -17105,9 +17125,12 @@ export namespace Prisma {
     sourceAmount?: true
     exchangeRate?: true
     destinationAmount?: true
+    idempotencyKey?: true
     providerFee?: true
     nobleCardsFee?: true
     totalFee?: true
+    destinationFee?: true
+    recipientAmount?: true
     amountReceived?: true
     status?: true
     createdAt?: true
@@ -17125,9 +17148,12 @@ export namespace Prisma {
     sourceAmount?: true
     exchangeRate?: true
     destinationAmount?: true
+    idempotencyKey?: true
     providerFee?: true
     nobleCardsFee?: true
     totalFee?: true
+    destinationFee?: true
+    recipientAmount?: true
     amountReceived?: true
     status?: true
     createdAt?: true
@@ -17232,9 +17258,12 @@ export namespace Prisma {
     sourceAmount: Decimal
     exchangeRate: Decimal
     destinationAmount: Decimal
+    idempotencyKey: string | null
     providerFee: Decimal
     nobleCardsFee: Decimal
     totalFee: Decimal
+    destinationFee: Decimal
+    recipientAmount: Decimal
     amountReceived: Decimal
     status: $Enums.WithdrawalQuoteStatus
     createdAt: Date
@@ -17271,9 +17300,12 @@ export namespace Prisma {
     sourceAmount?: boolean
     exchangeRate?: boolean
     destinationAmount?: boolean
+    idempotencyKey?: boolean
     providerFee?: boolean
     nobleCardsFee?: boolean
     totalFee?: boolean
+    destinationFee?: boolean
+    recipientAmount?: boolean
     amountReceived?: boolean
     status?: boolean
     createdAt?: boolean
@@ -17296,9 +17328,12 @@ export namespace Prisma {
     sourceAmount?: boolean
     exchangeRate?: boolean
     destinationAmount?: boolean
+    idempotencyKey?: boolean
     providerFee?: boolean
     nobleCardsFee?: boolean
     totalFee?: boolean
+    destinationFee?: boolean
+    recipientAmount?: boolean
     amountReceived?: boolean
     status?: boolean
     createdAt?: boolean
@@ -17319,9 +17354,12 @@ export namespace Prisma {
     sourceAmount?: boolean
     exchangeRate?: boolean
     destinationAmount?: boolean
+    idempotencyKey?: boolean
     providerFee?: boolean
     nobleCardsFee?: boolean
     totalFee?: boolean
+    destinationFee?: boolean
+    recipientAmount?: boolean
     amountReceived?: boolean
     status?: boolean
     createdAt?: boolean
@@ -17342,9 +17380,12 @@ export namespace Prisma {
     sourceAmount?: boolean
     exchangeRate?: boolean
     destinationAmount?: boolean
+    idempotencyKey?: boolean
     providerFee?: boolean
     nobleCardsFee?: boolean
     totalFee?: boolean
+    destinationFee?: boolean
+    recipientAmount?: boolean
     amountReceived?: boolean
     status?: boolean
     createdAt?: boolean
@@ -17352,7 +17393,7 @@ export namespace Prisma {
     usedAt?: boolean
   }
 
-  export type WithdrawalQuoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "sourceCurrencyCode" | "destinationCurrencyCode" | "countryCode" | "paymentMethod" | "sourceAmount" | "exchangeRate" | "destinationAmount" | "providerFee" | "nobleCardsFee" | "totalFee" | "amountReceived" | "status" | "createdAt" | "expiresAt" | "usedAt", ExtArgs["result"]["withdrawalQuote"]>
+  export type WithdrawalQuoteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "sourceCurrencyCode" | "destinationCurrencyCode" | "countryCode" | "paymentMethod" | "sourceAmount" | "exchangeRate" | "destinationAmount" | "idempotencyKey" | "providerFee" | "nobleCardsFee" | "totalFee" | "destinationFee" | "recipientAmount" | "amountReceived" | "status" | "createdAt" | "expiresAt" | "usedAt", ExtArgs["result"]["withdrawalQuote"]>
   export type WithdrawalQuoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     sourceCurrency?: boolean | CurrencyDefaultArgs<ExtArgs>
@@ -17389,9 +17430,12 @@ export namespace Prisma {
       sourceAmount: Prisma.Decimal
       exchangeRate: Prisma.Decimal
       destinationAmount: Prisma.Decimal
+      idempotencyKey: string | null
       providerFee: Prisma.Decimal
       nobleCardsFee: Prisma.Decimal
       totalFee: Prisma.Decimal
+      destinationFee: Prisma.Decimal
+      recipientAmount: Prisma.Decimal
       amountReceived: Prisma.Decimal
       status: $Enums.WithdrawalQuoteStatus
       createdAt: Date
@@ -17833,9 +17877,12 @@ export namespace Prisma {
     readonly sourceAmount: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly exchangeRate: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly destinationAmount: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly idempotencyKey: FieldRef<"WithdrawalQuote", 'String'>
     readonly providerFee: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly nobleCardsFee: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly totalFee: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly destinationFee: FieldRef<"WithdrawalQuote", 'Decimal'>
+    readonly recipientAmount: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly amountReceived: FieldRef<"WithdrawalQuote", 'Decimal'>
     readonly status: FieldRef<"WithdrawalQuote", 'WithdrawalQuoteStatus'>
     readonly createdAt: FieldRef<"WithdrawalQuote", 'DateTime'>
@@ -22181,9 +22228,12 @@ export namespace Prisma {
     sourceAmount: 'sourceAmount',
     exchangeRate: 'exchangeRate',
     destinationAmount: 'destinationAmount',
+    idempotencyKey: 'idempotencyKey',
     providerFee: 'providerFee',
     nobleCardsFee: 'nobleCardsFee',
     totalFee: 'totalFee',
+    destinationFee: 'destinationFee',
+    recipientAmount: 'recipientAmount',
     amountReceived: 'amountReceived',
     status: 'status',
     createdAt: 'createdAt',
@@ -23800,9 +23850,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: StringNullableFilter<"WithdrawalQuote"> | string | null
     providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
@@ -23824,9 +23877,12 @@ export namespace Prisma {
     sourceAmount?: SortOrder
     exchangeRate?: SortOrder
     destinationAmount?: SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -23840,6 +23896,7 @@ export namespace Prisma {
 
   export type WithdrawalQuoteWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId_idempotencyKey?: WithdrawalQuoteUserIdIdempotencyKeyCompoundUniqueInput
     AND?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
     OR?: WithdrawalQuoteWhereInput[]
     NOT?: WithdrawalQuoteWhereInput | WithdrawalQuoteWhereInput[]
@@ -23851,9 +23908,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: StringNullableFilter<"WithdrawalQuote"> | string | null
     providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
@@ -23863,7 +23923,7 @@ export namespace Prisma {
     sourceCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     destinationCurrency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     withdrawals?: WithdrawalListRelationFilter
-  }, "id">
+  }, "id" | "userId_idempotencyKey">
 
   export type WithdrawalQuoteOrderByWithAggregationInput = {
     id?: SortOrder
@@ -23875,9 +23935,12 @@ export namespace Prisma {
     sourceAmount?: SortOrder
     exchangeRate?: SortOrder
     destinationAmount?: SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -23903,9 +23966,12 @@ export namespace Prisma {
     sourceAmount?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: StringNullableWithAggregatesFilter<"WithdrawalQuote"> | string | null
     providerFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalWithAggregatesFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusWithAggregatesFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeWithAggregatesFilter<"WithdrawalQuote"> | Date | string
@@ -25639,9 +25705,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -25663,9 +25732,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -25681,9 +25753,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25705,9 +25780,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25726,9 +25804,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -25743,9 +25824,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25763,9 +25847,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -27414,6 +27501,11 @@ export namespace Prisma {
     not?: NestedEnumWithdrawalQuoteStatusFilter<$PrismaModel> | $Enums.WithdrawalQuoteStatus
   }
 
+  export type WithdrawalQuoteUserIdIdempotencyKeyCompoundUniqueInput = {
+    userId: string
+    idempotencyKey: string
+  }
+
   export type WithdrawalQuoteCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -27424,9 +27516,12 @@ export namespace Prisma {
     sourceAmount?: SortOrder
     exchangeRate?: SortOrder
     destinationAmount?: SortOrder
+    idempotencyKey?: SortOrder
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -27441,6 +27536,8 @@ export namespace Prisma {
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
   }
 
@@ -27454,9 +27551,12 @@ export namespace Prisma {
     sourceAmount?: SortOrder
     exchangeRate?: SortOrder
     destinationAmount?: SortOrder
+    idempotencyKey?: SortOrder
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -27474,9 +27574,12 @@ export namespace Prisma {
     sourceAmount?: SortOrder
     exchangeRate?: SortOrder
     destinationAmount?: SortOrder
+    idempotencyKey?: SortOrder
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -27491,6 +27594,8 @@ export namespace Prisma {
     providerFee?: SortOrder
     nobleCardsFee?: SortOrder
     totalFee?: SortOrder
+    destinationFee?: SortOrder
+    recipientAmount?: SortOrder
     amountReceived?: SortOrder
   }
 
@@ -30276,9 +30381,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -30298,9 +30406,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -30671,9 +30782,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: StringNullableFilter<"WithdrawalQuote"> | string | null
     providerFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFilter<"WithdrawalQuote"> | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFilter<"WithdrawalQuote"> | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFilter<"WithdrawalQuote"> | Date | string
@@ -32055,9 +32169,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -32077,9 +32194,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -32105,9 +32225,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -32127,9 +32250,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -34072,9 +34198,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -34095,9 +34224,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -34534,9 +34666,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -34557,9 +34692,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35865,9 +36003,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -36175,9 +36316,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36197,9 +36341,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36217,9 +36364,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36818,9 +36968,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -36837,9 +36990,12 @@ export namespace Prisma {
     sourceAmount: Decimal | DecimalJsLike | number | string
     exchangeRate: Decimal | DecimalJsLike | number | string
     destinationAmount: Decimal | DecimalJsLike | number | string
+    idempotencyKey?: string | null
     providerFee?: Decimal | DecimalJsLike | number | string
     nobleCardsFee?: Decimal | DecimalJsLike | number | string
     totalFee?: Decimal | DecimalJsLike | number | string
+    destinationFee?: Decimal | DecimalJsLike | number | string
+    recipientAmount: Decimal | DecimalJsLike | number | string
     amountReceived: Decimal | DecimalJsLike | number | string
     status?: $Enums.WithdrawalQuoteStatus
     createdAt?: Date | string
@@ -37262,9 +37418,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37284,9 +37443,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37304,9 +37466,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37321,9 +37486,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37343,9 +37511,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37363,9 +37534,12 @@ export namespace Prisma {
     sourceAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     destinationAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     providerFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     nobleCardsFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     totalFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    destinationFee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    recipientAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountReceived?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumWithdrawalQuoteStatusFieldUpdateOperationsInput | $Enums.WithdrawalQuoteStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

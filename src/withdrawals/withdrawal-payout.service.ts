@@ -1,11 +1,56 @@
-import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Inject, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PaymentProvider, ProviderWebhookEventStatus, TransactionStatus } from '../generated/prisma';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption.service';
 import { WalletsService } from '../wallets/wallets.service';
+import { EmailService } from '../email/email.service';
 import { PAYOUT_PROVIDER_ADAPTER, type PayoutProviderAdapter } from './payout-provider.interface';
+
+type V3BankRecipient = {
+  type: 'bank';
+  name: string;
+  bank: {
+    account_number: string;
+    code?: string;
+    branch?: string;
+    account_type?: 'individual';
+    name?: string;
+    sort_code?: string;
+  };
+};
+
+type V3PaymentInstruction = {
+  source_currency: string;
+  destination_currency: string;
+  amount: {
+    value: number;
+    applies_to: 'destination_currency';
+  };
+  recipient: V3BankRecipient;
+  sender: {
+    name: {
+      first: string;
+      last: string;
+    };
+  };
+};
+
+type V3TransferRequest = {
+  action: 'instant';
+  reference: string;
+  narration: string;
+  payment_instruction?: V3PaymentInstruction;
+  account_bank?: string;
+  account_number?: string;
+  beneficiary_name?: string;
+  amount?: number;
+  currency?: string;
+  debit_currency?: string;
+  callback_url?: string;
+  meta?: Record<string, unknown>;
+};
 
 const TERMINAL_STATUSES = new Set<TransactionStatus>([
   TransactionStatus.SUCCESSFUL,
@@ -15,6 +60,8 @@ const TERMINAL_STATUSES = new Set<TransactionStatus>([
   TransactionStatus.REVERSED,
 ]);
 
+const normalizeProviderIdentifier = (value: unknown): string | null => value == null ? null : String(value);
+
 @Injectable()
 export class WithdrawalPayoutService {
   constructor(
@@ -23,6 +70,7 @@ export class WithdrawalPayoutService {
     private readonly encryption: BeneficiaryEncryptionService,
     @Inject(PAYOUT_PROVIDER_ADAPTER) private readonly provider: PayoutProviderAdapter,
     private readonly config: ConfigService,
+    @Optional() private readonly email?: EmailService,
   ) {}
 
   private async getOwnedWithdrawal(userId: string, withdrawalId: string) {
@@ -68,7 +116,80 @@ export class WithdrawalPayoutService {
     return `nc-payout-${withdrawal.reference}`;
   }
 
-  private buildTransferRequest(withdrawal: any) {
+  private normalizeAmount(value: unknown): number {
+    const raw = Number(String(value ?? '0'));
+    return Number.isFinite(raw) ? raw : 0;
+  }
+
+  private buildOfficialV3BankRecipient(countryCode: string, details: Record<string, string | undefined>, accountNumber: string, beneficiaryName: string): V3BankRecipient {
+    const institutionCode = details.institutionCode ?? details.providerBankCode ?? '';
+    const institutionName = details.institutionName ?? '';
+    const branchCode = details.branchCode ?? '';
+    const sortCode = details.sortCode ?? '';
+    const routingNumber = details.routingNumber ?? '';
+    const swiftCode = details.swiftCode ?? '';
+
+    if (countryCode === 'GH') {
+      return {
+        type: 'bank',
+        name: beneficiaryName,
+        bank: {
+          account_number: accountNumber,
+          code: institutionCode,
+          branch: branchCode,
+        },
+      };
+    }
+
+    if (countryCode === 'GB') {
+      return {
+        type: 'bank',
+        name: beneficiaryName,
+        bank: {
+          account_number: accountNumber,
+          account_type: 'individual',
+          name: institutionName,
+          sort_code: sortCode || routingNumber || '',
+        },
+      };
+    }
+
+    return {
+      type: 'bank',
+      name: beneficiaryName,
+      bank: {
+        account_number: accountNumber,
+        code: institutionCode,
+      },
+    };
+  }
+
+  private buildOfficialV3PaymentInstruction(withdrawal: any, details: Record<string, string | undefined>, beneficiaryName: string, accountNumber: string): V3PaymentInstruction {
+    const countryCode = String(withdrawal.countryCode ?? '').toUpperCase();
+    const routeCurrency = String(withdrawal.destinationCurrencyCode ?? '').toUpperCase();
+    const sourceCurrency = String(withdrawal.sourceCurrencyCode ?? 'USD').toUpperCase();
+    const amountValue = this.normalizeAmount(withdrawal.amountReceived);
+
+    const recipient = this.buildOfficialV3BankRecipient(countryCode, details, accountNumber, beneficiaryName);
+
+    return {
+      source_currency: sourceCurrency,
+      destination_currency: routeCurrency,
+      amount: {
+        value: amountValue,
+        applies_to: 'destination_currency',
+      },
+      recipient,
+      sender: {
+        name: {
+          first: 'NobleCards',
+          last: 'Payout',
+        },
+      },
+    };
+  }
+
+  private buildTransferRequest(withdrawal: any): V3TransferRequest {
     const encrypted = withdrawal.beneficiary.encryptedDetails;
     if (typeof encrypted !== 'string') throw new BadRequestException('BENEFICIARY_DATA_UNAVAILABLE: Encrypted beneficiary details are unavailable.');
     const details = this.encryption.decrypt<Record<string, string | undefined>>(encrypted);
@@ -76,23 +197,82 @@ export class WithdrawalPayoutService {
     const accountBank = details.institutionCode ?? details.providerBankCode;
     const accountNumber = details.accountNumber;
     const beneficiaryName = details.accountHolderName ?? withdrawal.beneficiary.accountHolderName ?? 'NobleCards Recipient';
-    const amount = withdrawal.amountReceived.toString();
 
     if (!accountBank || !accountNumber) {
       throw new BadRequestException('BENEFICIARY_DATA_INCOMPLETE: Bank account and institution code are required.');
     }
 
-    const payload: Record<string, unknown> = {
-      account_bank: accountBank,
-      account_number: accountNumber,
-      amount,
-      currency: 'NGN',
-      beneficiary_name: beneficiaryName,
+    const routeCurrency = String(withdrawal.destinationCurrencyCode ?? '').toUpperCase();
+    const countryCode = String(withdrawal.countryCode ?? '').toUpperCase();
+    const amountValue = this.normalizeAmount(withdrawal.amountReceived);
+    const paymentInstruction = this.buildOfficialV3PaymentInstruction(withdrawal, details, beneficiaryName, accountNumber);
+
+    if (countryCode !== 'NG') {
+      const payload: V3TransferRequest = {
+        action: 'instant',
+        reference: withdrawal.reference,
+        narration: `NobleCards withdrawal ${withdrawal.reference}`.slice(0, 180),
+        payment_instruction: paymentInstruction,
+      };
+
+      if (countryCode === 'GH') {
+        payload.payment_instruction = {
+          ...paymentInstruction,
+          destination_currency: 'GHS',
+          recipient: {
+            type: 'bank',
+            name: beneficiaryName,
+            bank: { account_number: accountNumber, code: accountBank, branch: details.branchCode ?? '' },
+          },
+        };
+      }
+
+      if (countryCode === 'GB') {
+        payload.payment_instruction = {
+          ...paymentInstruction,
+          destination_currency: 'GBP',
+          recipient: {
+            type: 'bank',
+            name: beneficiaryName,
+            bank: {
+              account_number: accountNumber,
+              account_type: 'individual',
+              name: details.institutionName ?? withdrawal.beneficiary.institutionName ?? '',
+              sort_code: details.sortCode ?? details.routingNumber ?? '',
+            },
+          },
+        };
+        payload.meta = {
+          beneficiary: {
+            account_number: accountNumber,
+            beneficiary_name: beneficiaryName,
+            bank_name: details.institutionName ?? withdrawal.beneficiary.institutionName ?? '',
+            country: 'UK',
+            routing_number: details.routingNumber ?? '',
+            sort_code: details.sortCode ?? '',
+            swift_code: details.swiftCode ?? '',
+          },
+        };
+      }
+
+      const callbackUrl = this.config?.get<string>('FLUTTERWAVE_PAYOUT_CALLBACK_URL');
+      if (callbackUrl && callbackUrl.trim()) payload.callback_url = callbackUrl.trim();
+      return payload;
+    }
+
+    const payload: V3TransferRequest = {
+      action: 'instant',
       reference: withdrawal.reference,
       narration: `NobleCards withdrawal ${withdrawal.reference}`.slice(0, 180),
+      account_bank: accountBank,
+      account_number: accountNumber,
+      beneficiary_name: beneficiaryName,
+      amount: amountValue,
+      currency: routeCurrency,
+      debit_currency: String(withdrawal.sourceCurrencyCode ?? 'USD').toUpperCase(),
     };
 
-    const callbackUrl = this.config.get<string>('FLUTTERWAVE_PAYOUT_CALLBACK_URL');
+    const callbackUrl = this.config?.get<string>('FLUTTERWAVE_PAYOUT_CALLBACK_URL');
     if (callbackUrl && callbackUrl.trim()) payload.callback_url = callbackUrl.trim();
 
     return payload;
@@ -126,34 +306,82 @@ export class WithdrawalPayoutService {
   }
 
   private async persistProviderResult(withdrawal: any, claim: any, result: any) {
-    return (this.prisma as any).$transaction(async (tx: any) => {
+    const outcome = await (this.prisma as any).$transaction(async (tx: any) => {
       const status = result.status as TransactionStatus;
+      const providerReference = normalizeProviderIdentifier(result.providerReference);
+      const providerTransactionId = normalizeProviderIdentifier(result.providerTransactionId);
       await tx.payoutAttempt.update({
         where: { id: claim.attempt.id },
         data: {
           status,
-          providerReference: result.providerReference ?? null,
-          providerTransactionId: result.providerTransactionId ?? null,
+          providerReference,
+          providerTransactionId,
           responseMetadata: result.metadata ?? null,
         },
       });
 
       if (status === TransactionStatus.SUCCESSFUL) {
-        await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: TransactionStatus.PROCESSING }, data: { status: TransactionStatus.SUCCESSFUL, providerReference: result.providerReference, providerTransactionId: result.providerTransactionId, completedAt: new Date() } });
-        await tx.transaction.updateMany({ where: { id: withdrawal.transaction.id, status: TransactionStatus.PROCESSING }, data: { status: TransactionStatus.SUCCESSFUL } });
-        await this.wallets.finalizeHeldFunds({ userId: withdrawal.userId, walletId: withdrawal.walletId, currencyCode: withdrawal.sourceCurrencyCode, amount: withdrawal.sourceAmount, transactionId: withdrawal.transaction.id, reference: withdrawal.reference }, tx);
+        const updated = await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.SUCCESSFUL, providerReference, providerTransactionId, completedAt: new Date() } });
+        await tx.transaction.updateMany({ where: { id: withdrawal.transaction.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.SUCCESSFUL, providerReference, providerTransactionId } });
+        if (updated.count === 1) {
+          await this.wallets.finalizeHeldFunds({ userId: withdrawal.userId, walletId: withdrawal.walletId, currencyCode: withdrawal.sourceCurrencyCode, amount: withdrawal.sourceAmount, transactionId: withdrawal.transaction.id, reference: withdrawal.reference }, tx);
+        }
+        return { status, shouldSendSuccessEmail: updated.count === 1 };
       } else if (status === TransactionStatus.FAILED) {
-        await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: TransactionStatus.PROCESSING }, data: { status: TransactionStatus.FAILED, providerReference: result.providerReference, providerTransactionId: result.providerTransactionId, failureReason: result.failureReason ?? 'Provider rejected the payout.' } });
-        await tx.transaction.updateMany({ where: { id: withdrawal.transaction.id, status: TransactionStatus.PROCESSING }, data: { status: TransactionStatus.FAILED } });
-        await this.wallets.releaseHeldFunds({ userId: withdrawal.userId, walletId: withdrawal.walletId, currencyCode: withdrawal.sourceCurrencyCode, amount: withdrawal.sourceAmount, transactionId: withdrawal.transaction.id, reference: withdrawal.reference }, tx);
+        const updated = await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.FAILED, providerReference, providerTransactionId, failureReason: result.failureReason ?? 'Provider rejected the payout.' } });
+        await tx.transaction.updateMany({ where: { id: withdrawal.transaction.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.FAILED, providerReference, providerTransactionId } });
+        if (updated.count === 1) {
+          await this.wallets.releaseHeldFunds({ userId: withdrawal.userId, walletId: withdrawal.walletId, currencyCode: withdrawal.sourceCurrencyCode, amount: withdrawal.sourceAmount, transactionId: withdrawal.transaction.id, reference: withdrawal.reference }, tx);
+        }
+      } else if (status === TransactionStatus.PROCESSING) {
+        await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.PROCESSING, providerReference, providerTransactionId } });
+        await tx.transaction.updateMany({ where: { id: withdrawal.transaction.id, status: { in: [TransactionStatus.PROCESSING, TransactionStatus.UNDER_REVIEW] } }, data: { status: TransactionStatus.PROCESSING, providerReference, providerTransactionId } });
+      } else {
+        await tx.withdrawal.updateMany({ where: { id: withdrawal.id, status: TransactionStatus.UNDER_REVIEW }, data: { providerReference, providerTransactionId } });
       }
-      return status;
+      return { status, shouldSendSuccessEmail: false };
+    });
+    if (outcome.shouldSendSuccessEmail && this.email) {
+      await this.sendWithdrawalSuccessEmail(withdrawal).catch(() => undefined);
+    }
+    return outcome.status;
+  }
+
+  private async sendWithdrawalSuccessEmail(withdrawal: any) {
+    const user = await (this.prisma as any).user.findUnique({ where: { id: withdrawal.userId }, select: { email: true } });
+    if (!user?.email) return;
+
+    let accountLast4 = withdrawal.beneficiary?.accountLast4;
+    if (!accountLast4 && typeof withdrawal.beneficiary?.encryptedDetails === 'string') {
+      const details = this.encryption.decrypt<Record<string, string | undefined>>(withdrawal.beneficiary.encryptedDetails);
+      accountLast4 = details.accountNumber?.slice(-4);
+    }
+    const destination = accountLast4 ? `Bank account ending in ${accountLast4}` : 'Bank account';
+    await this.email!.sendWithdrawalSuccessEmail(user.email, {
+      sourceAmount: withdrawal.sourceAmount.toString(),
+      sourceCurrency: withdrawal.sourceCurrencyCode,
+      destinationAmount: withdrawal.amountReceived.toString(),
+      destinationCurrency: withdrawal.destinationCurrencyCode,
+      destination,
+      reference: withdrawal.reference,
+      completedAt: new Date(),
     });
   }
 
   async execute(userId: string, withdrawalId: string) {
     const withdrawal = await this.getOwnedWithdrawal(userId, withdrawalId);
     this.validateEligibility(withdrawal);
+
+    const existingAttempt = await (this.prisma as any).payoutAttempt.findFirst({ where: { withdrawalId: withdrawal.id }, orderBy: { attemptNumber: 'desc' } });
+    if (existingAttempt?.providerTransactionId || existingAttempt?.providerReference) {
+      if (!existingAttempt.providerTransactionId) {
+        throw new ConflictException('Withdrawal has an existing provider reference and cannot be submitted again.');
+      }
+      const result = await this.provider.getPayoutStatus({ transferId: String(existingAttempt.providerTransactionId) });
+      const status = result.status === 'SUCCESS' ? TransactionStatus.SUCCESSFUL : result.status === 'FAILED' ? TransactionStatus.FAILED : result.status === 'PROCESSING' ? TransactionStatus.PROCESSING : TransactionStatus.UNDER_REVIEW;
+      await this.persistProviderResult(withdrawal, { attempt: existingAttempt }, { ...result, status });
+      return { withdrawalId, status, providerReference: normalizeProviderIdentifier(result.providerReference), providerTransactionId: normalizeProviderIdentifier(result.providerTransactionId) };
+    }
 
     if (!this.provider.supportsPayout(this.capabilityInput(withdrawal))) {
       throw new BadRequestException(
@@ -183,11 +411,8 @@ export class WithdrawalPayoutService {
     const attempt = await (this.prisma as any).payoutAttempt.findFirst({ where: { withdrawalId: withdrawal.id }, orderBy: { attemptNumber: 'desc' } });
     if (!attempt?.providerTransactionId) throw new BadRequestException('PAYOUT_RECONCILIATION_UNAVAILABLE: Provider transfer ID is not available.');
     const result = await this.provider.getPayoutStatus({ transferId: attempt.providerTransactionId });
-    if (result.status === 'SUCCESS') {
-      await this.persistProviderResult(withdrawal, { attempt }, { ...result, status: TransactionStatus.SUCCESSFUL });
-    } else if (result.status === 'FAILED') {
-      await this.persistProviderResult(withdrawal, { attempt }, { ...result, status: TransactionStatus.FAILED });
-    }
+    const status = result.status === 'SUCCESS' ? TransactionStatus.SUCCESSFUL : result.status === 'FAILED' ? TransactionStatus.FAILED : result.status === 'PROCESSING' ? TransactionStatus.PROCESSING : TransactionStatus.UNDER_REVIEW;
+    await this.persistProviderResult(withdrawal, { attempt }, { ...result, status });
     return result;
   }
 

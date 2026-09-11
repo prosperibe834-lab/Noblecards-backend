@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, NotFoundException } from '@nest
 import { ConfigService } from '@nestjs/config';
 import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption.service';
 import { BeneficiaryService } from './beneficiary.service';
-import { PaymentMethod } from '../generated/prisma';
+import { BeneficiaryType, PaymentMethod } from '../generated/prisma';
 
 describe('BeneficiaryEncryptionService', () => {
   it('round-trips encrypted values and produces different cipher text for the same plaintext', async () => {
@@ -132,7 +132,18 @@ describe('BeneficiaryService', () => {
     expect(prisma.beneficiary.create).toHaveBeenCalled();
     expect(provider.resolveAccount).toHaveBeenCalled();
 
-    prisma.beneficiary.findFirst.mockResolvedValue({ id: 'existing' });
+    prisma.beneficiary.findFirst.mockResolvedValue({
+      id: 'existing',
+      userId: 'user-1',
+      countryCode: 'NG',
+      currencyCode: 'NGN',
+      paymentMethod: PaymentMethod.BANK_TRANSFER,
+      type: BeneficiaryType.BANK_ACCOUNT,
+      providerBankCode: '044',
+      accountHolderName: 'Jane Doe',
+      verificationStatus: 'VERIFIED',
+      isActive: true,
+    });
     await expect(service.createBeneficiary('user-1', {
       countryCode: 'NG',
       currencyCode: 'NGN',
@@ -142,7 +153,7 @@ describe('BeneficiaryService', () => {
       institutionName: 'Access Bank',
       accountNumber: '0012345678',
       accountHolderName: 'Jane Doe',
-    } as any)).rejects.toBeInstanceOf(ConflictException);
+    } as any)).resolves.toEqual(expect.objectContaining({ id: 'existing' }));
   });
 
   it('returns provider-backed Nigerian banks', async () => {
@@ -155,18 +166,28 @@ describe('BeneficiaryService', () => {
     expect(provider.getBanks).toHaveBeenCalledWith({ countryCode: 'NG', currencyCode: 'NGN', method: PaymentMethod.BANK_TRANSFER });
   });
 
-  it('rejects unsupported bank routes before provider access', async () => {
+  it('accepts Ghana and United Kingdom internal route validation while keeping provider execution capability-gated', async () => {
     const { service, provider } = makeService({
       validateCountryCurrencyMethod: ({ countryCode, currencyCode, method }: any) => {
-        if (countryCode !== 'NG' || currencyCode !== 'NGN' || method !== PaymentMethod.BANK_TRANSFER) {
-          throw new BadRequestException('Only NG to NGN bank transfer beneficiary operations are currently supported.');
+        const valid = (countryCode === 'NG' && currencyCode === 'NGN' && method === PaymentMethod.BANK_TRANSFER)
+          || (countryCode === 'GH' && currencyCode === 'GHS' && method === PaymentMethod.BANK_TRANSFER)
+          || (countryCode === 'GB' && currencyCode === 'GBP' && method === PaymentMethod.BANK_TRANSFER);
+        if (!valid) {
+          throw new BadRequestException('Only NG→NGN, GH→GHS, and GB→GBP bank transfer beneficiary operations are currently supported internally.');
         }
         return { countryCode, currencyCode, method };
       },
     });
 
-    await expect(service.getBanksForUser('user-1', 'GH', 'GHS')).rejects.toThrow(/only ng to ngn/i);
-    expect(provider.getBanks).not.toHaveBeenCalled();
+    provider.getBanks.mockResolvedValue([{ id: 'bank-1', code: '044', name: 'Access Bank', country: 'NG', currency: 'NGN', provider: 'FLUTTERWAVE' }]);
+
+    await expect(service.getBanksForUser('user-1', 'GH', 'GHS')).resolves.toEqual([
+      expect.objectContaining({ code: '044', name: 'Access Bank' }),
+    ]);
+    await expect(service.getBanksForUser('user-1', 'GB', 'GBP')).resolves.toEqual([
+      expect.objectContaining({ code: '044', name: 'Access Bank' }),
+    ]);
+    expect(provider.getBanks).toHaveBeenCalledTimes(2);
   });
 
   it('does not persist a beneficiary when account verification fails', async () => {

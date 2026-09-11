@@ -42,7 +42,14 @@ export class FlutterwavePayoutClient {
       body: JSON.stringify(body),
     });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new BadRequestException('PAYOUT_PROVIDER_REQUEST_FAILED: Flutterwave rejected the payout request.');
+    if (!response.ok) {
+      const providerMessage = typeof payload?.message === 'string'
+        ? payload.message
+        : typeof payload?.data?.message === 'string'
+          ? payload.data.message
+          : 'Flutterwave rejected the payout request.';
+      throw new BadRequestException(`PAYOUT_PROVIDER_REQUEST_FAILED: ${providerMessage}`);
+    }
     return payload as T;
   }
 
@@ -52,7 +59,12 @@ export class FlutterwavePayoutClient {
       headers: { ...this.getAuthorizationHeader(), Accept: 'application/json', ...headers },
     });
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new BadRequestException('PAYOUT_PROVIDER_REQUEST_FAILED: Flutterwave status lookup failed.');
+    if (!response.ok) {
+      const providerMessage = typeof payload?.message === 'string'
+        ? payload.message
+        : 'Flutterwave status lookup failed.';
+      throw new BadRequestException(`PAYOUT_PROVIDER_REQUEST_FAILED: ${providerMessage}`);
+    }
     return payload as T;
   }
 }

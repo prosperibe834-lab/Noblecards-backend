@@ -3,6 +3,8 @@ import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
+import { EmailService } from '../email/email.service';
+import { Optional } from '@nestjs/common';
 import { WalletsService } from '../wallets/wallets.service';
 import { BeneficiaryVerificationStatus, PaymentMethod, TransactionStatus, TransactionType, WithdrawalQuoteStatus } from '../generated/prisma';
 
@@ -40,6 +42,7 @@ export class WithdrawalService {
     private readonly prisma: PrismaService,
     private readonly wallets: WalletsService,
     private readonly users: UsersService,
+    @Optional() private readonly email?: EmailService,
   ) {}
 
   private ensureIdempotencyKey(value: string) {
@@ -51,7 +54,7 @@ export class WithdrawalService {
   }
 
   private generateReference() {
-    return `WD-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    return `WD-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}_PMCKDU_1`;
   }
 
   private async getQuoteForUser(userId: string, quoteId: string) {
@@ -269,6 +272,18 @@ export class WithdrawalService {
 
     if ((result as any)?.alreadyProcessed) {
       throw new ConflictException('A withdrawal with this idempotency key already exists.');
+    }
+
+    if (this.email && (this.prisma as any).user?.findUnique) {
+      const user = await (this.prisma as any).user.findUnique({ where: { id: userId }, select: { email: true } });
+      if (user?.email) {
+        await this.email.sendWithdrawalCreatedEmail(
+          user.email,
+          result.withdrawal.reference,
+          result.withdrawal.amountReceived.toString(),
+          result.withdrawal.destinationCurrencyCode,
+        ).catch(() => undefined);
+      }
     }
 
     return {

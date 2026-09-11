@@ -104,6 +104,7 @@ export class BeneficiaryService {
     method: PaymentMethod;
     institutionCode?: string;
     institutionName?: string;
+    accountHolderName?: string;
     accountNumber?: string;
     routingNumber?: string;
     sortCode?: string;
@@ -119,6 +120,7 @@ export class BeneficiaryService {
       method: validated.method,
       institutionCode: dto.institutionCode,
       institutionName: dto.institutionName,
+      accountHolderName: dto.accountHolderName,
       accountNumber: dto.accountNumber,
       routingNumber: dto.routingNumber,
       sortCode: dto.sortCode,
@@ -142,10 +144,14 @@ export class BeneficiaryService {
     if (this.capabilityValidator) return this.capabilityValidator.validateCountryCurrencyMethod(input);
     const countryCode = input.countryCode.toUpperCase();
     const currencyCode = input.currencyCode.toUpperCase();
-    if (countryCode !== 'NG' || currencyCode !== 'NGN' || input.method !== PaymentMethod.BANK_TRANSFER) {
-      throw new BadRequestException('Only NG to NGN bank transfer beneficiary operations are currently supported.');
+    const method = input.method;
+    const isNigeriaRoute = countryCode === 'NG' && currencyCode === 'NGN' && method === PaymentMethod.BANK_TRANSFER;
+    const isGhanaRoute = countryCode === 'GH' && currencyCode === 'GHS' && method === PaymentMethod.BANK_TRANSFER;
+    const isUnitedKingdomRoute = countryCode === 'GB' && currencyCode === 'GBP' && method === PaymentMethod.BANK_TRANSFER;
+    if (!isNigeriaRoute && !isGhanaRoute && !isUnitedKingdomRoute) {
+      throw new BadRequestException('Only NG→NGN, GH→GHS, and GB→GBP bank transfer beneficiary operations are currently supported internally.');
     }
-    return { countryCode, currencyCode, method: input.method };
+    return { countryCode, currencyCode, method };
   }
 
   async createBeneficiary(userId: string, dto: CreateBeneficiaryInput): Promise<any> {
@@ -212,6 +218,17 @@ export class BeneficiaryService {
     });
 
     if (existing) {
+      if (
+        existing.isActive
+        && existing.verificationStatus === BeneficiaryVerificationStatus.VERIFIED
+        && existing.countryCode === normalizedCountryCode
+        && existing.currencyCode === normalizedCurrencyCode
+        && existing.paymentMethod === normalizedMethod
+        && existing.type === (dto.type === 'BANK_ACCOUNT' ? BeneficiaryType.BANK_ACCOUNT : BeneficiaryType.MOBILE_MONEY)
+        && existing.providerBankCode === dto.institutionCode
+      ) {
+        return this.getSafePayload(existing);
+      }
       throw new ConflictException('This beneficiary already exists for this user.');
     }
 

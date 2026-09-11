@@ -48,6 +48,12 @@ export class ResolveBeneficiaryAccountDto {
   @MinLength(3)
   @MaxLength(64)
   mobileMoneyNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(2)
+  @MaxLength(128)
+  accountHolderName?: string;
 }
 
 export class CreateBeneficiaryDto {

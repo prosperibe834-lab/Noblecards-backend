@@ -59,25 +59,39 @@ export class BeneficiaryEncryptionService {
       throw new Error('Beneficiary payload is not in a supported encrypted format.');
     }
 
-    const [version, ivBase64, tagBase64, ciphertextBase64] = payload.split(':');
+    const parts = payload.split(':');
+    if (parts.length !== 4) {
+      throw new Error('Beneficiary payload is malformed.');
+    }
+
+    const [version, ivBase64, tagBase64, ciphertextBase64] = parts;
     if (!version || !ivBase64 || !tagBase64 || !ciphertextBase64) {
       throw new Error('Beneficiary payload is malformed.');
     }
 
-    const key = this.getAesKey('NOBLECARDS_BENEFICIARY_ENCRYPTION_KEY');
-    const iv = Buffer.from(ivBase64, 'base64');
-    const tag = Buffer.from(tagBase64, 'base64');
-    const ciphertext = Buffer.from(ciphertextBase64, 'base64');
-    const decipher = createDecipheriv('aes-256-gcm', key, iv);
-    decipher.setAuthTag(tag);
-
-    const plainText = Buffer.concat([
-      decipher.update(ciphertext),
-      decipher.final(),
-    ]).toString('utf8');
-
     try {
-      return JSON.parse(plainText) as T;
+      const key = this.getAesKey('NOBLECARDS_BENEFICIARY_ENCRYPTION_KEY');
+      const iv = Buffer.from(ivBase64, 'base64');
+      const tag = Buffer.from(tagBase64, 'base64');
+      const ciphertext = Buffer.from(ciphertextBase64, 'base64');
+
+      if (iv.length !== 12 || tag.length !== 16) {
+        throw new Error('Beneficiary payload is malformed.');
+      }
+
+      const decipher = createDecipheriv('aes-256-gcm', key, iv);
+      decipher.setAuthTag(tag);
+
+      const plainText = Buffer.concat([
+        decipher.update(ciphertext),
+        decipher.final(),
+      ]).toString('utf8');
+
+      try {
+        return JSON.parse(plainText) as T;
+      } catch {
+        throw new Error('Beneficiary payload could not be decrypted and parsed.');
+      }
     } catch {
       throw new Error('Beneficiary payload could not be decrypted and parsed.');
     }

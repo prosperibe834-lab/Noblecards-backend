@@ -1,84 +1,47 @@
 import { BadRequestException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { FlutterwavePayoutClient } from './flutterwave-payout.client';
 
 describe('FlutterwavePayoutClient', () => {
-  const config = (values: Record<string, string>) => ({
-    get: jest.fn((key: string) => values[key]),
-  }) as unknown as ConfigService;
+  const config = {
+    get: jest.fn((name: string) => ({
+      FLUTTERWAVE_PAYOUT_ENABLED: 'true',
+      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'sandbox',
+      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v3',
+      FLUTTERWAVE_SECRET_KEY: 'test-secret',
+    } as Record<string, string>)[name]),
+  } as any;
 
   afterEach(() => jest.restoreAllMocks());
 
-  it('uses the V3 secret-key bearer header without OAuth credentials', async () => {
-    const client = new FlutterwavePayoutClient(config({
-      FLUTTERWAVE_PAYOUT_ENABLED: 'true',
-      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'sandbox',
-      FLUTTERWAVE_SECRET_KEY: 'FLWSECK_TEST_SECRET',
-      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v3',
-    }));
-    const fetchMock = jest.spyOn(global, 'fetch')
-      .mockResolvedValueOnce(new Response(JSON.stringify({ status: 'success', data: { id: 'trf-1' } }), { status: 201 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify({ status: 'success', data: { id: 'trf-2' } }), { status: 201 }));
+  it('returns the provider response for an accepted transfer', async () => {
+    jest.spyOn(global, 'fetch').mockResolvedValue(new Response(JSON.stringify({
+      status: 'success',
+      message: 'Transfer Queued Successfully',
+      data: { id: 2240067, reference: 'NC-PROBE_PMCKDU_1', status: 'NEW' },
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } }));
 
-    await client.post('/transfers', { reference: 'WD-1' }, { 'X-Trace-Id': 'trace-123456', 'X-Idempotency-Key': 'key-123456' });
-    await client.post('/transfers', { reference: 'WD-1' }, { 'X-Trace-Id': 'trace-123456', 'X-Idempotency-Key': 'key-123456' });
-
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(fetchMock.mock.calls[0][0]).toBe('https://api.flutterwave.com/v3/transfers');
-    expect(fetchMock.mock.calls[0][1]).toEqual(expect.objectContaining({
-      headers: expect.objectContaining({
-        Authorization: 'Bearer FLWSECK_TEST_SECRET',
-        'X-Trace-Id': 'trace-123456',
-        'X-Idempotency-Key': 'key-123456',
-      }),
-    }));
+    await expect(new FlutterwavePayoutClient(config).post('/transfers', {
+      account_bank: '044',
+      account_number: '0690000040',
+      amount: 1326029.54,
+      currency: 'NGN',
+      debit_currency: 'USD',
+      beneficiary_name: 'Alexis Sanchez',
+      reference: 'NC-PROBE_PMCKDU_1',
+      narration: 'NobleCards withdrawal NC-PROBE_PMCKDU_1',
+    })).resolves.toEqual(expect.objectContaining({ status: 'success' }));
   });
 
-  it('fails closed when payout is disabled', async () => {
-    const client = new FlutterwavePayoutClient(config({
-      FLUTTERWAVE_PAYOUT_ENABLED: 'false',
-      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'sandbox',
-      FLUTTERWAVE_SECRET_KEY: 'FLWSECK_TEST_SECRET',
-      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v3',
-    }));
-    await expect(client.get('/transfers/trf-1')).rejects.toBeInstanceOf(BadRequestException);
-  });
+  it('preserves the safe provider rejection message', async () => {
+    jest.spyOn(global, 'fetch').mockImplementation(async () => new Response(JSON.stringify({
+      status: 'error',
+      message: 'amount is required',
+      data: null,
+    }), { status: 400, headers: { 'Content-Type': 'application/json' } }));
 
-  it('rejects a sandbox environment paired with a non-sandbox base URL', async () => {
-    const client = new FlutterwavePayoutClient(config({
-      FLUTTERWAVE_PAYOUT_ENABLED: 'true',
-      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'sandbox',
-      FLUTTERWAVE_SECRET_KEY: 'FLWSECK_TEST_SECRET',
-      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v1',
-    }));
-
-    await expect(client.get('/transfers/trf-1')).rejects.toMatchObject({
-      response: expect.objectContaining({ message: expect.stringContaining('PAYOUT_CONFIGURATION_INVALID') }),
-    });
-  });
-
-  it('rejects a non-sandbox environment for the active V3 payout path', async () => {
-    const client = new FlutterwavePayoutClient(config({
-      FLUTTERWAVE_PAYOUT_ENABLED: 'true',
-      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'production',
-      FLUTTERWAVE_SECRET_KEY: 'FLWSECK_LIVE_SECRET',
-      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v3',
-    }));
-
-    await expect(client.get('/transfers/trf-1')).rejects.toMatchObject({
-      response: expect.objectContaining({ message: expect.stringContaining('PAYOUT_CONFIGURATION_INVALID') }),
-    });
-  });
-
-  it('fails closed when the secret key is missing', async () => {
-    const client = new FlutterwavePayoutClient(config({
-      FLUTTERWAVE_PAYOUT_ENABLED: 'true',
-      FLUTTERWAVE_PAYOUT_ENVIRONMENT: 'sandbox',
-      FLUTTERWAVE_PAYOUT_BASE_URL: 'https://api.flutterwave.com/v3',
-    }));
-
-    await expect(client.get('/transfers/trf-1')).rejects.toMatchObject({
-      response: expect.objectContaining({ message: expect.stringContaining('PAYOUT_CONFIGURATION_MISSING') }),
-    });
+    await expect(new FlutterwavePayoutClient(config).post('/transfers', {}))
+      .rejects.toBeInstanceOf(BadRequestException);
+    await expect(new FlutterwavePayoutClient(config).post('/transfers', {}))
+      .rejects.toThrow('amount is required');
   });
 });

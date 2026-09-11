@@ -5,6 +5,7 @@ import { ExchangeRatesModule } from '../exchange-rates/exchange-rates.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { WalletsModule } from '../wallets/wallets.module';
 import { UsersModule } from '../users/users.module';
+import { EmailModule } from '../email/email.module';
 import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption.service';
 import { WithdrawalsController } from './withdrawals.controller';
 import { WithdrawalQuoteService } from './withdrawal-quote.service';
@@ -18,7 +19,7 @@ import { BeneficiaryService } from './beneficiary.service';
 import { WITHDRAWAL_PROVIDER } from './beneficiary-provider.interface';
 
 @Module({
-  imports: [AuthModule, CurrenciesModule, ExchangeRatesModule, PrismaModule, WalletsModule, UsersModule],
+  imports: [AuthModule, CurrenciesModule, ExchangeRatesModule, PrismaModule, WalletsModule, UsersModule, EmailModule],
   controllers: [WithdrawalsController, WithdrawalPayoutController],
   providers: [
     WithdrawalQuoteService,
