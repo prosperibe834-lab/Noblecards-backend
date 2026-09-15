@@ -48,6 +48,7 @@ type V3TransferRequest = {
   amount?: number;
   currency?: string;
   debit_currency?: string;
+  destination_branch_code?: string;
   callback_url?: string;
   meta?: Record<string, unknown>;
 };
@@ -207,6 +208,24 @@ export class WithdrawalPayoutService {
     const amountValue = this.normalizeAmount(withdrawal.amountReceived);
     const paymentInstruction = this.buildOfficialV3PaymentInstruction(withdrawal, details, beneficiaryName, accountNumber);
 
+    if (countryCode === 'GH') {
+      const payload: V3TransferRequest = {
+        action: 'instant',
+        reference: withdrawal.reference,
+        narration: `NobleCards withdrawal ${withdrawal.reference}`.slice(0, 180),
+        account_bank: accountBank,
+        account_number: accountNumber,
+        beneficiary_name: beneficiaryName,
+        amount: amountValue,
+        currency: 'GHS',
+        debit_currency: String(withdrawal.sourceCurrencyCode ?? 'USD').toUpperCase(),
+      };
+      if (details.branchCode) payload.destination_branch_code = details.branchCode;
+      const callbackUrl = this.config?.get<string>('FLUTTERWAVE_PAYOUT_CALLBACK_URL');
+      if (callbackUrl && callbackUrl.trim()) payload.callback_url = callbackUrl.trim();
+      return payload;
+    }
+
     if (countryCode !== 'NG') {
       const payload: V3TransferRequest = {
         action: 'instant',
@@ -214,18 +233,6 @@ export class WithdrawalPayoutService {
         narration: `NobleCards withdrawal ${withdrawal.reference}`.slice(0, 180),
         payment_instruction: paymentInstruction,
       };
-
-      if (countryCode === 'GH') {
-        payload.payment_instruction = {
-          ...paymentInstruction,
-          destination_currency: 'GHS',
-          recipient: {
-            type: 'bank',
-            name: beneficiaryName,
-            bank: { account_number: accountNumber, code: accountBank, branch: details.branchCode ?? '' },
-          },
-        };
-      }
 
       if (countryCode === 'GB') {
         payload.payment_instruction = {

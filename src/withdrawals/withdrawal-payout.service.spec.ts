@@ -73,26 +73,23 @@ describe('WithdrawalPayoutService', () => {
     expect(request).not.toHaveProperty('payment_instruction');
   });
 
-  it('builds an official V3 GHS payment_instruction envelope', () => {
+  it('builds the flat V3 GHS transfer contract', () => {
     const { service } = makeService(makeWithdrawal({ destinationCurrencyCode: 'GHS', countryCode: 'GH' }));
     const request = (service as any).buildTransferRequest(makeWithdrawal({ destinationCurrencyCode: 'GHS', countryCode: 'GH' }));
 
-    expect(request.payment_instruction).toEqual(expect.objectContaining({
-      source_currency: 'USD',
-      destination_currency: 'GHS',
-      amount: expect.objectContaining({ value: 147, applies_to: 'destination_currency' }),
-      recipient: expect.objectContaining({
-        type: 'bank',
-        name: 'Jane Doe',
-        bank: expect.objectContaining({ account_number: '1234567890', code: '044', branch: 'IB-01' }),
-      }),
-      sender: expect.objectContaining({
-        name: expect.objectContaining({
-          first: 'NobleCards',
-          last: 'Payout',
-        }),
-      }),
+    expect(request).toEqual(expect.objectContaining({
+      action: 'instant',
+      reference: 'WD-123',
+      narration: 'NobleCards withdrawal WD-123',
+      account_bank: '044',
+      account_number: '1234567890',
+      beneficiary_name: 'Jane Doe',
+      amount: 147,
+      currency: 'GHS',
+      debit_currency: 'USD',
+      destination_branch_code: 'IB-01',
     }));
+    expect(request).not.toHaveProperty('payment_instruction');
   });
 
   it('builds an official V3 GBP payment_instruction envelope', () => {

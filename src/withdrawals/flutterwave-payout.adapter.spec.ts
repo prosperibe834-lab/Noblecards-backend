@@ -34,4 +34,22 @@ describe('FlutterwavePayoutAdapter provider identifier normalization', () => {
       providerReference: 'ref_ABC-42',
     }));
   });
+
+  it('loads country-specific bank lists without substituting Nigerian banks for Ghana', async () => {
+    const client = {
+      get: jest.fn()
+        .mockResolvedValueOnce({ data: [{ id: 44, code: '044', name: 'Access Bank', country: 'NG', currency: 'NGN', has_branches: false }] })
+        .mockResolvedValueOnce({ data: [{ id: 501, code: 'GH001', name: 'Ghana Bank', country: 'GH', currency: 'GHS', has_branches: true }] }),
+    } as any;
+    const adapter = new FlutterwavePayoutAdapter(config, client);
+
+    await expect(adapter.getBanks({ countryCode: 'NG', currencyCode: 'NGN', method: 'BANK_TRANSFER' as any })).resolves.toEqual([
+      expect.objectContaining({ code: '044', name: 'Access Bank', country: 'NG', currency: 'NGN' }),
+    ]);
+    await expect(adapter.getBanks({ countryCode: 'GH', currencyCode: 'GHS', method: 'BANK_TRANSFER' as any })).resolves.toEqual([
+      expect.objectContaining({ code: 'GH001', name: 'Ghana Bank', country: 'GH', currency: 'GHS', hasBranches: true }),
+    ]);
+    expect(client.get).toHaveBeenNthCalledWith(1, '/banks/NG');
+    expect(client.get).toHaveBeenNthCalledWith(2, '/banks/GH');
+  });
 });

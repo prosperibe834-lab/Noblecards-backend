@@ -179,15 +179,12 @@ describe('BeneficiaryService', () => {
       },
     });
 
-    provider.getBanks.mockResolvedValue([{ id: 'bank-1', code: '044', name: 'Access Bank', country: 'NG', currency: 'NGN', provider: 'FLUTTERWAVE' }]);
+    provider.getBanks.mockResolvedValue([{ id: 'bank-gh-1', code: 'GH001', name: 'Ghana Bank', country: 'GH', currency: 'GHS', provider: 'FLUTTERWAVE' }]);
 
     await expect(service.getBanksForUser('user-1', 'GH', 'GHS')).resolves.toEqual([
-      expect.objectContaining({ code: '044', name: 'Access Bank' }),
+      expect.objectContaining({ code: 'GH001', name: 'Ghana Bank', country: 'GH', currency: 'GHS' }),
     ]);
-    await expect(service.getBanksForUser('user-1', 'GB', 'GBP')).resolves.toEqual([
-      expect.objectContaining({ code: '044', name: 'Access Bank' }),
-    ]);
-    expect(provider.getBanks).toHaveBeenCalledTimes(2);
+    expect(provider.getBanks).toHaveBeenCalledWith({ countryCode: 'GH', currencyCode: 'GHS', method: PaymentMethod.BANK_TRANSFER });
   });
 
   it('does not persist a beneficiary when account verification fails', async () => {
