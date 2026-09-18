@@ -42,6 +42,7 @@ model User {
   withdrawals         Withdrawal[]
   withdrawalQuotes    WithdrawalQuote[]
   beneficiaries       Beneficiary[]
+  giftCardSales       GiftCardSale[]
 }
 
 model PendingRegistration {
@@ -202,6 +203,7 @@ model Transaction {
   currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
   deposit               Deposit?
   withdrawal            Withdrawal?
+  giftCardSale          GiftCardSale?
   ledgerEntries         LedgerEntry[]
 
   @@index([userId, status, createdAt])
@@ -392,6 +394,65 @@ model ProviderWebhookEvent {
   @@index([status, receivedAt])
 }
 
+model GiftCardSale {
+  id                       String             @id @default(uuid())
+  userId                   String
+  transactionId            String?            @unique
+  provider                 PaymentProvider    @default(SOGO)
+  providerTradeId          String?
+  providerStatus           String?
+  status                   GiftCardSaleStatus @default(SUBMITTED)
+  idempotencyKey           String             @unique
+  slug                     String
+  brandNameSnapshot        String?
+  cardCountry              String
+  cardType                 String
+  receiptType              String?
+  cardCurrency             String
+  cardAmount               Decimal            @db.Decimal(18, 2)
+  providerRate             Decimal?           @db.Decimal(18, 8)
+  adjustmentPercent        Decimal?           @db.Decimal(9, 4)
+  quotedPayoutAmount       Decimal?           @db.Decimal(18, 2)
+  quotedPayoutCurrency     String?
+  quotedRate               Decimal?           @db.Decimal(18, 8)
+  providerFee              Decimal?           @db.Decimal(18, 2)
+  nobleCardsFee            Decimal?           @db.Decimal(18, 2)
+  finalPayoutAmount        Decimal?           @db.Decimal(18, 2)
+  payoutCurrency           String?
+  additionalInfo           String?
+  providerResponse         Json?
+  walletCreditedAt         DateTime?
+  walletCreditOperationKey String?            @unique
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  user                     User               @relation(fields: [userId], references: [id], onDelete: Restrict)
+  transaction              Transaction?       @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerTradeId])
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([provider, providerStatus])
+}
+
+model GiftCardSellRateAdjustment {
+  id                 String   @id @default(uuid())
+  slug               String
+  cardCountry        String
+  cardCurrency       String
+  payoutCurrency     String
+  cardType           String
+  receiptType        String?
+  minimumDenomination Decimal? @db.Decimal(18, 2)
+  maximumDenomination Decimal? @db.Decimal(18, 2)
+  adjustmentPercent  Decimal  @db.Decimal(9, 4)
+  combinationKey     String   @unique
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([slug, cardCountry, cardCurrency, payoutCurrency, cardType, isActive])
+}
+
 enum DepositStatus {
   PENDING
   PROCESSING
@@ -430,8 +491,19 @@ enum TransactionType {
 
 enum PaymentProvider {
   FLUTTERWAVE
+  SOGO
   MANUAL
   INTERNAL
+}
+
+enum GiftCardSaleStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  FAILED
+  PAID
+  CANCELLED
 }
 
 enum PaymentMethod {

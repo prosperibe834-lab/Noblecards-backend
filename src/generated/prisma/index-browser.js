@@ -383,6 +383,56 @@ exports.Prisma.ProviderWebhookEventScalarFieldEnum = {
   metadata: 'metadata'
 };
 
+exports.Prisma.GiftCardSaleScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  transactionId: 'transactionId',
+  provider: 'provider',
+  providerTradeId: 'providerTradeId',
+  providerStatus: 'providerStatus',
+  status: 'status',
+  idempotencyKey: 'idempotencyKey',
+  slug: 'slug',
+  brandNameSnapshot: 'brandNameSnapshot',
+  cardCountry: 'cardCountry',
+  cardType: 'cardType',
+  receiptType: 'receiptType',
+  cardCurrency: 'cardCurrency',
+  cardAmount: 'cardAmount',
+  providerRate: 'providerRate',
+  adjustmentPercent: 'adjustmentPercent',
+  quotedPayoutAmount: 'quotedPayoutAmount',
+  quotedPayoutCurrency: 'quotedPayoutCurrency',
+  quotedRate: 'quotedRate',
+  providerFee: 'providerFee',
+  nobleCardsFee: 'nobleCardsFee',
+  finalPayoutAmount: 'finalPayoutAmount',
+  payoutCurrency: 'payoutCurrency',
+  additionalInfo: 'additionalInfo',
+  providerResponse: 'providerResponse',
+  walletCreditedAt: 'walletCreditedAt',
+  walletCreditOperationKey: 'walletCreditOperationKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GiftCardSellRateAdjustmentScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  cardCountry: 'cardCountry',
+  cardCurrency: 'cardCurrency',
+  payoutCurrency: 'payoutCurrency',
+  cardType: 'cardType',
+  receiptType: 'receiptType',
+  minimumDenomination: 'minimumDenomination',
+  maximumDenomination: 'maximumDenomination',
+  adjustmentPercent: 'adjustmentPercent',
+  combinationKey: 'combinationKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -415,6 +465,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.PaymentProvider = exports.$Enums.PaymentProvider = {
   FLUTTERWAVE: 'FLUTTERWAVE',
+  SOGO: 'SOGO',
   MANUAL: 'MANUAL',
   INTERNAL: 'INTERNAL'
 };
@@ -504,6 +555,16 @@ exports.ProviderWebhookEventStatus = exports.$Enums.ProviderWebhookEventStatus =
   IGNORED: 'IGNORED'
 };
 
+exports.GiftCardSaleStatus = exports.$Enums.GiftCardSaleStatus = {
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  FAILED: 'FAILED',
+  PAID: 'PAID',
+  CANCELLED: 'CANCELLED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   PendingRegistration: 'PendingRegistration',
@@ -519,7 +580,9 @@ exports.Prisma.ModelName = {
   WithdrawalQuote: 'WithdrawalQuote',
   Beneficiary: 'Beneficiary',
   PayoutAttempt: 'PayoutAttempt',
-  ProviderWebhookEvent: 'ProviderWebhookEvent'
+  ProviderWebhookEvent: 'ProviderWebhookEvent',
+  GiftCardSale: 'GiftCardSale',
+  GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment'
 };
 
 /**
