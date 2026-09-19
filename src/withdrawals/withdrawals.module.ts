@@ -14,17 +14,22 @@ import { FlutterwavePayoutAdapter } from './flutterwave-payout.adapter';
 import { FlutterwavePayoutClient } from './flutterwave-payout.client';
 import { WithdrawalPayoutController } from './withdrawal-payout.controller';
 import { WithdrawalPayoutService } from './withdrawal-payout.service';
+import { AdminWithdrawalsController } from './admin-withdrawals.controller';
+import { AdminWithdrawalsGuard } from './admin-withdrawals.guard';
+import { AdminWithdrawalsService } from './admin-withdrawals.service';
 import { PAYOUT_PROVIDER_ADAPTER } from './payout-provider.interface';
 import { BeneficiaryService } from './beneficiary.service';
 import { WITHDRAWAL_PROVIDER } from './beneficiary-provider.interface';
 
 @Module({
   imports: [AuthModule, CurrenciesModule, ExchangeRatesModule, PrismaModule, WalletsModule, UsersModule, EmailModule],
-  controllers: [WithdrawalsController, WithdrawalPayoutController],
+  controllers: [WithdrawalsController, WithdrawalPayoutController, AdminWithdrawalsController],
   providers: [
     WithdrawalQuoteService,
     WithdrawalService,
     WithdrawalPayoutService,
+    AdminWithdrawalsService,
+    AdminWithdrawalsGuard,
     BeneficiaryService,
     FlutterwavePayoutAdapter,
     FlutterwavePayoutClient,
