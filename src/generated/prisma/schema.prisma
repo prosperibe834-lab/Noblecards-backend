@@ -43,6 +43,9 @@ model User {
   withdrawalQuotes             WithdrawalQuote[]
   beneficiaries                Beneficiary[]
   giftCardSales                GiftCardSale[]
+  supportTickets               SupportTicket[]          @relation("UserSupportTickets")
+  assignedSupportTickets       SupportTicket[]          @relation("AssignedSupportTickets")
+  supportMessages              SupportMessage[]
 }
 
 model PendingRegistration {
@@ -453,6 +456,44 @@ model GiftCardSellRateAdjustment {
   @@index([slug, cardCountry, cardCurrency, payoutCurrency, cardType, isActive])
 }
 
+model SupportTicket {
+  id            String                @id @default(uuid())
+  userId        String
+  user          User                  @relation("UserSupportTickets", fields: [userId], references: [id], onDelete: Cascade)
+  assignedToId  String?
+  assignedTo    User?                 @relation("AssignedSupportTickets", fields: [assignedToId], references: [id], onDelete: SetNull)
+  subject       String
+  category      SupportTicketCategory @default(GENERAL)
+  status        SupportTicketStatus   @default(OPEN)
+  priority      SupportTicketPriority @default(MEDIUM)
+  source        SupportTicketSource   @default(APP)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  resolvedAt    DateTime?
+  lastMessageAt DateTime?
+  messages      SupportMessage[]
+
+  @@index([userId, createdAt])
+  @@index([status, priority, createdAt])
+  @@index([assignedToId, status])
+}
+
+model SupportMessage {
+  id         String                   @id @default(uuid())
+  ticketId   String
+  ticket     SupportTicket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  senderType SupportMessageSenderType @default(USER)
+  body       String
+  isInternal Boolean                  @default(false)
+  createdAt  DateTime                 @default(now())
+  updatedAt  DateTime                 @updatedAt
+
+  @@index([ticketId, createdAt])
+  @@index([userId, createdAt])
+}
+
 enum DepositStatus {
   PENDING
   PROCESSING
@@ -556,6 +597,42 @@ enum ProviderWebhookEventStatus {
 }
 
 enum UserRole {
+  USER
+  ADMIN
+}
+
+enum SupportTicketCategory {
+  ACCOUNT
+  PAYMENT
+  WITHDRAWAL
+  GIFT_CARD
+  TECHNICAL
+  GENERAL
+}
+
+enum SupportTicketStatus {
+  OPEN
+  IN_PROGRESS
+  PENDING
+  RESOLVED
+  CLOSED
+}
+
+enum SupportTicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum SupportTicketSource {
+  APP
+  WEB
+  EMAIL
+  PHONE
+}
+
+enum SupportMessageSenderType {
   USER
   ADMIN
 }

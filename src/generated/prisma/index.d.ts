@@ -98,6 +98,16 @@ export type GiftCardSale = $Result.DefaultSelection<Prisma.$GiftCardSalePayload>
  * 
  */
 export type GiftCardSellRateAdjustment = $Result.DefaultSelection<Prisma.$GiftCardSellRateAdjustmentPayload>
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = $Result.DefaultSelection<Prisma.$SupportTicketPayload>
+/**
+ * Model SupportMessage
+ * 
+ */
+export type SupportMessage = $Result.DefaultSelection<Prisma.$SupportMessagePayload>
 
 /**
  * Enums
@@ -245,6 +255,57 @@ export const UserRole: {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const SupportTicketCategory: {
+  ACCOUNT: 'ACCOUNT',
+  PAYMENT: 'PAYMENT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  GIFT_CARD: 'GIFT_CARD',
+  TECHNICAL: 'TECHNICAL',
+  GENERAL: 'GENERAL'
+};
+
+export type SupportTicketCategory = (typeof SupportTicketCategory)[keyof typeof SupportTicketCategory]
+
+
+export const SupportTicketStatus: {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  PENDING: 'PENDING',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+export type SupportTicketStatus = (typeof SupportTicketStatus)[keyof typeof SupportTicketStatus]
+
+
+export const SupportTicketPriority: {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
+export type SupportTicketPriority = (typeof SupportTicketPriority)[keyof typeof SupportTicketPriority]
+
+
+export const SupportTicketSource: {
+  APP: 'APP',
+  WEB: 'WEB',
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE'
+};
+
+export type SupportTicketSource = (typeof SupportTicketSource)[keyof typeof SupportTicketSource]
+
+
+export const SupportMessageSenderType: {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
+export type SupportMessageSenderType = (typeof SupportMessageSenderType)[keyof typeof SupportMessageSenderType]
+
 }
 
 export type DepositStatus = $Enums.DepositStatus
@@ -294,6 +355,26 @@ export const ProviderWebhookEventStatus: typeof $Enums.ProviderWebhookEventStatu
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type SupportTicketCategory = $Enums.SupportTicketCategory
+
+export const SupportTicketCategory: typeof $Enums.SupportTicketCategory
+
+export type SupportTicketStatus = $Enums.SupportTicketStatus
+
+export const SupportTicketStatus: typeof $Enums.SupportTicketStatus
+
+export type SupportTicketPriority = $Enums.SupportTicketPriority
+
+export const SupportTicketPriority: typeof $Enums.SupportTicketPriority
+
+export type SupportTicketSource = $Enums.SupportTicketSource
+
+export const SupportTicketSource: typeof $Enums.SupportTicketSource
+
+export type SupportMessageSenderType = $Enums.SupportMessageSenderType
+
+export const SupportMessageSenderType: typeof $Enums.SupportMessageSenderType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -585,6 +666,26 @@ export class PrismaClient<
     * ```
     */
   get giftCardSellRateAdjustment(): Prisma.GiftCardSellRateAdjustmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.supportTicket`: Exposes CRUD operations for the **SupportTicket** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportTickets
+    * const supportTickets = await prisma.supportTicket.findMany()
+    * ```
+    */
+  get supportTicket(): Prisma.SupportTicketDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.supportMessage`: Exposes CRUD operations for the **SupportMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportMessages
+    * const supportMessages = await prisma.supportMessage.findMany()
+    * ```
+    */
+  get supportMessage(): Prisma.SupportMessageDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1048,7 +1149,9 @@ export namespace Prisma {
     PayoutAttempt: 'PayoutAttempt',
     ProviderWebhookEvent: 'ProviderWebhookEvent',
     GiftCardSale: 'GiftCardSale',
-    GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment'
+    GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+    SupportTicket: 'SupportTicket',
+    SupportMessage: 'SupportMessage'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1064,7 +1167,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "supportTicket" | "supportMessage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2326,6 +2429,154 @@ export namespace Prisma {
           }
         }
       }
+      SupportTicket: {
+        payload: Prisma.$SupportTicketPayload<ExtArgs>
+        fields: Prisma.SupportTicketFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportTicketFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportTicketFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findFirst: {
+            args: Prisma.SupportTicketFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportTicketFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findMany: {
+            args: Prisma.SupportTicketFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          create: {
+            args: Prisma.SupportTicketCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          createMany: {
+            args: Prisma.SupportTicketCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportTicketCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          delete: {
+            args: Prisma.SupportTicketDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          update: {
+            args: Prisma.SupportTicketUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportTicketDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportTicketUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SupportTicketUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          upsert: {
+            args: Prisma.SupportTicketUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          aggregate: {
+            args: Prisma.SupportTicketAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportTicket>
+          }
+          groupBy: {
+            args: Prisma.SupportTicketGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportTicketCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupportMessage: {
+        payload: Prisma.$SupportMessagePayload<ExtArgs>
+        fields: Prisma.SupportMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.SupportMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          findMany: {
+            args: Prisma.SupportMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>[]
+          }
+          create: {
+            args: Prisma.SupportMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          createMany: {
+            args: Prisma.SupportMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.SupportMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          update: {
+            args: Prisma.SupportMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SupportMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.SupportMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.SupportMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportMessage>
+          }
+          groupBy: {
+            args: Prisma.SupportMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportMessageCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2466,6 +2717,8 @@ export namespace Prisma {
     providerWebhookEvent?: ProviderWebhookEventOmit
     giftCardSale?: GiftCardSaleOmit
     giftCardSellRateAdjustment?: GiftCardSellRateAdjustmentOmit
+    supportTicket?: SupportTicketOmit
+    supportMessage?: SupportMessageOmit
   }
 
   /* Types for Logging */
@@ -2554,6 +2807,9 @@ export namespace Prisma {
     withdrawalQuotes: number
     beneficiaries: number
     giftCardSales: number
+    supportTickets: number
+    assignedSupportTickets: number
+    supportMessages: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2565,6 +2821,9 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | UserCountOutputTypeCountWithdrawalQuotesArgs
     beneficiaries?: boolean | UserCountOutputTypeCountBeneficiariesArgs
     giftCardSales?: boolean | UserCountOutputTypeCountGiftCardSalesArgs
+    supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
+    assignedSupportTickets?: boolean | UserCountOutputTypeCountAssignedSupportTicketsArgs
+    supportMessages?: boolean | UserCountOutputTypeCountSupportMessagesArgs
   }
 
   // Custom InputTypes
@@ -2632,6 +2891,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountGiftCardSalesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GiftCardSaleWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAssignedSupportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSupportMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportMessageWhereInput
   }
 
 
@@ -2935,6 +3215,37 @@ export namespace Prisma {
    */
   export type BeneficiaryCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WithdrawalWhereInput
+  }
+
+
+  /**
+   * Count Type SupportTicketCountOutputType
+   */
+
+  export type SupportTicketCountOutputType = {
+    messages: number
+  }
+
+  export type SupportTicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | SupportTicketCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicketCountOutputType
+     */
+    select?: SupportTicketCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportMessageWhereInput
   }
 
 
@@ -3310,6 +3621,9 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
+    supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
+    assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
+    supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3409,6 +3723,9 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
+    supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
+    assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
+    supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3427,6 +3744,9 @@ export namespace Prisma {
       withdrawalQuotes: Prisma.$WithdrawalQuotePayload<ExtArgs>[]
       beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
       giftCardSales: Prisma.$GiftCardSalePayload<ExtArgs>[]
+      supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+      assignedSupportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+      supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3858,6 +4178,9 @@ export namespace Prisma {
     withdrawalQuotes<T extends User$withdrawalQuotesArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     beneficiaries<T extends User$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, User$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardSales<T extends User$giftCardSalesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardSalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    supportTickets<T extends User$supportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedSupportTickets<T extends User$assignedSupportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedSupportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    supportMessages<T extends User$supportMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4532,6 +4855,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GiftCardSaleScalarFieldEnum | GiftCardSaleScalarFieldEnum[]
+  }
+
+  /**
+   * User.supportTickets
+   */
+  export type User$supportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    cursor?: SupportTicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * User.assignedSupportTickets
+   */
+  export type User$assignedSupportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    cursor?: SupportTicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * User.supportMessages
+   */
+  export type User$supportMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    where?: SupportMessageWhereInput
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    cursor?: SupportMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
   }
 
   /**
@@ -24878,6 +25273,2346 @@ export namespace Prisma {
 
 
   /**
+   * Model SupportTicket
+   */
+
+  export type AggregateSupportTicket = {
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  export type SupportTicketMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    assignedToId: string | null
+    subject: string | null
+    category: $Enums.SupportTicketCategory | null
+    status: $Enums.SupportTicketStatus | null
+    priority: $Enums.SupportTicketPriority | null
+    source: $Enums.SupportTicketSource | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    resolvedAt: Date | null
+    lastMessageAt: Date | null
+  }
+
+  export type SupportTicketMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    assignedToId: string | null
+    subject: string | null
+    category: $Enums.SupportTicketCategory | null
+    status: $Enums.SupportTicketStatus | null
+    priority: $Enums.SupportTicketPriority | null
+    source: $Enums.SupportTicketSource | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    resolvedAt: Date | null
+    lastMessageAt: Date | null
+  }
+
+  export type SupportTicketCountAggregateOutputType = {
+    id: number
+    userId: number
+    assignedToId: number
+    subject: number
+    category: number
+    status: number
+    priority: number
+    source: number
+    createdAt: number
+    updatedAt: number
+    resolvedAt: number
+    lastMessageAt: number
+    _all: number
+  }
+
+
+  export type SupportTicketMinAggregateInputType = {
+    id?: true
+    userId?: true
+    assignedToId?: true
+    subject?: true
+    category?: true
+    status?: true
+    priority?: true
+    source?: true
+    createdAt?: true
+    updatedAt?: true
+    resolvedAt?: true
+    lastMessageAt?: true
+  }
+
+  export type SupportTicketMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    assignedToId?: true
+    subject?: true
+    category?: true
+    status?: true
+    priority?: true
+    source?: true
+    createdAt?: true
+    updatedAt?: true
+    resolvedAt?: true
+    lastMessageAt?: true
+  }
+
+  export type SupportTicketCountAggregateInputType = {
+    id?: true
+    userId?: true
+    assignedToId?: true
+    subject?: true
+    category?: true
+    status?: true
+    priority?: true
+    source?: true
+    createdAt?: true
+    updatedAt?: true
+    resolvedAt?: true
+    lastMessageAt?: true
+    _all?: true
+  }
+
+  export type SupportTicketAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTicket to aggregate.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportTickets
+    **/
+    _count?: true | SupportTicketCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportTicketMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type GetSupportTicketAggregateType<T extends SupportTicketAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportTicket]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportTicket[P]>
+      : GetScalarType<T[P], AggregateSupportTicket[P]>
+  }
+
+
+
+
+  export type SupportTicketGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithAggregationInput | SupportTicketOrderByWithAggregationInput[]
+    by: SupportTicketScalarFieldEnum[] | SupportTicketScalarFieldEnum
+    having?: SupportTicketScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportTicketCountAggregateInputType | true
+    _min?: SupportTicketMinAggregateInputType
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type SupportTicketGroupByOutputType = {
+    id: string
+    userId: string
+    assignedToId: string | null
+    subject: string
+    category: $Enums.SupportTicketCategory
+    status: $Enums.SupportTicketStatus
+    priority: $Enums.SupportTicketPriority
+    source: $Enums.SupportTicketSource
+    createdAt: Date
+    updatedAt: Date
+    resolvedAt: Date | null
+    lastMessageAt: Date | null
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  type GetSupportTicketGroupByPayload<T extends SupportTicketGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportTicketGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportTicketGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    assignedToId?: boolean
+    subject?: boolean
+    category?: boolean
+    status?: boolean
+    priority?: boolean
+    source?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedAt?: boolean
+    lastMessageAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    messages?: boolean | SupportTicket$messagesArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    assignedToId?: boolean
+    subject?: boolean
+    category?: boolean
+    status?: boolean
+    priority?: boolean
+    source?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedAt?: boolean
+    lastMessageAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    assignedToId?: boolean
+    subject?: boolean
+    category?: boolean
+    status?: boolean
+    priority?: boolean
+    source?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedAt?: boolean
+    lastMessageAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    assignedToId?: boolean
+    subject?: boolean
+    category?: boolean
+    status?: boolean
+    priority?: boolean
+    source?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    resolvedAt?: boolean
+    lastMessageAt?: boolean
+  }
+
+  export type SupportTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "assignedToId" | "subject" | "category" | "status" | "priority" | "source" | "createdAt" | "updatedAt" | "resolvedAt" | "lastMessageAt", ExtArgs["result"]["supportTicket"]>
+  export type SupportTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+    messages?: boolean | SupportTicket$messagesArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SupportTicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+  }
+  export type SupportTicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
+  }
+
+  export type $SupportTicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportTicket"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
+      messages: Prisma.$SupportMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      assignedToId: string | null
+      subject: string
+      category: $Enums.SupportTicketCategory
+      status: $Enums.SupportTicketStatus
+      priority: $Enums.SupportTicketPriority
+      source: $Enums.SupportTicketSource
+      createdAt: Date
+      updatedAt: Date
+      resolvedAt: Date | null
+      lastMessageAt: Date | null
+    }, ExtArgs["result"]["supportTicket"]>
+    composites: {}
+  }
+
+  type SupportTicketGetPayload<S extends boolean | null | undefined | SupportTicketDefaultArgs> = $Result.GetResult<Prisma.$SupportTicketPayload, S>
+
+  type SupportTicketCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SupportTicketFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SupportTicketCountAggregateInputType | true
+    }
+
+  export interface SupportTicketDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportTicket'], meta: { name: 'SupportTicket' } }
+    /**
+     * Find zero or one SupportTicket that matches the filter.
+     * @param {SupportTicketFindUniqueArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportTicketFindUniqueArgs>(args: SelectSubset<T, SupportTicketFindUniqueArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SupportTicket that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SupportTicketFindUniqueOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportTicketFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportTicketFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportTicket that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportTicketFindFirstArgs>(args?: SelectSubset<T, SupportTicketFindFirstArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportTicket that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportTicketFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportTicketFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SupportTickets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany()
+     * 
+     * // Get first 10 SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportTicketFindManyArgs>(args?: SelectSubset<T, SupportTicketFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SupportTicket.
+     * @param {SupportTicketCreateArgs} args - Arguments to create a SupportTicket.
+     * @example
+     * // Create one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.create({
+     *   data: {
+     *     // ... data to create a SupportTicket
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportTicketCreateArgs>(args: SelectSubset<T, SupportTicketCreateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SupportTickets.
+     * @param {SupportTicketCreateManyArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportTicketCreateManyArgs>(args?: SelectSubset<T, SupportTicketCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportTickets and returns the data saved in the database.
+     * @param {SupportTicketCreateManyAndReturnArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportTickets and only return the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportTicketCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportTicketCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SupportTicket.
+     * @param {SupportTicketDeleteArgs} args - Arguments to delete one SupportTicket.
+     * @example
+     * // Delete one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.delete({
+     *   where: {
+     *     // ... filter to delete one SupportTicket
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportTicketDeleteArgs>(args: SelectSubset<T, SupportTicketDeleteArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SupportTicket.
+     * @param {SupportTicketUpdateArgs} args - Arguments to update one SupportTicket.
+     * @example
+     * // Update one SupportTicket
+     * const supportTicket = await prisma.supportTicket.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportTicketUpdateArgs>(args: SelectSubset<T, SupportTicketUpdateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SupportTickets.
+     * @param {SupportTicketDeleteManyArgs} args - Arguments to filter SupportTickets to delete.
+     * @example
+     * // Delete a few SupportTickets
+     * const { count } = await prisma.supportTicket.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportTicketDeleteManyArgs>(args?: SelectSubset<T, SupportTicketDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportTickets
+     * const supportTicket = await prisma.supportTicket.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportTicketUpdateManyArgs>(args: SelectSubset<T, SupportTicketUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportTickets and returns the data updated in the database.
+     * @param {SupportTicketUpdateManyAndReturnArgs} args - Arguments to update many SupportTickets.
+     * @example
+     * // Update many SupportTickets
+     * const supportTicket = await prisma.supportTicket.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SupportTickets and only return the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SupportTicketUpdateManyAndReturnArgs>(args: SelectSubset<T, SupportTicketUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SupportTicket.
+     * @param {SupportTicketUpsertArgs} args - Arguments to update or create a SupportTicket.
+     * @example
+     * // Update or create a SupportTicket
+     * const supportTicket = await prisma.supportTicket.upsert({
+     *   create: {
+     *     // ... data to create a SupportTicket
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportTicket we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportTicketUpsertArgs>(args: SelectSubset<T, SupportTicketUpsertArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketCountArgs} args - Arguments to filter SupportTickets to count.
+     * @example
+     * // Count the number of SupportTickets
+     * const count = await prisma.supportTicket.count({
+     *   where: {
+     *     // ... the filter for the SupportTickets we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportTicketCountArgs>(
+      args?: Subset<T, SupportTicketCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportTicketCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportTicketAggregateArgs>(args: Subset<T, SupportTicketAggregateArgs>): Prisma.PrismaPromise<GetSupportTicketAggregateType<T>>
+
+    /**
+     * Group by SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportTicketGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportTicketGroupByArgs['orderBy'] }
+        : { orderBy?: SupportTicketGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportTicketGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportTicketGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportTicket model
+   */
+  readonly fields: SupportTicketFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportTicket.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportTicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    assignedTo<T extends SupportTicket$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicket$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    messages<T extends SupportTicket$messagesArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicket$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportTicket model
+   */
+  interface SupportTicketFieldRefs {
+    readonly id: FieldRef<"SupportTicket", 'String'>
+    readonly userId: FieldRef<"SupportTicket", 'String'>
+    readonly assignedToId: FieldRef<"SupportTicket", 'String'>
+    readonly subject: FieldRef<"SupportTicket", 'String'>
+    readonly category: FieldRef<"SupportTicket", 'SupportTicketCategory'>
+    readonly status: FieldRef<"SupportTicket", 'SupportTicketStatus'>
+    readonly priority: FieldRef<"SupportTicket", 'SupportTicketPriority'>
+    readonly source: FieldRef<"SupportTicket", 'SupportTicketSource'>
+    readonly createdAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly updatedAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly resolvedAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly lastMessageAt: FieldRef<"SupportTicket", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportTicket findUnique
+   */
+  export type SupportTicketFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findUniqueOrThrow
+   */
+  export type SupportTicketFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findFirst
+   */
+  export type SupportTicketFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findFirstOrThrow
+   */
+  export type SupportTicketFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findMany
+   */
+  export type SupportTicketFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTickets to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket create
+   */
+  export type SupportTicketCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportTicket.
+     */
+    data: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+  }
+
+  /**
+   * SupportTicket createMany
+   */
+  export type SupportTicketCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportTicket createManyAndReturn
+   */
+  export type SupportTicketCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicket update
+   */
+  export type SupportTicketUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportTicket.
+     */
+    data: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+    /**
+     * Choose, which SupportTicket to update.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket updateMany
+   */
+  export type SupportTicketUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportTickets.
+     */
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportTickets to update
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * Limit how many SupportTickets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportTicket updateManyAndReturn
+   */
+  export type SupportTicketUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * The data used to update SupportTickets.
+     */
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportTickets to update
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * Limit how many SupportTickets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicket upsert
+   */
+  export type SupportTicketUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportTicket to update in case it exists.
+     */
+    where: SupportTicketWhereUniqueInput
+    /**
+     * In case the SupportTicket found by the `where` argument doesn't exist, create a new SupportTicket with this data.
+     */
+    create: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+    /**
+     * In case the SupportTicket was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportTicket delete
+   */
+  export type SupportTicketDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter which SupportTicket to delete.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket deleteMany
+   */
+  export type SupportTicketDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTickets to delete
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * Limit how many SupportTickets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportTicket.assignedTo
+   */
+  export type SupportTicket$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SupportTicket.messages
+   */
+  export type SupportTicket$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    where?: SupportMessageWhereInput
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    cursor?: SupportMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket without action
+   */
+  export type SupportTicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportTicket
+     */
+    omit?: SupportTicketOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupportMessage
+   */
+
+  export type AggregateSupportMessage = {
+    _count: SupportMessageCountAggregateOutputType | null
+    _min: SupportMessageMinAggregateOutputType | null
+    _max: SupportMessageMaxAggregateOutputType | null
+  }
+
+  export type SupportMessageMinAggregateOutputType = {
+    id: string | null
+    ticketId: string | null
+    userId: string | null
+    senderType: $Enums.SupportMessageSenderType | null
+    body: string | null
+    isInternal: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupportMessageMaxAggregateOutputType = {
+    id: string | null
+    ticketId: string | null
+    userId: string | null
+    senderType: $Enums.SupportMessageSenderType | null
+    body: string | null
+    isInternal: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SupportMessageCountAggregateOutputType = {
+    id: number
+    ticketId: number
+    userId: number
+    senderType: number
+    body: number
+    isInternal: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SupportMessageMinAggregateInputType = {
+    id?: true
+    ticketId?: true
+    userId?: true
+    senderType?: true
+    body?: true
+    isInternal?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupportMessageMaxAggregateInputType = {
+    id?: true
+    ticketId?: true
+    userId?: true
+    senderType?: true
+    body?: true
+    isInternal?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SupportMessageCountAggregateInputType = {
+    id?: true
+    ticketId?: true
+    userId?: true
+    senderType?: true
+    body?: true
+    isInternal?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SupportMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportMessage to aggregate.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportMessages
+    **/
+    _count?: true | SupportMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportMessageMaxAggregateInputType
+  }
+
+  export type GetSupportMessageAggregateType<T extends SupportMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportMessage[P]>
+      : GetScalarType<T[P], AggregateSupportMessage[P]>
+  }
+
+
+
+
+  export type SupportMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportMessageWhereInput
+    orderBy?: SupportMessageOrderByWithAggregationInput | SupportMessageOrderByWithAggregationInput[]
+    by: SupportMessageScalarFieldEnum[] | SupportMessageScalarFieldEnum
+    having?: SupportMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportMessageCountAggregateInputType | true
+    _min?: SupportMessageMinAggregateInputType
+    _max?: SupportMessageMaxAggregateInputType
+  }
+
+  export type SupportMessageGroupByOutputType = {
+    id: string
+    ticketId: string
+    userId: string | null
+    senderType: $Enums.SupportMessageSenderType
+    body: string
+    isInternal: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SupportMessageCountAggregateOutputType | null
+    _min: SupportMessageMinAggregateOutputType | null
+    _max: SupportMessageMaxAggregateOutputType | null
+  }
+
+  type GetSupportMessageGroupByPayload<T extends SupportMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketId?: boolean
+    userId?: boolean
+    senderType?: boolean
+    body?: boolean
+    isInternal?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }, ExtArgs["result"]["supportMessage"]>
+
+  export type SupportMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketId?: boolean
+    userId?: boolean
+    senderType?: boolean
+    body?: boolean
+    isInternal?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }, ExtArgs["result"]["supportMessage"]>
+
+  export type SupportMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticketId?: boolean
+    userId?: boolean
+    senderType?: boolean
+    body?: boolean
+    isInternal?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }, ExtArgs["result"]["supportMessage"]>
+
+  export type SupportMessageSelectScalar = {
+    id?: boolean
+    ticketId?: boolean
+    userId?: boolean
+    senderType?: boolean
+    body?: boolean
+    isInternal?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SupportMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "userId" | "senderType" | "body" | "isInternal" | "createdAt" | "updatedAt", ExtArgs["result"]["supportMessage"]>
+  export type SupportMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }
+  export type SupportMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }
+  export type SupportMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+    user?: boolean | SupportMessage$userArgs<ExtArgs>
+  }
+
+  export type $SupportMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportMessage"
+    objects: {
+      ticket: Prisma.$SupportTicketPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ticketId: string
+      userId: string | null
+      senderType: $Enums.SupportMessageSenderType
+      body: string
+      isInternal: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["supportMessage"]>
+    composites: {}
+  }
+
+  type SupportMessageGetPayload<S extends boolean | null | undefined | SupportMessageDefaultArgs> = $Result.GetResult<Prisma.$SupportMessagePayload, S>
+
+  type SupportMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SupportMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SupportMessageCountAggregateInputType | true
+    }
+
+  export interface SupportMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportMessage'], meta: { name: 'SupportMessage' } }
+    /**
+     * Find zero or one SupportMessage that matches the filter.
+     * @param {SupportMessageFindUniqueArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportMessageFindUniqueArgs>(args: SelectSubset<T, SupportMessageFindUniqueArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SupportMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SupportMessageFindUniqueOrThrowArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindFirstArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportMessageFindFirstArgs>(args?: SelectSubset<T, SupportMessageFindFirstArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindFirstOrThrowArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SupportMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportMessages
+     * const supportMessages = await prisma.supportMessage.findMany()
+     * 
+     * // Get first 10 SupportMessages
+     * const supportMessages = await prisma.supportMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportMessageWithIdOnly = await prisma.supportMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportMessageFindManyArgs>(args?: SelectSubset<T, SupportMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SupportMessage.
+     * @param {SupportMessageCreateArgs} args - Arguments to create a SupportMessage.
+     * @example
+     * // Create one SupportMessage
+     * const SupportMessage = await prisma.supportMessage.create({
+     *   data: {
+     *     // ... data to create a SupportMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportMessageCreateArgs>(args: SelectSubset<T, SupportMessageCreateArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SupportMessages.
+     * @param {SupportMessageCreateManyArgs} args - Arguments to create many SupportMessages.
+     * @example
+     * // Create many SupportMessages
+     * const supportMessage = await prisma.supportMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportMessageCreateManyArgs>(args?: SelectSubset<T, SupportMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportMessages and returns the data saved in the database.
+     * @param {SupportMessageCreateManyAndReturnArgs} args - Arguments to create many SupportMessages.
+     * @example
+     * // Create many SupportMessages
+     * const supportMessage = await prisma.supportMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportMessages and only return the `id`
+     * const supportMessageWithIdOnly = await prisma.supportMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SupportMessage.
+     * @param {SupportMessageDeleteArgs} args - Arguments to delete one SupportMessage.
+     * @example
+     * // Delete one SupportMessage
+     * const SupportMessage = await prisma.supportMessage.delete({
+     *   where: {
+     *     // ... filter to delete one SupportMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportMessageDeleteArgs>(args: SelectSubset<T, SupportMessageDeleteArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SupportMessage.
+     * @param {SupportMessageUpdateArgs} args - Arguments to update one SupportMessage.
+     * @example
+     * // Update one SupportMessage
+     * const supportMessage = await prisma.supportMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportMessageUpdateArgs>(args: SelectSubset<T, SupportMessageUpdateArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SupportMessages.
+     * @param {SupportMessageDeleteManyArgs} args - Arguments to filter SupportMessages to delete.
+     * @example
+     * // Delete a few SupportMessages
+     * const { count } = await prisma.supportMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportMessageDeleteManyArgs>(args?: SelectSubset<T, SupportMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportMessages
+     * const supportMessage = await prisma.supportMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportMessageUpdateManyArgs>(args: SelectSubset<T, SupportMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportMessages and returns the data updated in the database.
+     * @param {SupportMessageUpdateManyAndReturnArgs} args - Arguments to update many SupportMessages.
+     * @example
+     * // Update many SupportMessages
+     * const supportMessage = await prisma.supportMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SupportMessages and only return the `id`
+     * const supportMessageWithIdOnly = await prisma.supportMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SupportMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, SupportMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SupportMessage.
+     * @param {SupportMessageUpsertArgs} args - Arguments to update or create a SupportMessage.
+     * @example
+     * // Update or create a SupportMessage
+     * const supportMessage = await prisma.supportMessage.upsert({
+     *   create: {
+     *     // ... data to create a SupportMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportMessageUpsertArgs>(args: SelectSubset<T, SupportMessageUpsertArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SupportMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageCountArgs} args - Arguments to filter SupportMessages to count.
+     * @example
+     * // Count the number of SupportMessages
+     * const count = await prisma.supportMessage.count({
+     *   where: {
+     *     // ... the filter for the SupportMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportMessageCountArgs>(
+      args?: Subset<T, SupportMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportMessageAggregateArgs>(args: Subset<T, SupportMessageAggregateArgs>): Prisma.PrismaPromise<GetSupportMessageAggregateType<T>>
+
+    /**
+     * Group by SupportMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportMessageGroupByArgs['orderBy'] }
+        : { orderBy?: SupportMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportMessage model
+   */
+  readonly fields: SupportMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends SupportTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicketDefaultArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends SupportMessage$userArgs<ExtArgs> = {}>(args?: Subset<T, SupportMessage$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportMessage model
+   */
+  interface SupportMessageFieldRefs {
+    readonly id: FieldRef<"SupportMessage", 'String'>
+    readonly ticketId: FieldRef<"SupportMessage", 'String'>
+    readonly userId: FieldRef<"SupportMessage", 'String'>
+    readonly senderType: FieldRef<"SupportMessage", 'SupportMessageSenderType'>
+    readonly body: FieldRef<"SupportMessage", 'String'>
+    readonly isInternal: FieldRef<"SupportMessage", 'Boolean'>
+    readonly createdAt: FieldRef<"SupportMessage", 'DateTime'>
+    readonly updatedAt: FieldRef<"SupportMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportMessage findUnique
+   */
+  export type SupportMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage findUniqueOrThrow
+   */
+  export type SupportMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage findFirst
+   */
+  export type SupportMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportMessages.
+     */
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage findFirstOrThrow
+   */
+  export type SupportMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportMessages.
+     */
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage findMany
+   */
+  export type SupportMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessages to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportMessages.
+     */
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage create
+   */
+  export type SupportMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportMessage.
+     */
+    data: XOR<SupportMessageCreateInput, SupportMessageUncheckedCreateInput>
+  }
+
+  /**
+   * SupportMessage createMany
+   */
+  export type SupportMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportMessages.
+     */
+    data: SupportMessageCreateManyInput | SupportMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportMessage createManyAndReturn
+   */
+  export type SupportMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many SupportMessages.
+     */
+    data: SupportMessageCreateManyInput | SupportMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportMessage update
+   */
+  export type SupportMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportMessage.
+     */
+    data: XOR<SupportMessageUpdateInput, SupportMessageUncheckedUpdateInput>
+    /**
+     * Choose, which SupportMessage to update.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage updateMany
+   */
+  export type SupportMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportMessages.
+     */
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportMessages to update
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * Limit how many SupportMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportMessage updateManyAndReturn
+   */
+  export type SupportMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update SupportMessages.
+     */
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportMessages to update
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * Limit how many SupportMessages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportMessage upsert
+   */
+  export type SupportMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportMessage to update in case it exists.
+     */
+    where: SupportMessageWhereUniqueInput
+    /**
+     * In case the SupportMessage found by the `where` argument doesn't exist, create a new SupportMessage with this data.
+     */
+    create: XOR<SupportMessageCreateInput, SupportMessageUncheckedCreateInput>
+    /**
+     * In case the SupportMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportMessageUpdateInput, SupportMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportMessage delete
+   */
+  export type SupportMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter which SupportMessage to delete.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage deleteMany
+   */
+  export type SupportMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportMessages to delete
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * Limit how many SupportMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportMessage.user
+   */
+  export type SupportMessage$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SupportMessage without action
+   */
+  export type SupportMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportMessage
+     */
+    omit?: SupportMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -25255,6 +27990,38 @@ export namespace Prisma {
   export type GiftCardSellRateAdjustmentScalarFieldEnum = (typeof GiftCardSellRateAdjustmentScalarFieldEnum)[keyof typeof GiftCardSellRateAdjustmentScalarFieldEnum]
 
 
+  export const SupportTicketScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    assignedToId: 'assignedToId',
+    subject: 'subject',
+    category: 'category',
+    status: 'status',
+    priority: 'priority',
+    source: 'source',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    resolvedAt: 'resolvedAt',
+    lastMessageAt: 'lastMessageAt'
+  };
+
+  export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
+
+
+  export const SupportMessageScalarFieldEnum: {
+    id: 'id',
+    ticketId: 'ticketId',
+    userId: 'userId',
+    senderType: 'senderType',
+    body: 'body',
+    isInternal: 'isInternal',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SupportMessageScalarFieldEnum = (typeof SupportMessageScalarFieldEnum)[keyof typeof SupportMessageScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -25547,6 +28314,76 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SupportTicketCategory'
+   */
+  export type EnumSupportTicketCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketCategory[]'
+   */
+  export type ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketCategory[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketStatus'
+   */
+  export type EnumSupportTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketStatus[]'
+   */
+  export type ListEnumSupportTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketPriority'
+   */
+  export type EnumSupportTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketPriority'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketPriority[]'
+   */
+  export type ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketPriority[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketSource'
+   */
+  export type EnumSupportTicketSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportTicketSource[]'
+   */
+  export type ListEnumSupportTicketSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketSource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportMessageSenderType'
+   */
+  export type EnumSupportMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportMessageSenderType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SupportMessageSenderType[]'
+   */
+  export type ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportMessageSenderType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -25602,6 +28439,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteListRelationFilter
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
+    supportTickets?: SupportTicketListRelationFilter
+    assignedSupportTickets?: SupportTicketListRelationFilter
+    supportMessages?: SupportMessageListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -25640,6 +28480,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteOrderByRelationAggregateInput
     beneficiaries?: BeneficiaryOrderByRelationAggregateInput
     giftCardSales?: GiftCardSaleOrderByRelationAggregateInput
+    supportTickets?: SupportTicketOrderByRelationAggregateInput
+    assignedSupportTickets?: SupportTicketOrderByRelationAggregateInput
+    supportMessages?: SupportMessageOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -25681,6 +28524,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteListRelationFilter
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
+    supportTickets?: SupportTicketListRelationFilter
+    assignedSupportTickets?: SupportTicketListRelationFilter
+    supportMessages?: SupportMessageListRelationFilter
   }, "id" | "email" | "username" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -27560,6 +30406,175 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"GiftCardSellRateAdjustment"> | Date | string
   }
 
+  export type SupportTicketWhereInput = {
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    id?: StringFilter<"SupportTicket"> | string
+    userId?: StringFilter<"SupportTicket"> | string
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    subject?: StringFilter<"SupportTicket"> | string
+    category?: EnumSupportTicketCategoryFilter<"SupportTicket"> | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFilter<"SupportTicket"> | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFilter<"SupportTicket"> | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFilter<"SupportTicket"> | $Enums.SupportTicketSource
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    messages?: SupportMessageListRelationFilter
+  }
+
+  export type SupportTicketOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    source?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    lastMessageAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    assignedTo?: UserOrderByWithRelationInput
+    messages?: SupportMessageOrderByRelationAggregateInput
+  }
+
+  export type SupportTicketWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    userId?: StringFilter<"SupportTicket"> | string
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    subject?: StringFilter<"SupportTicket"> | string
+    category?: EnumSupportTicketCategoryFilter<"SupportTicket"> | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFilter<"SupportTicket"> | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFilter<"SupportTicket"> | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFilter<"SupportTicket"> | $Enums.SupportTicketSource
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    messages?: SupportMessageListRelationFilter
+  }, "id">
+
+  export type SupportTicketOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
+    subject?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    source?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrderInput | SortOrder
+    lastMessageAt?: SortOrderInput | SortOrder
+    _count?: SupportTicketCountOrderByAggregateInput
+    _max?: SupportTicketMaxOrderByAggregateInput
+    _min?: SupportTicketMinOrderByAggregateInput
+  }
+
+  export type SupportTicketScalarWhereWithAggregatesInput = {
+    AND?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    OR?: SupportTicketScalarWhereWithAggregatesInput[]
+    NOT?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupportTicket"> | string
+    userId?: StringWithAggregatesFilter<"SupportTicket"> | string
+    assignedToId?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
+    subject?: StringWithAggregatesFilter<"SupportTicket"> | string
+    category?: EnumSupportTicketCategoryWithAggregatesFilter<"SupportTicket"> | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusWithAggregatesFilter<"SupportTicket"> | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityWithAggregatesFilter<"SupportTicket"> | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceWithAggregatesFilter<"SupportTicket"> | $Enums.SupportTicketSource
+    createdAt?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+    resolvedAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    lastMessageAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+  }
+
+  export type SupportMessageWhereInput = {
+    AND?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    OR?: SupportMessageWhereInput[]
+    NOT?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    id?: StringFilter<"SupportMessage"> | string
+    ticketId?: StringFilter<"SupportMessage"> | string
+    userId?: StringNullableFilter<"SupportMessage"> | string | null
+    senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
+    body?: StringFilter<"SupportMessage"> | string
+    isInternal?: BoolFilter<"SupportMessage"> | boolean
+    createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
+    ticket?: XOR<SupportTicketScalarRelationFilter, SupportTicketWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type SupportMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    senderType?: SortOrder
+    body?: SortOrder
+    isInternal?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ticket?: SupportTicketOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type SupportMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    OR?: SupportMessageWhereInput[]
+    NOT?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    ticketId?: StringFilter<"SupportMessage"> | string
+    userId?: StringNullableFilter<"SupportMessage"> | string | null
+    senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
+    body?: StringFilter<"SupportMessage"> | string
+    isInternal?: BoolFilter<"SupportMessage"> | boolean
+    createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
+    ticket?: XOR<SupportTicketScalarRelationFilter, SupportTicketWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type SupportMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    senderType?: SortOrder
+    body?: SortOrder
+    isInternal?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SupportMessageCountOrderByAggregateInput
+    _max?: SupportMessageMaxOrderByAggregateInput
+    _min?: SupportMessageMinOrderByAggregateInput
+  }
+
+  export type SupportMessageScalarWhereWithAggregatesInput = {
+    AND?: SupportMessageScalarWhereWithAggregatesInput | SupportMessageScalarWhereWithAggregatesInput[]
+    OR?: SupportMessageScalarWhereWithAggregatesInput[]
+    NOT?: SupportMessageScalarWhereWithAggregatesInput | SupportMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupportMessage"> | string
+    ticketId?: StringWithAggregatesFilter<"SupportMessage"> | string
+    userId?: StringNullableWithAggregatesFilter<"SupportMessage"> | string | null
+    senderType?: EnumSupportMessageSenderTypeWithAggregatesFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
+    body?: StringWithAggregatesFilter<"SupportMessage"> | string
+    isInternal?: BoolWithAggregatesFilter<"SupportMessage"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -27596,6 +30611,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -27634,6 +30652,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -27672,6 +30693,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -27710,6 +30734,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -29847,6 +32874,188 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SupportTicketCreateInput = {
+    id?: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
+    messages?: SupportMessageCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateInput = {
+    id?: string
+    userId: string
+    assignedToId?: string | null
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
+    messages?: SupportMessageUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketCreateManyInput = {
+    id?: string
+    userId: string
+    assignedToId?: string | null
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+  }
+
+  export type SupportTicketUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportTicketUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportMessageCreateInput = {
+    id?: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutMessagesInput
+    user?: UserCreateNestedOneWithoutSupportMessagesInput
+  }
+
+  export type SupportMessageUncheckedCreateInput = {
+    id?: string
+    ticketId: string
+    userId?: string | null
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
+    user?: UserUpdateOneWithoutSupportMessagesNestedInput
+  }
+
+  export type SupportMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageCreateManyInput = {
+    id?: string
+    ticketId: string
+    userId?: string | null
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -29980,6 +33189,18 @@ export namespace Prisma {
     none?: GiftCardSaleWhereInput
   }
 
+  export type SupportTicketListRelationFilter = {
+    every?: SupportTicketWhereInput
+    some?: SupportTicketWhereInput
+    none?: SupportTicketWhereInput
+  }
+
+  export type SupportMessageListRelationFilter = {
+    every?: SupportMessageWhereInput
+    some?: SupportMessageWhereInput
+    none?: SupportMessageWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -30014,6 +33235,14 @@ export namespace Prisma {
   }
 
   export type GiftCardSaleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupportTicketOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupportMessageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31680,6 +34909,174 @@ export namespace Prisma {
     adjustmentPercent?: SortOrder
   }
 
+  export type EnumSupportTicketCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketCategoryFilter<$PrismaModel> | $Enums.SupportTicketCategory
+  }
+
+  export type EnumSupportTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketStatus | EnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketStatusFilter<$PrismaModel> | $Enums.SupportTicketStatus
+  }
+
+  export type EnumSupportTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketPriority | EnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketPriorityFilter<$PrismaModel> | $Enums.SupportTicketPriority
+  }
+
+  export type EnumSupportTicketSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketSource | EnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketSourceFilter<$PrismaModel> | $Enums.SupportTicketSource
+  }
+
+  export type SupportTicketCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assignedToId?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    source?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    lastMessageAt?: SortOrder
+  }
+
+  export type SupportTicketMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assignedToId?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    source?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    lastMessageAt?: SortOrder
+  }
+
+  export type SupportTicketMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    assignedToId?: SortOrder
+    subject?: SortOrder
+    category?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    source?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    resolvedAt?: SortOrder
+    lastMessageAt?: SortOrder
+  }
+
+  export type EnumSupportTicketCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketCategoryWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketCategoryFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketCategoryFilter<$PrismaModel>
+  }
+
+  export type EnumSupportTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketStatus | EnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketStatusFilter<$PrismaModel>
+  }
+
+  export type EnumSupportTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketPriority | EnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type EnumSupportTicketSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketSource | EnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketSourceWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketSourceFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketSourceFilter<$PrismaModel>
+  }
+
+  export type EnumSupportMessageSenderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportMessageSenderType | EnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel> | $Enums.SupportMessageSenderType
+  }
+
+  export type SupportTicketScalarRelationFilter = {
+    is?: SupportTicketWhereInput
+    isNot?: SupportTicketWhereInput
+  }
+
+  export type SupportMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    userId?: SortOrder
+    senderType?: SortOrder
+    body?: SortOrder
+    isInternal?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupportMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    userId?: SortOrder
+    senderType?: SortOrder
+    body?: SortOrder
+    isInternal?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SupportMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+    userId?: SortOrder
+    senderType?: SortOrder
+    body?: SortOrder
+    isInternal?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumSupportMessageSenderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportMessageSenderType | EnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportMessageSenderTypeWithAggregatesFilter<$PrismaModel> | $Enums.SupportMessageSenderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
+    _max?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
+  }
+
   export type PasswordResetChallengeCreateNestedManyWithoutUserInput = {
     create?: XOR<PasswordResetChallengeCreateWithoutUserInput, PasswordResetChallengeUncheckedCreateWithoutUserInput> | PasswordResetChallengeCreateWithoutUserInput[] | PasswordResetChallengeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
@@ -31748,6 +35145,27 @@ export namespace Prisma {
     connect?: GiftCardSaleWhereUniqueInput | GiftCardSaleWhereUniqueInput[]
   }
 
+  export type SupportTicketCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type SupportTicketCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type SupportMessageCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput> | SupportMessageCreateWithoutUserInput[] | SupportMessageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
+    createMany?: SupportMessageCreateManyUserInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
   export type PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<PasswordResetChallengeCreateWithoutUserInput, PasswordResetChallengeUncheckedCreateWithoutUserInput> | PasswordResetChallengeCreateWithoutUserInput[] | PasswordResetChallengeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
@@ -31814,6 +35232,27 @@ export namespace Prisma {
     connectOrCreate?: GiftCardSaleCreateOrConnectWithoutUserInput | GiftCardSaleCreateOrConnectWithoutUserInput[]
     createMany?: GiftCardSaleCreateManyUserInputEnvelope
     connect?: GiftCardSaleWhereUniqueInput | GiftCardSaleWhereUniqueInput[]
+  }
+
+  export type SupportTicketUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type SupportMessageUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput> | SupportMessageCreateWithoutUserInput[] | SupportMessageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
+    createMany?: SupportMessageCreateManyUserInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -31980,6 +35419,48 @@ export namespace Prisma {
     deleteMany?: GiftCardSaleScalarWhereInput | GiftCardSaleScalarWhereInput[]
   }
 
+  export type SupportTicketUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type SupportTicketUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput | SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput | SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutAssignedToInput | SupportTicketUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type SupportMessageUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput> | SupportMessageCreateWithoutUserInput[] | SupportMessageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutUserInput | SupportMessageUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportMessageCreateManyUserInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutUserInput | SupportMessageUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutUserInput | SupportMessageUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
   export type PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<PasswordResetChallengeCreateWithoutUserInput, PasswordResetChallengeUncheckedCreateWithoutUserInput> | PasswordResetChallengeCreateWithoutUserInput[] | PasswordResetChallengeUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
@@ -32110,6 +35591,48 @@ export namespace Prisma {
     update?: GiftCardSaleUpdateWithWhereUniqueWithoutUserInput | GiftCardSaleUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GiftCardSaleUpdateManyWithWhereWithoutUserInput | GiftCardSaleUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GiftCardSaleScalarWhereInput | GiftCardSaleScalarWhereInput[]
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput> | SupportTicketCreateWithoutAssignedToInput[] | SupportTicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutAssignedToInput | SupportTicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput | SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: SupportTicketCreateManyAssignedToInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput | SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutAssignedToInput | SupportTicketUpdateManyWithWhereWithoutAssignedToInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput> | SupportMessageCreateWithoutUserInput[] | SupportMessageUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutUserInput | SupportMessageUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportMessageCreateManyUserInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutUserInput | SupportMessageUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutUserInput | SupportMessageUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutPendingVerificationInput = {
@@ -33536,6 +37059,128 @@ export namespace Prisma {
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutGiftCardSaleInput, TransactionUpdateWithoutGiftCardSaleInput>, TransactionUncheckedUpdateWithoutGiftCardSaleInput>
   }
 
+  export type UserCreateNestedOneWithoutSupportTicketsInput = {
+    create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAssignedSupportTicketsInput = {
+    create?: XOR<UserCreateWithoutAssignedSupportTicketsInput, UserUncheckedCreateWithoutAssignedSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedSupportTicketsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SupportMessageCreateNestedManyWithoutTicketInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type SupportMessageUncheckedCreateNestedManyWithoutTicketInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type EnumSupportTicketCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.SupportTicketCategory
+  }
+
+  export type EnumSupportTicketStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SupportTicketStatus
+  }
+
+  export type EnumSupportTicketPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.SupportTicketPriority
+  }
+
+  export type EnumSupportTicketSourceFieldUpdateOperationsInput = {
+    set?: $Enums.SupportTicketSource
+  }
+
+  export type UserUpdateOneRequiredWithoutSupportTicketsNestedInput = {
+    create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
+    upsert?: UserUpsertWithoutSupportTicketsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupportTicketsInput, UserUpdateWithoutSupportTicketsInput>, UserUncheckedUpdateWithoutSupportTicketsInput>
+  }
+
+  export type UserUpdateOneWithoutAssignedSupportTicketsNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedSupportTicketsInput, UserUncheckedCreateWithoutAssignedSupportTicketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedSupportTicketsInput
+    upsert?: UserUpsertWithoutAssignedSupportTicketsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedSupportTicketsInput, UserUpdateWithoutAssignedSupportTicketsInput>, UserUncheckedUpdateWithoutAssignedSupportTicketsInput>
+  }
+
+  export type SupportMessageUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutTicketInput | SupportMessageUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutTicketInput | SupportMessageUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutTicketInput | SupportMessageUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutTicketInput | SupportMessageUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutTicketInput | SupportMessageUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutTicketInput | SupportMessageUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportTicketCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutMessagesInput
+    connect?: SupportTicketWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutSupportMessagesInput = {
+    create?: XOR<UserCreateWithoutSupportMessagesInput, UserUncheckedCreateWithoutSupportMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportMessagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumSupportMessageSenderTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SupportMessageSenderType
+  }
+
+  export type SupportTicketUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutMessagesInput
+    upsert?: SupportTicketUpsertWithoutMessagesInput
+    connect?: SupportTicketWhereUniqueInput
+    update?: XOR<XOR<SupportTicketUpdateToOneWithWhereWithoutMessagesInput, SupportTicketUpdateWithoutMessagesInput>, SupportTicketUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type UserUpdateOneWithoutSupportMessagesNestedInput = {
+    create?: XOR<UserCreateWithoutSupportMessagesInput, UserUncheckedCreateWithoutSupportMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupportMessagesInput
+    upsert?: UserUpsertWithoutSupportMessagesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupportMessagesInput, UserUpdateWithoutSupportMessagesInput>, UserUncheckedUpdateWithoutSupportMessagesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -34023,6 +37668,91 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumGiftCardSaleStatusFilter<$PrismaModel>
     _max?: NestedEnumGiftCardSaleStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupportTicketCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketCategoryFilter<$PrismaModel> | $Enums.SupportTicketCategory
+  }
+
+  export type NestedEnumSupportTicketStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketStatus | EnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketStatusFilter<$PrismaModel> | $Enums.SupportTicketStatus
+  }
+
+  export type NestedEnumSupportTicketPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketPriority | EnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketPriorityFilter<$PrismaModel> | $Enums.SupportTicketPriority
+  }
+
+  export type NestedEnumSupportTicketSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketSource | EnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketSourceFilter<$PrismaModel> | $Enums.SupportTicketSource
+  }
+
+  export type NestedEnumSupportTicketCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketCategoryWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketCategoryFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupportTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketStatus | EnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketStatus[] | ListEnumSupportTicketStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketStatusWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketStatusFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupportTicketPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketPriority | EnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketPriority[] | ListEnumSupportTicketPriorityFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketPriorityWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketPriorityFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketPriorityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupportTicketSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportTicketSource | EnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportTicketSource[] | ListEnumSupportTicketSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportTicketSourceWithAggregatesFilter<$PrismaModel> | $Enums.SupportTicketSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportTicketSourceFilter<$PrismaModel>
+    _max?: NestedEnumSupportTicketSourceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSupportMessageSenderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportMessageSenderType | EnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel> | $Enums.SupportMessageSenderType
+  }
+
+  export type NestedEnumSupportMessageSenderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SupportMessageSenderType | EnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SupportMessageSenderType[] | ListEnumSupportMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSupportMessageSenderTypeWithAggregatesFilter<$PrismaModel> | $Enums.SupportMessageSenderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
+    _max?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
   }
 
   export type PasswordResetChallengeCreateWithoutUserInput = {
@@ -34515,6 +38245,116 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SupportTicketCreateWithoutUserInput = {
+    id?: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
+    messages?: SupportMessageCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutUserInput = {
+    id?: string
+    assignedToId?: string | null
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketCreateOrConnectWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketCreateManyUserInputEnvelope = {
+    data: SupportTicketCreateManyUserInput | SupportTicketCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupportTicketCreateWithoutAssignedToInput = {
+    id?: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+    messages?: SupportMessageCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutAssignedToInput = {
+    id?: string
+    userId: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketCreateOrConnectWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketCreateManyAssignedToInputEnvelope = {
+    data: SupportTicketCreateManyAssignedToInput | SupportTicketCreateManyAssignedToInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupportMessageCreateWithoutUserInput = {
+    id?: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutMessagesInput
+  }
+
+  export type SupportMessageUncheckedCreateWithoutUserInput = {
+    id?: string
+    ticketId: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageCreateOrConnectWithoutUserInput = {
+    where: SupportMessageWhereUniqueInput
+    create: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportMessageCreateManyUserInputEnvelope = {
+    data: SupportMessageCreateManyUserInput | SupportMessageCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PasswordResetChallengeUpsertWithWhereUniqueWithoutUserInput = {
     where: PasswordResetChallengeWhereUniqueInput
     update: XOR<PasswordResetChallengeUpdateWithoutUserInput, PasswordResetChallengeUncheckedUpdateWithoutUserInput>
@@ -34918,6 +38758,86 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GiftCardSale"> | Date | string
   }
 
+  export type SupportTicketUpsertWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    update: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    data: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateManyWithWhereWithoutUserInput = {
+    where: SupportTicketScalarWhereInput
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SupportTicketScalarWhereInput = {
+    AND?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    OR?: SupportTicketScalarWhereInput[]
+    NOT?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    id?: StringFilter<"SupportTicket"> | string
+    userId?: StringFilter<"SupportTicket"> | string
+    assignedToId?: StringNullableFilter<"SupportTicket"> | string | null
+    subject?: StringFilter<"SupportTicket"> | string
+    category?: EnumSupportTicketCategoryFilter<"SupportTicket"> | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFilter<"SupportTicket"> | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFilter<"SupportTicket"> | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFilter<"SupportTicket"> | $Enums.SupportTicketSource
+    createdAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
+    resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+  }
+
+  export type SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    update: XOR<SupportTicketUpdateWithoutAssignedToInput, SupportTicketUncheckedUpdateWithoutAssignedToInput>
+    create: XOR<SupportTicketCreateWithoutAssignedToInput, SupportTicketUncheckedCreateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketUpdateWithWhereUniqueWithoutAssignedToInput = {
+    where: SupportTicketWhereUniqueInput
+    data: XOR<SupportTicketUpdateWithoutAssignedToInput, SupportTicketUncheckedUpdateWithoutAssignedToInput>
+  }
+
+  export type SupportTicketUpdateManyWithWhereWithoutAssignedToInput = {
+    where: SupportTicketScalarWhereInput
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyWithoutAssignedToInput>
+  }
+
+  export type SupportMessageUpsertWithWhereUniqueWithoutUserInput = {
+    where: SupportMessageWhereUniqueInput
+    update: XOR<SupportMessageUpdateWithoutUserInput, SupportMessageUncheckedUpdateWithoutUserInput>
+    create: XOR<SupportMessageCreateWithoutUserInput, SupportMessageUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportMessageUpdateWithWhereUniqueWithoutUserInput = {
+    where: SupportMessageWhereUniqueInput
+    data: XOR<SupportMessageUpdateWithoutUserInput, SupportMessageUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SupportMessageUpdateManyWithWhereWithoutUserInput = {
+    where: SupportMessageScalarWhereInput
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SupportMessageScalarWhereInput = {
+    AND?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+    OR?: SupportMessageScalarWhereInput[]
+    NOT?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+    id?: StringFilter<"SupportMessage"> | string
+    ticketId?: StringFilter<"SupportMessage"> | string
+    userId?: StringNullableFilter<"SupportMessage"> | string | null
+    senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
+    body?: StringFilter<"SupportMessage"> | string
+    isInternal?: BoolFilter<"SupportMessage"> | boolean
+    createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
+    updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
+  }
+
   export type UserCreateWithoutPendingVerificationInput = {
     id?: string
     email: string
@@ -34953,6 +38873,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPendingVerificationInput = {
@@ -34990,6 +38913,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPendingVerificationInput = {
@@ -35043,6 +38969,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPendingVerificationInput = {
@@ -35080,6 +39009,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPasswordResetsInput = {
@@ -35117,6 +39049,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetsInput = {
@@ -35154,6 +39089,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetsInput = {
@@ -35207,6 +39145,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetsInput = {
@@ -35244,6 +39185,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutRefreshSessionsInput = {
@@ -35281,6 +39225,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -35318,6 +39265,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -35371,6 +39321,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -35408,6 +39361,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWalletInput = {
@@ -35445,6 +39401,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWalletInput = {
@@ -35482,6 +39441,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWalletInput = {
@@ -35787,6 +39749,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWalletInput = {
@@ -35824,6 +39789,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletBalanceUpsertWithWhereUniqueWithoutWalletInput = {
@@ -36770,6 +40738,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepositsInput = {
@@ -36807,6 +40778,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepositsInput = {
@@ -36985,6 +40959,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepositsInput = {
@@ -37022,6 +40999,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletUpsertWithoutDepositsInput = {
@@ -37202,6 +41182,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -37239,6 +41222,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -37593,6 +41579,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -37630,6 +41619,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletUpsertWithoutTransactionsInput = {
@@ -38240,6 +42232,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -38277,6 +42272,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -38682,6 +42680,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -38719,6 +42720,9 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type WalletUpsertWithoutWithdrawalsInput = {
@@ -39135,6 +43139,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalQuotesInput = {
@@ -39172,6 +43179,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalQuotesInput = {
@@ -39391,6 +43401,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalQuotesInput = {
@@ -39428,6 +43441,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CurrencyUpsertWithoutSourceQuotesInput = {
@@ -39587,6 +43603,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBeneficiariesInput = {
@@ -39624,6 +43643,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBeneficiariesInput = {
@@ -39796,6 +43818,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBeneficiariesInput = {
@@ -39833,6 +43858,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CurrencyUpsertWithoutBeneficiariesInput = {
@@ -40219,6 +44247,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutGiftCardSalesInput = {
@@ -40256,6 +44287,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutGiftCardSalesInput = {
@@ -40360,6 +44394,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGiftCardSalesInput = {
@@ -40397,6 +44434,9 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TransactionUpsertWithoutGiftCardSaleInput = {
@@ -40454,6 +44494,656 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type UserCreateWithoutSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSupportTicketsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+  }
+
+  export type UserCreateWithoutAssignedSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAssignedSupportTicketsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAssignedSupportTicketsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAssignedSupportTicketsInput, UserUncheckedCreateWithoutAssignedSupportTicketsInput>
+  }
+
+  export type SupportMessageCreateWithoutTicketInput = {
+    id?: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutSupportMessagesInput
+  }
+
+  export type SupportMessageUncheckedCreateWithoutTicketInput = {
+    id?: string
+    userId?: string | null
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageCreateOrConnectWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    create: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput>
+  }
+
+  export type SupportMessageCreateManyTicketInputEnvelope = {
+    data: SupportMessageCreateManyTicketInput | SupportMessageCreateManyTicketInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutSupportTicketsInput = {
+    update: XOR<UserUpdateWithoutSupportTicketsInput, UserUncheckedUpdateWithoutSupportTicketsInput>
+    create: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSupportTicketsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSupportTicketsInput, UserUncheckedUpdateWithoutSupportTicketsInput>
+  }
+
+  export type UserUpdateWithoutSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutAssignedSupportTicketsInput = {
+    update: XOR<UserUpdateWithoutAssignedSupportTicketsInput, UserUncheckedUpdateWithoutAssignedSupportTicketsInput>
+    create: XOR<UserCreateWithoutAssignedSupportTicketsInput, UserUncheckedCreateWithoutAssignedSupportTicketsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedSupportTicketsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedSupportTicketsInput, UserUncheckedUpdateWithoutAssignedSupportTicketsInput>
+  }
+
+  export type UserUpdateWithoutAssignedSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedSupportTicketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SupportMessageUpsertWithWhereUniqueWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    update: XOR<SupportMessageUpdateWithoutTicketInput, SupportMessageUncheckedUpdateWithoutTicketInput>
+    create: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput>
+  }
+
+  export type SupportMessageUpdateWithWhereUniqueWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    data: XOR<SupportMessageUpdateWithoutTicketInput, SupportMessageUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type SupportMessageUpdateManyWithWhereWithoutTicketInput = {
+    where: SupportMessageScalarWhereInput
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyWithoutTicketInput>
+  }
+
+  export type SupportTicketCreateWithoutMessagesInput = {
+    id?: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+    user: UserCreateNestedOneWithoutSupportTicketsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    userId: string
+    assignedToId?: string | null
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+  }
+
+  export type SupportTicketCreateOrConnectWithoutMessagesInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type UserCreateWithoutSupportMessagesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserUncheckedCreateWithoutSupportMessagesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+  }
+
+  export type UserCreateOrConnectWithoutSupportMessagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSupportMessagesInput, UserUncheckedCreateWithoutSupportMessagesInput>
+  }
+
+  export type SupportTicketUpsertWithoutMessagesInput = {
+    update: XOR<SupportTicketUpdateWithoutMessagesInput, SupportTicketUncheckedUpdateWithoutMessagesInput>
+    create: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    where?: SupportTicketWhereInput
+  }
+
+  export type SupportTicketUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: SupportTicketWhereInput
+    data: XOR<SupportTicketUpdateWithoutMessagesInput, SupportTicketUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type SupportTicketUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserUpsertWithoutSupportMessagesInput = {
+    update: XOR<UserUpdateWithoutSupportMessagesInput, UserUncheckedUpdateWithoutSupportMessagesInput>
+    create: XOR<UserCreateWithoutSupportMessagesInput, UserUncheckedCreateWithoutSupportMessagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSupportMessagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSupportMessagesInput, UserUncheckedUpdateWithoutSupportMessagesInput>
+  }
+
+  export type UserUpdateWithoutSupportMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSupportMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
   }
 
   export type PasswordResetChallengeCreateManyUserInput = {
@@ -40615,6 +45305,44 @@ export namespace Prisma {
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
     walletCreditedAt?: Date | string | null
     walletCreditOperationKey?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportTicketCreateManyUserInput = {
+    id?: string
+    assignedToId?: string | null
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+  }
+
+  export type SupportTicketCreateManyAssignedToInput = {
+    id?: string
+    userId: string
+    subject: string
+    category?: $Enums.SupportTicketCategory
+    status?: $Enums.SupportTicketStatus
+    priority?: $Enums.SupportTicketPriority
+    source?: $Enums.SupportTicketSource
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    resolvedAt?: Date | string | null
+    lastMessageAt?: Date | string | null
+  }
+
+  export type SupportMessageCreateManyUserInput = {
+    id?: string
+    ticketId: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -41120,6 +45848,124 @@ export namespace Prisma {
     providerResponse?: NullableJsonNullValueInput | InputJsonValue
     walletCreditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     walletCreditOperationKey?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportTicketUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
+    messages?: SupportMessageUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportTicketUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
+    messages?: SupportMessageUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutAssignedToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    category?: EnumSupportTicketCategoryFieldUpdateOperationsInput | $Enums.SupportTicketCategory
+    status?: EnumSupportTicketStatusFieldUpdateOperationsInput | $Enums.SupportTicketStatus
+    priority?: EnumSupportTicketPriorityFieldUpdateOperationsInput | $Enums.SupportTicketPriority
+    source?: EnumSupportTicketSourceFieldUpdateOperationsInput | $Enums.SupportTicketSource
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportMessageUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type SupportMessageUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42716,6 +47562,46 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SupportMessageCreateManyTicketInput = {
+    id?: string
+    userId?: string | null
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutSupportMessagesNestedInput
+  }
+
+  export type SupportMessageUncheckedUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

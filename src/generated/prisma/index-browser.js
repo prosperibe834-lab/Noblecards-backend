@@ -433,6 +433,32 @@ exports.Prisma.GiftCardSellRateAdjustmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SupportTicketScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  assignedToId: 'assignedToId',
+  subject: 'subject',
+  category: 'category',
+  status: 'status',
+  priority: 'priority',
+  source: 'source',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  resolvedAt: 'resolvedAt',
+  lastMessageAt: 'lastMessageAt'
+};
+
+exports.Prisma.SupportMessageScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  userId: 'userId',
+  senderType: 'senderType',
+  body: 'body',
+  isInternal: 'isInternal',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -565,6 +591,42 @@ exports.GiftCardSaleStatus = exports.$Enums.GiftCardSaleStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.SupportTicketCategory = exports.$Enums.SupportTicketCategory = {
+  ACCOUNT: 'ACCOUNT',
+  PAYMENT: 'PAYMENT',
+  WITHDRAWAL: 'WITHDRAWAL',
+  GIFT_CARD: 'GIFT_CARD',
+  TECHNICAL: 'TECHNICAL',
+  GENERAL: 'GENERAL'
+};
+
+exports.SupportTicketStatus = exports.$Enums.SupportTicketStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  PENDING: 'PENDING',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+};
+
+exports.SupportTicketPriority = exports.$Enums.SupportTicketPriority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
+exports.SupportTicketSource = exports.$Enums.SupportTicketSource = {
+  APP: 'APP',
+  WEB: 'WEB',
+  EMAIL: 'EMAIL',
+  PHONE: 'PHONE'
+};
+
+exports.SupportMessageSenderType = exports.$Enums.SupportMessageSenderType = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   PendingRegistration: 'PendingRegistration',
@@ -582,7 +644,9 @@ exports.Prisma.ModelName = {
   PayoutAttempt: 'PayoutAttempt',
   ProviderWebhookEvent: 'ProviderWebhookEvent',
   GiftCardSale: 'GiftCardSale',
-  GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment'
+  GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+  SupportTicket: 'SupportTicket',
+  SupportMessage: 'SupportMessage'
 };
 
 /**
