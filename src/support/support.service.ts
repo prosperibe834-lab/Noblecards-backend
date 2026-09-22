@@ -39,6 +39,15 @@ export class SupportService {
         },
       });
 
+      await tx.supportMessage.create({
+        data: {
+          ticketId: createdTicket.id,
+          senderType: 'SYSTEM',
+          body: 'Thank you for contacting NobleCards Support. Your request has been received successfully. A support representative will review your message and get back to you as soon as possible.',
+          isInternal: false,
+        },
+      });
+
       return tx.supportTicket.findUnique({
         where: { id: createdTicket.id },
         include: {
@@ -47,6 +56,7 @@ export class SupportService {
             orderBy: { createdAt: 'asc' },
             include: {
               user: { select: { id: true, firstName: true, lastName: true, email: true } },
+              attachments: true,
             },
           },
         },
@@ -63,12 +73,12 @@ export class SupportService {
       include: {
         messages: {
           orderBy: { createdAt: 'asc' },
-          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } },
+          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } }, attachments: true },
         },
       },
     });
 
-    return tickets.map((ticket) => this.serializeTicket(ticket));
+    return tickets.map((ticket) => this.serializeTicket(ticket, true));
   }
 
   async getUserTicket(userId: string, ticketId: string) {
@@ -79,13 +89,13 @@ export class SupportService {
         assignedTo: { select: { id: true, firstName: true, lastName: true, email: true } },
         messages: {
           orderBy: { createdAt: 'asc' },
-          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } },
+          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } }, attachments: true },
         },
       },
     });
 
     if (!ticket) throw new NotFoundException('Support ticket not found.');
-    return this.serializeTicket(ticket);
+    return this.serializeTicket(ticket, true);
   }
 
   async addMessage(userId: string, ticketId: string, dto: SendSupportMessageDto) {
@@ -95,16 +105,21 @@ export class SupportService {
     });
     if (!ticket) throw new NotFoundException('Support ticket not found.');
 
-    const body = dto.message.trim();
-    if (!body) throw new BadRequestException('Message is required.');
+    const body = dto.message?.trim();
+    const hasLocation = dto.latitude !== undefined || dto.longitude !== undefined;
+    if (!body && !hasLocation) throw new BadRequestException('Message or location is required.');
+    if (hasLocation && (dto.latitude === undefined || dto.longitude === undefined || dto.latitude < -90 || dto.latitude > 90 || dto.longitude < -180 || dto.longitude > 180)) {
+      throw new BadRequestException('Valid latitude and longitude are required.');
+    }
 
     const created = await this.prismaAny.supportMessage.create({
       data: {
         ticketId: ticket.id,
         userId,
         senderType: 'USER',
-        body,
-        isInternal: dto.isInternal ?? false,
+        body: body ?? `Location: ${dto.latitude}, ${dto.longitude}`,
+        metadata: hasLocation ? { type: 'LOCATION', latitude: dto.latitude, longitude: dto.longitude } : undefined,
+        isInternal: false,
       },
     });
 
@@ -118,6 +133,46 @@ export class SupportService {
     });
 
     return created;
+  }
+
+  async clearUserTicket(userId: string, ticketId: string) {
+    const ticket = await this.prismaAny.supportTicket.findFirst({ where: { id: ticketId, userId }, select: { id: true } });
+    if (!ticket) throw new NotFoundException('Support ticket not found.');
+    const userClearedAt = new Date();
+    await this.prismaAny.supportTicket.update({ where: { id: ticket.id }, data: { userClearedAt } });
+    return { cleared: true, userClearedAt };
+  }
+
+  async addUserAttachment(userId: string, ticketId: string, file: { filename: string; originalname: string; mimetype: string; size: number }) {
+    const ticket = await this.prismaAny.supportTicket.findFirst({ where: { id: ticketId, userId }, select: { id: true } });
+    if (!ticket) throw new NotFoundException('Support ticket not found.');
+
+    const result = await this.prismaAny.$transaction(async (tx: any) => {
+      const message = await tx.supportMessage.create({
+        data: {
+          ticketId: ticket.id,
+          userId,
+          senderType: 'USER',
+          body: `Attachment: ${file.originalname}`,
+          isInternal: false,
+        },
+      });
+      await tx.supportAttachment.create({
+        data: {
+          messageId: message.id,
+          uploadedByUserId: userId,
+          fileName: file.filename,
+          originalName: file.originalname,
+          mimeType: file.mimetype,
+          sizeBytes: file.size,
+          storagePath: `uploads/support/${file.filename}`,
+          publicUrl: `/uploads/support/${file.filename}`,
+        },
+      });
+      await tx.supportTicket.update({ where: { id: ticket.id }, data: { updatedAt: new Date(), lastMessageAt: new Date(), status: 'OPEN' } });
+      return tx.supportMessage.findUnique({ where: { id: message.id }, include: { user: { select: { id: true, firstName: true, lastName: true, email: true } }, attachments: true } });
+    });
+    return this.serializeMessage(result);
   }
 
   async getAdminTickets(query: Record<string, string | undefined> = {}) {
@@ -154,6 +209,7 @@ export class SupportService {
           messages: {
             orderBy: { createdAt: 'asc' },
             take: 10,
+            include: { user: { select: { id: true, firstName: true, lastName: true, email: true } }, attachments: true },
           },
         },
       }),
@@ -178,7 +234,7 @@ export class SupportService {
         assignedTo: { select: { id: true, firstName: true, lastName: true, email: true } },
         messages: {
           orderBy: { createdAt: 'asc' },
-          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } },
+          include: { user: { select: { id: true, firstName: true, lastName: true, email: true } }, attachments: true },
         },
       },
     });
@@ -236,7 +292,7 @@ export class SupportService {
     const ticket = await this.prismaAny.supportTicket.findUnique({ where: { id: ticketId } });
     if (!ticket) throw new NotFoundException('Support ticket not found.');
 
-    const body = dto.message.trim();
+    const body = dto.message?.trim();
     if (!body) throw new BadRequestException('Message is required.');
 
     const created = await this.prismaAny.supportMessage.create({
@@ -276,7 +332,13 @@ export class SupportService {
     return { total, open, inProgress, pending, resolved };
   }
 
-  private serializeTicket(ticket: any) {
+  private serializeTicket(ticket: any, userView = false) {
+    const messages = (ticket.messages ?? []).filter((message: any) => {
+      if (!userView) return true;
+      if (message.isInternal) return false;
+      return !ticket.userClearedAt || message.createdAt > ticket.userClearedAt;
+    });
+
     return {
       id: ticket.id,
       userId: ticket.userId,
@@ -301,13 +363,19 @@ export class SupportService {
         lastName: ticket.assignedTo.lastName,
         email: ticket.assignedTo.email,
       } : null,
-      messages: (ticket.messages ?? []).map((message: any) => ({
+      messages: messages.map((message: any) => this.serializeMessage(message)),
+    };
+  }
+
+  private serializeMessage(message: any) {
+    return {
         id: message.id,
         ticketId: message.ticketId,
         userId: message.userId,
         senderType: message.senderType,
         body: message.body,
         isInternal: message.isInternal,
+        metadata: message.metadata ?? null,
         createdAt: message.createdAt,
         user: message.user ? {
           id: message.user.id,
@@ -315,7 +383,15 @@ export class SupportService {
           lastName: message.user.lastName,
           email: message.user.email,
         } : null,
-      })),
+        attachments: (message.attachments ?? []).map((attachment: any) => ({
+          id: attachment.id,
+          fileName: attachment.fileName,
+          originalName: attachment.originalName,
+          mimeType: attachment.mimeType,
+          sizeBytes: attachment.sizeBytes,
+          publicUrl: attachment.publicUrl,
+          createdAt: attachment.createdAt,
+        })),
     };
   }
 }

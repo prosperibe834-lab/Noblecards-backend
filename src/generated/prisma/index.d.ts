@@ -99,6 +99,11 @@ export type GiftCardSale = $Result.DefaultSelection<Prisma.$GiftCardSalePayload>
  */
 export type GiftCardSellRateAdjustment = $Result.DefaultSelection<Prisma.$GiftCardSellRateAdjustmentPayload>
 /**
+ * Model GiftCardPurchase
+ * 
+ */
+export type GiftCardPurchase = $Result.DefaultSelection<Prisma.$GiftCardPurchasePayload>
+/**
  * Model SupportTicket
  * 
  */
@@ -108,6 +113,11 @@ export type SupportTicket = $Result.DefaultSelection<Prisma.$SupportTicketPayloa
  * 
  */
 export type SupportMessage = $Result.DefaultSelection<Prisma.$SupportMessagePayload>
+/**
+ * Model SupportAttachment
+ * 
+ */
+export type SupportAttachment = $Result.DefaultSelection<Prisma.$SupportAttachmentPayload>
 
 /**
  * Enums
@@ -161,6 +171,7 @@ export type TransactionType = (typeof TransactionType)[keyof typeof TransactionT
 export const PaymentProvider: {
   FLUTTERWAVE: 'FLUTTERWAVE',
   SOGO: 'SOGO',
+  TOPUPMATE: 'TOPUPMATE',
   MANUAL: 'MANUAL',
   INTERNAL: 'INTERNAL'
 };
@@ -179,6 +190,17 @@ export const GiftCardSaleStatus: {
 };
 
 export type GiftCardSaleStatus = (typeof GiftCardSaleStatus)[keyof typeof GiftCardSaleStatus]
+
+
+export const GiftCardPurchaseStatus: {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCESSFUL: 'SUCCESSFUL',
+  FAILED: 'FAILED',
+  UNDER_REVIEW: 'UNDER_REVIEW'
+};
+
+export type GiftCardPurchaseStatus = (typeof GiftCardPurchaseStatus)[keyof typeof GiftCardPurchaseStatus]
 
 
 export const PaymentMethod: {
@@ -301,7 +323,8 @@ export type SupportTicketSource = (typeof SupportTicketSource)[keyof typeof Supp
 
 export const SupportMessageSenderType: {
   USER: 'USER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  SYSTEM: 'SYSTEM'
 };
 
 export type SupportMessageSenderType = (typeof SupportMessageSenderType)[keyof typeof SupportMessageSenderType]
@@ -327,6 +350,10 @@ export const PaymentProvider: typeof $Enums.PaymentProvider
 export type GiftCardSaleStatus = $Enums.GiftCardSaleStatus
 
 export const GiftCardSaleStatus: typeof $Enums.GiftCardSaleStatus
+
+export type GiftCardPurchaseStatus = $Enums.GiftCardPurchaseStatus
+
+export const GiftCardPurchaseStatus: typeof $Enums.GiftCardPurchaseStatus
 
 export type PaymentMethod = $Enums.PaymentMethod
 
@@ -668,6 +695,16 @@ export class PrismaClient<
   get giftCardSellRateAdjustment(): Prisma.GiftCardSellRateAdjustmentDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.giftCardPurchase`: Exposes CRUD operations for the **GiftCardPurchase** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GiftCardPurchases
+    * const giftCardPurchases = await prisma.giftCardPurchase.findMany()
+    * ```
+    */
+  get giftCardPurchase(): Prisma.GiftCardPurchaseDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.supportTicket`: Exposes CRUD operations for the **SupportTicket** model.
     * Example usage:
     * ```ts
@@ -686,6 +723,16 @@ export class PrismaClient<
     * ```
     */
   get supportMessage(): Prisma.SupportMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.supportAttachment`: Exposes CRUD operations for the **SupportAttachment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportAttachments
+    * const supportAttachments = await prisma.supportAttachment.findMany()
+    * ```
+    */
+  get supportAttachment(): Prisma.SupportAttachmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1150,8 +1197,10 @@ export namespace Prisma {
     ProviderWebhookEvent: 'ProviderWebhookEvent',
     GiftCardSale: 'GiftCardSale',
     GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+    GiftCardPurchase: 'GiftCardPurchase',
     SupportTicket: 'SupportTicket',
-    SupportMessage: 'SupportMessage'
+    SupportMessage: 'SupportMessage',
+    SupportAttachment: 'SupportAttachment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1167,7 +1216,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "supportTicket" | "supportMessage"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardPurchase" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2429,6 +2478,80 @@ export namespace Prisma {
           }
         }
       }
+      GiftCardPurchase: {
+        payload: Prisma.$GiftCardPurchasePayload<ExtArgs>
+        fields: Prisma.GiftCardPurchaseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GiftCardPurchaseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GiftCardPurchaseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          findFirst: {
+            args: Prisma.GiftCardPurchaseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GiftCardPurchaseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          findMany: {
+            args: Prisma.GiftCardPurchaseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>[]
+          }
+          create: {
+            args: Prisma.GiftCardPurchaseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          createMany: {
+            args: Prisma.GiftCardPurchaseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GiftCardPurchaseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>[]
+          }
+          delete: {
+            args: Prisma.GiftCardPurchaseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          update: {
+            args: Prisma.GiftCardPurchaseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          deleteMany: {
+            args: Prisma.GiftCardPurchaseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GiftCardPurchaseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GiftCardPurchaseUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>[]
+          }
+          upsert: {
+            args: Prisma.GiftCardPurchaseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardPurchasePayload>
+          }
+          aggregate: {
+            args: Prisma.GiftCardPurchaseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGiftCardPurchase>
+          }
+          groupBy: {
+            args: Prisma.GiftCardPurchaseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardPurchaseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GiftCardPurchaseCountArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardPurchaseCountAggregateOutputType> | number
+          }
+        }
+      }
       SupportTicket: {
         payload: Prisma.$SupportTicketPayload<ExtArgs>
         fields: Prisma.SupportTicketFieldRefs
@@ -2577,6 +2700,80 @@ export namespace Prisma {
           }
         }
       }
+      SupportAttachment: {
+        payload: Prisma.$SupportAttachmentPayload<ExtArgs>
+        fields: Prisma.SupportAttachmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportAttachmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportAttachmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          findFirst: {
+            args: Prisma.SupportAttachmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportAttachmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          findMany: {
+            args: Prisma.SupportAttachmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>[]
+          }
+          create: {
+            args: Prisma.SupportAttachmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          createMany: {
+            args: Prisma.SupportAttachmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportAttachmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>[]
+          }
+          delete: {
+            args: Prisma.SupportAttachmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          update: {
+            args: Prisma.SupportAttachmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportAttachmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportAttachmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SupportAttachmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.SupportAttachmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportAttachmentPayload>
+          }
+          aggregate: {
+            args: Prisma.SupportAttachmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportAttachment>
+          }
+          groupBy: {
+            args: Prisma.SupportAttachmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportAttachmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportAttachmentCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportAttachmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2717,8 +2914,10 @@ export namespace Prisma {
     providerWebhookEvent?: ProviderWebhookEventOmit
     giftCardSale?: GiftCardSaleOmit
     giftCardSellRateAdjustment?: GiftCardSellRateAdjustmentOmit
+    giftCardPurchase?: GiftCardPurchaseOmit
     supportTicket?: SupportTicketOmit
     supportMessage?: SupportMessageOmit
+    supportAttachment?: SupportAttachmentOmit
   }
 
   /* Types for Logging */
@@ -2807,9 +3006,12 @@ export namespace Prisma {
     withdrawalQuotes: number
     beneficiaries: number
     giftCardSales: number
+    giftCardPurchases: number
     supportTickets: number
     assignedSupportTickets: number
     supportMessages: number
+    uploadedSupportAttachments: number
+    uploadedAdminAttachments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2821,9 +3023,12 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | UserCountOutputTypeCountWithdrawalQuotesArgs
     beneficiaries?: boolean | UserCountOutputTypeCountBeneficiariesArgs
     giftCardSales?: boolean | UserCountOutputTypeCountGiftCardSalesArgs
+    giftCardPurchases?: boolean | UserCountOutputTypeCountGiftCardPurchasesArgs
     supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
     assignedSupportTickets?: boolean | UserCountOutputTypeCountAssignedSupportTicketsArgs
     supportMessages?: boolean | UserCountOutputTypeCountSupportMessagesArgs
+    uploadedSupportAttachments?: boolean | UserCountOutputTypeCountUploadedSupportAttachmentsArgs
+    uploadedAdminAttachments?: boolean | UserCountOutputTypeCountUploadedAdminAttachmentsArgs
   }
 
   // Custom InputTypes
@@ -2896,6 +3101,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountGiftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GiftCardPurchaseWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupportTicketWhereInput
   }
@@ -2914,6 +3126,20 @@ export namespace Prisma {
     where?: SupportMessageWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUploadedSupportAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportAttachmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountUploadedAdminAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportAttachmentWhereInput
+  }
+
 
   /**
    * Count Type WalletCountOutputType
@@ -2925,6 +3151,7 @@ export namespace Prisma {
     transactions: number
     ledgerEntries: number
     withdrawals: number
+    giftCardPurchases: number
   }
 
   export type WalletCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2933,6 +3160,7 @@ export namespace Prisma {
     transactions?: boolean | WalletCountOutputTypeCountTransactionsArgs
     ledgerEntries?: boolean | WalletCountOutputTypeCountLedgerEntriesArgs
     withdrawals?: boolean | WalletCountOutputTypeCountWithdrawalsArgs
+    giftCardPurchases?: boolean | WalletCountOutputTypeCountGiftCardPurchasesArgs
   }
 
   // Custom InputTypes
@@ -2979,6 +3207,13 @@ export namespace Prisma {
    */
   export type WalletCountOutputTypeCountWithdrawalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: WithdrawalWhereInput
+  }
+
+  /**
+   * WalletCountOutputType without action
+   */
+  export type WalletCountOutputTypeCountGiftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GiftCardPurchaseWhereInput
   }
 
 
@@ -3246,6 +3481,37 @@ export namespace Prisma {
    */
   export type SupportTicketCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SupportMessageWhereInput
+  }
+
+
+  /**
+   * Count Type SupportMessageCountOutputType
+   */
+
+  export type SupportMessageCountOutputType = {
+    attachments: number
+  }
+
+  export type SupportMessageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attachments?: boolean | SupportMessageCountOutputTypeCountAttachmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupportMessageCountOutputType without action
+   */
+  export type SupportMessageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessageCountOutputType
+     */
+    select?: SupportMessageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupportMessageCountOutputType without action
+   */
+  export type SupportMessageCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportAttachmentWhereInput
   }
 
 
@@ -3621,9 +3887,12 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
+    giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
     supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
+    uploadedSupportAttachments?: boolean | User$uploadedSupportAttachmentsArgs<ExtArgs>
+    uploadedAdminAttachments?: boolean | User$uploadedAdminAttachmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3723,9 +3992,12 @@ export namespace Prisma {
     withdrawalQuotes?: boolean | User$withdrawalQuotesArgs<ExtArgs>
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
+    giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
     supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
+    uploadedSupportAttachments?: boolean | User$uploadedSupportAttachmentsArgs<ExtArgs>
+    uploadedAdminAttachments?: boolean | User$uploadedAdminAttachmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3744,9 +4016,12 @@ export namespace Prisma {
       withdrawalQuotes: Prisma.$WithdrawalQuotePayload<ExtArgs>[]
       beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
       giftCardSales: Prisma.$GiftCardSalePayload<ExtArgs>[]
+      giftCardPurchases: Prisma.$GiftCardPurchasePayload<ExtArgs>[]
       supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       assignedSupportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
+      uploadedSupportAttachments: Prisma.$SupportAttachmentPayload<ExtArgs>[]
+      uploadedAdminAttachments: Prisma.$SupportAttachmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4178,9 +4453,12 @@ export namespace Prisma {
     withdrawalQuotes<T extends User$withdrawalQuotesArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     beneficiaries<T extends User$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, User$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardSales<T extends User$giftCardSalesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardSalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    giftCardPurchases<T extends User$giftCardPurchasesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     supportTickets<T extends User$supportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedSupportTickets<T extends User$assignedSupportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedSupportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     supportMessages<T extends User$supportMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    uploadedSupportAttachments<T extends User$uploadedSupportAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$uploadedSupportAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    uploadedAdminAttachments<T extends User$uploadedAdminAttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$uploadedAdminAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4858,6 +5136,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.giftCardPurchases
+   */
+  export type User$giftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    where?: GiftCardPurchaseWhereInput
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
+  }
+
+  /**
    * User.supportTickets
    */
   export type User$supportTicketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4927,6 +5229,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * User.uploadedSupportAttachments
+   */
+  export type User$uploadedSupportAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    where?: SupportAttachmentWhereInput
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    cursor?: SupportAttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.uploadedAdminAttachments
+   */
+  export type User$uploadedAdminAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    where?: SupportAttachmentWhereInput
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    cursor?: SupportAttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
   }
 
   /**
@@ -8568,6 +8918,7 @@ export namespace Prisma {
     transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Wallet$ledgerEntriesArgs<ExtArgs>
     withdrawals?: boolean | Wallet$withdrawalsArgs<ExtArgs>
+    giftCardPurchases?: boolean | Wallet$giftCardPurchasesArgs<ExtArgs>
     _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["wallet"]>
 
@@ -8602,6 +8953,7 @@ export namespace Prisma {
     transactions?: boolean | Wallet$transactionsArgs<ExtArgs>
     ledgerEntries?: boolean | Wallet$ledgerEntriesArgs<ExtArgs>
     withdrawals?: boolean | Wallet$withdrawalsArgs<ExtArgs>
+    giftCardPurchases?: boolean | Wallet$giftCardPurchasesArgs<ExtArgs>
     _count?: boolean | WalletCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type WalletIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8620,6 +8972,7 @@ export namespace Prisma {
       transactions: Prisma.$TransactionPayload<ExtArgs>[]
       ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
       withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
+      giftCardPurchases: Prisma.$GiftCardPurchasePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9026,6 +9379,7 @@ export namespace Prisma {
     transactions<T extends Wallet$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     ledgerEntries<T extends Wallet$ledgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     withdrawals<T extends Wallet$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    giftCardPurchases<T extends Wallet$giftCardPurchasesArgs<ExtArgs> = {}>(args?: Subset<T, Wallet$giftCardPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9577,6 +9931,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: WithdrawalScalarFieldEnum | WithdrawalScalarFieldEnum[]
+  }
+
+  /**
+   * Wallet.giftCardPurchases
+   */
+  export type Wallet$giftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    where?: GiftCardPurchaseWhereInput
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
   }
 
   /**
@@ -13744,6 +14122,7 @@ export namespace Prisma {
     deposit?: boolean | Transaction$depositArgs<ExtArgs>
     withdrawal?: boolean | Transaction$withdrawalArgs<ExtArgs>
     giftCardSale?: boolean | Transaction$giftCardSaleArgs<ExtArgs>
+    giftCardPurchase?: boolean | Transaction$giftCardPurchaseArgs<ExtArgs>
     ledgerEntries?: boolean | Transaction$ledgerEntriesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
@@ -13822,6 +14201,7 @@ export namespace Prisma {
     deposit?: boolean | Transaction$depositArgs<ExtArgs>
     withdrawal?: boolean | Transaction$withdrawalArgs<ExtArgs>
     giftCardSale?: boolean | Transaction$giftCardSaleArgs<ExtArgs>
+    giftCardPurchase?: boolean | Transaction$giftCardPurchaseArgs<ExtArgs>
     ledgerEntries?: boolean | Transaction$ledgerEntriesArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -13845,6 +14225,7 @@ export namespace Prisma {
       deposit: Prisma.$DepositPayload<ExtArgs> | null
       withdrawal: Prisma.$WithdrawalPayload<ExtArgs> | null
       giftCardSale: Prisma.$GiftCardSalePayload<ExtArgs> | null
+      giftCardPurchase: Prisma.$GiftCardPurchasePayload<ExtArgs> | null
       ledgerEntries: Prisma.$LedgerEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -14265,6 +14646,7 @@ export namespace Prisma {
     deposit<T extends Transaction$depositArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$depositArgs<ExtArgs>>): Prisma__DepositClient<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     withdrawal<T extends Transaction$withdrawalArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$withdrawalArgs<ExtArgs>>): Prisma__WithdrawalClient<$Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     giftCardSale<T extends Transaction$giftCardSaleArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$giftCardSaleArgs<ExtArgs>>): Prisma__GiftCardSaleClient<$Result.GetResult<Prisma.$GiftCardSalePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    giftCardPurchase<T extends Transaction$giftCardPurchaseArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$giftCardPurchaseArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     ledgerEntries<T extends Transaction$ledgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -14767,6 +15149,25 @@ export namespace Prisma {
      */
     include?: GiftCardSaleInclude<ExtArgs> | null
     where?: GiftCardSaleWhereInput
+  }
+
+  /**
+   * Transaction.giftCardPurchase
+   */
+  export type Transaction$giftCardPurchaseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    where?: GiftCardPurchaseWhereInput
   }
 
   /**
@@ -25273,6 +25674,1480 @@ export namespace Prisma {
 
 
   /**
+   * Model GiftCardPurchase
+   */
+
+  export type AggregateGiftCardPurchase = {
+    _count: GiftCardPurchaseCountAggregateOutputType | null
+    _avg: GiftCardPurchaseAvgAggregateOutputType | null
+    _sum: GiftCardPurchaseSumAggregateOutputType | null
+    _min: GiftCardPurchaseMinAggregateOutputType | null
+    _max: GiftCardPurchaseMaxAggregateOutputType | null
+  }
+
+  export type GiftCardPurchaseAvgAggregateOutputType = {
+    quantity: number | null
+    amount: Decimal | null
+    providerAmount: Decimal | null
+    fee: Decimal | null
+    customerPrice: Decimal | null
+  }
+
+  export type GiftCardPurchaseSumAggregateOutputType = {
+    quantity: number | null
+    amount: Decimal | null
+    providerAmount: Decimal | null
+    fee: Decimal | null
+    customerPrice: Decimal | null
+  }
+
+  export type GiftCardPurchaseMinAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    idempotencyKey: string | null
+    userId: string | null
+    walletId: string | null
+    transactionId: string | null
+    provider: $Enums.PaymentProvider | null
+    providerProductId: string | null
+    providerReference: string | null
+    redeemId: string | null
+    brandNameSnapshot: string | null
+    productNameSnapshot: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    denominationType: string | null
+    quantity: number | null
+    amount: Decimal | null
+    providerAmount: Decimal | null
+    fee: Decimal | null
+    customerPrice: Decimal | null
+    status: $Enums.GiftCardPurchaseStatus | null
+    providerStatus: string | null
+    providerMessage: string | null
+    voucherCiphertext: string | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type GiftCardPurchaseMaxAggregateOutputType = {
+    id: string | null
+    reference: string | null
+    idempotencyKey: string | null
+    userId: string | null
+    walletId: string | null
+    transactionId: string | null
+    provider: $Enums.PaymentProvider | null
+    providerProductId: string | null
+    providerReference: string | null
+    redeemId: string | null
+    brandNameSnapshot: string | null
+    productNameSnapshot: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    denominationType: string | null
+    quantity: number | null
+    amount: Decimal | null
+    providerAmount: Decimal | null
+    fee: Decimal | null
+    customerPrice: Decimal | null
+    status: $Enums.GiftCardPurchaseStatus | null
+    providerStatus: string | null
+    providerMessage: string | null
+    voucherCiphertext: string | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type GiftCardPurchaseCountAggregateOutputType = {
+    id: number
+    reference: number
+    idempotencyKey: number
+    userId: number
+    walletId: number
+    transactionId: number
+    provider: number
+    providerProductId: number
+    providerReference: number
+    redeemId: number
+    brandNameSnapshot: number
+    productNameSnapshot: number
+    countryCode: number
+    currencyCode: number
+    denominationType: number
+    quantity: number
+    amount: number
+    providerAmount: number
+    fee: number
+    customerPrice: number
+    status: number
+    providerStatus: number
+    providerMessage: number
+    voucherCiphertext: number
+    redeemDetails: number
+    providerMetadata: number
+    errorMessage: number
+    metadata: number
+    createdAt: number
+    updatedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type GiftCardPurchaseAvgAggregateInputType = {
+    quantity?: true
+    amount?: true
+    providerAmount?: true
+    fee?: true
+    customerPrice?: true
+  }
+
+  export type GiftCardPurchaseSumAggregateInputType = {
+    quantity?: true
+    amount?: true
+    providerAmount?: true
+    fee?: true
+    customerPrice?: true
+  }
+
+  export type GiftCardPurchaseMinAggregateInputType = {
+    id?: true
+    reference?: true
+    idempotencyKey?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    provider?: true
+    providerProductId?: true
+    providerReference?: true
+    redeemId?: true
+    brandNameSnapshot?: true
+    productNameSnapshot?: true
+    countryCode?: true
+    currencyCode?: true
+    denominationType?: true
+    quantity?: true
+    amount?: true
+    providerAmount?: true
+    fee?: true
+    customerPrice?: true
+    status?: true
+    providerStatus?: true
+    providerMessage?: true
+    voucherCiphertext?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type GiftCardPurchaseMaxAggregateInputType = {
+    id?: true
+    reference?: true
+    idempotencyKey?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    provider?: true
+    providerProductId?: true
+    providerReference?: true
+    redeemId?: true
+    brandNameSnapshot?: true
+    productNameSnapshot?: true
+    countryCode?: true
+    currencyCode?: true
+    denominationType?: true
+    quantity?: true
+    amount?: true
+    providerAmount?: true
+    fee?: true
+    customerPrice?: true
+    status?: true
+    providerStatus?: true
+    providerMessage?: true
+    voucherCiphertext?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type GiftCardPurchaseCountAggregateInputType = {
+    id?: true
+    reference?: true
+    idempotencyKey?: true
+    userId?: true
+    walletId?: true
+    transactionId?: true
+    provider?: true
+    providerProductId?: true
+    providerReference?: true
+    redeemId?: true
+    brandNameSnapshot?: true
+    productNameSnapshot?: true
+    countryCode?: true
+    currencyCode?: true
+    denominationType?: true
+    quantity?: true
+    amount?: true
+    providerAmount?: true
+    fee?: true
+    customerPrice?: true
+    status?: true
+    providerStatus?: true
+    providerMessage?: true
+    voucherCiphertext?: true
+    redeemDetails?: true
+    providerMetadata?: true
+    errorMessage?: true
+    metadata?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type GiftCardPurchaseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardPurchase to aggregate.
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardPurchases to fetch.
+     */
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GiftCardPurchases
+    **/
+    _count?: true | GiftCardPurchaseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GiftCardPurchaseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GiftCardPurchaseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GiftCardPurchaseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GiftCardPurchaseMaxAggregateInputType
+  }
+
+  export type GetGiftCardPurchaseAggregateType<T extends GiftCardPurchaseAggregateArgs> = {
+        [P in keyof T & keyof AggregateGiftCardPurchase]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGiftCardPurchase[P]>
+      : GetScalarType<T[P], AggregateGiftCardPurchase[P]>
+  }
+
+
+
+
+  export type GiftCardPurchaseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GiftCardPurchaseWhereInput
+    orderBy?: GiftCardPurchaseOrderByWithAggregationInput | GiftCardPurchaseOrderByWithAggregationInput[]
+    by: GiftCardPurchaseScalarFieldEnum[] | GiftCardPurchaseScalarFieldEnum
+    having?: GiftCardPurchaseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GiftCardPurchaseCountAggregateInputType | true
+    _avg?: GiftCardPurchaseAvgAggregateInputType
+    _sum?: GiftCardPurchaseSumAggregateInputType
+    _min?: GiftCardPurchaseMinAggregateInputType
+    _max?: GiftCardPurchaseMaxAggregateInputType
+  }
+
+  export type GiftCardPurchaseGroupByOutputType = {
+    id: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    walletId: string
+    transactionId: string | null
+    provider: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference: string | null
+    redeemId: string | null
+    brandNameSnapshot: string | null
+    productNameSnapshot: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType: string | null
+    quantity: number
+    amount: Decimal
+    providerAmount: Decimal | null
+    fee: Decimal
+    customerPrice: Decimal
+    status: $Enums.GiftCardPurchaseStatus
+    providerStatus: string | null
+    providerMessage: string | null
+    voucherCiphertext: string | null
+    redeemDetails: JsonValue | null
+    providerMetadata: JsonValue | null
+    errorMessage: string | null
+    metadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    completedAt: Date | null
+    _count: GiftCardPurchaseCountAggregateOutputType | null
+    _avg: GiftCardPurchaseAvgAggregateOutputType | null
+    _sum: GiftCardPurchaseSumAggregateOutputType | null
+    _min: GiftCardPurchaseMinAggregateOutputType | null
+    _max: GiftCardPurchaseMaxAggregateOutputType | null
+  }
+
+  type GetGiftCardPurchaseGroupByPayload<T extends GiftCardPurchaseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GiftCardPurchaseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GiftCardPurchaseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GiftCardPurchaseGroupByOutputType[P]>
+            : GetScalarType<T[P], GiftCardPurchaseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GiftCardPurchaseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    idempotencyKey?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    providerReference?: boolean
+    redeemId?: boolean
+    brandNameSnapshot?: boolean
+    productNameSnapshot?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    denominationType?: boolean
+    quantity?: boolean
+    amount?: boolean
+    providerAmount?: boolean
+    fee?: boolean
+    customerPrice?: boolean
+    status?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["giftCardPurchase"]>
+
+  export type GiftCardPurchaseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    idempotencyKey?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    providerReference?: boolean
+    redeemId?: boolean
+    brandNameSnapshot?: boolean
+    productNameSnapshot?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    denominationType?: boolean
+    quantity?: boolean
+    amount?: boolean
+    providerAmount?: boolean
+    fee?: boolean
+    customerPrice?: boolean
+    status?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["giftCardPurchase"]>
+
+  export type GiftCardPurchaseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reference?: boolean
+    idempotencyKey?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    providerReference?: boolean
+    redeemId?: boolean
+    brandNameSnapshot?: boolean
+    productNameSnapshot?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    denominationType?: boolean
+    quantity?: boolean
+    amount?: boolean
+    providerAmount?: boolean
+    fee?: boolean
+    customerPrice?: boolean
+    status?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }, ExtArgs["result"]["giftCardPurchase"]>
+
+  export type GiftCardPurchaseSelectScalar = {
+    id?: boolean
+    reference?: boolean
+    idempotencyKey?: boolean
+    userId?: boolean
+    walletId?: boolean
+    transactionId?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    providerReference?: boolean
+    redeemId?: boolean
+    brandNameSnapshot?: boolean
+    productNameSnapshot?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    denominationType?: boolean
+    quantity?: boolean
+    amount?: boolean
+    providerAmount?: boolean
+    fee?: boolean
+    customerPrice?: boolean
+    status?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    errorMessage?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
+  export type GiftCardPurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }
+  export type GiftCardPurchaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }
+  export type GiftCardPurchaseIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    wallet?: boolean | WalletDefaultArgs<ExtArgs>
+    transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+  }
+
+  export type $GiftCardPurchasePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GiftCardPurchase"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      wallet: Prisma.$WalletPayload<ExtArgs>
+      transaction: Prisma.$TransactionPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reference: string
+      idempotencyKey: string
+      userId: string
+      walletId: string
+      transactionId: string | null
+      provider: $Enums.PaymentProvider
+      providerProductId: string
+      providerReference: string | null
+      redeemId: string | null
+      brandNameSnapshot: string | null
+      productNameSnapshot: string | null
+      countryCode: string
+      currencyCode: string
+      denominationType: string | null
+      quantity: number
+      amount: Prisma.Decimal
+      providerAmount: Prisma.Decimal | null
+      fee: Prisma.Decimal
+      customerPrice: Prisma.Decimal
+      status: $Enums.GiftCardPurchaseStatus
+      providerStatus: string | null
+      providerMessage: string | null
+      voucherCiphertext: string | null
+      redeemDetails: Prisma.JsonValue | null
+      providerMetadata: Prisma.JsonValue | null
+      errorMessage: string | null
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["giftCardPurchase"]>
+    composites: {}
+  }
+
+  type GiftCardPurchaseGetPayload<S extends boolean | null | undefined | GiftCardPurchaseDefaultArgs> = $Result.GetResult<Prisma.$GiftCardPurchasePayload, S>
+
+  type GiftCardPurchaseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GiftCardPurchaseFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GiftCardPurchaseCountAggregateInputType | true
+    }
+
+  export interface GiftCardPurchaseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GiftCardPurchase'], meta: { name: 'GiftCardPurchase' } }
+    /**
+     * Find zero or one GiftCardPurchase that matches the filter.
+     * @param {GiftCardPurchaseFindUniqueArgs} args - Arguments to find a GiftCardPurchase
+     * @example
+     * // Get one GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GiftCardPurchaseFindUniqueArgs>(args: SelectSubset<T, GiftCardPurchaseFindUniqueArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GiftCardPurchase that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GiftCardPurchaseFindUniqueOrThrowArgs} args - Arguments to find a GiftCardPurchase
+     * @example
+     * // Get one GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GiftCardPurchaseFindUniqueOrThrowArgs>(args: SelectSubset<T, GiftCardPurchaseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardPurchase that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseFindFirstArgs} args - Arguments to find a GiftCardPurchase
+     * @example
+     * // Get one GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GiftCardPurchaseFindFirstArgs>(args?: SelectSubset<T, GiftCardPurchaseFindFirstArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardPurchase that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseFindFirstOrThrowArgs} args - Arguments to find a GiftCardPurchase
+     * @example
+     * // Get one GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GiftCardPurchaseFindFirstOrThrowArgs>(args?: SelectSubset<T, GiftCardPurchaseFindFirstOrThrowArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GiftCardPurchases that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GiftCardPurchases
+     * const giftCardPurchases = await prisma.giftCardPurchase.findMany()
+     * 
+     * // Get first 10 GiftCardPurchases
+     * const giftCardPurchases = await prisma.giftCardPurchase.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const giftCardPurchaseWithIdOnly = await prisma.giftCardPurchase.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GiftCardPurchaseFindManyArgs>(args?: SelectSubset<T, GiftCardPurchaseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GiftCardPurchase.
+     * @param {GiftCardPurchaseCreateArgs} args - Arguments to create a GiftCardPurchase.
+     * @example
+     * // Create one GiftCardPurchase
+     * const GiftCardPurchase = await prisma.giftCardPurchase.create({
+     *   data: {
+     *     // ... data to create a GiftCardPurchase
+     *   }
+     * })
+     * 
+     */
+    create<T extends GiftCardPurchaseCreateArgs>(args: SelectSubset<T, GiftCardPurchaseCreateArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GiftCardPurchases.
+     * @param {GiftCardPurchaseCreateManyArgs} args - Arguments to create many GiftCardPurchases.
+     * @example
+     * // Create many GiftCardPurchases
+     * const giftCardPurchase = await prisma.giftCardPurchase.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GiftCardPurchaseCreateManyArgs>(args?: SelectSubset<T, GiftCardPurchaseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GiftCardPurchases and returns the data saved in the database.
+     * @param {GiftCardPurchaseCreateManyAndReturnArgs} args - Arguments to create many GiftCardPurchases.
+     * @example
+     * // Create many GiftCardPurchases
+     * const giftCardPurchase = await prisma.giftCardPurchase.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GiftCardPurchases and only return the `id`
+     * const giftCardPurchaseWithIdOnly = await prisma.giftCardPurchase.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GiftCardPurchaseCreateManyAndReturnArgs>(args?: SelectSubset<T, GiftCardPurchaseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GiftCardPurchase.
+     * @param {GiftCardPurchaseDeleteArgs} args - Arguments to delete one GiftCardPurchase.
+     * @example
+     * // Delete one GiftCardPurchase
+     * const GiftCardPurchase = await prisma.giftCardPurchase.delete({
+     *   where: {
+     *     // ... filter to delete one GiftCardPurchase
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GiftCardPurchaseDeleteArgs>(args: SelectSubset<T, GiftCardPurchaseDeleteArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GiftCardPurchase.
+     * @param {GiftCardPurchaseUpdateArgs} args - Arguments to update one GiftCardPurchase.
+     * @example
+     * // Update one GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GiftCardPurchaseUpdateArgs>(args: SelectSubset<T, GiftCardPurchaseUpdateArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GiftCardPurchases.
+     * @param {GiftCardPurchaseDeleteManyArgs} args - Arguments to filter GiftCardPurchases to delete.
+     * @example
+     * // Delete a few GiftCardPurchases
+     * const { count } = await prisma.giftCardPurchase.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GiftCardPurchaseDeleteManyArgs>(args?: SelectSubset<T, GiftCardPurchaseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardPurchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GiftCardPurchases
+     * const giftCardPurchase = await prisma.giftCardPurchase.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GiftCardPurchaseUpdateManyArgs>(args: SelectSubset<T, GiftCardPurchaseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardPurchases and returns the data updated in the database.
+     * @param {GiftCardPurchaseUpdateManyAndReturnArgs} args - Arguments to update many GiftCardPurchases.
+     * @example
+     * // Update many GiftCardPurchases
+     * const giftCardPurchase = await prisma.giftCardPurchase.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GiftCardPurchases and only return the `id`
+     * const giftCardPurchaseWithIdOnly = await prisma.giftCardPurchase.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GiftCardPurchaseUpdateManyAndReturnArgs>(args: SelectSubset<T, GiftCardPurchaseUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GiftCardPurchase.
+     * @param {GiftCardPurchaseUpsertArgs} args - Arguments to update or create a GiftCardPurchase.
+     * @example
+     * // Update or create a GiftCardPurchase
+     * const giftCardPurchase = await prisma.giftCardPurchase.upsert({
+     *   create: {
+     *     // ... data to create a GiftCardPurchase
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GiftCardPurchase we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GiftCardPurchaseUpsertArgs>(args: SelectSubset<T, GiftCardPurchaseUpsertArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GiftCardPurchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseCountArgs} args - Arguments to filter GiftCardPurchases to count.
+     * @example
+     * // Count the number of GiftCardPurchases
+     * const count = await prisma.giftCardPurchase.count({
+     *   where: {
+     *     // ... the filter for the GiftCardPurchases we want to count
+     *   }
+     * })
+    **/
+    count<T extends GiftCardPurchaseCountArgs>(
+      args?: Subset<T, GiftCardPurchaseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GiftCardPurchaseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GiftCardPurchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GiftCardPurchaseAggregateArgs>(args: Subset<T, GiftCardPurchaseAggregateArgs>): Prisma.PrismaPromise<GetGiftCardPurchaseAggregateType<T>>
+
+    /**
+     * Group by GiftCardPurchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardPurchaseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GiftCardPurchaseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GiftCardPurchaseGroupByArgs['orderBy'] }
+        : { orderBy?: GiftCardPurchaseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GiftCardPurchaseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGiftCardPurchaseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GiftCardPurchase model
+   */
+  readonly fields: GiftCardPurchaseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GiftCardPurchase.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GiftCardPurchaseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    transaction<T extends GiftCardPurchase$transactionArgs<ExtArgs> = {}>(args?: Subset<T, GiftCardPurchase$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GiftCardPurchase model
+   */
+  interface GiftCardPurchaseFieldRefs {
+    readonly id: FieldRef<"GiftCardPurchase", 'String'>
+    readonly reference: FieldRef<"GiftCardPurchase", 'String'>
+    readonly idempotencyKey: FieldRef<"GiftCardPurchase", 'String'>
+    readonly userId: FieldRef<"GiftCardPurchase", 'String'>
+    readonly walletId: FieldRef<"GiftCardPurchase", 'String'>
+    readonly transactionId: FieldRef<"GiftCardPurchase", 'String'>
+    readonly provider: FieldRef<"GiftCardPurchase", 'PaymentProvider'>
+    readonly providerProductId: FieldRef<"GiftCardPurchase", 'String'>
+    readonly providerReference: FieldRef<"GiftCardPurchase", 'String'>
+    readonly redeemId: FieldRef<"GiftCardPurchase", 'String'>
+    readonly brandNameSnapshot: FieldRef<"GiftCardPurchase", 'String'>
+    readonly productNameSnapshot: FieldRef<"GiftCardPurchase", 'String'>
+    readonly countryCode: FieldRef<"GiftCardPurchase", 'String'>
+    readonly currencyCode: FieldRef<"GiftCardPurchase", 'String'>
+    readonly denominationType: FieldRef<"GiftCardPurchase", 'String'>
+    readonly quantity: FieldRef<"GiftCardPurchase", 'Int'>
+    readonly amount: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly providerAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly fee: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly customerPrice: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly status: FieldRef<"GiftCardPurchase", 'GiftCardPurchaseStatus'>
+    readonly providerStatus: FieldRef<"GiftCardPurchase", 'String'>
+    readonly providerMessage: FieldRef<"GiftCardPurchase", 'String'>
+    readonly voucherCiphertext: FieldRef<"GiftCardPurchase", 'String'>
+    readonly redeemDetails: FieldRef<"GiftCardPurchase", 'Json'>
+    readonly providerMetadata: FieldRef<"GiftCardPurchase", 'Json'>
+    readonly errorMessage: FieldRef<"GiftCardPurchase", 'String'>
+    readonly metadata: FieldRef<"GiftCardPurchase", 'Json'>
+    readonly createdAt: FieldRef<"GiftCardPurchase", 'DateTime'>
+    readonly updatedAt: FieldRef<"GiftCardPurchase", 'DateTime'>
+    readonly completedAt: FieldRef<"GiftCardPurchase", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GiftCardPurchase findUnique
+   */
+  export type GiftCardPurchaseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which GiftCardPurchase to fetch.
+     */
+    where: GiftCardPurchaseWhereUniqueInput
+  }
+
+  /**
+   * GiftCardPurchase findUniqueOrThrow
+   */
+  export type GiftCardPurchaseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which GiftCardPurchase to fetch.
+     */
+    where: GiftCardPurchaseWhereUniqueInput
+  }
+
+  /**
+   * GiftCardPurchase findFirst
+   */
+  export type GiftCardPurchaseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which GiftCardPurchase to fetch.
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardPurchases to fetch.
+     */
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardPurchases.
+     */
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardPurchases.
+     */
+    distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardPurchase findFirstOrThrow
+   */
+  export type GiftCardPurchaseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which GiftCardPurchase to fetch.
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardPurchases to fetch.
+     */
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardPurchases.
+     */
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardPurchases.
+     */
+    distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardPurchase findMany
+   */
+  export type GiftCardPurchaseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter, which GiftCardPurchases to fetch.
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardPurchases to fetch.
+     */
+    orderBy?: GiftCardPurchaseOrderByWithRelationInput | GiftCardPurchaseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GiftCardPurchases.
+     */
+    cursor?: GiftCardPurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardPurchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardPurchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardPurchases.
+     */
+    distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardPurchase create
+   */
+  export type GiftCardPurchaseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GiftCardPurchase.
+     */
+    data: XOR<GiftCardPurchaseCreateInput, GiftCardPurchaseUncheckedCreateInput>
+  }
+
+  /**
+   * GiftCardPurchase createMany
+   */
+  export type GiftCardPurchaseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GiftCardPurchases.
+     */
+    data: GiftCardPurchaseCreateManyInput | GiftCardPurchaseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GiftCardPurchase createManyAndReturn
+   */
+  export type GiftCardPurchaseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * The data used to create many GiftCardPurchases.
+     */
+    data: GiftCardPurchaseCreateManyInput | GiftCardPurchaseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GiftCardPurchase update
+   */
+  export type GiftCardPurchaseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GiftCardPurchase.
+     */
+    data: XOR<GiftCardPurchaseUpdateInput, GiftCardPurchaseUncheckedUpdateInput>
+    /**
+     * Choose, which GiftCardPurchase to update.
+     */
+    where: GiftCardPurchaseWhereUniqueInput
+  }
+
+  /**
+   * GiftCardPurchase updateMany
+   */
+  export type GiftCardPurchaseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GiftCardPurchases.
+     */
+    data: XOR<GiftCardPurchaseUpdateManyMutationInput, GiftCardPurchaseUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardPurchases to update
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * Limit how many GiftCardPurchases to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardPurchase updateManyAndReturn
+   */
+  export type GiftCardPurchaseUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * The data used to update GiftCardPurchases.
+     */
+    data: XOR<GiftCardPurchaseUpdateManyMutationInput, GiftCardPurchaseUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardPurchases to update
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * Limit how many GiftCardPurchases to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GiftCardPurchase upsert
+   */
+  export type GiftCardPurchaseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GiftCardPurchase to update in case it exists.
+     */
+    where: GiftCardPurchaseWhereUniqueInput
+    /**
+     * In case the GiftCardPurchase found by the `where` argument doesn't exist, create a new GiftCardPurchase with this data.
+     */
+    create: XOR<GiftCardPurchaseCreateInput, GiftCardPurchaseUncheckedCreateInput>
+    /**
+     * In case the GiftCardPurchase was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GiftCardPurchaseUpdateInput, GiftCardPurchaseUncheckedUpdateInput>
+  }
+
+  /**
+   * GiftCardPurchase delete
+   */
+  export type GiftCardPurchaseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    /**
+     * Filter which GiftCardPurchase to delete.
+     */
+    where: GiftCardPurchaseWhereUniqueInput
+  }
+
+  /**
+   * GiftCardPurchase deleteMany
+   */
+  export type GiftCardPurchaseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardPurchases to delete
+     */
+    where?: GiftCardPurchaseWhereInput
+    /**
+     * Limit how many GiftCardPurchases to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardPurchase.transaction
+   */
+  export type GiftCardPurchase$transactionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+  }
+
+  /**
+   * GiftCardPurchase without action
+   */
+  export type GiftCardPurchaseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model SupportTicket
    */
 
@@ -25295,6 +27170,7 @@ export namespace Prisma {
     updatedAt: Date | null
     resolvedAt: Date | null
     lastMessageAt: Date | null
+    userClearedAt: Date | null
   }
 
   export type SupportTicketMaxAggregateOutputType = {
@@ -25310,6 +27186,7 @@ export namespace Prisma {
     updatedAt: Date | null
     resolvedAt: Date | null
     lastMessageAt: Date | null
+    userClearedAt: Date | null
   }
 
   export type SupportTicketCountAggregateOutputType = {
@@ -25325,6 +27202,7 @@ export namespace Prisma {
     updatedAt: number
     resolvedAt: number
     lastMessageAt: number
+    userClearedAt: number
     _all: number
   }
 
@@ -25342,6 +27220,7 @@ export namespace Prisma {
     updatedAt?: true
     resolvedAt?: true
     lastMessageAt?: true
+    userClearedAt?: true
   }
 
   export type SupportTicketMaxAggregateInputType = {
@@ -25357,6 +27236,7 @@ export namespace Prisma {
     updatedAt?: true
     resolvedAt?: true
     lastMessageAt?: true
+    userClearedAt?: true
   }
 
   export type SupportTicketCountAggregateInputType = {
@@ -25372,6 +27252,7 @@ export namespace Prisma {
     updatedAt?: true
     resolvedAt?: true
     lastMessageAt?: true
+    userClearedAt?: true
     _all?: true
   }
 
@@ -25460,6 +27341,7 @@ export namespace Prisma {
     updatedAt: Date
     resolvedAt: Date | null
     lastMessageAt: Date | null
+    userClearedAt: Date | null
     _count: SupportTicketCountAggregateOutputType | null
     _min: SupportTicketMinAggregateOutputType | null
     _max: SupportTicketMaxAggregateOutputType | null
@@ -25492,6 +27374,7 @@ export namespace Prisma {
     updatedAt?: boolean
     resolvedAt?: boolean
     lastMessageAt?: boolean
+    userClearedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
     messages?: boolean | SupportTicket$messagesArgs<ExtArgs>
@@ -25511,6 +27394,7 @@ export namespace Prisma {
     updatedAt?: boolean
     resolvedAt?: boolean
     lastMessageAt?: boolean
+    userClearedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["supportTicket"]>
@@ -25528,6 +27412,7 @@ export namespace Prisma {
     updatedAt?: boolean
     resolvedAt?: boolean
     lastMessageAt?: boolean
+    userClearedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["supportTicket"]>
@@ -25545,9 +27430,10 @@ export namespace Prisma {
     updatedAt?: boolean
     resolvedAt?: boolean
     lastMessageAt?: boolean
+    userClearedAt?: boolean
   }
 
-  export type SupportTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "assignedToId" | "subject" | "category" | "status" | "priority" | "source" | "createdAt" | "updatedAt" | "resolvedAt" | "lastMessageAt", ExtArgs["result"]["supportTicket"]>
+  export type SupportTicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "assignedToId" | "subject" | "category" | "status" | "priority" | "source" | "createdAt" | "updatedAt" | "resolvedAt" | "lastMessageAt" | "userClearedAt", ExtArgs["result"]["supportTicket"]>
   export type SupportTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | SupportTicket$assignedToArgs<ExtArgs>
@@ -25583,6 +27469,7 @@ export namespace Prisma {
       updatedAt: Date
       resolvedAt: Date | null
       lastMessageAt: Date | null
+      userClearedAt: Date | null
     }, ExtArgs["result"]["supportTicket"]>
     composites: {}
   }
@@ -26021,6 +27908,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"SupportTicket", 'DateTime'>
     readonly resolvedAt: FieldRef<"SupportTicket", 'DateTime'>
     readonly lastMessageAt: FieldRef<"SupportTicket", 'DateTime'>
+    readonly userClearedAt: FieldRef<"SupportTicket", 'DateTime'>
   }
     
 
@@ -26521,6 +28409,7 @@ export namespace Prisma {
     userId: number
     senderType: number
     body: number
+    metadata: number
     isInternal: number
     createdAt: number
     updatedAt: number
@@ -26556,6 +28445,7 @@ export namespace Prisma {
     userId?: true
     senderType?: true
     body?: true
+    metadata?: true
     isInternal?: true
     createdAt?: true
     updatedAt?: true
@@ -26640,6 +28530,7 @@ export namespace Prisma {
     userId: string | null
     senderType: $Enums.SupportMessageSenderType
     body: string
+    metadata: JsonValue | null
     isInternal: boolean
     createdAt: Date
     updatedAt: Date
@@ -26668,11 +28559,14 @@ export namespace Prisma {
     userId?: boolean
     senderType?: boolean
     body?: boolean
+    metadata?: boolean
     isInternal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
     user?: boolean | SupportMessage$userArgs<ExtArgs>
+    attachments?: boolean | SupportMessage$attachmentsArgs<ExtArgs>
+    _count?: boolean | SupportMessageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supportMessage"]>
 
   export type SupportMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -26681,6 +28575,7 @@ export namespace Prisma {
     userId?: boolean
     senderType?: boolean
     body?: boolean
+    metadata?: boolean
     isInternal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -26694,6 +28589,7 @@ export namespace Prisma {
     userId?: boolean
     senderType?: boolean
     body?: boolean
+    metadata?: boolean
     isInternal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -26707,15 +28603,18 @@ export namespace Prisma {
     userId?: boolean
     senderType?: boolean
     body?: boolean
+    metadata?: boolean
     isInternal?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SupportMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "userId" | "senderType" | "body" | "isInternal" | "createdAt" | "updatedAt", ExtArgs["result"]["supportMessage"]>
+  export type SupportMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "userId" | "senderType" | "body" | "metadata" | "isInternal" | "createdAt" | "updatedAt", ExtArgs["result"]["supportMessage"]>
   export type SupportMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
     user?: boolean | SupportMessage$userArgs<ExtArgs>
+    attachments?: boolean | SupportMessage$attachmentsArgs<ExtArgs>
+    _count?: boolean | SupportMessageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SupportMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
@@ -26731,6 +28630,7 @@ export namespace Prisma {
     objects: {
       ticket: Prisma.$SupportTicketPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs> | null
+      attachments: Prisma.$SupportAttachmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -26738,6 +28638,7 @@ export namespace Prisma {
       userId: string | null
       senderType: $Enums.SupportMessageSenderType
       body: string
+      metadata: Prisma.JsonValue | null
       isInternal: boolean
       createdAt: Date
       updatedAt: Date
@@ -27137,6 +29038,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ticket<T extends SupportTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicketDefaultArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends SupportMessage$userArgs<ExtArgs> = {}>(args?: Subset<T, SupportMessage$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    attachments<T extends SupportMessage$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, SupportMessage$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -27171,6 +29073,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"SupportMessage", 'String'>
     readonly senderType: FieldRef<"SupportMessage", 'SupportMessageSenderType'>
     readonly body: FieldRef<"SupportMessage", 'String'>
+    readonly metadata: FieldRef<"SupportMessage", 'Json'>
     readonly isInternal: FieldRef<"SupportMessage", 'Boolean'>
     readonly createdAt: FieldRef<"SupportMessage", 'DateTime'>
     readonly updatedAt: FieldRef<"SupportMessage", 'DateTime'>
@@ -27594,6 +29497,30 @@ export namespace Prisma {
   }
 
   /**
+   * SupportMessage.attachments
+   */
+  export type SupportMessage$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    where?: SupportAttachmentWhereInput
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    cursor?: SupportAttachmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
+  }
+
+  /**
    * SupportMessage without action
    */
   export type SupportMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27609,6 +29536,1235 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SupportMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupportAttachment
+   */
+
+  export type AggregateSupportAttachment = {
+    _count: SupportAttachmentCountAggregateOutputType | null
+    _avg: SupportAttachmentAvgAggregateOutputType | null
+    _sum: SupportAttachmentSumAggregateOutputType | null
+    _min: SupportAttachmentMinAggregateOutputType | null
+    _max: SupportAttachmentMaxAggregateOutputType | null
+  }
+
+  export type SupportAttachmentAvgAggregateOutputType = {
+    sizeBytes: number | null
+  }
+
+  export type SupportAttachmentSumAggregateOutputType = {
+    sizeBytes: number | null
+  }
+
+  export type SupportAttachmentMinAggregateOutputType = {
+    id: string | null
+    messageId: string | null
+    uploadedByUserId: string | null
+    uploadedByAdminId: string | null
+    fileName: string | null
+    originalName: string | null
+    mimeType: string | null
+    sizeBytes: number | null
+    storagePath: string | null
+    publicUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type SupportAttachmentMaxAggregateOutputType = {
+    id: string | null
+    messageId: string | null
+    uploadedByUserId: string | null
+    uploadedByAdminId: string | null
+    fileName: string | null
+    originalName: string | null
+    mimeType: string | null
+    sizeBytes: number | null
+    storagePath: string | null
+    publicUrl: string | null
+    createdAt: Date | null
+  }
+
+  export type SupportAttachmentCountAggregateOutputType = {
+    id: number
+    messageId: number
+    uploadedByUserId: number
+    uploadedByAdminId: number
+    fileName: number
+    originalName: number
+    mimeType: number
+    sizeBytes: number
+    storagePath: number
+    publicUrl: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SupportAttachmentAvgAggregateInputType = {
+    sizeBytes?: true
+  }
+
+  export type SupportAttachmentSumAggregateInputType = {
+    sizeBytes?: true
+  }
+
+  export type SupportAttachmentMinAggregateInputType = {
+    id?: true
+    messageId?: true
+    uploadedByUserId?: true
+    uploadedByAdminId?: true
+    fileName?: true
+    originalName?: true
+    mimeType?: true
+    sizeBytes?: true
+    storagePath?: true
+    publicUrl?: true
+    createdAt?: true
+  }
+
+  export type SupportAttachmentMaxAggregateInputType = {
+    id?: true
+    messageId?: true
+    uploadedByUserId?: true
+    uploadedByAdminId?: true
+    fileName?: true
+    originalName?: true
+    mimeType?: true
+    sizeBytes?: true
+    storagePath?: true
+    publicUrl?: true
+    createdAt?: true
+  }
+
+  export type SupportAttachmentCountAggregateInputType = {
+    id?: true
+    messageId?: true
+    uploadedByUserId?: true
+    uploadedByAdminId?: true
+    fileName?: true
+    originalName?: true
+    mimeType?: true
+    sizeBytes?: true
+    storagePath?: true
+    publicUrl?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SupportAttachmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportAttachment to aggregate.
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportAttachments to fetch.
+     */
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportAttachments
+    **/
+    _count?: true | SupportAttachmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SupportAttachmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SupportAttachmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportAttachmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportAttachmentMaxAggregateInputType
+  }
+
+  export type GetSupportAttachmentAggregateType<T extends SupportAttachmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportAttachment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportAttachment[P]>
+      : GetScalarType<T[P], AggregateSupportAttachment[P]>
+  }
+
+
+
+
+  export type SupportAttachmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportAttachmentWhereInput
+    orderBy?: SupportAttachmentOrderByWithAggregationInput | SupportAttachmentOrderByWithAggregationInput[]
+    by: SupportAttachmentScalarFieldEnum[] | SupportAttachmentScalarFieldEnum
+    having?: SupportAttachmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportAttachmentCountAggregateInputType | true
+    _avg?: SupportAttachmentAvgAggregateInputType
+    _sum?: SupportAttachmentSumAggregateInputType
+    _min?: SupportAttachmentMinAggregateInputType
+    _max?: SupportAttachmentMaxAggregateInputType
+  }
+
+  export type SupportAttachmentGroupByOutputType = {
+    id: string
+    messageId: string
+    uploadedByUserId: string | null
+    uploadedByAdminId: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl: string | null
+    createdAt: Date
+    _count: SupportAttachmentCountAggregateOutputType | null
+    _avg: SupportAttachmentAvgAggregateOutputType | null
+    _sum: SupportAttachmentSumAggregateOutputType | null
+    _min: SupportAttachmentMinAggregateOutputType | null
+    _max: SupportAttachmentMaxAggregateOutputType | null
+  }
+
+  type GetSupportAttachmentGroupByPayload<T extends SupportAttachmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportAttachmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportAttachmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportAttachmentGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportAttachmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportAttachmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    messageId?: boolean
+    uploadedByUserId?: boolean
+    uploadedByAdminId?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    mimeType?: boolean
+    sizeBytes?: boolean
+    storagePath?: boolean
+    publicUrl?: boolean
+    createdAt?: boolean
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }, ExtArgs["result"]["supportAttachment"]>
+
+  export type SupportAttachmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    messageId?: boolean
+    uploadedByUserId?: boolean
+    uploadedByAdminId?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    mimeType?: boolean
+    sizeBytes?: boolean
+    storagePath?: boolean
+    publicUrl?: boolean
+    createdAt?: boolean
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }, ExtArgs["result"]["supportAttachment"]>
+
+  export type SupportAttachmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    messageId?: boolean
+    uploadedByUserId?: boolean
+    uploadedByAdminId?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    mimeType?: boolean
+    sizeBytes?: boolean
+    storagePath?: boolean
+    publicUrl?: boolean
+    createdAt?: boolean
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }, ExtArgs["result"]["supportAttachment"]>
+
+  export type SupportAttachmentSelectScalar = {
+    id?: boolean
+    messageId?: boolean
+    uploadedByUserId?: boolean
+    uploadedByAdminId?: boolean
+    fileName?: boolean
+    originalName?: boolean
+    mimeType?: boolean
+    sizeBytes?: boolean
+    storagePath?: boolean
+    publicUrl?: boolean
+    createdAt?: boolean
+  }
+
+  export type SupportAttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "messageId" | "uploadedByUserId" | "uploadedByAdminId" | "fileName" | "originalName" | "mimeType" | "sizeBytes" | "storagePath" | "publicUrl" | "createdAt", ExtArgs["result"]["supportAttachment"]>
+  export type SupportAttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }
+  export type SupportAttachmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }
+  export type SupportAttachmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    message?: boolean | SupportMessageDefaultArgs<ExtArgs>
+    uploadedByUser?: boolean | SupportAttachment$uploadedByUserArgs<ExtArgs>
+    uploadedByAdmin?: boolean | SupportAttachment$uploadedByAdminArgs<ExtArgs>
+  }
+
+  export type $SupportAttachmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportAttachment"
+    objects: {
+      message: Prisma.$SupportMessagePayload<ExtArgs>
+      uploadedByUser: Prisma.$UserPayload<ExtArgs> | null
+      uploadedByAdmin: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      messageId: string
+      uploadedByUserId: string | null
+      uploadedByAdminId: string | null
+      fileName: string
+      originalName: string
+      mimeType: string
+      sizeBytes: number
+      storagePath: string
+      publicUrl: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["supportAttachment"]>
+    composites: {}
+  }
+
+  type SupportAttachmentGetPayload<S extends boolean | null | undefined | SupportAttachmentDefaultArgs> = $Result.GetResult<Prisma.$SupportAttachmentPayload, S>
+
+  type SupportAttachmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SupportAttachmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SupportAttachmentCountAggregateInputType | true
+    }
+
+  export interface SupportAttachmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportAttachment'], meta: { name: 'SupportAttachment' } }
+    /**
+     * Find zero or one SupportAttachment that matches the filter.
+     * @param {SupportAttachmentFindUniqueArgs} args - Arguments to find a SupportAttachment
+     * @example
+     * // Get one SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportAttachmentFindUniqueArgs>(args: SelectSubset<T, SupportAttachmentFindUniqueArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SupportAttachment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SupportAttachmentFindUniqueOrThrowArgs} args - Arguments to find a SupportAttachment
+     * @example
+     * // Get one SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportAttachmentFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportAttachmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportAttachment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentFindFirstArgs} args - Arguments to find a SupportAttachment
+     * @example
+     * // Get one SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportAttachmentFindFirstArgs>(args?: SelectSubset<T, SupportAttachmentFindFirstArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SupportAttachment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentFindFirstOrThrowArgs} args - Arguments to find a SupportAttachment
+     * @example
+     * // Get one SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportAttachmentFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportAttachmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SupportAttachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportAttachments
+     * const supportAttachments = await prisma.supportAttachment.findMany()
+     * 
+     * // Get first 10 SupportAttachments
+     * const supportAttachments = await prisma.supportAttachment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportAttachmentWithIdOnly = await prisma.supportAttachment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportAttachmentFindManyArgs>(args?: SelectSubset<T, SupportAttachmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SupportAttachment.
+     * @param {SupportAttachmentCreateArgs} args - Arguments to create a SupportAttachment.
+     * @example
+     * // Create one SupportAttachment
+     * const SupportAttachment = await prisma.supportAttachment.create({
+     *   data: {
+     *     // ... data to create a SupportAttachment
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportAttachmentCreateArgs>(args: SelectSubset<T, SupportAttachmentCreateArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SupportAttachments.
+     * @param {SupportAttachmentCreateManyArgs} args - Arguments to create many SupportAttachments.
+     * @example
+     * // Create many SupportAttachments
+     * const supportAttachment = await prisma.supportAttachment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportAttachmentCreateManyArgs>(args?: SelectSubset<T, SupportAttachmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportAttachments and returns the data saved in the database.
+     * @param {SupportAttachmentCreateManyAndReturnArgs} args - Arguments to create many SupportAttachments.
+     * @example
+     * // Create many SupportAttachments
+     * const supportAttachment = await prisma.supportAttachment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportAttachments and only return the `id`
+     * const supportAttachmentWithIdOnly = await prisma.supportAttachment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportAttachmentCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportAttachmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SupportAttachment.
+     * @param {SupportAttachmentDeleteArgs} args - Arguments to delete one SupportAttachment.
+     * @example
+     * // Delete one SupportAttachment
+     * const SupportAttachment = await prisma.supportAttachment.delete({
+     *   where: {
+     *     // ... filter to delete one SupportAttachment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportAttachmentDeleteArgs>(args: SelectSubset<T, SupportAttachmentDeleteArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SupportAttachment.
+     * @param {SupportAttachmentUpdateArgs} args - Arguments to update one SupportAttachment.
+     * @example
+     * // Update one SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportAttachmentUpdateArgs>(args: SelectSubset<T, SupportAttachmentUpdateArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SupportAttachments.
+     * @param {SupportAttachmentDeleteManyArgs} args - Arguments to filter SupportAttachments to delete.
+     * @example
+     * // Delete a few SupportAttachments
+     * const { count } = await prisma.supportAttachment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportAttachmentDeleteManyArgs>(args?: SelectSubset<T, SupportAttachmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportAttachments
+     * const supportAttachment = await prisma.supportAttachment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportAttachmentUpdateManyArgs>(args: SelectSubset<T, SupportAttachmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportAttachments and returns the data updated in the database.
+     * @param {SupportAttachmentUpdateManyAndReturnArgs} args - Arguments to update many SupportAttachments.
+     * @example
+     * // Update many SupportAttachments
+     * const supportAttachment = await prisma.supportAttachment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SupportAttachments and only return the `id`
+     * const supportAttachmentWithIdOnly = await prisma.supportAttachment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SupportAttachmentUpdateManyAndReturnArgs>(args: SelectSubset<T, SupportAttachmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SupportAttachment.
+     * @param {SupportAttachmentUpsertArgs} args - Arguments to update or create a SupportAttachment.
+     * @example
+     * // Update or create a SupportAttachment
+     * const supportAttachment = await prisma.supportAttachment.upsert({
+     *   create: {
+     *     // ... data to create a SupportAttachment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportAttachment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportAttachmentUpsertArgs>(args: SelectSubset<T, SupportAttachmentUpsertArgs<ExtArgs>>): Prisma__SupportAttachmentClient<$Result.GetResult<Prisma.$SupportAttachmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SupportAttachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentCountArgs} args - Arguments to filter SupportAttachments to count.
+     * @example
+     * // Count the number of SupportAttachments
+     * const count = await prisma.supportAttachment.count({
+     *   where: {
+     *     // ... the filter for the SupportAttachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportAttachmentCountArgs>(
+      args?: Subset<T, SupportAttachmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportAttachmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportAttachmentAggregateArgs>(args: Subset<T, SupportAttachmentAggregateArgs>): Prisma.PrismaPromise<GetSupportAttachmentAggregateType<T>>
+
+    /**
+     * Group by SupportAttachment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportAttachmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportAttachmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportAttachmentGroupByArgs['orderBy'] }
+        : { orderBy?: SupportAttachmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportAttachmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportAttachmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportAttachment model
+   */
+  readonly fields: SupportAttachmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportAttachment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportAttachmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    message<T extends SupportMessageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupportMessageDefaultArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    uploadedByUser<T extends SupportAttachment$uploadedByUserArgs<ExtArgs> = {}>(args?: Subset<T, SupportAttachment$uploadedByUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    uploadedByAdmin<T extends SupportAttachment$uploadedByAdminArgs<ExtArgs> = {}>(args?: Subset<T, SupportAttachment$uploadedByAdminArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportAttachment model
+   */
+  interface SupportAttachmentFieldRefs {
+    readonly id: FieldRef<"SupportAttachment", 'String'>
+    readonly messageId: FieldRef<"SupportAttachment", 'String'>
+    readonly uploadedByUserId: FieldRef<"SupportAttachment", 'String'>
+    readonly uploadedByAdminId: FieldRef<"SupportAttachment", 'String'>
+    readonly fileName: FieldRef<"SupportAttachment", 'String'>
+    readonly originalName: FieldRef<"SupportAttachment", 'String'>
+    readonly mimeType: FieldRef<"SupportAttachment", 'String'>
+    readonly sizeBytes: FieldRef<"SupportAttachment", 'Int'>
+    readonly storagePath: FieldRef<"SupportAttachment", 'String'>
+    readonly publicUrl: FieldRef<"SupportAttachment", 'String'>
+    readonly createdAt: FieldRef<"SupportAttachment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportAttachment findUnique
+   */
+  export type SupportAttachmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportAttachment to fetch.
+     */
+    where: SupportAttachmentWhereUniqueInput
+  }
+
+  /**
+   * SupportAttachment findUniqueOrThrow
+   */
+  export type SupportAttachmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportAttachment to fetch.
+     */
+    where: SupportAttachmentWhereUniqueInput
+  }
+
+  /**
+   * SupportAttachment findFirst
+   */
+  export type SupportAttachmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportAttachment to fetch.
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportAttachments to fetch.
+     */
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportAttachments.
+     */
+    cursor?: SupportAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportAttachments.
+     */
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportAttachment findFirstOrThrow
+   */
+  export type SupportAttachmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportAttachment to fetch.
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportAttachments to fetch.
+     */
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportAttachments.
+     */
+    cursor?: SupportAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportAttachments.
+     */
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportAttachment findMany
+   */
+  export type SupportAttachmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportAttachments to fetch.
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportAttachments to fetch.
+     */
+    orderBy?: SupportAttachmentOrderByWithRelationInput | SupportAttachmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportAttachments.
+     */
+    cursor?: SupportAttachmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportAttachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportAttachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportAttachments.
+     */
+    distinct?: SupportAttachmentScalarFieldEnum | SupportAttachmentScalarFieldEnum[]
+  }
+
+  /**
+   * SupportAttachment create
+   */
+  export type SupportAttachmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportAttachment.
+     */
+    data: XOR<SupportAttachmentCreateInput, SupportAttachmentUncheckedCreateInput>
+  }
+
+  /**
+   * SupportAttachment createMany
+   */
+  export type SupportAttachmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportAttachments.
+     */
+    data: SupportAttachmentCreateManyInput | SupportAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportAttachment createManyAndReturn
+   */
+  export type SupportAttachmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many SupportAttachments.
+     */
+    data: SupportAttachmentCreateManyInput | SupportAttachmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportAttachment update
+   */
+  export type SupportAttachmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportAttachment.
+     */
+    data: XOR<SupportAttachmentUpdateInput, SupportAttachmentUncheckedUpdateInput>
+    /**
+     * Choose, which SupportAttachment to update.
+     */
+    where: SupportAttachmentWhereUniqueInput
+  }
+
+  /**
+   * SupportAttachment updateMany
+   */
+  export type SupportAttachmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportAttachments.
+     */
+    data: XOR<SupportAttachmentUpdateManyMutationInput, SupportAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportAttachments to update
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * Limit how many SupportAttachments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportAttachment updateManyAndReturn
+   */
+  export type SupportAttachmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * The data used to update SupportAttachments.
+     */
+    data: XOR<SupportAttachmentUpdateManyMutationInput, SupportAttachmentUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportAttachments to update
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * Limit how many SupportAttachments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportAttachment upsert
+   */
+  export type SupportAttachmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportAttachment to update in case it exists.
+     */
+    where: SupportAttachmentWhereUniqueInput
+    /**
+     * In case the SupportAttachment found by the `where` argument doesn't exist, create a new SupportAttachment with this data.
+     */
+    create: XOR<SupportAttachmentCreateInput, SupportAttachmentUncheckedCreateInput>
+    /**
+     * In case the SupportAttachment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportAttachmentUpdateInput, SupportAttachmentUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportAttachment delete
+   */
+  export type SupportAttachmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
+    /**
+     * Filter which SupportAttachment to delete.
+     */
+    where: SupportAttachmentWhereUniqueInput
+  }
+
+  /**
+   * SupportAttachment deleteMany
+   */
+  export type SupportAttachmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportAttachments to delete
+     */
+    where?: SupportAttachmentWhereInput
+    /**
+     * Limit how many SupportAttachments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SupportAttachment.uploadedByUser
+   */
+  export type SupportAttachment$uploadedByUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SupportAttachment.uploadedByAdmin
+   */
+  export type SupportAttachment$uploadedByAdminArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * SupportAttachment without action
+   */
+  export type SupportAttachmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportAttachment
+     */
+    select?: SupportAttachmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SupportAttachment
+     */
+    omit?: SupportAttachmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportAttachmentInclude<ExtArgs> | null
   }
 
 
@@ -27990,6 +31146,43 @@ export namespace Prisma {
   export type GiftCardSellRateAdjustmentScalarFieldEnum = (typeof GiftCardSellRateAdjustmentScalarFieldEnum)[keyof typeof GiftCardSellRateAdjustmentScalarFieldEnum]
 
 
+  export const GiftCardPurchaseScalarFieldEnum: {
+    id: 'id',
+    reference: 'reference',
+    idempotencyKey: 'idempotencyKey',
+    userId: 'userId',
+    walletId: 'walletId',
+    transactionId: 'transactionId',
+    provider: 'provider',
+    providerProductId: 'providerProductId',
+    providerReference: 'providerReference',
+    redeemId: 'redeemId',
+    brandNameSnapshot: 'brandNameSnapshot',
+    productNameSnapshot: 'productNameSnapshot',
+    countryCode: 'countryCode',
+    currencyCode: 'currencyCode',
+    denominationType: 'denominationType',
+    quantity: 'quantity',
+    amount: 'amount',
+    providerAmount: 'providerAmount',
+    fee: 'fee',
+    customerPrice: 'customerPrice',
+    status: 'status',
+    providerStatus: 'providerStatus',
+    providerMessage: 'providerMessage',
+    voucherCiphertext: 'voucherCiphertext',
+    redeemDetails: 'redeemDetails',
+    providerMetadata: 'providerMetadata',
+    errorMessage: 'errorMessage',
+    metadata: 'metadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type GiftCardPurchaseScalarFieldEnum = (typeof GiftCardPurchaseScalarFieldEnum)[keyof typeof GiftCardPurchaseScalarFieldEnum]
+
+
   export const SupportTicketScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -28002,7 +31195,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     resolvedAt: 'resolvedAt',
-    lastMessageAt: 'lastMessageAt'
+    lastMessageAt: 'lastMessageAt',
+    userClearedAt: 'userClearedAt'
   };
 
   export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
@@ -28014,12 +31208,30 @@ export namespace Prisma {
     userId: 'userId',
     senderType: 'senderType',
     body: 'body',
+    metadata: 'metadata',
     isInternal: 'isInternal',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type SupportMessageScalarFieldEnum = (typeof SupportMessageScalarFieldEnum)[keyof typeof SupportMessageScalarFieldEnum]
+
+
+  export const SupportAttachmentScalarFieldEnum: {
+    id: 'id',
+    messageId: 'messageId',
+    uploadedByUserId: 'uploadedByUserId',
+    uploadedByAdminId: 'uploadedByAdminId',
+    fileName: 'fileName',
+    originalName: 'originalName',
+    mimeType: 'mimeType',
+    sizeBytes: 'sizeBytes',
+    storagePath: 'storagePath',
+    publicUrl: 'publicUrl',
+    createdAt: 'createdAt'
+  };
+
+  export type SupportAttachmentScalarFieldEnum = (typeof SupportAttachmentScalarFieldEnum)[keyof typeof SupportAttachmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -28314,6 +31526,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'GiftCardPurchaseStatus'
+   */
+  export type EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GiftCardPurchaseStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'GiftCardPurchaseStatus[]'
+   */
+  export type ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GiftCardPurchaseStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'SupportTicketCategory'
    */
   export type EnumSupportTicketCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SupportTicketCategory'>
@@ -28439,9 +31665,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteListRelationFilter
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
+    giftCardPurchases?: GiftCardPurchaseListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
     supportMessages?: SupportMessageListRelationFilter
+    uploadedSupportAttachments?: SupportAttachmentListRelationFilter
+    uploadedAdminAttachments?: SupportAttachmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -28480,9 +31709,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteOrderByRelationAggregateInput
     beneficiaries?: BeneficiaryOrderByRelationAggregateInput
     giftCardSales?: GiftCardSaleOrderByRelationAggregateInput
+    giftCardPurchases?: GiftCardPurchaseOrderByRelationAggregateInput
     supportTickets?: SupportTicketOrderByRelationAggregateInput
     assignedSupportTickets?: SupportTicketOrderByRelationAggregateInput
     supportMessages?: SupportMessageOrderByRelationAggregateInput
+    uploadedSupportAttachments?: SupportAttachmentOrderByRelationAggregateInput
+    uploadedAdminAttachments?: SupportAttachmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -28524,9 +31756,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteListRelationFilter
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
+    giftCardPurchases?: GiftCardPurchaseListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
     supportMessages?: SupportMessageListRelationFilter
+    uploadedSupportAttachments?: SupportAttachmentListRelationFilter
+    uploadedAdminAttachments?: SupportAttachmentListRelationFilter
   }, "id" | "email" | "username" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -28846,6 +32081,7 @@ export namespace Prisma {
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
     withdrawals?: WithdrawalListRelationFilter
+    giftCardPurchases?: GiftCardPurchaseListRelationFilter
   }
 
   export type WalletOrderByWithRelationInput = {
@@ -28859,6 +32095,7 @@ export namespace Prisma {
     transactions?: TransactionOrderByRelationAggregateInput
     ledgerEntries?: LedgerEntryOrderByRelationAggregateInput
     withdrawals?: WithdrawalOrderByRelationAggregateInput
+    giftCardPurchases?: GiftCardPurchaseOrderByRelationAggregateInput
   }
 
   export type WalletWhereUniqueInput = Prisma.AtLeast<{
@@ -28875,6 +32112,7 @@ export namespace Prisma {
     transactions?: TransactionListRelationFilter
     ledgerEntries?: LedgerEntryListRelationFilter
     withdrawals?: WithdrawalListRelationFilter
+    giftCardPurchases?: GiftCardPurchaseListRelationFilter
   }, "id" | "userId">
 
   export type WalletOrderByWithAggregationInput = {
@@ -29241,6 +32479,7 @@ export namespace Prisma {
     deposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
     withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
     giftCardSale?: XOR<GiftCardSaleNullableScalarRelationFilter, GiftCardSaleWhereInput> | null
+    giftCardPurchase?: XOR<GiftCardPurchaseNullableScalarRelationFilter, GiftCardPurchaseWhereInput> | null
     ledgerEntries?: LedgerEntryListRelationFilter
   }
 
@@ -29268,6 +32507,7 @@ export namespace Prisma {
     deposit?: DepositOrderByWithRelationInput
     withdrawal?: WithdrawalOrderByWithRelationInput
     giftCardSale?: GiftCardSaleOrderByWithRelationInput
+    giftCardPurchase?: GiftCardPurchaseOrderByWithRelationInput
     ledgerEntries?: LedgerEntryOrderByRelationAggregateInput
   }
 
@@ -29298,6 +32538,7 @@ export namespace Prisma {
     deposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
     withdrawal?: XOR<WithdrawalNullableScalarRelationFilter, WithdrawalWhereInput> | null
     giftCardSale?: XOR<GiftCardSaleNullableScalarRelationFilter, GiftCardSaleWhereInput> | null
+    giftCardPurchase?: XOR<GiftCardPurchaseNullableScalarRelationFilter, GiftCardPurchaseWhereInput> | null
     ledgerEntries?: LedgerEntryListRelationFilter
   }, "id" | "reference">
 
@@ -30406,6 +33647,200 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"GiftCardSellRateAdjustment"> | Date | string
   }
 
+  export type GiftCardPurchaseWhereInput = {
+    AND?: GiftCardPurchaseWhereInput | GiftCardPurchaseWhereInput[]
+    OR?: GiftCardPurchaseWhereInput[]
+    NOT?: GiftCardPurchaseWhereInput | GiftCardPurchaseWhereInput[]
+    id?: StringFilter<"GiftCardPurchase"> | string
+    reference?: StringFilter<"GiftCardPurchase"> | string
+    idempotencyKey?: StringFilter<"GiftCardPurchase"> | string
+    userId?: StringFilter<"GiftCardPurchase"> | string
+    walletId?: StringFilter<"GiftCardPurchase"> | string
+    transactionId?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    provider?: EnumPaymentProviderFilter<"GiftCardPurchase"> | $Enums.PaymentProvider
+    providerProductId?: StringFilter<"GiftCardPurchase"> | string
+    providerReference?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemId?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    brandNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    productNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    countryCode?: StringFilter<"GiftCardPurchase"> | string
+    currencyCode?: StringFilter<"GiftCardPurchase"> | string
+    denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    quantity?: IntFilter<"GiftCardPurchase"> | number
+    amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
+    providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    voucherCiphertext?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemDetails?: JsonNullableFilter<"GiftCardPurchase">
+    providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
+    errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    metadata?: JsonNullableFilter<"GiftCardPurchase">
+    createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+  }
+
+  export type GiftCardPurchaseOrderByWithRelationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    idempotencyKey?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    redeemId?: SortOrderInput | SortOrder
+    brandNameSnapshot?: SortOrderInput | SortOrder
+    productNameSnapshot?: SortOrderInput | SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    denominationType?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+    status?: SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerMessage?: SortOrderInput | SortOrder
+    voucherCiphertext?: SortOrderInput | SortOrder
+    redeemDetails?: SortOrderInput | SortOrder
+    providerMetadata?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    wallet?: WalletOrderByWithRelationInput
+    transaction?: TransactionOrderByWithRelationInput
+  }
+
+  export type GiftCardPurchaseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    idempotencyKey?: string
+    transactionId?: string
+    provider_providerReference?: GiftCardPurchaseProviderProviderReferenceCompoundUniqueInput
+    AND?: GiftCardPurchaseWhereInput | GiftCardPurchaseWhereInput[]
+    OR?: GiftCardPurchaseWhereInput[]
+    NOT?: GiftCardPurchaseWhereInput | GiftCardPurchaseWhereInput[]
+    userId?: StringFilter<"GiftCardPurchase"> | string
+    walletId?: StringFilter<"GiftCardPurchase"> | string
+    provider?: EnumPaymentProviderFilter<"GiftCardPurchase"> | $Enums.PaymentProvider
+    providerProductId?: StringFilter<"GiftCardPurchase"> | string
+    providerReference?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemId?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    brandNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    productNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    countryCode?: StringFilter<"GiftCardPurchase"> | string
+    currencyCode?: StringFilter<"GiftCardPurchase"> | string
+    denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    quantity?: IntFilter<"GiftCardPurchase"> | number
+    amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
+    providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    voucherCiphertext?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemDetails?: JsonNullableFilter<"GiftCardPurchase">
+    providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
+    errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    metadata?: JsonNullableFilter<"GiftCardPurchase">
+    createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
+    transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+  }, "id" | "reference" | "idempotencyKey" | "transactionId" | "provider_providerReference">
+
+  export type GiftCardPurchaseOrderByWithAggregationInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    idempotencyKey?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrderInput | SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    redeemId?: SortOrderInput | SortOrder
+    brandNameSnapshot?: SortOrderInput | SortOrder
+    productNameSnapshot?: SortOrderInput | SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    denominationType?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrderInput | SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+    status?: SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerMessage?: SortOrderInput | SortOrder
+    voucherCiphertext?: SortOrderInput | SortOrder
+    redeemDetails?: SortOrderInput | SortOrder
+    providerMetadata?: SortOrderInput | SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: GiftCardPurchaseCountOrderByAggregateInput
+    _avg?: GiftCardPurchaseAvgOrderByAggregateInput
+    _max?: GiftCardPurchaseMaxOrderByAggregateInput
+    _min?: GiftCardPurchaseMinOrderByAggregateInput
+    _sum?: GiftCardPurchaseSumOrderByAggregateInput
+  }
+
+  export type GiftCardPurchaseScalarWhereWithAggregatesInput = {
+    AND?: GiftCardPurchaseScalarWhereWithAggregatesInput | GiftCardPurchaseScalarWhereWithAggregatesInput[]
+    OR?: GiftCardPurchaseScalarWhereWithAggregatesInput[]
+    NOT?: GiftCardPurchaseScalarWhereWithAggregatesInput | GiftCardPurchaseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    reference?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    idempotencyKey?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    userId?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    walletId?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    transactionId?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    provider?: EnumPaymentProviderWithAggregatesFilter<"GiftCardPurchase"> | $Enums.PaymentProvider
+    providerProductId?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    providerReference?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    redeemId?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    brandNameSnapshot?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    productNameSnapshot?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    countryCode?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    currencyCode?: StringWithAggregatesFilter<"GiftCardPurchase"> | string
+    denominationType?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    quantity?: IntWithAggregatesFilter<"GiftCardPurchase"> | number
+    amount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    providerAmount?: DecimalNullableWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusWithAggregatesFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
+    providerStatus?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    providerMessage?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    voucherCiphertext?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    redeemDetails?: JsonNullableWithAggregatesFilter<"GiftCardPurchase">
+    providerMetadata?: JsonNullableWithAggregatesFilter<"GiftCardPurchase">
+    errorMessage?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
+    metadata?: JsonNullableWithAggregatesFilter<"GiftCardPurchase">
+    createdAt?: DateTimeWithAggregatesFilter<"GiftCardPurchase"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GiftCardPurchase"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"GiftCardPurchase"> | Date | string | null
+  }
+
   export type SupportTicketWhereInput = {
     AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
     OR?: SupportTicketWhereInput[]
@@ -30422,6 +33857,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
     resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
     lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userClearedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     messages?: SupportMessageListRelationFilter
@@ -30440,6 +33876,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     resolvedAt?: SortOrderInput | SortOrder
     lastMessageAt?: SortOrderInput | SortOrder
+    userClearedAt?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     assignedTo?: UserOrderByWithRelationInput
     messages?: SupportMessageOrderByRelationAggregateInput
@@ -30461,6 +33898,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
     resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
     lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userClearedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     messages?: SupportMessageListRelationFilter
@@ -30479,6 +33917,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     resolvedAt?: SortOrderInput | SortOrder
     lastMessageAt?: SortOrderInput | SortOrder
+    userClearedAt?: SortOrderInput | SortOrder
     _count?: SupportTicketCountOrderByAggregateInput
     _max?: SupportTicketMaxOrderByAggregateInput
     _min?: SupportTicketMinOrderByAggregateInput
@@ -30500,6 +33939,7 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
     resolvedAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
     lastMessageAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
+    userClearedAt?: DateTimeNullableWithAggregatesFilter<"SupportTicket"> | Date | string | null
   }
 
   export type SupportMessageWhereInput = {
@@ -30511,11 +33951,13 @@ export namespace Prisma {
     userId?: StringNullableFilter<"SupportMessage"> | string | null
     senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
     body?: StringFilter<"SupportMessage"> | string
+    metadata?: JsonNullableFilter<"SupportMessage">
     isInternal?: BoolFilter<"SupportMessage"> | boolean
     createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
     updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
     ticket?: XOR<SupportTicketScalarRelationFilter, SupportTicketWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    attachments?: SupportAttachmentListRelationFilter
   }
 
   export type SupportMessageOrderByWithRelationInput = {
@@ -30524,11 +33966,13 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     senderType?: SortOrder
     body?: SortOrder
+    metadata?: SortOrderInput | SortOrder
     isInternal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     ticket?: SupportTicketOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    attachments?: SupportAttachmentOrderByRelationAggregateInput
   }
 
   export type SupportMessageWhereUniqueInput = Prisma.AtLeast<{
@@ -30540,11 +33984,13 @@ export namespace Prisma {
     userId?: StringNullableFilter<"SupportMessage"> | string | null
     senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
     body?: StringFilter<"SupportMessage"> | string
+    metadata?: JsonNullableFilter<"SupportMessage">
     isInternal?: BoolFilter<"SupportMessage"> | boolean
     createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
     updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
     ticket?: XOR<SupportTicketScalarRelationFilter, SupportTicketWhereInput>
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    attachments?: SupportAttachmentListRelationFilter
   }, "id">
 
   export type SupportMessageOrderByWithAggregationInput = {
@@ -30553,6 +33999,7 @@ export namespace Prisma {
     userId?: SortOrderInput | SortOrder
     senderType?: SortOrder
     body?: SortOrder
+    metadata?: SortOrderInput | SortOrder
     isInternal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -30570,9 +34017,103 @@ export namespace Prisma {
     userId?: StringNullableWithAggregatesFilter<"SupportMessage"> | string | null
     senderType?: EnumSupportMessageSenderTypeWithAggregatesFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
     body?: StringWithAggregatesFilter<"SupportMessage"> | string
+    metadata?: JsonNullableWithAggregatesFilter<"SupportMessage">
     isInternal?: BoolWithAggregatesFilter<"SupportMessage"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
+  }
+
+  export type SupportAttachmentWhereInput = {
+    AND?: SupportAttachmentWhereInput | SupportAttachmentWhereInput[]
+    OR?: SupportAttachmentWhereInput[]
+    NOT?: SupportAttachmentWhereInput | SupportAttachmentWhereInput[]
+    id?: StringFilter<"SupportAttachment"> | string
+    messageId?: StringFilter<"SupportAttachment"> | string
+    uploadedByUserId?: StringNullableFilter<"SupportAttachment"> | string | null
+    uploadedByAdminId?: StringNullableFilter<"SupportAttachment"> | string | null
+    fileName?: StringFilter<"SupportAttachment"> | string
+    originalName?: StringFilter<"SupportAttachment"> | string
+    mimeType?: StringFilter<"SupportAttachment"> | string
+    sizeBytes?: IntFilter<"SupportAttachment"> | number
+    storagePath?: StringFilter<"SupportAttachment"> | string
+    publicUrl?: StringNullableFilter<"SupportAttachment"> | string | null
+    createdAt?: DateTimeFilter<"SupportAttachment"> | Date | string
+    message?: XOR<SupportMessageScalarRelationFilter, SupportMessageWhereInput>
+    uploadedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    uploadedByAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type SupportAttachmentOrderByWithRelationInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    uploadedByUserId?: SortOrderInput | SortOrder
+    uploadedByAdminId?: SortOrderInput | SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    mimeType?: SortOrder
+    sizeBytes?: SortOrder
+    storagePath?: SortOrder
+    publicUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    message?: SupportMessageOrderByWithRelationInput
+    uploadedByUser?: UserOrderByWithRelationInput
+    uploadedByAdmin?: UserOrderByWithRelationInput
+  }
+
+  export type SupportAttachmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupportAttachmentWhereInput | SupportAttachmentWhereInput[]
+    OR?: SupportAttachmentWhereInput[]
+    NOT?: SupportAttachmentWhereInput | SupportAttachmentWhereInput[]
+    messageId?: StringFilter<"SupportAttachment"> | string
+    uploadedByUserId?: StringNullableFilter<"SupportAttachment"> | string | null
+    uploadedByAdminId?: StringNullableFilter<"SupportAttachment"> | string | null
+    fileName?: StringFilter<"SupportAttachment"> | string
+    originalName?: StringFilter<"SupportAttachment"> | string
+    mimeType?: StringFilter<"SupportAttachment"> | string
+    sizeBytes?: IntFilter<"SupportAttachment"> | number
+    storagePath?: StringFilter<"SupportAttachment"> | string
+    publicUrl?: StringNullableFilter<"SupportAttachment"> | string | null
+    createdAt?: DateTimeFilter<"SupportAttachment"> | Date | string
+    message?: XOR<SupportMessageScalarRelationFilter, SupportMessageWhereInput>
+    uploadedByUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    uploadedByAdmin?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type SupportAttachmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    uploadedByUserId?: SortOrderInput | SortOrder
+    uploadedByAdminId?: SortOrderInput | SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    mimeType?: SortOrder
+    sizeBytes?: SortOrder
+    storagePath?: SortOrder
+    publicUrl?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SupportAttachmentCountOrderByAggregateInput
+    _avg?: SupportAttachmentAvgOrderByAggregateInput
+    _max?: SupportAttachmentMaxOrderByAggregateInput
+    _min?: SupportAttachmentMinOrderByAggregateInput
+    _sum?: SupportAttachmentSumOrderByAggregateInput
+  }
+
+  export type SupportAttachmentScalarWhereWithAggregatesInput = {
+    AND?: SupportAttachmentScalarWhereWithAggregatesInput | SupportAttachmentScalarWhereWithAggregatesInput[]
+    OR?: SupportAttachmentScalarWhereWithAggregatesInput[]
+    NOT?: SupportAttachmentScalarWhereWithAggregatesInput | SupportAttachmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    messageId?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    uploadedByUserId?: StringNullableWithAggregatesFilter<"SupportAttachment"> | string | null
+    uploadedByAdminId?: StringNullableWithAggregatesFilter<"SupportAttachment"> | string | null
+    fileName?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    originalName?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    mimeType?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    sizeBytes?: IntWithAggregatesFilter<"SupportAttachment"> | number
+    storagePath?: StringWithAggregatesFilter<"SupportAttachment"> | string
+    publicUrl?: StringNullableWithAggregatesFilter<"SupportAttachment"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SupportAttachment"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -30611,9 +34152,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -30652,9 +34196,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUpdateInput = {
@@ -30693,9 +34240,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -30734,9 +34284,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -31096,6 +34649,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateInput = {
@@ -31108,6 +34662,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUpdateInput = {
@@ -31120,6 +34675,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateInput = {
@@ -31132,6 +34688,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletCreateManyInput = {
@@ -31527,6 +35084,7 @@ export namespace Prisma {
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -31551,6 +35109,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -31575,6 +35134,7 @@ export namespace Prisma {
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -31599,6 +35159,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -32874,6 +36435,241 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GiftCardPurchaseCreateInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutGiftCardPurchasesInput
+    wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
+    transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    walletId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateManyInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    walletId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type SupportTicketCreateInput = {
     id?: string
     subject: string
@@ -32885,6 +36681,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     user: UserCreateNestedOneWithoutSupportTicketsInput
     assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
     messages?: SupportMessageCreateNestedManyWithoutTicketInput
@@ -32903,6 +36700,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
   }
 
@@ -32917,6 +36715,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
     assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
     messages?: SupportMessageUpdateManyWithoutTicketNestedInput
@@ -32935,6 +36734,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
   }
 
@@ -32951,6 +36751,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
   }
 
   export type SupportTicketUpdateManyMutationInput = {
@@ -32964,6 +36765,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupportTicketUncheckedUpdateManyInput = {
@@ -32979,17 +36781,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupportMessageCreateInput = {
     id?: string
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     ticket: SupportTicketCreateNestedOneWithoutMessagesInput
     user?: UserCreateNestedOneWithoutSupportMessagesInput
+    attachments?: SupportAttachmentCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageUncheckedCreateInput = {
@@ -32998,20 +36803,24 @@ export namespace Prisma {
     userId?: string | null
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    attachments?: SupportAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
     user?: UserUpdateOneWithoutSupportMessagesNestedInput
+    attachments?: SupportAttachmentUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageUncheckedUpdateInput = {
@@ -33020,9 +36829,11 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: SupportAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageCreateManyInput = {
@@ -33031,6 +36842,7 @@ export namespace Prisma {
     userId?: string | null
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33040,6 +36852,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -33051,9 +36864,105 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentCreateInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+    message: SupportMessageCreateNestedOneWithoutAttachmentsInput
+    uploadedByUser?: UserCreateNestedOneWithoutUploadedSupportAttachmentsInput
+    uploadedByAdmin?: UserCreateNestedOneWithoutUploadedAdminAttachmentsInput
+  }
+
+  export type SupportAttachmentUncheckedCreateInput = {
+    id?: string
+    messageId: string
+    uploadedByUserId?: string | null
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    message?: SupportMessageUpdateOneRequiredWithoutAttachmentsNestedInput
+    uploadedByUser?: UserUpdateOneWithoutUploadedSupportAttachmentsNestedInput
+    uploadedByAdmin?: UserUpdateOneWithoutUploadedAdminAttachmentsNestedInput
+  }
+
+  export type SupportAttachmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentCreateManyInput = {
+    id?: string
+    messageId: string
+    uploadedByUserId?: string | null
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -33189,6 +37098,12 @@ export namespace Prisma {
     none?: GiftCardSaleWhereInput
   }
 
+  export type GiftCardPurchaseListRelationFilter = {
+    every?: GiftCardPurchaseWhereInput
+    some?: GiftCardPurchaseWhereInput
+    none?: GiftCardPurchaseWhereInput
+  }
+
   export type SupportTicketListRelationFilter = {
     every?: SupportTicketWhereInput
     some?: SupportTicketWhereInput
@@ -33199,6 +37114,12 @@ export namespace Prisma {
     every?: SupportMessageWhereInput
     some?: SupportMessageWhereInput
     none?: SupportMessageWhereInput
+  }
+
+  export type SupportAttachmentListRelationFilter = {
+    every?: SupportAttachmentWhereInput
+    some?: SupportAttachmentWhereInput
+    none?: SupportAttachmentWhereInput
   }
 
   export type SortOrderInput = {
@@ -33238,11 +37159,19 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type GiftCardPurchaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type SupportTicketOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type SupportMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupportAttachmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33990,6 +37919,11 @@ export namespace Prisma {
   export type GiftCardSaleNullableScalarRelationFilter = {
     is?: GiftCardSaleWhereInput | null
     isNot?: GiftCardSaleWhereInput | null
+  }
+
+  export type GiftCardPurchaseNullableScalarRelationFilter = {
+    is?: GiftCardPurchaseWhereInput | null
+    isNot?: GiftCardPurchaseWhereInput | null
   }
 
   export type TransactionCountOrderByAggregateInput = {
@@ -34909,6 +38843,140 @@ export namespace Prisma {
     adjustmentPercent?: SortOrder
   }
 
+  export type EnumGiftCardPurchaseStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.GiftCardPurchaseStatus | EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel> | $Enums.GiftCardPurchaseStatus
+  }
+
+  export type GiftCardPurchaseProviderProviderReferenceCompoundUniqueInput = {
+    provider: $Enums.PaymentProvider
+    providerReference: string
+  }
+
+  export type GiftCardPurchaseCountOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    idempotencyKey?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    providerReference?: SortOrder
+    redeemId?: SortOrder
+    brandNameSnapshot?: SortOrder
+    productNameSnapshot?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    denominationType?: SortOrder
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+    status?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    voucherCiphertext?: SortOrder
+    redeemDetails?: SortOrder
+    providerMetadata?: SortOrder
+    errorMessage?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type GiftCardPurchaseAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+  }
+
+  export type GiftCardPurchaseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    idempotencyKey?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    providerReference?: SortOrder
+    redeemId?: SortOrder
+    brandNameSnapshot?: SortOrder
+    productNameSnapshot?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    denominationType?: SortOrder
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+    status?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    voucherCiphertext?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type GiftCardPurchaseMinOrderByAggregateInput = {
+    id?: SortOrder
+    reference?: SortOrder
+    idempotencyKey?: SortOrder
+    userId?: SortOrder
+    walletId?: SortOrder
+    transactionId?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    providerReference?: SortOrder
+    redeemId?: SortOrder
+    brandNameSnapshot?: SortOrder
+    productNameSnapshot?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    denominationType?: SortOrder
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+    status?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    voucherCiphertext?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type GiftCardPurchaseSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    amount?: SortOrder
+    providerAmount?: SortOrder
+    fee?: SortOrder
+    customerPrice?: SortOrder
+  }
+
+  export type EnumGiftCardPurchaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GiftCardPurchaseStatus | EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGiftCardPurchaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.GiftCardPurchaseStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel>
+    _max?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel>
+  }
+
   export type EnumSupportTicketCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
@@ -34950,6 +39018,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     resolvedAt?: SortOrder
     lastMessageAt?: SortOrder
+    userClearedAt?: SortOrder
   }
 
   export type SupportTicketMaxOrderByAggregateInput = {
@@ -34965,6 +39034,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     resolvedAt?: SortOrder
     lastMessageAt?: SortOrder
+    userClearedAt?: SortOrder
   }
 
   export type SupportTicketMinOrderByAggregateInput = {
@@ -34980,6 +39050,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     resolvedAt?: SortOrder
     lastMessageAt?: SortOrder
+    userClearedAt?: SortOrder
   }
 
   export type EnumSupportTicketCategoryWithAggregatesFilter<$PrismaModel = never> = {
@@ -35040,6 +39111,7 @@ export namespace Prisma {
     userId?: SortOrder
     senderType?: SortOrder
     body?: SortOrder
+    metadata?: SortOrder
     isInternal?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -35075,6 +39147,61 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
     _max?: NestedEnumSupportMessageSenderTypeFilter<$PrismaModel>
+  }
+
+  export type SupportMessageScalarRelationFilter = {
+    is?: SupportMessageWhereInput
+    isNot?: SupportMessageWhereInput
+  }
+
+  export type SupportAttachmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    uploadedByUserId?: SortOrder
+    uploadedByAdminId?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    mimeType?: SortOrder
+    sizeBytes?: SortOrder
+    storagePath?: SortOrder
+    publicUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupportAttachmentAvgOrderByAggregateInput = {
+    sizeBytes?: SortOrder
+  }
+
+  export type SupportAttachmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    uploadedByUserId?: SortOrder
+    uploadedByAdminId?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    mimeType?: SortOrder
+    sizeBytes?: SortOrder
+    storagePath?: SortOrder
+    publicUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupportAttachmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    messageId?: SortOrder
+    uploadedByUserId?: SortOrder
+    uploadedByAdminId?: SortOrder
+    fileName?: SortOrder
+    originalName?: SortOrder
+    mimeType?: SortOrder
+    sizeBytes?: SortOrder
+    storagePath?: SortOrder
+    publicUrl?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SupportAttachmentSumOrderByAggregateInput = {
+    sizeBytes?: SortOrder
   }
 
   export type PasswordResetChallengeCreateNestedManyWithoutUserInput = {
@@ -35145,6 +39272,13 @@ export namespace Prisma {
     connect?: GiftCardSaleWhereUniqueInput | GiftCardSaleWhereUniqueInput[]
   }
 
+  export type GiftCardPurchaseCreateNestedManyWithoutUserInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput> | GiftCardPurchaseCreateWithoutUserInput[] | GiftCardPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+  }
+
   export type SupportTicketCreateNestedManyWithoutUserInput = {
     create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
@@ -35164,6 +39298,20 @@ export namespace Prisma {
     connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
     createMany?: SupportMessageCreateManyUserInputEnvelope
     connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type SupportAttachmentCreateNestedManyWithoutUploadedByUserInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput> | SupportAttachmentCreateWithoutUploadedByUserInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByUserInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByUserInput | SupportAttachmentCreateOrConnectWithoutUploadedByUserInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByUserInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+  }
+
+  export type SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput> | SupportAttachmentCreateWithoutUploadedByAdminInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput | SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByAdminInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
   }
 
   export type PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput = {
@@ -35234,6 +39382,13 @@ export namespace Prisma {
     connect?: GiftCardSaleWhereUniqueInput | GiftCardSaleWhereUniqueInput[]
   }
 
+  export type GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput> | GiftCardPurchaseCreateWithoutUserInput[] | GiftCardPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
+    createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+  }
+
   export type SupportTicketUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
@@ -35253,6 +39408,20 @@ export namespace Prisma {
     connectOrCreate?: SupportMessageCreateOrConnectWithoutUserInput | SupportMessageCreateOrConnectWithoutUserInput[]
     createMany?: SupportMessageCreateManyUserInputEnvelope
     connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput> | SupportAttachmentCreateWithoutUploadedByUserInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByUserInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByUserInput | SupportAttachmentCreateOrConnectWithoutUploadedByUserInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByUserInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+  }
+
+  export type SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput> | SupportAttachmentCreateWithoutUploadedByAdminInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput | SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByAdminInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -35419,6 +39588,20 @@ export namespace Prisma {
     deleteMany?: GiftCardSaleScalarWhereInput | GiftCardSaleScalarWhereInput[]
   }
 
+  export type GiftCardPurchaseUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput> | GiftCardPurchaseCreateWithoutUserInput[] | GiftCardPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: GiftCardPurchaseUpsertWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
+    set?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    disconnect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    delete?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
   export type SupportTicketUpdateManyWithoutUserNestedInput = {
     create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
@@ -35459,6 +39642,34 @@ export namespace Prisma {
     update?: SupportMessageUpdateWithWhereUniqueWithoutUserInput | SupportMessageUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SupportMessageUpdateManyWithWhereWithoutUserInput | SupportMessageUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput> | SupportAttachmentCreateWithoutUploadedByUserInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByUserInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByUserInput | SupportAttachmentCreateOrConnectWithoutUploadedByUserInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByUserInput | SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByUserInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByUserInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByUserInput | SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByUserInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutUploadedByUserInput | SupportAttachmentUpdateManyWithWhereWithoutUploadedByUserInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+  }
+
+  export type SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput> | SupportAttachmentCreateWithoutUploadedByAdminInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput | SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByAdminInput | SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByAdminInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByAdminInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByAdminInput | SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByAdminInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutUploadedByAdminInput | SupportAttachmentUpdateManyWithWhereWithoutUploadedByAdminInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
   }
 
   export type PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput = {
@@ -35593,6 +39804,20 @@ export namespace Prisma {
     deleteMany?: GiftCardSaleScalarWhereInput | GiftCardSaleScalarWhereInput[]
   }
 
+  export type GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput> | GiftCardPurchaseCreateWithoutUserInput[] | GiftCardPurchaseUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
+    upsert?: GiftCardPurchaseUpsertWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
+    set?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    disconnect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    delete?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
   export type SupportTicketUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
@@ -35633,6 +39858,34 @@ export namespace Prisma {
     update?: SupportMessageUpdateWithWhereUniqueWithoutUserInput | SupportMessageUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SupportMessageUpdateManyWithWhereWithoutUserInput | SupportMessageUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput> | SupportAttachmentCreateWithoutUploadedByUserInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByUserInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByUserInput | SupportAttachmentCreateOrConnectWithoutUploadedByUserInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByUserInput | SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByUserInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByUserInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByUserInput | SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByUserInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutUploadedByUserInput | SupportAttachmentUpdateManyWithWhereWithoutUploadedByUserInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput> | SupportAttachmentCreateWithoutUploadedByAdminInput[] | SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput | SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByAdminInput | SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByAdminInput[]
+    createMany?: SupportAttachmentCreateManyUploadedByAdminInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByAdminInput | SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByAdminInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutUploadedByAdminInput | SupportAttachmentUpdateManyWithWhereWithoutUploadedByAdminInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutPendingVerificationInput = {
@@ -35720,6 +39973,13 @@ export namespace Prisma {
     connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
   }
 
+  export type GiftCardPurchaseCreateNestedManyWithoutWalletInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput> | GiftCardPurchaseCreateWithoutWalletInput[] | GiftCardPurchaseUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutWalletInput | GiftCardPurchaseCreateOrConnectWithoutWalletInput[]
+    createMany?: GiftCardPurchaseCreateManyWalletInputEnvelope
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+  }
+
   export type WalletBalanceUncheckedCreateNestedManyWithoutWalletInput = {
     create?: XOR<WalletBalanceCreateWithoutWalletInput, WalletBalanceUncheckedCreateWithoutWalletInput> | WalletBalanceCreateWithoutWalletInput[] | WalletBalanceUncheckedCreateWithoutWalletInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutWalletInput | WalletBalanceCreateOrConnectWithoutWalletInput[]
@@ -35753,6 +40013,13 @@ export namespace Prisma {
     connectOrCreate?: WithdrawalCreateOrConnectWithoutWalletInput | WithdrawalCreateOrConnectWithoutWalletInput[]
     createMany?: WithdrawalCreateManyWalletInputEnvelope
     connect?: WithdrawalWhereUniqueInput | WithdrawalWhereUniqueInput[]
+  }
+
+  export type GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput> | GiftCardPurchaseCreateWithoutWalletInput[] | GiftCardPurchaseUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutWalletInput | GiftCardPurchaseCreateOrConnectWithoutWalletInput[]
+    createMany?: GiftCardPurchaseCreateManyWalletInputEnvelope
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutWalletNestedInput = {
@@ -35833,6 +40100,20 @@ export namespace Prisma {
     deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
   }
 
+  export type GiftCardPurchaseUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput> | GiftCardPurchaseCreateWithoutWalletInput[] | GiftCardPurchaseUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutWalletInput | GiftCardPurchaseCreateOrConnectWithoutWalletInput[]
+    upsert?: GiftCardPurchaseUpsertWithWhereUniqueWithoutWalletInput | GiftCardPurchaseUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: GiftCardPurchaseCreateManyWalletInputEnvelope
+    set?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    disconnect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    delete?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutWalletInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutWalletInput | GiftCardPurchaseUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
   export type WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput = {
     create?: XOR<WalletBalanceCreateWithoutWalletInput, WalletBalanceUncheckedCreateWithoutWalletInput> | WalletBalanceCreateWithoutWalletInput[] | WalletBalanceUncheckedCreateWithoutWalletInput[]
     connectOrCreate?: WalletBalanceCreateOrConnectWithoutWalletInput | WalletBalanceCreateOrConnectWithoutWalletInput[]
@@ -35901,6 +40182,20 @@ export namespace Prisma {
     update?: WithdrawalUpdateWithWhereUniqueWithoutWalletInput | WithdrawalUpdateWithWhereUniqueWithoutWalletInput[]
     updateMany?: WithdrawalUpdateManyWithWhereWithoutWalletInput | WithdrawalUpdateManyWithWhereWithoutWalletInput[]
     deleteMany?: WithdrawalScalarWhereInput | WithdrawalScalarWhereInput[]
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput> | GiftCardPurchaseCreateWithoutWalletInput[] | GiftCardPurchaseUncheckedCreateWithoutWalletInput[]
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutWalletInput | GiftCardPurchaseCreateOrConnectWithoutWalletInput[]
+    upsert?: GiftCardPurchaseUpsertWithWhereUniqueWithoutWalletInput | GiftCardPurchaseUpsertWithWhereUniqueWithoutWalletInput[]
+    createMany?: GiftCardPurchaseCreateManyWalletInputEnvelope
+    set?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    disconnect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    delete?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+    update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutWalletInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutWalletInput[]
+    updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutWalletInput | GiftCardPurchaseUpdateManyWithWhereWithoutWalletInput[]
+    deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
   }
 
   export type WalletBalanceCreateNestedManyWithoutCurrencyInput = {
@@ -36431,6 +40726,12 @@ export namespace Prisma {
     connect?: GiftCardSaleWhereUniqueInput
   }
 
+  export type GiftCardPurchaseCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutTransactionInput
+    connect?: GiftCardPurchaseWhereUniqueInput
+  }
+
   export type LedgerEntryCreateNestedManyWithoutTransactionInput = {
     create?: XOR<LedgerEntryCreateWithoutTransactionInput, LedgerEntryUncheckedCreateWithoutTransactionInput> | LedgerEntryCreateWithoutTransactionInput[] | LedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutTransactionInput | LedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -36454,6 +40755,12 @@ export namespace Prisma {
     create?: XOR<GiftCardSaleCreateWithoutTransactionInput, GiftCardSaleUncheckedCreateWithoutTransactionInput>
     connectOrCreate?: GiftCardSaleCreateOrConnectWithoutTransactionInput
     connect?: GiftCardSaleWhereUniqueInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutTransactionInput
+    connect?: GiftCardPurchaseWhereUniqueInput
   }
 
   export type LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput = {
@@ -36529,6 +40836,16 @@ export namespace Prisma {
     update?: XOR<XOR<GiftCardSaleUpdateToOneWithWhereWithoutTransactionInput, GiftCardSaleUpdateWithoutTransactionInput>, GiftCardSaleUncheckedUpdateWithoutTransactionInput>
   }
 
+  export type GiftCardPurchaseUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutTransactionInput
+    upsert?: GiftCardPurchaseUpsertWithoutTransactionInput
+    disconnect?: GiftCardPurchaseWhereInput | boolean
+    delete?: GiftCardPurchaseWhereInput | boolean
+    connect?: GiftCardPurchaseWhereUniqueInput
+    update?: XOR<XOR<GiftCardPurchaseUpdateToOneWithWhereWithoutTransactionInput, GiftCardPurchaseUpdateWithoutTransactionInput>, GiftCardPurchaseUncheckedUpdateWithoutTransactionInput>
+  }
+
   export type LedgerEntryUpdateManyWithoutTransactionNestedInput = {
     create?: XOR<LedgerEntryCreateWithoutTransactionInput, LedgerEntryUncheckedCreateWithoutTransactionInput> | LedgerEntryCreateWithoutTransactionInput[] | LedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: LedgerEntryCreateOrConnectWithoutTransactionInput | LedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -36571,6 +40888,16 @@ export namespace Prisma {
     delete?: GiftCardSaleWhereInput | boolean
     connect?: GiftCardSaleWhereUniqueInput
     update?: XOR<XOR<GiftCardSaleUpdateToOneWithWhereWithoutTransactionInput, GiftCardSaleUpdateWithoutTransactionInput>, GiftCardSaleUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutTransactionInput
+    upsert?: GiftCardPurchaseUpsertWithoutTransactionInput
+    disconnect?: GiftCardPurchaseWhereInput | boolean
+    delete?: GiftCardPurchaseWhereInput | boolean
+    connect?: GiftCardPurchaseWhereUniqueInput
+    update?: XOR<XOR<GiftCardPurchaseUpdateToOneWithWhereWithoutTransactionInput, GiftCardPurchaseUpdateWithoutTransactionInput>, GiftCardPurchaseUncheckedUpdateWithoutTransactionInput>
   }
 
   export type LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput = {
@@ -37059,6 +41386,54 @@ export namespace Prisma {
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutGiftCardSaleInput, TransactionUpdateWithoutGiftCardSaleInput>, TransactionUncheckedUpdateWithoutGiftCardSaleInput>
   }
 
+  export type UserCreateNestedOneWithoutGiftCardPurchasesInput = {
+    create?: XOR<UserCreateWithoutGiftCardPurchasesInput, UserUncheckedCreateWithoutGiftCardPurchasesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGiftCardPurchasesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type WalletCreateNestedOneWithoutGiftCardPurchasesInput = {
+    create?: XOR<WalletCreateWithoutGiftCardPurchasesInput, WalletUncheckedCreateWithoutGiftCardPurchasesInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutGiftCardPurchasesInput
+    connect?: WalletWhereUniqueInput
+  }
+
+  export type TransactionCreateNestedOneWithoutGiftCardPurchaseInput = {
+    create?: XOR<TransactionCreateWithoutGiftCardPurchaseInput, TransactionUncheckedCreateWithoutGiftCardPurchaseInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutGiftCardPurchaseInput
+    connect?: TransactionWhereUniqueInput
+  }
+
+  export type EnumGiftCardPurchaseStatusFieldUpdateOperationsInput = {
+    set?: $Enums.GiftCardPurchaseStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput = {
+    create?: XOR<UserCreateWithoutGiftCardPurchasesInput, UserUncheckedCreateWithoutGiftCardPurchasesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutGiftCardPurchasesInput
+    upsert?: UserUpsertWithoutGiftCardPurchasesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutGiftCardPurchasesInput, UserUpdateWithoutGiftCardPurchasesInput>, UserUncheckedUpdateWithoutGiftCardPurchasesInput>
+  }
+
+  export type WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput = {
+    create?: XOR<WalletCreateWithoutGiftCardPurchasesInput, WalletUncheckedCreateWithoutGiftCardPurchasesInput>
+    connectOrCreate?: WalletCreateOrConnectWithoutGiftCardPurchasesInput
+    upsert?: WalletUpsertWithoutGiftCardPurchasesInput
+    connect?: WalletWhereUniqueInput
+    update?: XOR<XOR<WalletUpdateToOneWithWhereWithoutGiftCardPurchasesInput, WalletUpdateWithoutGiftCardPurchasesInput>, WalletUncheckedUpdateWithoutGiftCardPurchasesInput>
+  }
+
+  export type TransactionUpdateOneWithoutGiftCardPurchaseNestedInput = {
+    create?: XOR<TransactionCreateWithoutGiftCardPurchaseInput, TransactionUncheckedCreateWithoutGiftCardPurchaseInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutGiftCardPurchaseInput
+    upsert?: TransactionUpsertWithoutGiftCardPurchaseInput
+    disconnect?: TransactionWhereInput | boolean
+    delete?: TransactionWhereInput | boolean
+    connect?: TransactionWhereUniqueInput
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutGiftCardPurchaseInput, TransactionUpdateWithoutGiftCardPurchaseInput>, TransactionUncheckedUpdateWithoutGiftCardPurchaseInput>
+  }
+
   export type UserCreateNestedOneWithoutSupportTicketsInput = {
     create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
@@ -37159,6 +41534,20 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type SupportAttachmentCreateNestedManyWithoutMessageInput = {
+    create?: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput> | SupportAttachmentCreateWithoutMessageInput[] | SupportAttachmentUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutMessageInput | SupportAttachmentCreateOrConnectWithoutMessageInput[]
+    createMany?: SupportAttachmentCreateManyMessageInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+  }
+
+  export type SupportAttachmentUncheckedCreateNestedManyWithoutMessageInput = {
+    create?: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput> | SupportAttachmentCreateWithoutMessageInput[] | SupportAttachmentUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutMessageInput | SupportAttachmentCreateOrConnectWithoutMessageInput[]
+    createMany?: SupportAttachmentCreateManyMessageInputEnvelope
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+  }
+
   export type EnumSupportMessageSenderTypeFieldUpdateOperationsInput = {
     set?: $Enums.SupportMessageSenderType
   }
@@ -37179,6 +41568,80 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupportMessagesInput, UserUpdateWithoutSupportMessagesInput>, UserUncheckedUpdateWithoutSupportMessagesInput>
+  }
+
+  export type SupportAttachmentUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput> | SupportAttachmentCreateWithoutMessageInput[] | SupportAttachmentUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutMessageInput | SupportAttachmentCreateOrConnectWithoutMessageInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutMessageInput | SupportAttachmentUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: SupportAttachmentCreateManyMessageInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutMessageInput | SupportAttachmentUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutMessageInput | SupportAttachmentUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutMessageNestedInput = {
+    create?: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput> | SupportAttachmentCreateWithoutMessageInput[] | SupportAttachmentUncheckedCreateWithoutMessageInput[]
+    connectOrCreate?: SupportAttachmentCreateOrConnectWithoutMessageInput | SupportAttachmentCreateOrConnectWithoutMessageInput[]
+    upsert?: SupportAttachmentUpsertWithWhereUniqueWithoutMessageInput | SupportAttachmentUpsertWithWhereUniqueWithoutMessageInput[]
+    createMany?: SupportAttachmentCreateManyMessageInputEnvelope
+    set?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    disconnect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    delete?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    connect?: SupportAttachmentWhereUniqueInput | SupportAttachmentWhereUniqueInput[]
+    update?: SupportAttachmentUpdateWithWhereUniqueWithoutMessageInput | SupportAttachmentUpdateWithWhereUniqueWithoutMessageInput[]
+    updateMany?: SupportAttachmentUpdateManyWithWhereWithoutMessageInput | SupportAttachmentUpdateManyWithWhereWithoutMessageInput[]
+    deleteMany?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+  }
+
+  export type SupportMessageCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<SupportMessageCreateWithoutAttachmentsInput, SupportMessageUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutAttachmentsInput
+    connect?: SupportMessageWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUploadedSupportAttachmentsInput = {
+    create?: XOR<UserCreateWithoutUploadedSupportAttachmentsInput, UserUncheckedCreateWithoutUploadedSupportAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedSupportAttachmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutUploadedAdminAttachmentsInput = {
+    create?: XOR<UserCreateWithoutUploadedAdminAttachmentsInput, UserUncheckedCreateWithoutUploadedAdminAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedAdminAttachmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SupportMessageUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutAttachmentsInput, SupportMessageUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutAttachmentsInput
+    upsert?: SupportMessageUpsertWithoutAttachmentsInput
+    connect?: SupportMessageWhereUniqueInput
+    update?: XOR<XOR<SupportMessageUpdateToOneWithWhereWithoutAttachmentsInput, SupportMessageUpdateWithoutAttachmentsInput>, SupportMessageUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type UserUpdateOneWithoutUploadedSupportAttachmentsNestedInput = {
+    create?: XOR<UserCreateWithoutUploadedSupportAttachmentsInput, UserUncheckedCreateWithoutUploadedSupportAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedSupportAttachmentsInput
+    upsert?: UserUpsertWithoutUploadedSupportAttachmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadedSupportAttachmentsInput, UserUpdateWithoutUploadedSupportAttachmentsInput>, UserUncheckedUpdateWithoutUploadedSupportAttachmentsInput>
+  }
+
+  export type UserUpdateOneWithoutUploadedAdminAttachmentsNestedInput = {
+    create?: XOR<UserCreateWithoutUploadedAdminAttachmentsInput, UserUncheckedCreateWithoutUploadedAdminAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUploadedAdminAttachmentsInput
+    upsert?: UserUpsertWithoutUploadedAdminAttachmentsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUploadedAdminAttachmentsInput, UserUpdateWithoutUploadedAdminAttachmentsInput>, UserUncheckedUpdateWithoutUploadedAdminAttachmentsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -37670,6 +42133,23 @@ export namespace Prisma {
     _max?: NestedEnumGiftCardSaleStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.GiftCardPurchaseStatus | EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel> | $Enums.GiftCardPurchaseStatus
+  }
+
+  export type NestedEnumGiftCardPurchaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GiftCardPurchaseStatus | EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGiftCardPurchaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.GiftCardPurchaseStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel>
+    _max?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumSupportTicketCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
@@ -37859,6 +42339,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutUserInput = {
@@ -37870,6 +42351,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutUserInput = {
@@ -37951,6 +42433,7 @@ export namespace Prisma {
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -37974,6 +42457,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -38245,6 +42729,82 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GiftCardPurchaseCreateWithoutUserInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
+    transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateWithoutUserInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    walletId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateOrConnectWithoutUserInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    create: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type GiftCardPurchaseCreateManyUserInputEnvelope = {
+    data: GiftCardPurchaseCreateManyUserInput | GiftCardPurchaseCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupportTicketCreateWithoutUserInput = {
     id?: string
     subject: string
@@ -38256,6 +42816,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
     messages?: SupportMessageCreateNestedManyWithoutTicketInput
   }
@@ -38272,6 +42833,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
   }
 
@@ -38296,6 +42858,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     user: UserCreateNestedOneWithoutSupportTicketsInput
     messages?: SupportMessageCreateNestedManyWithoutTicketInput
   }
@@ -38312,6 +42875,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
   }
 
@@ -38329,10 +42893,12 @@ export namespace Prisma {
     id?: string
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     ticket: SupportTicketCreateNestedOneWithoutMessagesInput
+    attachments?: SupportAttachmentCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageUncheckedCreateWithoutUserInput = {
@@ -38340,9 +42906,11 @@ export namespace Prisma {
     ticketId: string
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    attachments?: SupportAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageCreateOrConnectWithoutUserInput = {
@@ -38352,6 +42920,78 @@ export namespace Prisma {
 
   export type SupportMessageCreateManyUserInputEnvelope = {
     data: SupportMessageCreateManyUserInput | SupportMessageCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupportAttachmentCreateWithoutUploadedByUserInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+    message: SupportMessageCreateNestedOneWithoutAttachmentsInput
+    uploadedByAdmin?: UserCreateNestedOneWithoutUploadedAdminAttachmentsInput
+  }
+
+  export type SupportAttachmentUncheckedCreateWithoutUploadedByUserInput = {
+    id?: string
+    messageId: string
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentCreateOrConnectWithoutUploadedByUserInput = {
+    where: SupportAttachmentWhereUniqueInput
+    create: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput>
+  }
+
+  export type SupportAttachmentCreateManyUploadedByUserInputEnvelope = {
+    data: SupportAttachmentCreateManyUploadedByUserInput | SupportAttachmentCreateManyUploadedByUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SupportAttachmentCreateWithoutUploadedByAdminInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+    message: SupportMessageCreateNestedOneWithoutAttachmentsInput
+    uploadedByUser?: UserCreateNestedOneWithoutUploadedSupportAttachmentsInput
+  }
+
+  export type SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput = {
+    id?: string
+    messageId: string
+    uploadedByUserId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentCreateOrConnectWithoutUploadedByAdminInput = {
+    where: SupportAttachmentWhereUniqueInput
+    create: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput>
+  }
+
+  export type SupportAttachmentCreateManyUploadedByAdminInputEnvelope = {
+    data: SupportAttachmentCreateManyUploadedByAdminInput | SupportAttachmentCreateManyUploadedByAdminInput[]
     skipDuplicates?: boolean
   }
 
@@ -38479,6 +43119,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutUserInput = {
@@ -38490,6 +43131,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type DepositUpsertWithWhereUniqueWithoutUserInput = {
@@ -38758,6 +43400,59 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GiftCardSale"> | Date | string
   }
 
+  export type GiftCardPurchaseUpsertWithWhereUniqueWithoutUserInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    update: XOR<GiftCardPurchaseUpdateWithoutUserInput, GiftCardPurchaseUncheckedUpdateWithoutUserInput>
+    create: XOR<GiftCardPurchaseCreateWithoutUserInput, GiftCardPurchaseUncheckedCreateWithoutUserInput>
+  }
+
+  export type GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    data: XOR<GiftCardPurchaseUpdateWithoutUserInput, GiftCardPurchaseUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GiftCardPurchaseUpdateManyWithWhereWithoutUserInput = {
+    where: GiftCardPurchaseScalarWhereInput
+    data: XOR<GiftCardPurchaseUpdateManyMutationInput, GiftCardPurchaseUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type GiftCardPurchaseScalarWhereInput = {
+    AND?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+    OR?: GiftCardPurchaseScalarWhereInput[]
+    NOT?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+    id?: StringFilter<"GiftCardPurchase"> | string
+    reference?: StringFilter<"GiftCardPurchase"> | string
+    idempotencyKey?: StringFilter<"GiftCardPurchase"> | string
+    userId?: StringFilter<"GiftCardPurchase"> | string
+    walletId?: StringFilter<"GiftCardPurchase"> | string
+    transactionId?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    provider?: EnumPaymentProviderFilter<"GiftCardPurchase"> | $Enums.PaymentProvider
+    providerProductId?: StringFilter<"GiftCardPurchase"> | string
+    providerReference?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemId?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    brandNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    productNameSnapshot?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    countryCode?: StringFilter<"GiftCardPurchase"> | string
+    currencyCode?: StringFilter<"GiftCardPurchase"> | string
+    denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    quantity?: IntFilter<"GiftCardPurchase"> | number
+    amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
+    providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    voucherCiphertext?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    redeemDetails?: JsonNullableFilter<"GiftCardPurchase">
+    providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
+    errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
+    metadata?: JsonNullableFilter<"GiftCardPurchase">
+    createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
+    completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
+  }
+
   export type SupportTicketUpsertWithWhereUniqueWithoutUserInput = {
     where: SupportTicketWhereUniqueInput
     update: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
@@ -38790,6 +43485,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SupportTicket"> | Date | string
     resolvedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
     lastMessageAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
+    userClearedAt?: DateTimeNullableFilter<"SupportTicket"> | Date | string | null
   }
 
   export type SupportTicketUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -38833,9 +43529,59 @@ export namespace Prisma {
     userId?: StringNullableFilter<"SupportMessage"> | string | null
     senderType?: EnumSupportMessageSenderTypeFilter<"SupportMessage"> | $Enums.SupportMessageSenderType
     body?: StringFilter<"SupportMessage"> | string
+    metadata?: JsonNullableFilter<"SupportMessage">
     isInternal?: BoolFilter<"SupportMessage"> | boolean
     createdAt?: DateTimeFilter<"SupportMessage"> | Date | string
     updatedAt?: DateTimeFilter<"SupportMessage"> | Date | string
+  }
+
+  export type SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByUserInput = {
+    where: SupportAttachmentWhereUniqueInput
+    update: XOR<SupportAttachmentUpdateWithoutUploadedByUserInput, SupportAttachmentUncheckedUpdateWithoutUploadedByUserInput>
+    create: XOR<SupportAttachmentCreateWithoutUploadedByUserInput, SupportAttachmentUncheckedCreateWithoutUploadedByUserInput>
+  }
+
+  export type SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByUserInput = {
+    where: SupportAttachmentWhereUniqueInput
+    data: XOR<SupportAttachmentUpdateWithoutUploadedByUserInput, SupportAttachmentUncheckedUpdateWithoutUploadedByUserInput>
+  }
+
+  export type SupportAttachmentUpdateManyWithWhereWithoutUploadedByUserInput = {
+    where: SupportAttachmentScalarWhereInput
+    data: XOR<SupportAttachmentUpdateManyMutationInput, SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserInput>
+  }
+
+  export type SupportAttachmentScalarWhereInput = {
+    AND?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+    OR?: SupportAttachmentScalarWhereInput[]
+    NOT?: SupportAttachmentScalarWhereInput | SupportAttachmentScalarWhereInput[]
+    id?: StringFilter<"SupportAttachment"> | string
+    messageId?: StringFilter<"SupportAttachment"> | string
+    uploadedByUserId?: StringNullableFilter<"SupportAttachment"> | string | null
+    uploadedByAdminId?: StringNullableFilter<"SupportAttachment"> | string | null
+    fileName?: StringFilter<"SupportAttachment"> | string
+    originalName?: StringFilter<"SupportAttachment"> | string
+    mimeType?: StringFilter<"SupportAttachment"> | string
+    sizeBytes?: IntFilter<"SupportAttachment"> | number
+    storagePath?: StringFilter<"SupportAttachment"> | string
+    publicUrl?: StringNullableFilter<"SupportAttachment"> | string | null
+    createdAt?: DateTimeFilter<"SupportAttachment"> | Date | string
+  }
+
+  export type SupportAttachmentUpsertWithWhereUniqueWithoutUploadedByAdminInput = {
+    where: SupportAttachmentWhereUniqueInput
+    update: XOR<SupportAttachmentUpdateWithoutUploadedByAdminInput, SupportAttachmentUncheckedUpdateWithoutUploadedByAdminInput>
+    create: XOR<SupportAttachmentCreateWithoutUploadedByAdminInput, SupportAttachmentUncheckedCreateWithoutUploadedByAdminInput>
+  }
+
+  export type SupportAttachmentUpdateWithWhereUniqueWithoutUploadedByAdminInput = {
+    where: SupportAttachmentWhereUniqueInput
+    data: XOR<SupportAttachmentUpdateWithoutUploadedByAdminInput, SupportAttachmentUncheckedUpdateWithoutUploadedByAdminInput>
+  }
+
+  export type SupportAttachmentUpdateManyWithWhereWithoutUploadedByAdminInput = {
+    where: SupportAttachmentScalarWhereInput
+    data: XOR<SupportAttachmentUpdateManyMutationInput, SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminInput>
   }
 
   export type UserCreateWithoutPendingVerificationInput = {
@@ -38873,9 +43619,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutPendingVerificationInput = {
@@ -38913,9 +43662,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutPendingVerificationInput = {
@@ -38969,9 +43721,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPendingVerificationInput = {
@@ -39009,9 +43764,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserCreateWithoutPasswordResetsInput = {
@@ -39049,9 +43807,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutPasswordResetsInput = {
@@ -39089,9 +43850,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutPasswordResetsInput = {
@@ -39145,9 +43909,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPasswordResetsInput = {
@@ -39185,9 +43952,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserCreateWithoutRefreshSessionsInput = {
@@ -39225,9 +43995,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -39265,9 +44038,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -39321,9 +44097,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -39361,9 +44140,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserCreateWithoutWalletInput = {
@@ -39401,9 +44183,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutWalletInput = {
@@ -39441,9 +44226,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutWalletInput = {
@@ -39553,6 +44341,7 @@ export namespace Prisma {
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -39576,6 +44365,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -39703,6 +44493,82 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GiftCardPurchaseCreateWithoutWalletInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutGiftCardPurchasesInput
+    transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateWithoutWalletInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateOrConnectWithoutWalletInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    create: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput>
+  }
+
+  export type GiftCardPurchaseCreateManyWalletInputEnvelope = {
+    data: GiftCardPurchaseCreateManyWalletInput | GiftCardPurchaseCreateManyWalletInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutWalletInput = {
     update: XOR<UserUpdateWithoutWalletInput, UserUncheckedUpdateWithoutWalletInput>
     create: XOR<UserCreateWithoutWalletInput, UserUncheckedCreateWithoutWalletInput>
@@ -39749,9 +44615,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWalletInput = {
@@ -39789,9 +44658,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type WalletBalanceUpsertWithWhereUniqueWithoutWalletInput = {
@@ -39907,6 +44779,22 @@ export namespace Prisma {
     data: XOR<WithdrawalUpdateManyMutationInput, WithdrawalUncheckedUpdateManyWithoutWalletInput>
   }
 
+  export type GiftCardPurchaseUpsertWithWhereUniqueWithoutWalletInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    update: XOR<GiftCardPurchaseUpdateWithoutWalletInput, GiftCardPurchaseUncheckedUpdateWithoutWalletInput>
+    create: XOR<GiftCardPurchaseCreateWithoutWalletInput, GiftCardPurchaseUncheckedCreateWithoutWalletInput>
+  }
+
+  export type GiftCardPurchaseUpdateWithWhereUniqueWithoutWalletInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    data: XOR<GiftCardPurchaseUpdateWithoutWalletInput, GiftCardPurchaseUncheckedUpdateWithoutWalletInput>
+  }
+
+  export type GiftCardPurchaseUpdateManyWithWhereWithoutWalletInput = {
+    where: GiftCardPurchaseScalarWhereInput
+    data: XOR<GiftCardPurchaseUpdateManyMutationInput, GiftCardPurchaseUncheckedUpdateManyWithoutWalletInput>
+  }
+
   export type WalletBalanceCreateWithoutCurrencyInput = {
     id?: string
     availableBalance?: Decimal | DecimalJsLike | number | string
@@ -40009,6 +44897,7 @@ export namespace Prisma {
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -40032,6 +44921,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -40552,6 +45442,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutBalancesInput = {
@@ -40563,6 +45454,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutBalancesInput = {
@@ -40637,6 +45529,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutBalancesInput = {
@@ -40648,6 +45541,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutBalancesInput = {
@@ -40738,9 +45632,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutDepositsInput = {
@@ -40778,9 +45675,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutDepositsInput = {
@@ -40797,6 +45697,7 @@ export namespace Prisma {
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutDepositsInput = {
@@ -40808,6 +45709,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutDepositsInput = {
@@ -40882,6 +45784,7 @@ export namespace Prisma {
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -40905,6 +45808,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -40959,9 +45863,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepositsInput = {
@@ -40999,9 +45906,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type WalletUpsertWithoutDepositsInput = {
@@ -41024,6 +45934,7 @@ export namespace Prisma {
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutDepositsInput = {
@@ -41035,6 +45946,7 @@ export namespace Prisma {
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutDepositsInput = {
@@ -41121,6 +46033,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -41144,6 +46057,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -41182,9 +46096,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -41222,9 +46139,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -41241,6 +46161,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutTransactionsInput = {
@@ -41252,6 +46173,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutTransactionsInput = {
@@ -41491,6 +46413,77 @@ export namespace Prisma {
     create: XOR<GiftCardSaleCreateWithoutTransactionInput, GiftCardSaleUncheckedCreateWithoutTransactionInput>
   }
 
+  export type GiftCardPurchaseCreateWithoutTransactionInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutGiftCardPurchasesInput
+    wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateWithoutTransactionInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    walletId: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateOrConnectWithoutTransactionInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    create: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+  }
+
   export type LedgerEntryCreateWithoutTransactionInput = {
     id?: string
     type: $Enums.LedgerEntryType
@@ -41579,9 +46572,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -41619,9 +46615,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type WalletUpsertWithoutTransactionsInput = {
@@ -41644,6 +46643,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutTransactionsInput = {
@@ -41655,6 +46655,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutTransactionsInput = {
@@ -41913,6 +46914,83 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GiftCardPurchaseUpsertWithoutTransactionInput = {
+    update: XOR<GiftCardPurchaseUpdateWithoutTransactionInput, GiftCardPurchaseUncheckedUpdateWithoutTransactionInput>
+    create: XOR<GiftCardPurchaseCreateWithoutTransactionInput, GiftCardPurchaseUncheckedCreateWithoutTransactionInput>
+    where?: GiftCardPurchaseWhereInput
+  }
+
+  export type GiftCardPurchaseUpdateToOneWithWhereWithoutTransactionInput = {
+    where?: GiftCardPurchaseWhereInput
+    data: XOR<GiftCardPurchaseUpdateWithoutTransactionInput, GiftCardPurchaseUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type GiftCardPurchaseUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type LedgerEntryUpsertWithWhereUniqueWithoutTransactionInput = {
     where: LedgerEntryWhereUniqueInput
     update: XOR<LedgerEntryUpdateWithoutTransactionInput, LedgerEntryUncheckedUpdateWithoutTransactionInput>
@@ -41938,6 +47016,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutLedgerEntriesInput = {
@@ -41949,6 +47028,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutLedgerEntriesInput = {
@@ -42024,6 +47104,7 @@ export namespace Prisma {
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutLedgerEntriesInput = {
@@ -42047,6 +47128,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutLedgerEntriesInput = {
@@ -42074,6 +47156,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -42085,6 +47168,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type CurrencyUpsertWithoutLedgerEntriesInput = {
@@ -42172,6 +47256,7 @@ export namespace Prisma {
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -42195,6 +47280,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -42232,9 +47318,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -42272,9 +47361,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -42291,6 +47383,7 @@ export namespace Prisma {
     deposits?: DepositCreateNestedManyWithoutWalletInput
     transactions?: TransactionCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutWalletInput
   }
 
   export type WalletUncheckedCreateWithoutWithdrawalsInput = {
@@ -42302,6 +47395,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
     transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutWalletInput
   }
 
   export type WalletCreateOrConnectWithoutWithdrawalsInput = {
@@ -42329,6 +47423,7 @@ export namespace Prisma {
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -42352,6 +47447,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -42680,9 +47776,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -42720,9 +47819,12 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type WalletUpsertWithoutWithdrawalsInput = {
@@ -42745,6 +47847,7 @@ export namespace Prisma {
     deposits?: DepositUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutWalletNestedInput
   }
 
   export type WalletUncheckedUpdateWithoutWithdrawalsInput = {
@@ -42756,6 +47859,7 @@ export namespace Prisma {
     deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
     transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutWalletNestedInput
   }
 
   export type TransactionUpsertWithoutWithdrawalInput = {
@@ -42789,6 +47893,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -42812,6 +47917,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -43139,9 +48245,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalQuotesInput = {
@@ -43179,9 +48288,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalQuotesInput = {
@@ -43401,9 +48513,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalQuotesInput = {
@@ -43441,9 +48556,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type CurrencyUpsertWithoutSourceQuotesInput = {
@@ -43603,9 +48721,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutBeneficiariesInput = {
@@ -43643,9 +48764,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutBeneficiariesInput = {
@@ -43818,9 +48942,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBeneficiariesInput = {
@@ -43858,9 +48985,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type CurrencyUpsertWithoutBeneficiariesInput = {
@@ -44247,9 +49377,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutGiftCardSalesInput = {
@@ -44287,9 +49420,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutGiftCardSalesInput = {
@@ -44317,6 +49453,7 @@ export namespace Prisma {
     currency: CurrencyCreateNestedOneWithoutTransactionsInput
     deposit?: DepositCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
   }
 
@@ -44340,6 +49477,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
     withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedCreateNestedOneWithoutTransactionInput
     ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
   }
 
@@ -44394,9 +49532,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutGiftCardSalesInput = {
@@ -44434,9 +49575,12 @@ export namespace Prisma {
     withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type TransactionUpsertWithoutGiftCardSaleInput = {
@@ -44470,6 +49614,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -44493,6 +49638,371 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type UserCreateWithoutGiftCardPurchasesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutGiftCardPurchasesInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutGiftCardPurchasesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutGiftCardPurchasesInput, UserUncheckedCreateWithoutGiftCardPurchasesInput>
+  }
+
+  export type WalletCreateWithoutGiftCardPurchasesInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutWalletInput
+    balances?: WalletBalanceCreateNestedManyWithoutWalletInput
+    deposits?: DepositCreateNestedManyWithoutWalletInput
+    transactions?: TransactionCreateNestedManyWithoutWalletInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletUncheckedCreateWithoutGiftCardPurchasesInput = {
+    id?: string
+    userId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    balances?: WalletBalanceUncheckedCreateNestedManyWithoutWalletInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutWalletInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutWalletInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutWalletInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutWalletInput
+  }
+
+  export type WalletCreateOrConnectWithoutGiftCardPurchasesInput = {
+    where: WalletWhereUniqueInput
+    create: XOR<WalletCreateWithoutGiftCardPurchasesInput, WalletUncheckedCreateWithoutGiftCardPurchasesInput>
+  }
+
+  export type TransactionCreateWithoutGiftCardPurchaseInput = {
+    id?: string
+    type?: $Enums.TransactionType
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TransactionStatus
+    provider?: $Enums.PaymentProvider | null
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    reference: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTransactionsInput
+    wallet: WalletCreateNestedOneWithoutTransactionsInput
+    currency: CurrencyCreateNestedOneWithoutTransactionsInput
+    deposit?: DepositCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalCreateNestedOneWithoutTransactionInput
+    giftCardSale?: GiftCardSaleCreateNestedOneWithoutTransactionInput
+    ledgerEntries?: LedgerEntryCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionUncheckedCreateWithoutGiftCardPurchaseInput = {
+    id?: string
+    userId: string
+    walletId: string
+    currencyCode: string
+    type?: $Enums.TransactionType
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    status?: $Enums.TransactionStatus
+    provider?: $Enums.PaymentProvider | null
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    reference: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    deposit?: DepositUncheckedCreateNestedOneWithoutTransactionInput
+    withdrawal?: WithdrawalUncheckedCreateNestedOneWithoutTransactionInput
+    giftCardSale?: GiftCardSaleUncheckedCreateNestedOneWithoutTransactionInput
+    ledgerEntries?: LedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionCreateOrConnectWithoutGiftCardPurchaseInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutGiftCardPurchaseInput, TransactionUncheckedCreateWithoutGiftCardPurchaseInput>
+  }
+
+  export type UserUpsertWithoutGiftCardPurchasesInput = {
+    update: XOR<UserUpdateWithoutGiftCardPurchasesInput, UserUncheckedUpdateWithoutGiftCardPurchasesInput>
+    create: XOR<UserCreateWithoutGiftCardPurchasesInput, UserUncheckedCreateWithoutGiftCardPurchasesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutGiftCardPurchasesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutGiftCardPurchasesInput, UserUncheckedUpdateWithoutGiftCardPurchasesInput>
+  }
+
+  export type UserUpdateWithoutGiftCardPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutGiftCardPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type WalletUpsertWithoutGiftCardPurchasesInput = {
+    update: XOR<WalletUpdateWithoutGiftCardPurchasesInput, WalletUncheckedUpdateWithoutGiftCardPurchasesInput>
+    create: XOR<WalletCreateWithoutGiftCardPurchasesInput, WalletUncheckedCreateWithoutGiftCardPurchasesInput>
+    where?: WalletWhereInput
+  }
+
+  export type WalletUpdateToOneWithWhereWithoutGiftCardPurchasesInput = {
+    where?: WalletWhereInput
+    data: XOR<WalletUpdateWithoutGiftCardPurchasesInput, WalletUncheckedUpdateWithoutGiftCardPurchasesInput>
+  }
+
+  export type WalletUpdateWithoutGiftCardPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWalletNestedInput
+    balances?: WalletBalanceUpdateManyWithoutWalletNestedInput
+    deposits?: DepositUpdateManyWithoutWalletNestedInput
+    transactions?: TransactionUpdateManyWithoutWalletNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutWalletNestedInput
+  }
+
+  export type WalletUncheckedUpdateWithoutGiftCardPurchasesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    balances?: WalletBalanceUncheckedUpdateManyWithoutWalletNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutWalletNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutWalletNestedInput
+    ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutWalletNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutWalletNestedInput
+  }
+
+  export type TransactionUpsertWithoutGiftCardPurchaseInput = {
+    update: XOR<TransactionUpdateWithoutGiftCardPurchaseInput, TransactionUncheckedUpdateWithoutGiftCardPurchaseInput>
+    create: XOR<TransactionCreateWithoutGiftCardPurchaseInput, TransactionUncheckedCreateWithoutGiftCardPurchaseInput>
+    where?: TransactionWhereInput
+  }
+
+  export type TransactionUpdateToOneWithWhereWithoutGiftCardPurchaseInput = {
+    where?: TransactionWhereInput
+    data: XOR<TransactionUpdateWithoutGiftCardPurchaseInput, TransactionUncheckedUpdateWithoutGiftCardPurchaseInput>
+  }
+
+  export type TransactionUpdateWithoutGiftCardPurchaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    reference?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutTransactionsNestedInput
+    currency?: CurrencyUpdateOneRequiredWithoutTransactionsNestedInput
+    deposit?: DepositUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
+    giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutGiftCardPurchaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    type?: EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+    provider?: NullableEnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider | null
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    reference?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
+    withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -44532,8 +50042,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutSupportTicketsInput = {
@@ -44572,8 +50085,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutSupportTicketsInput = {
@@ -44617,8 +50133,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutAssignedSupportTicketsInput = {
@@ -44657,8 +50176,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutAssignedSupportTicketsInput = {
@@ -44670,10 +50192,12 @@ export namespace Prisma {
     id?: string
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutSupportMessagesInput
+    attachments?: SupportAttachmentCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageUncheckedCreateWithoutTicketInput = {
@@ -44681,9 +50205,11 @@ export namespace Prisma {
     userId?: string | null
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    attachments?: SupportAttachmentUncheckedCreateNestedManyWithoutMessageInput
   }
 
   export type SupportMessageCreateOrConnectWithoutTicketInput = {
@@ -44743,8 +50269,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupportTicketsInput = {
@@ -44783,8 +50312,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUpsertWithoutAssignedSupportTicketsInput = {
@@ -44834,8 +50366,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedSupportTicketsInput = {
@@ -44874,8 +50409,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type SupportMessageUpsertWithWhereUniqueWithoutTicketInput = {
@@ -44905,6 +50443,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
     user: UserCreateNestedOneWithoutSupportTicketsInput
     assignedTo?: UserCreateNestedOneWithoutAssignedSupportTicketsInput
   }
@@ -44922,6 +50461,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
   }
 
   export type SupportTicketCreateOrConnectWithoutMessagesInput = {
@@ -44965,8 +50505,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserUncheckedCreateWithoutSupportMessagesInput = {
@@ -45005,13 +50548,52 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
   }
 
   export type UserCreateOrConnectWithoutSupportMessagesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutSupportMessagesInput, UserUncheckedCreateWithoutSupportMessagesInput>
+  }
+
+  export type SupportAttachmentCreateWithoutMessageInput = {
+    id?: string
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+    uploadedByUser?: UserCreateNestedOneWithoutUploadedSupportAttachmentsInput
+    uploadedByAdmin?: UserCreateNestedOneWithoutUploadedAdminAttachmentsInput
+  }
+
+  export type SupportAttachmentUncheckedCreateWithoutMessageInput = {
+    id?: string
+    uploadedByUserId?: string | null
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentCreateOrConnectWithoutMessageInput = {
+    where: SupportAttachmentWhereUniqueInput
+    create: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput>
+  }
+
+  export type SupportAttachmentCreateManyMessageInputEnvelope = {
+    data: SupportAttachmentCreateManyMessageInput | SupportAttachmentCreateManyMessageInput[]
+    skipDuplicates?: boolean
   }
 
   export type SupportTicketUpsertWithoutMessagesInput = {
@@ -45036,6 +50618,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
     assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
   }
@@ -45053,6 +50636,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUpsertWithoutSupportMessagesInput = {
@@ -45102,8 +50686,11 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupportMessagesInput = {
@@ -45142,8 +50729,467 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type SupportAttachmentUpsertWithWhereUniqueWithoutMessageInput = {
+    where: SupportAttachmentWhereUniqueInput
+    update: XOR<SupportAttachmentUpdateWithoutMessageInput, SupportAttachmentUncheckedUpdateWithoutMessageInput>
+    create: XOR<SupportAttachmentCreateWithoutMessageInput, SupportAttachmentUncheckedCreateWithoutMessageInput>
+  }
+
+  export type SupportAttachmentUpdateWithWhereUniqueWithoutMessageInput = {
+    where: SupportAttachmentWhereUniqueInput
+    data: XOR<SupportAttachmentUpdateWithoutMessageInput, SupportAttachmentUncheckedUpdateWithoutMessageInput>
+  }
+
+  export type SupportAttachmentUpdateManyWithWhereWithoutMessageInput = {
+    where: SupportAttachmentScalarWhereInput
+    data: XOR<SupportAttachmentUpdateManyMutationInput, SupportAttachmentUncheckedUpdateManyWithoutMessageInput>
+  }
+
+  export type SupportMessageCreateWithoutAttachmentsInput = {
+    id?: string
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutMessagesInput
+    user?: UserCreateNestedOneWithoutSupportMessagesInput
+  }
+
+  export type SupportMessageUncheckedCreateWithoutAttachmentsInput = {
+    id?: string
+    ticketId: string
+    userId?: string | null
+    senderType?: $Enums.SupportMessageSenderType
+    body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isInternal?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SupportMessageCreateOrConnectWithoutAttachmentsInput = {
+    where: SupportMessageWhereUniqueInput
+    create: XOR<SupportMessageCreateWithoutAttachmentsInput, SupportMessageUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type UserCreateWithoutUploadedSupportAttachmentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutUploadedSupportAttachmentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutUploadedSupportAttachmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUploadedSupportAttachmentsInput, UserUncheckedCreateWithoutUploadedSupportAttachmentsInput>
+  }
+
+  export type UserCreateWithoutUploadedAdminAttachmentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUploadedAdminAttachmentsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUploadedAdminAttachmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUploadedAdminAttachmentsInput, UserUncheckedCreateWithoutUploadedAdminAttachmentsInput>
+  }
+
+  export type SupportMessageUpsertWithoutAttachmentsInput = {
+    update: XOR<SupportMessageUpdateWithoutAttachmentsInput, SupportMessageUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<SupportMessageCreateWithoutAttachmentsInput, SupportMessageUncheckedCreateWithoutAttachmentsInput>
+    where?: SupportMessageWhereInput
+  }
+
+  export type SupportMessageUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: SupportMessageWhereInput
+    data: XOR<SupportMessageUpdateWithoutAttachmentsInput, SupportMessageUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type SupportMessageUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
+    user?: UserUpdateOneWithoutSupportMessagesNestedInput
+  }
+
+  export type SupportMessageUncheckedUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticketId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
+    body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isInternal?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutUploadedSupportAttachmentsInput = {
+    update: XOR<UserUpdateWithoutUploadedSupportAttachmentsInput, UserUncheckedUpdateWithoutUploadedSupportAttachmentsInput>
+    create: XOR<UserCreateWithoutUploadedSupportAttachmentsInput, UserUncheckedCreateWithoutUploadedSupportAttachmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUploadedSupportAttachmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUploadedSupportAttachmentsInput, UserUncheckedUpdateWithoutUploadedSupportAttachmentsInput>
+  }
+
+  export type UserUpdateWithoutUploadedSupportAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUploadedSupportAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUpsertWithoutUploadedAdminAttachmentsInput = {
+    update: XOR<UserUpdateWithoutUploadedAdminAttachmentsInput, UserUncheckedUpdateWithoutUploadedAdminAttachmentsInput>
+    create: XOR<UserCreateWithoutUploadedAdminAttachmentsInput, UserUncheckedCreateWithoutUploadedAdminAttachmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUploadedAdminAttachmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUploadedAdminAttachmentsInput, UserUncheckedUpdateWithoutUploadedAdminAttachmentsInput>
+  }
+
+  export type UserUpdateWithoutUploadedAdminAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUploadedAdminAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
   }
 
   export type PasswordResetChallengeCreateManyUserInput = {
@@ -45309,6 +51355,39 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type GiftCardPurchaseCreateManyUserInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    walletId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
   export type SupportTicketCreateManyUserInput = {
     id?: string
     assignedToId?: string | null
@@ -45321,6 +51400,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
   }
 
   export type SupportTicketCreateManyAssignedToInput = {
@@ -45335,6 +51415,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     resolvedAt?: Date | string | null
     lastMessageAt?: Date | string | null
+    userClearedAt?: Date | string | null
   }
 
   export type SupportMessageCreateManyUserInput = {
@@ -45342,9 +51423,36 @@ export namespace Prisma {
     ticketId: string
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type SupportAttachmentCreateManyUploadedByUserInput = {
+    id?: string
+    messageId: string
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentCreateManyUploadedByAdminInput = {
+    id?: string
+    messageId: string
+    uploadedByUserId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
   }
 
   export type PasswordResetChallengeUpdateWithoutUserInput = {
@@ -45484,6 +51592,7 @@ export namespace Prisma {
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -45507,6 +51616,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -45852,6 +51962,105 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GiftCardPurchaseUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type SupportTicketUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
@@ -45863,6 +52072,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     assignedTo?: UserUpdateOneWithoutAssignedSupportTicketsNestedInput
     messages?: SupportMessageUpdateManyWithoutTicketNestedInput
   }
@@ -45879,6 +52089,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
   }
 
@@ -45894,6 +52105,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupportTicketUpdateWithoutAssignedToInput = {
@@ -45907,6 +52119,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutSupportTicketsNestedInput
     messages?: SupportMessageUpdateManyWithoutTicketNestedInput
   }
@@ -45923,6 +52136,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
   }
 
@@ -45938,16 +52152,19 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lastMessageAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userClearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupportMessageUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
+    attachments?: SupportAttachmentUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageUncheckedUpdateWithoutUserInput = {
@@ -45955,9 +52172,11 @@ export namespace Prisma {
     ticketId?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: SupportAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageUncheckedUpdateManyWithoutUserInput = {
@@ -45965,9 +52184,88 @@ export namespace Prisma {
     ticketId?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUpdateWithoutUploadedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    message?: SupportMessageUpdateOneRequiredWithoutAttachmentsNestedInput
+    uploadedByAdmin?: UserUpdateOneWithoutUploadedAdminAttachmentsNestedInput
+  }
+
+  export type SupportAttachmentUncheckedUpdateWithoutUploadedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUpdateWithoutUploadedByAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    message?: SupportMessageUpdateOneRequiredWithoutAttachmentsNestedInput
+    uploadedByUser?: UserUpdateOneWithoutUploadedSupportAttachmentsNestedInput
+  }
+
+  export type SupportAttachmentUncheckedUpdateWithoutUploadedByAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    messageId?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WalletBalanceCreateManyWalletInput = {
@@ -46059,6 +52357,39 @@ export namespace Prisma {
     idempotencyKey: string
     status?: $Enums.TransactionStatus
     failureReason?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateManyWalletInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -46178,6 +52509,7 @@ export namespace Prisma {
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -46201,6 +52533,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -46356,6 +52689,105 @@ export namespace Prisma {
     idempotencyKey?: StringFieldUpdateOperationsInput | string
     status?: EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
     failureReason?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GiftCardPurchaseUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateManyWithoutWalletInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46665,6 +53097,7 @@ export namespace Prisma {
     deposit?: DepositUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUpdateManyWithoutTransactionNestedInput
   }
 
@@ -46688,6 +53121,7 @@ export namespace Prisma {
     deposit?: DepositUncheckedUpdateOneWithoutTransactionNestedInput
     withdrawal?: WithdrawalUncheckedUpdateOneWithoutTransactionNestedInput
     giftCardSale?: GiftCardSaleUncheckedUpdateOneWithoutTransactionNestedInput
+    giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
@@ -47569,6 +54003,7 @@ export namespace Prisma {
     userId?: string | null
     senderType?: $Enums.SupportMessageSenderType
     body: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -47578,10 +54013,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutSupportMessagesNestedInput
+    attachments?: SupportAttachmentUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageUncheckedUpdateWithoutTicketInput = {
@@ -47589,9 +54026,11 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: SupportAttachmentUncheckedUpdateManyWithoutMessageNestedInput
   }
 
   export type SupportMessageUncheckedUpdateManyWithoutTicketInput = {
@@ -47599,9 +54038,62 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     senderType?: EnumSupportMessageSenderTypeFieldUpdateOperationsInput | $Enums.SupportMessageSenderType
     body?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
     isInternal?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentCreateManyMessageInput = {
+    id?: string
+    uploadedByUserId?: string | null
+    uploadedByAdminId?: string | null
+    fileName: string
+    originalName: string
+    mimeType: string
+    sizeBytes: number
+    storagePath: string
+    publicUrl?: string | null
+    createdAt?: Date | string
+  }
+
+  export type SupportAttachmentUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    uploadedByUser?: UserUpdateOneWithoutUploadedSupportAttachmentsNestedInput
+    uploadedByAdmin?: UserUpdateOneWithoutUploadedAdminAttachmentsNestedInput
+  }
+
+  export type SupportAttachmentUncheckedUpdateWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportAttachmentUncheckedUpdateManyWithoutMessageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    uploadedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    uploadedByAdminId?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: StringFieldUpdateOperationsInput | string
+    originalName?: StringFieldUpdateOperationsInput | string
+    mimeType?: StringFieldUpdateOperationsInput | string
+    sizeBytes?: IntFieldUpdateOperationsInput | number
+    storagePath?: StringFieldUpdateOperationsInput | string
+    publicUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

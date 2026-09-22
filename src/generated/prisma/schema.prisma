@@ -43,9 +43,12 @@ model User {
   withdrawalQuotes             WithdrawalQuote[]
   beneficiaries                Beneficiary[]
   giftCardSales                GiftCardSale[]
+  giftCardPurchases            GiftCardPurchase[]
   supportTickets               SupportTicket[]          @relation("UserSupportTickets")
   assignedSupportTickets       SupportTicket[]          @relation("AssignedSupportTickets")
   supportMessages              SupportMessage[]
+  uploadedSupportAttachments   SupportAttachment[]      @relation("UserSupportAttachments")
+  uploadedAdminAttachments     SupportAttachment[]      @relation("AdminSupportAttachments")
 }
 
 model PendingRegistration {
@@ -97,16 +100,17 @@ model RefreshSession {
 }
 
 model Wallet {
-  id            String          @id @default(uuid())
-  userId        String          @unique
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  balances      WalletBalance[]
-  deposits      Deposit[]
-  transactions  Transaction[]
-  ledgerEntries LedgerEntry[]
-  withdrawals   Withdrawal[]
+  id                String             @id @default(uuid())
+  userId            String             @unique
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balances          WalletBalance[]
+  deposits          Deposit[]
+  transactions      Transaction[]
+  ledgerEntries     LedgerEntry[]
+  withdrawals       Withdrawal[]
+  giftCardPurchases GiftCardPurchase[]
 
   @@index([userId])
 }
@@ -207,6 +211,7 @@ model Transaction {
   deposit               Deposit?
   withdrawal            Withdrawal?
   giftCardSale          GiftCardSale?
+  giftCardPurchase      GiftCardPurchase?
   ledgerEntries         LedgerEntry[]
 
   @@index([userId, status, createdAt])
@@ -456,6 +461,49 @@ model GiftCardSellRateAdjustment {
   @@index([slug, cardCountry, cardCurrency, payoutCurrency, cardType, isActive])
 }
 
+model GiftCardPurchase {
+  id                  String                 @id @default(uuid())
+  reference           String                 @unique
+  idempotencyKey      String                 @unique
+  userId              String
+  walletId            String
+  transactionId       String?                @unique
+  provider            PaymentProvider        @default(TOPUPMATE)
+  providerProductId   String
+  providerReference   String?
+  redeemId            String?
+  brandNameSnapshot   String?
+  productNameSnapshot String?
+  countryCode         String
+  currencyCode        String
+  denominationType    String?
+  quantity            Int                    @default(1)
+  amount              Decimal                @db.Decimal(18, 2)
+  providerAmount      Decimal?               @db.Decimal(18, 2)
+  fee                 Decimal                @default(0.00) @db.Decimal(18, 2)
+  customerPrice       Decimal                @db.Decimal(18, 2)
+  status              GiftCardPurchaseStatus @default(PENDING)
+  providerStatus      String?
+  providerMessage     String?
+  voucherCiphertext   String?
+  redeemDetails       Json?
+  providerMetadata    Json?
+  errorMessage        String?
+  metadata            Json?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  completedAt         DateTime?
+  user                User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  wallet              Wallet                 @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  transaction         Transaction?           @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerReference])
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([provider, providerStatus])
+  @@index([providerProductId, countryCode, currencyCode])
+}
+
 model SupportTicket {
   id            String                @id @default(uuid())
   userId        String
@@ -471,6 +519,7 @@ model SupportTicket {
   updatedAt     DateTime              @updatedAt
   resolvedAt    DateTime?
   lastMessageAt DateTime?
+  userClearedAt DateTime?
   messages      SupportMessage[]
 
   @@index([userId, createdAt])
@@ -479,19 +528,42 @@ model SupportTicket {
 }
 
 model SupportMessage {
-  id         String                   @id @default(uuid())
-  ticketId   String
-  ticket     SupportTicket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  userId     String?
-  user       User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  senderType SupportMessageSenderType @default(USER)
-  body       String
-  isInternal Boolean                  @default(false)
-  createdAt  DateTime                 @default(now())
-  updatedAt  DateTime                 @updatedAt
+  id          String                   @id @default(uuid())
+  ticketId    String
+  ticket      SupportTicket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  senderType  SupportMessageSenderType @default(USER)
+  body        String
+  metadata    Json?
+  isInternal  Boolean                  @default(false)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  attachments SupportAttachment[]
 
   @@index([ticketId, createdAt])
   @@index([userId, createdAt])
+}
+
+model SupportAttachment {
+  id                String         @id @default(uuid())
+  messageId         String
+  message           SupportMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  uploadedByUserId  String?
+  uploadedByUser    User?          @relation("UserSupportAttachments", fields: [uploadedByUserId], references: [id], onDelete: SetNull)
+  uploadedByAdminId String?
+  uploadedByAdmin   User?          @relation("AdminSupportAttachments", fields: [uploadedByAdminId], references: [id], onDelete: SetNull)
+  fileName          String
+  originalName      String
+  mimeType          String
+  sizeBytes         Int
+  storagePath       String
+  publicUrl         String?
+  createdAt         DateTime       @default(now())
+
+  @@index([messageId, createdAt])
+  @@index([uploadedByUserId])
+  @@index([uploadedByAdminId])
 }
 
 enum DepositStatus {
@@ -533,6 +605,7 @@ enum TransactionType {
 enum PaymentProvider {
   FLUTTERWAVE
   SOGO
+  TOPUPMATE
   MANUAL
   INTERNAL
 }
@@ -545,6 +618,14 @@ enum GiftCardSaleStatus {
   FAILED
   PAID
   CANCELLED
+}
+
+enum GiftCardPurchaseStatus {
+  PENDING
+  PROCESSING
+  SUCCESSFUL
+  FAILED
+  UNDER_REVIEW
 }
 
 enum PaymentMethod {
@@ -635,4 +716,5 @@ enum SupportTicketSource {
 enum SupportMessageSenderType {
   USER
   ADMIN
+  SYSTEM
 }

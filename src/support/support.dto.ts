@@ -43,9 +43,18 @@ export class CreateSupportTicketDto {
 }
 
 export class SendSupportMessageDto {
+  @IsOptional()
   @IsString()
   @Length(1, 4000)
-  message!: string;
+  message?: string;
+
+  @IsOptional()
+  @IsNumber()
+  latitude?: number;
+
+  @IsOptional()
+  @IsNumber()
+  longitude?: number;
 
   @IsOptional()
   @IsBoolean()

@@ -433,6 +433,40 @@ exports.Prisma.GiftCardSellRateAdjustmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  idempotencyKey: 'idempotencyKey',
+  userId: 'userId',
+  walletId: 'walletId',
+  transactionId: 'transactionId',
+  provider: 'provider',
+  providerProductId: 'providerProductId',
+  providerReference: 'providerReference',
+  redeemId: 'redeemId',
+  brandNameSnapshot: 'brandNameSnapshot',
+  productNameSnapshot: 'productNameSnapshot',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  denominationType: 'denominationType',
+  quantity: 'quantity',
+  amount: 'amount',
+  providerAmount: 'providerAmount',
+  fee: 'fee',
+  customerPrice: 'customerPrice',
+  status: 'status',
+  providerStatus: 'providerStatus',
+  providerMessage: 'providerMessage',
+  voucherCiphertext: 'voucherCiphertext',
+  redeemDetails: 'redeemDetails',
+  providerMetadata: 'providerMetadata',
+  errorMessage: 'errorMessage',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.SupportTicketScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -445,7 +479,8 @@ exports.Prisma.SupportTicketScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   resolvedAt: 'resolvedAt',
-  lastMessageAt: 'lastMessageAt'
+  lastMessageAt: 'lastMessageAt',
+  userClearedAt: 'userClearedAt'
 };
 
 exports.Prisma.SupportMessageScalarFieldEnum = {
@@ -454,9 +489,24 @@ exports.Prisma.SupportMessageScalarFieldEnum = {
   userId: 'userId',
   senderType: 'senderType',
   body: 'body',
+  metadata: 'metadata',
   isInternal: 'isInternal',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SupportAttachmentScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  uploadedByUserId: 'uploadedByUserId',
+  uploadedByAdminId: 'uploadedByAdminId',
+  fileName: 'fileName',
+  originalName: 'originalName',
+  mimeType: 'mimeType',
+  sizeBytes: 'sizeBytes',
+  storagePath: 'storagePath',
+  publicUrl: 'publicUrl',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -492,6 +542,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 exports.PaymentProvider = exports.$Enums.PaymentProvider = {
   FLUTTERWAVE: 'FLUTTERWAVE',
   SOGO: 'SOGO',
+  TOPUPMATE: 'TOPUPMATE',
   MANUAL: 'MANUAL',
   INTERNAL: 'INTERNAL'
 };
@@ -591,6 +642,14 @@ exports.GiftCardSaleStatus = exports.$Enums.GiftCardSaleStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.GiftCardPurchaseStatus = exports.$Enums.GiftCardPurchaseStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  SUCCESSFUL: 'SUCCESSFUL',
+  FAILED: 'FAILED',
+  UNDER_REVIEW: 'UNDER_REVIEW'
+};
+
 exports.SupportTicketCategory = exports.$Enums.SupportTicketCategory = {
   ACCOUNT: 'ACCOUNT',
   PAYMENT: 'PAYMENT',
@@ -624,7 +683,8 @@ exports.SupportTicketSource = exports.$Enums.SupportTicketSource = {
 
 exports.SupportMessageSenderType = exports.$Enums.SupportMessageSenderType = {
   USER: 'USER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  SYSTEM: 'SYSTEM'
 };
 
 exports.Prisma.ModelName = {
@@ -645,8 +705,10 @@ exports.Prisma.ModelName = {
   ProviderWebhookEvent: 'ProviderWebhookEvent',
   GiftCardSale: 'GiftCardSale',
   GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+  GiftCardPurchase: 'GiftCardPurchase',
   SupportTicket: 'SupportTicket',
-  SupportMessage: 'SupportMessage'
+  SupportMessage: 'SupportMessage',
+  SupportAttachment: 'SupportAttachment'
 };
 
 /**

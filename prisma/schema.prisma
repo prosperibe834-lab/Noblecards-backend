@@ -1,6 +1,6 @@
 generator client {
-  provider     = "prisma-client-js"
-  output       = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,44 +8,47 @@ datasource db {
 }
 
 model User {
-  id                  String                   @id @default(uuid())
-  email               String                   @unique
-  passwordHash        String
-  firstName           String
-  lastName            String
-  username            String?                  @unique
-  displayName         String?
-  phone               String?                  @unique
-  country             String?
-  countryCode         String?
-  gender              String?
-  dateOfBirth         DateTime?
-  bio                 String?
-  address             String?
-  profileImageUrl     String?
-  isEmailVerified     Boolean                  @default(false)
-  isProfileComplete   Boolean                  @default(false)
-  isVerified          Boolean                  @default(false)
-  isActive            Boolean                  @default(true)
-  role                UserRole                 @default(USER)
-  transactionPinHash  String?
-  transactionPinFailedAttempts Int              @default(0)
-  transactionPinLockedUntil DateTime?
-  createdAt           DateTime                 @default(now())
-  updatedAt           DateTime                 @updatedAt
-  passwordResets      PasswordResetChallenge[]
-  pendingVerification PendingRegistration?
-  refreshSessions     RefreshSession[]
-  wallet              Wallet?
-  deposits            Deposit[]
-  transactions        Transaction[]
-  withdrawals         Withdrawal[]
-  withdrawalQuotes    WithdrawalQuote[]
-  beneficiaries       Beneficiary[]
-  giftCardSales       GiftCardSale[]
-  supportTickets      SupportTicket[]     @relation("UserSupportTickets")
-  assignedSupportTickets SupportTicket[] @relation("AssignedSupportTickets")
-  supportMessages     SupportMessage[]
+  id                           String                   @id @default(uuid())
+  email                        String                   @unique
+  passwordHash                 String
+  firstName                    String
+  lastName                     String
+  username                     String?                  @unique
+  displayName                  String?
+  phone                        String?                  @unique
+  country                      String?
+  countryCode                  String?
+  gender                       String?
+  dateOfBirth                  DateTime?
+  bio                          String?
+  address                      String?
+  profileImageUrl              String?
+  isEmailVerified              Boolean                  @default(false)
+  isProfileComplete            Boolean                  @default(false)
+  isVerified                   Boolean                  @default(false)
+  isActive                     Boolean                  @default(true)
+  role                         UserRole                 @default(USER)
+  transactionPinHash           String?
+  transactionPinFailedAttempts Int                      @default(0)
+  transactionPinLockedUntil    DateTime?
+  createdAt                    DateTime                 @default(now())
+  updatedAt                    DateTime                 @updatedAt
+  passwordResets               PasswordResetChallenge[]
+  pendingVerification          PendingRegistration?
+  refreshSessions              RefreshSession[]
+  wallet                       Wallet?
+  deposits                     Deposit[]
+  transactions                 Transaction[]
+  withdrawals                  Withdrawal[]
+  withdrawalQuotes             WithdrawalQuote[]
+  beneficiaries                Beneficiary[]
+  giftCardSales                GiftCardSale[]
+  giftCardPurchases            GiftCardPurchase[]
+  supportTickets               SupportTicket[]          @relation("UserSupportTickets")
+  assignedSupportTickets       SupportTicket[]          @relation("AssignedSupportTickets")
+  supportMessages              SupportMessage[]
+  uploadedSupportAttachments   SupportAttachment[]      @relation("UserSupportAttachments")
+  uploadedAdminAttachments     SupportAttachment[]      @relation("AdminSupportAttachments")
 }
 
 model PendingRegistration {
@@ -97,40 +100,41 @@ model RefreshSession {
 }
 
 model Wallet {
-  id             String          @id @default(uuid())
-  userId         String          @unique
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  balances       WalletBalance[]
-  deposits       Deposit[]
-  transactions   Transaction[]
-  ledgerEntries  LedgerEntry[]
-  withdrawals    Withdrawal[]
+  id                String             @id @default(uuid())
+  userId            String             @unique
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  balances          WalletBalance[]
+  deposits          Deposit[]
+  transactions      Transaction[]
+  ledgerEntries     LedgerEntry[]
+  withdrawals       Withdrawal[]
+  giftCardPurchases GiftCardPurchase[]
 
   @@index([userId])
 }
 
 model Currency {
-  code                    String             @id @db.VarChar(10)
-  name                    String
-  symbol                  String?
-  country                 String?
-  region                  String?
-  flag                    String?
-  enabled                 Boolean            @default(true)
-  depositEnabled         Boolean            @default(false)
-  createdAt               DateTime           @default(now())
-  updatedAt               DateTime           @updatedAt
-  balances                WalletBalance[]
-  deposits                Deposit[]
-  transactions            Transaction[]
-  ledgerEntries           LedgerEntry[]
-  sourceWithdrawals       Withdrawal[]       @relation("WithdrawalSourceCurrency")
-  destinationWithdrawals  Withdrawal[]       @relation("WithdrawalDestinationCurrency")
-  sourceQuotes             WithdrawalQuote[]  @relation("QuoteSourceCurrency")
-  destinationQuotes        WithdrawalQuote[]  @relation("QuoteDestinationCurrency")
-  beneficiaries            Beneficiary[]
+  code                   String            @id @db.VarChar(10)
+  name                   String
+  symbol                 String?
+  country                String?
+  region                 String?
+  flag                   String?
+  enabled                Boolean           @default(true)
+  depositEnabled         Boolean           @default(false)
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  balances               WalletBalance[]
+  deposits               Deposit[]
+  transactions           Transaction[]
+  ledgerEntries          LedgerEntry[]
+  sourceWithdrawals      Withdrawal[]      @relation("WithdrawalSourceCurrency")
+  destinationWithdrawals Withdrawal[]      @relation("WithdrawalDestinationCurrency")
+  sourceQuotes           WithdrawalQuote[] @relation("QuoteSourceCurrency")
+  destinationQuotes      WithdrawalQuote[] @relation("QuoteDestinationCurrency")
+  beneficiaries          Beneficiary[]
 
   @@index([enabled, depositEnabled])
 }
@@ -151,30 +155,30 @@ model WalletBalance {
 }
 
 model Deposit {
-  id                     String            @id @default(uuid())
-  userId                 String
-  walletId               String
-  currencyCode           String
-  amount                 Decimal           @db.Decimal(18, 2)
-  fee                    Decimal           @default(0.00) @db.Decimal(18, 2)
-  netAmount              Decimal           @db.Decimal(18, 2)
-  exchangeRate           Decimal?          @db.Decimal(18, 8)
-  provider               PaymentProvider   @default(FLUTTERWAVE)
-  providerTransactionId  String?
-  providerReference      String?
-  paymentMethod          PaymentMethod?
-  country                String?
-  countryCode            String?
-  status                 DepositStatus     @default(PENDING)
-  idempotencyKey         String?
-  metadata               Json?
-  createdAt              DateTime          @default(now())
-  updatedAt              DateTime          @updatedAt
-  transactionId          String?           @unique
-  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wallet                 Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency               Currency          @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
-  transaction            Transaction?      @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  id                    String          @id @default(uuid())
+  userId                String
+  walletId              String
+  currencyCode          String
+  amount                Decimal         @db.Decimal(18, 2)
+  fee                   Decimal         @default(0.00) @db.Decimal(18, 2)
+  netAmount             Decimal         @db.Decimal(18, 2)
+  exchangeRate          Decimal?        @db.Decimal(18, 8)
+  provider              PaymentProvider @default(FLUTTERWAVE)
+  providerTransactionId String?
+  providerReference     String?
+  paymentMethod         PaymentMethod?
+  country               String?
+  countryCode           String?
+  status                DepositStatus   @default(PENDING)
+  idempotencyKey        String?
+  metadata              Json?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  transactionId         String?         @unique
+  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transaction           Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
 
   @@unique([userId, idempotencyKey])
   @@index([userId, status, createdAt])
@@ -184,29 +188,30 @@ model Deposit {
 }
 
 model Transaction {
-  id                    String          @id @default(uuid())
+  id                    String            @id @default(uuid())
   userId                String
   walletId              String
   currencyCode          String
-  type                  TransactionType @default(DEPOSIT)
-  amount                Decimal         @db.Decimal(18, 2)
-  fee                   Decimal         @default(0.00) @db.Decimal(18, 2)
-  netAmount             Decimal         @db.Decimal(18, 2)
+  type                  TransactionType   @default(DEPOSIT)
+  amount                Decimal           @db.Decimal(18, 2)
+  fee                   Decimal           @default(0.00) @db.Decimal(18, 2)
+  netAmount             Decimal           @db.Decimal(18, 2)
   status                TransactionStatus @default(PENDING)
   provider              PaymentProvider?
   providerTransactionId String?
   providerReference     String?
   paymentMethod         PaymentMethod?
-  reference             String          @unique
+  reference             String            @unique
   metadata              Json?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency          @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
   deposit               Deposit?
   withdrawal            Withdrawal?
   giftCardSale          GiftCardSale?
+  giftCardPurchase      GiftCardPurchase?
   ledgerEntries         LedgerEntry[]
 
   @@index([userId, status, createdAt])
@@ -215,65 +220,65 @@ model Transaction {
 }
 
 model LedgerEntry {
-  id                    String      @id @default(uuid())
-  walletId              String
-  currencyCode          String
-  transactionId         String?
-  type                  LedgerEntryType
-  amount                Decimal     @db.Decimal(18, 2)
-  balanceBefore         Decimal     @db.Decimal(18, 2)
-  balanceAfter          Decimal     @db.Decimal(18, 2)
-  pendingBalanceBefore  Decimal?    @db.Decimal(18, 2)
-  pendingBalanceAfter   Decimal?    @db.Decimal(18, 2)
-  operationKey          String?     @unique
-  reference             String?
-  reason                String?
-  createdAt             DateTime    @default(now())
-  wallet                Wallet      @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency              Currency    @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
-  transaction           Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  id                   String          @id @default(uuid())
+  walletId             String
+  currencyCode         String
+  transactionId        String?
+  type                 LedgerEntryType
+  amount               Decimal         @db.Decimal(18, 2)
+  balanceBefore        Decimal         @db.Decimal(18, 2)
+  balanceAfter         Decimal         @db.Decimal(18, 2)
+  pendingBalanceBefore Decimal?        @db.Decimal(18, 2)
+  pendingBalanceAfter  Decimal?        @db.Decimal(18, 2)
+  operationKey         String?         @unique
+  reference            String?
+  reason               String?
+  createdAt            DateTime        @default(now())
+  wallet               Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency             Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transaction          Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
 
   @@index([walletId, currencyCode, createdAt])
   @@index([transactionId])
 }
 
 model Withdrawal {
-  id                    String          @id @default(uuid())
-  reference             String          @unique
-  userId                String
-  walletId              String
-  transactionId         String          @unique
-  sourceCurrencyCode    String
+  id                      String                 @id @default(uuid())
+  reference               String                 @unique
+  userId                  String
+  walletId                String
+  transactionId           String                 @unique
+  sourceCurrencyCode      String
   destinationCurrencyCode String
-  sourceAmount          Decimal         @db.Decimal(18, 2)
-  destinationAmount     Decimal         @db.Decimal(18, 2)
-  exchangeRate          Decimal         @db.Decimal(18, 8)
-  fee                   Decimal         @db.Decimal(18, 2)
-  amountReceived        Decimal         @db.Decimal(18, 2)
-  country               String
-  countryCode           String
-  paymentMethod         PaymentMethod
-  provider              PaymentProvider?
-  providerReference     String?
-  providerTransactionId String?
-  quoteId               String?
-  beneficiaryId         String?
-  idempotencyKey        String
-  status                TransactionStatus @default(PENDING)
-  failureReason         String?
-  metadata              Json?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  completedAt           DateTime?
-  user                  User            @relation(fields: [userId], references: [id], onDelete: Restrict)
-  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Restrict)
-  transaction           Transaction     @relation(fields: [transactionId], references: [id], onDelete: Restrict)
-  sourceCurrency        Currency        @relation("WithdrawalSourceCurrency", fields: [sourceCurrencyCode], references: [code], onDelete: Restrict)
-  destinationCurrency   Currency        @relation("WithdrawalDestinationCurrency", fields: [destinationCurrencyCode], references: [code], onDelete: Restrict)
-  quote                 WithdrawalQuote? @relation(fields: [quoteId], references: [id], onDelete: Restrict)
-  beneficiary           Beneficiary?    @relation(fields: [beneficiaryId], references: [id], onDelete: Restrict)
-  payoutAttempts        PayoutAttempt[]
-  webhookEvents         ProviderWebhookEvent[]
+  sourceAmount            Decimal                @db.Decimal(18, 2)
+  destinationAmount       Decimal                @db.Decimal(18, 2)
+  exchangeRate            Decimal                @db.Decimal(18, 8)
+  fee                     Decimal                @db.Decimal(18, 2)
+  amountReceived          Decimal                @db.Decimal(18, 2)
+  country                 String
+  countryCode             String
+  paymentMethod           PaymentMethod
+  provider                PaymentProvider?
+  providerReference       String?
+  providerTransactionId   String?
+  quoteId                 String?
+  beneficiaryId           String?
+  idempotencyKey          String
+  status                  TransactionStatus      @default(PENDING)
+  failureReason           String?
+  metadata                Json?
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
+  completedAt             DateTime?
+  user                    User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  wallet                  Wallet                 @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  transaction             Transaction            @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+  sourceCurrency          Currency               @relation("WithdrawalSourceCurrency", fields: [sourceCurrencyCode], references: [code], onDelete: Restrict)
+  destinationCurrency     Currency               @relation("WithdrawalDestinationCurrency", fields: [destinationCurrencyCode], references: [code], onDelete: Restrict)
+  quote                   WithdrawalQuote?       @relation(fields: [quoteId], references: [id], onDelete: Restrict)
+  beneficiary             Beneficiary?           @relation(fields: [beneficiaryId], references: [id], onDelete: Restrict)
+  payoutAttempts          PayoutAttempt[]
+  webhookEvents           ProviderWebhookEvent[]
 
   @@unique([userId, idempotencyKey])
   @@unique([provider, providerReference])
@@ -288,30 +293,30 @@ model Withdrawal {
 }
 
 model WithdrawalQuote {
-  id                    String              @id @default(uuid())
-  userId                String
-  sourceCurrencyCode    String
+  id                      String                @id @default(uuid())
+  userId                  String
+  sourceCurrencyCode      String
   destinationCurrencyCode String
-  countryCode           String
-  paymentMethod         PaymentMethod
-  sourceAmount          Decimal             @db.Decimal(18, 2)
-  exchangeRate          Decimal             @db.Decimal(18, 8)
-  destinationAmount     Decimal             @db.Decimal(18, 2)
-  idempotencyKey        String?
-  providerFee           Decimal             @default(0.00) @db.Decimal(18, 2)
-  nobleCardsFee         Decimal             @default(0.00) @db.Decimal(18, 2)
-  totalFee              Decimal             @default(0.00) @db.Decimal(18, 2)
-  destinationFee        Decimal             @default(0.00) @db.Decimal(18, 2)
-  recipientAmount       Decimal             @db.Decimal(18, 2)
-  amountReceived        Decimal             @db.Decimal(18, 2)
-  status                WithdrawalQuoteStatus @default(ACTIVE)
-  createdAt             DateTime            @default(now())
-  expiresAt             DateTime
-  usedAt                DateTime?
-  user                  User                @relation(fields: [userId], references: [id], onDelete: Restrict)
-  sourceCurrency        Currency            @relation("QuoteSourceCurrency", fields: [sourceCurrencyCode], references: [code], onDelete: Restrict)
-  destinationCurrency   Currency            @relation("QuoteDestinationCurrency", fields: [destinationCurrencyCode], references: [code], onDelete: Restrict)
-  withdrawals           Withdrawal[]
+  countryCode             String
+  paymentMethod           PaymentMethod
+  sourceAmount            Decimal               @db.Decimal(18, 2)
+  exchangeRate            Decimal               @db.Decimal(18, 8)
+  destinationAmount       Decimal               @db.Decimal(18, 2)
+  idempotencyKey          String?
+  providerFee             Decimal               @default(0.00) @db.Decimal(18, 2)
+  nobleCardsFee           Decimal               @default(0.00) @db.Decimal(18, 2)
+  totalFee                Decimal               @default(0.00) @db.Decimal(18, 2)
+  destinationFee          Decimal               @default(0.00) @db.Decimal(18, 2)
+  recipientAmount         Decimal               @db.Decimal(18, 2)
+  amountReceived          Decimal               @db.Decimal(18, 2)
+  status                  WithdrawalQuoteStatus @default(ACTIVE)
+  createdAt               DateTime              @default(now())
+  expiresAt               DateTime
+  usedAt                  DateTime?
+  user                    User                  @relation(fields: [userId], references: [id], onDelete: Restrict)
+  sourceCurrency          Currency              @relation("QuoteSourceCurrency", fields: [sourceCurrencyCode], references: [code], onDelete: Restrict)
+  destinationCurrency     Currency              @relation("QuoteDestinationCurrency", fields: [destinationCurrencyCode], references: [code], onDelete: Restrict)
+  withdrawals             Withdrawal[]
 
   @@unique([userId, idempotencyKey])
   @@index([userId, createdAt])
@@ -320,38 +325,38 @@ model WithdrawalQuote {
 }
 
 model Beneficiary {
-  id                       String                     @id @default(uuid())
-  userId                   String
-  country                  String
-  countryCode              String
-  currencyCode             String
-  paymentMethod            PaymentMethod
-  type                     BeneficiaryType
-  institutionName          String?
-  providerBankCode         String?
-  accountHolderName        String?
-  accountLast4             String?
-  mobileMoneyProvider      String?
+  id                         String                        @id @default(uuid())
+  userId                     String
+  country                    String
+  countryCode                String
+  currencyCode               String
+  paymentMethod              PaymentMethod
+  type                       BeneficiaryType
+  institutionName            String?
+  providerBankCode           String?
+  accountHolderName          String?
+  accountLast4               String?
+  mobileMoneyProvider        String?
   providerRecipientReference String?
-  encryptedDetails         Json?
-  detailsFingerprint       String?
-  verificationStatus       BeneficiaryVerificationStatus @default(UNVERIFIED)
-  verifiedAt               DateTime?
-  isActive                 Boolean                    @default(true)
-  createdAt                DateTime                   @default(now())
-  updatedAt                DateTime                   @updatedAt
-  user                     User                       @relation(fields: [userId], references: [id], onDelete: Restrict)
-  currency                 Currency                   @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
-  withdrawals              Withdrawal[]
+  encryptedDetails           Json?
+  detailsFingerprint         String?
+  verificationStatus         BeneficiaryVerificationStatus @default(UNVERIFIED)
+  verifiedAt                 DateTime?
+  isActive                   Boolean                       @default(true)
+  createdAt                  DateTime                      @default(now())
+  updatedAt                  DateTime                      @updatedAt
+  user                       User                          @relation(fields: [userId], references: [id], onDelete: Restrict)
+  currency                   Currency                      @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  withdrawals                Withdrawal[]
 
+  @@unique([userId, providerRecipientReference])
   @@index([userId, createdAt])
   @@index([userId, countryCode, currencyCode, paymentMethod])
   @@index([verificationStatus])
-  @@unique([userId, providerRecipientReference])
 }
 
 model PayoutAttempt {
-  id                    String          @id @default(uuid())
+  id                    String            @id @default(uuid())
   withdrawalId          String
   provider              PaymentProvider
   providerReference     String?
@@ -362,9 +367,9 @@ model PayoutAttempt {
   responseMetadata      Json?
   errorCode             String?
   errorMessage          String?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  withdrawal            Withdrawal      @relation(fields: [withdrawalId], references: [id], onDelete: Restrict)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  withdrawal            Withdrawal        @relation(fields: [withdrawalId], references: [id], onDelete: Restrict)
 
   @@unique([withdrawalId, attemptNumber])
   @@unique([provider, providerReference])
@@ -376,19 +381,19 @@ model PayoutAttempt {
 }
 
 model ProviderWebhookEvent {
-  id                    String                    @id @default(uuid())
+  id                    String                     @id @default(uuid())
   provider              PaymentProvider
   eventId               String
   eventType             String
   providerReference     String?
   providerTransactionId String?
   withdrawalId          String?
-  receivedAt            DateTime                  @default(now())
+  receivedAt            DateTime                   @default(now())
   processedAt           DateTime?
   status                ProviderWebhookEventStatus @default(RECEIVED)
   errorMessage          String?
   metadata              Json?
-  withdrawal            Withdrawal?               @relation(fields: [withdrawalId], references: [id], onDelete: Restrict)
+  withdrawal            Withdrawal?                @relation(fields: [withdrawalId], references: [id], onDelete: Restrict)
 
   @@unique([provider, eventId])
   @@index([withdrawalId, receivedAt])
@@ -438,22 +443,65 @@ model GiftCardSale {
 }
 
 model GiftCardSellRateAdjustment {
-  id                 String   @id @default(uuid())
-  slug               String
-  cardCountry        String
-  cardCurrency       String
-  payoutCurrency     String
-  cardType           String
-  receiptType        String?
+  id                  String   @id @default(uuid())
+  slug                String
+  cardCountry         String
+  cardCurrency        String
+  payoutCurrency      String
+  cardType            String
+  receiptType         String?
   minimumDenomination Decimal? @db.Decimal(18, 2)
   maximumDenomination Decimal? @db.Decimal(18, 2)
-  adjustmentPercent  Decimal  @db.Decimal(9, 4)
-  combinationKey     String   @unique
-  isActive           Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  adjustmentPercent   Decimal  @db.Decimal(9, 4)
+  combinationKey      String   @unique
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@index([slug, cardCountry, cardCurrency, payoutCurrency, cardType, isActive])
+}
+
+model GiftCardPurchase {
+  id                  String                 @id @default(uuid())
+  reference           String                 @unique
+  idempotencyKey      String                 @unique
+  userId              String
+  walletId            String
+  transactionId       String?                @unique
+  provider            PaymentProvider        @default(TOPUPMATE)
+  providerProductId   String
+  providerReference   String?
+  redeemId            String?
+  brandNameSnapshot   String?
+  productNameSnapshot String?
+  countryCode         String
+  currencyCode        String
+  denominationType    String?
+  quantity            Int                    @default(1)
+  amount              Decimal                @db.Decimal(18, 2)
+  providerAmount      Decimal?               @db.Decimal(18, 2)
+  fee                 Decimal                @default(0.00) @db.Decimal(18, 2)
+  customerPrice       Decimal                @db.Decimal(18, 2)
+  status              GiftCardPurchaseStatus @default(PENDING)
+  providerStatus      String?
+  providerMessage     String?
+  voucherCiphertext   String?
+  redeemDetails       Json?
+  providerMetadata    Json?
+  errorMessage        String?
+  metadata            Json?
+  createdAt           DateTime               @default(now())
+  updatedAt           DateTime               @updatedAt
+  completedAt         DateTime?
+  user                User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
+  wallet              Wallet                 @relation(fields: [walletId], references: [id], onDelete: Restrict)
+  transaction         Transaction?           @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerReference])
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([provider, providerStatus])
+  @@index([providerProductId, countryCode, currencyCode])
 }
 
 model SupportTicket {
@@ -471,6 +519,7 @@ model SupportTicket {
   updatedAt     DateTime              @updatedAt
   resolvedAt    DateTime?
   lastMessageAt DateTime?
+  userClearedAt DateTime?
   messages      SupportMessage[]
 
   @@index([userId, createdAt])
@@ -479,19 +528,42 @@ model SupportTicket {
 }
 
 model SupportMessage {
-  id         String                 @id @default(uuid())
-  ticketId   String
-  ticket     SupportTicket          @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  userId     String?
-  user       User?                  @relation(fields: [userId], references: [id], onDelete: SetNull)
-  senderType SupportMessageSenderType @default(USER)
-  body       String
-  isInternal Boolean                @default(false)
-  createdAt  DateTime               @default(now())
-  updatedAt  DateTime               @updatedAt
+  id          String                   @id @default(uuid())
+  ticketId    String
+  ticket      SupportTicket            @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?                    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  senderType  SupportMessageSenderType @default(USER)
+  body        String
+  metadata    Json?
+  isInternal  Boolean                  @default(false)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  attachments SupportAttachment[]
 
   @@index([ticketId, createdAt])
   @@index([userId, createdAt])
+}
+
+model SupportAttachment {
+  id                String         @id @default(uuid())
+  messageId         String
+  message           SupportMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  uploadedByUserId  String?
+  uploadedByUser    User?          @relation("UserSupportAttachments", fields: [uploadedByUserId], references: [id], onDelete: SetNull)
+  uploadedByAdminId String?
+  uploadedByAdmin   User?          @relation("AdminSupportAttachments", fields: [uploadedByAdminId], references: [id], onDelete: SetNull)
+  fileName          String
+  originalName      String
+  mimeType          String
+  sizeBytes         Int
+  storagePath       String
+  publicUrl         String?
+  createdAt         DateTime       @default(now())
+
+  @@index([messageId, createdAt])
+  @@index([uploadedByUserId])
+  @@index([uploadedByAdminId])
 }
 
 enum DepositStatus {
@@ -533,6 +605,7 @@ enum TransactionType {
 enum PaymentProvider {
   FLUTTERWAVE
   SOGO
+  TOPUPMATE
   MANUAL
   INTERNAL
 }
@@ -545,6 +618,14 @@ enum GiftCardSaleStatus {
   FAILED
   PAID
   CANCELLED
+}
+
+enum GiftCardPurchaseStatus {
+  PENDING
+  PROCESSING
+  SUCCESSFUL
+  FAILED
+  UNDER_REVIEW
 }
 
 enum PaymentMethod {
@@ -635,4 +716,5 @@ enum SupportTicketSource {
 enum SupportMessageSenderType {
   USER
   ADMIN
+  SYSTEM
 }
