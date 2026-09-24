@@ -1,5 +1,35 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString, Length, Matches, Max, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsEmail, IsInt, IsNumber, IsOptional, IsString, Length, Matches, Max, MaxLength, Min } from 'class-validator';
+
+export class AdminGiftCardSandboxTestDto {
+  @IsString()
+  @MaxLength(120)
+  productId!: string;
+
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0.01)
+  @Max(100000)
+  amount!: number;
+
+  @IsString()
+  @Matches(/^[A-Z]{3}$/)
+  currencyCode!: string;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(1)
+  quantity = 1;
+
+  @IsEmail()
+  recipientEmail!: string;
+
+  @IsOptional()
+  @IsString()
+  @Matches(/^[A-Za-z0-9._:-]{1,128}$/)
+  idempotencyKey?: string;
+}
 
 export class SubmitGiftCardSaleDto {
   @IsString()

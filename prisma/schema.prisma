@@ -44,6 +44,7 @@ model User {
   beneficiaries                Beneficiary[]
   giftCardSales                GiftCardSale[]
   giftCardPurchases            GiftCardPurchase[]
+  adminGiftCardSandboxTests    AdminGiftCardSandboxTest[]
   supportTickets               SupportTicket[]          @relation("UserSupportTickets")
   assignedSupportTickets       SupportTicket[]          @relation("AssignedSupportTickets")
   supportMessages              SupportMessage[]
@@ -504,6 +505,36 @@ model GiftCardPurchase {
   @@index([providerProductId, countryCode, currencyCode])
 }
 
+model AdminGiftCardSandboxTest {
+  id                String   @id @default(uuid())
+  adminUserId       String
+  idempotencyKey    String   @unique
+  reference         String   @unique
+  providerProductId String
+  productName       String?
+  countryCode       String?
+  currencyCode      String
+  amount            Decimal  @db.Decimal(18, 2)
+  quantity          Int      @default(1)
+  recipientEmail    String
+  status            String   @default("PENDING")
+  providerReference String?
+  providerStatus    String?
+  providerMessage   String?
+  redeemId          String?
+  voucherCiphertext String?
+  redeemDetails     Json?
+  providerMetadata  Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  completedAt       DateTime?
+  adminUser         User     @relation(fields: [adminUserId], references: [id], onDelete: Restrict)
+
+  @@index([adminUserId, createdAt])
+  @@index([status, createdAt])
+  @@index([providerReference])
+}
+
 model SupportTicket {
   id            String                @id @default(uuid())
   userId        String
@@ -606,6 +637,7 @@ enum PaymentProvider {
   FLUTTERWAVE
   SOGO
   TOPUPMATE
+  TREMENDOUS
   MANUAL
   INTERNAL
 }

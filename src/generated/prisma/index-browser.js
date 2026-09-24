@@ -467,6 +467,31 @@ exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.AdminGiftCardSandboxTestScalarFieldEnum = {
+  id: 'id',
+  adminUserId: 'adminUserId',
+  idempotencyKey: 'idempotencyKey',
+  reference: 'reference',
+  providerProductId: 'providerProductId',
+  productName: 'productName',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  amount: 'amount',
+  quantity: 'quantity',
+  recipientEmail: 'recipientEmail',
+  status: 'status',
+  providerReference: 'providerReference',
+  providerStatus: 'providerStatus',
+  providerMessage: 'providerMessage',
+  redeemId: 'redeemId',
+  voucherCiphertext: 'voucherCiphertext',
+  redeemDetails: 'redeemDetails',
+  providerMetadata: 'providerMetadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.SupportTicketScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -543,6 +568,7 @@ exports.PaymentProvider = exports.$Enums.PaymentProvider = {
   FLUTTERWAVE: 'FLUTTERWAVE',
   SOGO: 'SOGO',
   TOPUPMATE: 'TOPUPMATE',
+  TREMENDOUS: 'TREMENDOUS',
   MANUAL: 'MANUAL',
   INTERNAL: 'INTERNAL'
 };
@@ -706,6 +732,7 @@ exports.Prisma.ModelName = {
   GiftCardSale: 'GiftCardSale',
   GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
   GiftCardPurchase: 'GiftCardPurchase',
+  AdminGiftCardSandboxTest: 'AdminGiftCardSandboxTest',
   SupportTicket: 'SupportTicket',
   SupportMessage: 'SupportMessage',
   SupportAttachment: 'SupportAttachment'

@@ -104,6 +104,11 @@ export type GiftCardSellRateAdjustment = $Result.DefaultSelection<Prisma.$GiftCa
  */
 export type GiftCardPurchase = $Result.DefaultSelection<Prisma.$GiftCardPurchasePayload>
 /**
+ * Model AdminGiftCardSandboxTest
+ * 
+ */
+export type AdminGiftCardSandboxTest = $Result.DefaultSelection<Prisma.$AdminGiftCardSandboxTestPayload>
+/**
  * Model SupportTicket
  * 
  */
@@ -172,6 +177,7 @@ export const PaymentProvider: {
   FLUTTERWAVE: 'FLUTTERWAVE',
   SOGO: 'SOGO',
   TOPUPMATE: 'TOPUPMATE',
+  TREMENDOUS: 'TREMENDOUS',
   MANUAL: 'MANUAL',
   INTERNAL: 'INTERNAL'
 };
@@ -705,6 +711,16 @@ export class PrismaClient<
   get giftCardPurchase(): Prisma.GiftCardPurchaseDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.adminGiftCardSandboxTest`: Exposes CRUD operations for the **AdminGiftCardSandboxTest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AdminGiftCardSandboxTests
+    * const adminGiftCardSandboxTests = await prisma.adminGiftCardSandboxTest.findMany()
+    * ```
+    */
+  get adminGiftCardSandboxTest(): Prisma.AdminGiftCardSandboxTestDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.supportTicket`: Exposes CRUD operations for the **SupportTicket** model.
     * Example usage:
     * ```ts
@@ -1198,6 +1214,7 @@ export namespace Prisma {
     GiftCardSale: 'GiftCardSale',
     GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
     GiftCardPurchase: 'GiftCardPurchase',
+    AdminGiftCardSandboxTest: 'AdminGiftCardSandboxTest',
     SupportTicket: 'SupportTicket',
     SupportMessage: 'SupportMessage',
     SupportAttachment: 'SupportAttachment'
@@ -1216,7 +1233,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardPurchase" | "supportTicket" | "supportMessage" | "supportAttachment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2552,6 +2569,80 @@ export namespace Prisma {
           }
         }
       }
+      AdminGiftCardSandboxTest: {
+        payload: Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>
+        fields: Prisma.AdminGiftCardSandboxTestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AdminGiftCardSandboxTestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AdminGiftCardSandboxTestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          findFirst: {
+            args: Prisma.AdminGiftCardSandboxTestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AdminGiftCardSandboxTestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          findMany: {
+            args: Prisma.AdminGiftCardSandboxTestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>[]
+          }
+          create: {
+            args: Prisma.AdminGiftCardSandboxTestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          createMany: {
+            args: Prisma.AdminGiftCardSandboxTestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AdminGiftCardSandboxTestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>[]
+          }
+          delete: {
+            args: Prisma.AdminGiftCardSandboxTestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          update: {
+            args: Prisma.AdminGiftCardSandboxTestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          deleteMany: {
+            args: Prisma.AdminGiftCardSandboxTestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AdminGiftCardSandboxTestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AdminGiftCardSandboxTestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>[]
+          }
+          upsert: {
+            args: Prisma.AdminGiftCardSandboxTestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AdminGiftCardSandboxTestPayload>
+          }
+          aggregate: {
+            args: Prisma.AdminGiftCardSandboxTestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdminGiftCardSandboxTest>
+          }
+          groupBy: {
+            args: Prisma.AdminGiftCardSandboxTestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AdminGiftCardSandboxTestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AdminGiftCardSandboxTestCountArgs<ExtArgs>
+            result: $Utils.Optional<AdminGiftCardSandboxTestCountAggregateOutputType> | number
+          }
+        }
+      }
       SupportTicket: {
         payload: Prisma.$SupportTicketPayload<ExtArgs>
         fields: Prisma.SupportTicketFieldRefs
@@ -2915,6 +3006,7 @@ export namespace Prisma {
     giftCardSale?: GiftCardSaleOmit
     giftCardSellRateAdjustment?: GiftCardSellRateAdjustmentOmit
     giftCardPurchase?: GiftCardPurchaseOmit
+    adminGiftCardSandboxTest?: AdminGiftCardSandboxTestOmit
     supportTicket?: SupportTicketOmit
     supportMessage?: SupportMessageOmit
     supportAttachment?: SupportAttachmentOmit
@@ -3007,6 +3099,7 @@ export namespace Prisma {
     beneficiaries: number
     giftCardSales: number
     giftCardPurchases: number
+    adminGiftCardSandboxTests: number
     supportTickets: number
     assignedSupportTickets: number
     supportMessages: number
@@ -3024,6 +3117,7 @@ export namespace Prisma {
     beneficiaries?: boolean | UserCountOutputTypeCountBeneficiariesArgs
     giftCardSales?: boolean | UserCountOutputTypeCountGiftCardSalesArgs
     giftCardPurchases?: boolean | UserCountOutputTypeCountGiftCardPurchasesArgs
+    adminGiftCardSandboxTests?: boolean | UserCountOutputTypeCountAdminGiftCardSandboxTestsArgs
     supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
     assignedSupportTickets?: boolean | UserCountOutputTypeCountAssignedSupportTicketsArgs
     supportMessages?: boolean | UserCountOutputTypeCountSupportMessagesArgs
@@ -3103,6 +3197,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountGiftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GiftCardPurchaseWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAdminGiftCardSandboxTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminGiftCardSandboxTestWhereInput
   }
 
   /**
@@ -3888,6 +3989,7 @@ export namespace Prisma {
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
     giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
+    adminGiftCardSandboxTests?: boolean | User$adminGiftCardSandboxTestsArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
     supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
@@ -3993,6 +4095,7 @@ export namespace Prisma {
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
     giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
+    adminGiftCardSandboxTests?: boolean | User$adminGiftCardSandboxTestsArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
     supportMessages?: boolean | User$supportMessagesArgs<ExtArgs>
@@ -4017,6 +4120,7 @@ export namespace Prisma {
       beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
       giftCardSales: Prisma.$GiftCardSalePayload<ExtArgs>[]
       giftCardPurchases: Prisma.$GiftCardPurchasePayload<ExtArgs>[]
+      adminGiftCardSandboxTests: Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>[]
       supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       assignedSupportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
@@ -4454,6 +4558,7 @@ export namespace Prisma {
     beneficiaries<T extends User$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, User$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardSales<T extends User$giftCardSalesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardSalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardPurchases<T extends User$giftCardPurchasesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    adminGiftCardSandboxTests<T extends User$adminGiftCardSandboxTestsArgs<ExtArgs> = {}>(args?: Subset<T, User$adminGiftCardSandboxTestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     supportTickets<T extends User$supportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedSupportTickets<T extends User$assignedSupportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedSupportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     supportMessages<T extends User$supportMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5157,6 +5262,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GiftCardPurchaseScalarFieldEnum | GiftCardPurchaseScalarFieldEnum[]
+  }
+
+  /**
+   * User.adminGiftCardSandboxTests
+   */
+  export type User$adminGiftCardSandboxTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    where?: AdminGiftCardSandboxTestWhereInput
+    orderBy?: AdminGiftCardSandboxTestOrderByWithRelationInput | AdminGiftCardSandboxTestOrderByWithRelationInput[]
+    cursor?: AdminGiftCardSandboxTestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AdminGiftCardSandboxTestScalarFieldEnum | AdminGiftCardSandboxTestScalarFieldEnum[]
   }
 
   /**
@@ -27148,6 +27277,1320 @@ export namespace Prisma {
 
 
   /**
+   * Model AdminGiftCardSandboxTest
+   */
+
+  export type AggregateAdminGiftCardSandboxTest = {
+    _count: AdminGiftCardSandboxTestCountAggregateOutputType | null
+    _avg: AdminGiftCardSandboxTestAvgAggregateOutputType | null
+    _sum: AdminGiftCardSandboxTestSumAggregateOutputType | null
+    _min: AdminGiftCardSandboxTestMinAggregateOutputType | null
+    _max: AdminGiftCardSandboxTestMaxAggregateOutputType | null
+  }
+
+  export type AdminGiftCardSandboxTestAvgAggregateOutputType = {
+    amount: Decimal | null
+    quantity: number | null
+  }
+
+  export type AdminGiftCardSandboxTestSumAggregateOutputType = {
+    amount: Decimal | null
+    quantity: number | null
+  }
+
+  export type AdminGiftCardSandboxTestMinAggregateOutputType = {
+    id: string | null
+    adminUserId: string | null
+    idempotencyKey: string | null
+    reference: string | null
+    providerProductId: string | null
+    productName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    amount: Decimal | null
+    quantity: number | null
+    recipientEmail: string | null
+    status: string | null
+    providerReference: string | null
+    providerStatus: string | null
+    providerMessage: string | null
+    redeemId: string | null
+    voucherCiphertext: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type AdminGiftCardSandboxTestMaxAggregateOutputType = {
+    id: string | null
+    adminUserId: string | null
+    idempotencyKey: string | null
+    reference: string | null
+    providerProductId: string | null
+    productName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    amount: Decimal | null
+    quantity: number | null
+    recipientEmail: string | null
+    status: string | null
+    providerReference: string | null
+    providerStatus: string | null
+    providerMessage: string | null
+    redeemId: string | null
+    voucherCiphertext: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    completedAt: Date | null
+  }
+
+  export type AdminGiftCardSandboxTestCountAggregateOutputType = {
+    id: number
+    adminUserId: number
+    idempotencyKey: number
+    reference: number
+    providerProductId: number
+    productName: number
+    countryCode: number
+    currencyCode: number
+    amount: number
+    quantity: number
+    recipientEmail: number
+    status: number
+    providerReference: number
+    providerStatus: number
+    providerMessage: number
+    redeemId: number
+    voucherCiphertext: number
+    redeemDetails: number
+    providerMetadata: number
+    createdAt: number
+    updatedAt: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type AdminGiftCardSandboxTestAvgAggregateInputType = {
+    amount?: true
+    quantity?: true
+  }
+
+  export type AdminGiftCardSandboxTestSumAggregateInputType = {
+    amount?: true
+    quantity?: true
+  }
+
+  export type AdminGiftCardSandboxTestMinAggregateInputType = {
+    id?: true
+    adminUserId?: true
+    idempotencyKey?: true
+    reference?: true
+    providerProductId?: true
+    productName?: true
+    countryCode?: true
+    currencyCode?: true
+    amount?: true
+    quantity?: true
+    recipientEmail?: true
+    status?: true
+    providerReference?: true
+    providerStatus?: true
+    providerMessage?: true
+    redeemId?: true
+    voucherCiphertext?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type AdminGiftCardSandboxTestMaxAggregateInputType = {
+    id?: true
+    adminUserId?: true
+    idempotencyKey?: true
+    reference?: true
+    providerProductId?: true
+    productName?: true
+    countryCode?: true
+    currencyCode?: true
+    amount?: true
+    quantity?: true
+    recipientEmail?: true
+    status?: true
+    providerReference?: true
+    providerStatus?: true
+    providerMessage?: true
+    redeemId?: true
+    voucherCiphertext?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+  }
+
+  export type AdminGiftCardSandboxTestCountAggregateInputType = {
+    id?: true
+    adminUserId?: true
+    idempotencyKey?: true
+    reference?: true
+    providerProductId?: true
+    productName?: true
+    countryCode?: true
+    currencyCode?: true
+    amount?: true
+    quantity?: true
+    recipientEmail?: true
+    status?: true
+    providerReference?: true
+    providerStatus?: true
+    providerMessage?: true
+    redeemId?: true
+    voucherCiphertext?: true
+    redeemDetails?: true
+    providerMetadata?: true
+    createdAt?: true
+    updatedAt?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type AdminGiftCardSandboxTestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminGiftCardSandboxTest to aggregate.
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminGiftCardSandboxTests to fetch.
+     */
+    orderBy?: AdminGiftCardSandboxTestOrderByWithRelationInput | AdminGiftCardSandboxTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AdminGiftCardSandboxTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminGiftCardSandboxTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminGiftCardSandboxTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AdminGiftCardSandboxTests
+    **/
+    _count?: true | AdminGiftCardSandboxTestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AdminGiftCardSandboxTestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AdminGiftCardSandboxTestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AdminGiftCardSandboxTestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AdminGiftCardSandboxTestMaxAggregateInputType
+  }
+
+  export type GetAdminGiftCardSandboxTestAggregateType<T extends AdminGiftCardSandboxTestAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdminGiftCardSandboxTest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdminGiftCardSandboxTest[P]>
+      : GetScalarType<T[P], AggregateAdminGiftCardSandboxTest[P]>
+  }
+
+
+
+
+  export type AdminGiftCardSandboxTestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AdminGiftCardSandboxTestWhereInput
+    orderBy?: AdminGiftCardSandboxTestOrderByWithAggregationInput | AdminGiftCardSandboxTestOrderByWithAggregationInput[]
+    by: AdminGiftCardSandboxTestScalarFieldEnum[] | AdminGiftCardSandboxTestScalarFieldEnum
+    having?: AdminGiftCardSandboxTestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AdminGiftCardSandboxTestCountAggregateInputType | true
+    _avg?: AdminGiftCardSandboxTestAvgAggregateInputType
+    _sum?: AdminGiftCardSandboxTestSumAggregateInputType
+    _min?: AdminGiftCardSandboxTestMinAggregateInputType
+    _max?: AdminGiftCardSandboxTestMaxAggregateInputType
+  }
+
+  export type AdminGiftCardSandboxTestGroupByOutputType = {
+    id: string
+    adminUserId: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName: string | null
+    countryCode: string | null
+    currencyCode: string
+    amount: Decimal
+    quantity: number
+    recipientEmail: string
+    status: string
+    providerReference: string | null
+    providerStatus: string | null
+    providerMessage: string | null
+    redeemId: string | null
+    voucherCiphertext: string | null
+    redeemDetails: JsonValue | null
+    providerMetadata: JsonValue | null
+    createdAt: Date
+    updatedAt: Date
+    completedAt: Date | null
+    _count: AdminGiftCardSandboxTestCountAggregateOutputType | null
+    _avg: AdminGiftCardSandboxTestAvgAggregateOutputType | null
+    _sum: AdminGiftCardSandboxTestSumAggregateOutputType | null
+    _min: AdminGiftCardSandboxTestMinAggregateOutputType | null
+    _max: AdminGiftCardSandboxTestMaxAggregateOutputType | null
+  }
+
+  type GetAdminGiftCardSandboxTestGroupByPayload<T extends AdminGiftCardSandboxTestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AdminGiftCardSandboxTestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AdminGiftCardSandboxTestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AdminGiftCardSandboxTestGroupByOutputType[P]>
+            : GetScalarType<T[P], AdminGiftCardSandboxTestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AdminGiftCardSandboxTestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminUserId?: boolean
+    idempotencyKey?: boolean
+    reference?: boolean
+    providerProductId?: boolean
+    productName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    amount?: boolean
+    quantity?: boolean
+    recipientEmail?: boolean
+    status?: boolean
+    providerReference?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    redeemId?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminGiftCardSandboxTest"]>
+
+  export type AdminGiftCardSandboxTestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminUserId?: boolean
+    idempotencyKey?: boolean
+    reference?: boolean
+    providerProductId?: boolean
+    productName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    amount?: boolean
+    quantity?: boolean
+    recipientEmail?: boolean
+    status?: boolean
+    providerReference?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    redeemId?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminGiftCardSandboxTest"]>
+
+  export type AdminGiftCardSandboxTestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adminUserId?: boolean
+    idempotencyKey?: boolean
+    reference?: boolean
+    providerProductId?: boolean
+    productName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    amount?: boolean
+    quantity?: boolean
+    recipientEmail?: boolean
+    status?: boolean
+    providerReference?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    redeemId?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["adminGiftCardSandboxTest"]>
+
+  export type AdminGiftCardSandboxTestSelectScalar = {
+    id?: boolean
+    adminUserId?: boolean
+    idempotencyKey?: boolean
+    reference?: boolean
+    providerProductId?: boolean
+    productName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    amount?: boolean
+    quantity?: boolean
+    recipientEmail?: boolean
+    status?: boolean
+    providerReference?: boolean
+    providerStatus?: boolean
+    providerMessage?: boolean
+    redeemId?: boolean
+    voucherCiphertext?: boolean
+    redeemDetails?: boolean
+    providerMetadata?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completedAt?: boolean
+  }
+
+  export type AdminGiftCardSandboxTestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adminUserId" | "idempotencyKey" | "reference" | "providerProductId" | "productName" | "countryCode" | "currencyCode" | "amount" | "quantity" | "recipientEmail" | "status" | "providerReference" | "providerStatus" | "providerMessage" | "redeemId" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["adminGiftCardSandboxTest"]>
+  export type AdminGiftCardSandboxTestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminGiftCardSandboxTestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AdminGiftCardSandboxTestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    adminUser?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AdminGiftCardSandboxTestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AdminGiftCardSandboxTest"
+    objects: {
+      adminUser: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      adminUserId: string
+      idempotencyKey: string
+      reference: string
+      providerProductId: string
+      productName: string | null
+      countryCode: string | null
+      currencyCode: string
+      amount: Prisma.Decimal
+      quantity: number
+      recipientEmail: string
+      status: string
+      providerReference: string | null
+      providerStatus: string | null
+      providerMessage: string | null
+      redeemId: string | null
+      voucherCiphertext: string | null
+      redeemDetails: Prisma.JsonValue | null
+      providerMetadata: Prisma.JsonValue | null
+      createdAt: Date
+      updatedAt: Date
+      completedAt: Date | null
+    }, ExtArgs["result"]["adminGiftCardSandboxTest"]>
+    composites: {}
+  }
+
+  type AdminGiftCardSandboxTestGetPayload<S extends boolean | null | undefined | AdminGiftCardSandboxTestDefaultArgs> = $Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload, S>
+
+  type AdminGiftCardSandboxTestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AdminGiftCardSandboxTestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AdminGiftCardSandboxTestCountAggregateInputType | true
+    }
+
+  export interface AdminGiftCardSandboxTestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AdminGiftCardSandboxTest'], meta: { name: 'AdminGiftCardSandboxTest' } }
+    /**
+     * Find zero or one AdminGiftCardSandboxTest that matches the filter.
+     * @param {AdminGiftCardSandboxTestFindUniqueArgs} args - Arguments to find a AdminGiftCardSandboxTest
+     * @example
+     * // Get one AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AdminGiftCardSandboxTestFindUniqueArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestFindUniqueArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AdminGiftCardSandboxTest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AdminGiftCardSandboxTestFindUniqueOrThrowArgs} args - Arguments to find a AdminGiftCardSandboxTest
+     * @example
+     * // Get one AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AdminGiftCardSandboxTestFindUniqueOrThrowArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminGiftCardSandboxTest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestFindFirstArgs} args - Arguments to find a AdminGiftCardSandboxTest
+     * @example
+     * // Get one AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AdminGiftCardSandboxTestFindFirstArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestFindFirstArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AdminGiftCardSandboxTest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestFindFirstOrThrowArgs} args - Arguments to find a AdminGiftCardSandboxTest
+     * @example
+     * // Get one AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AdminGiftCardSandboxTestFindFirstOrThrowArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestFindFirstOrThrowArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AdminGiftCardSandboxTests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTests = await prisma.adminGiftCardSandboxTest.findMany()
+     * 
+     * // Get first 10 AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTests = await prisma.adminGiftCardSandboxTest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const adminGiftCardSandboxTestWithIdOnly = await prisma.adminGiftCardSandboxTest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AdminGiftCardSandboxTestFindManyArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AdminGiftCardSandboxTest.
+     * @param {AdminGiftCardSandboxTestCreateArgs} args - Arguments to create a AdminGiftCardSandboxTest.
+     * @example
+     * // Create one AdminGiftCardSandboxTest
+     * const AdminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.create({
+     *   data: {
+     *     // ... data to create a AdminGiftCardSandboxTest
+     *   }
+     * })
+     * 
+     */
+    create<T extends AdminGiftCardSandboxTestCreateArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestCreateArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AdminGiftCardSandboxTests.
+     * @param {AdminGiftCardSandboxTestCreateManyArgs} args - Arguments to create many AdminGiftCardSandboxTests.
+     * @example
+     * // Create many AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AdminGiftCardSandboxTestCreateManyArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AdminGiftCardSandboxTests and returns the data saved in the database.
+     * @param {AdminGiftCardSandboxTestCreateManyAndReturnArgs} args - Arguments to create many AdminGiftCardSandboxTests.
+     * @example
+     * // Create many AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AdminGiftCardSandboxTests and only return the `id`
+     * const adminGiftCardSandboxTestWithIdOnly = await prisma.adminGiftCardSandboxTest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AdminGiftCardSandboxTestCreateManyAndReturnArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AdminGiftCardSandboxTest.
+     * @param {AdminGiftCardSandboxTestDeleteArgs} args - Arguments to delete one AdminGiftCardSandboxTest.
+     * @example
+     * // Delete one AdminGiftCardSandboxTest
+     * const AdminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.delete({
+     *   where: {
+     *     // ... filter to delete one AdminGiftCardSandboxTest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AdminGiftCardSandboxTestDeleteArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestDeleteArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AdminGiftCardSandboxTest.
+     * @param {AdminGiftCardSandboxTestUpdateArgs} args - Arguments to update one AdminGiftCardSandboxTest.
+     * @example
+     * // Update one AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AdminGiftCardSandboxTestUpdateArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestUpdateArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AdminGiftCardSandboxTests.
+     * @param {AdminGiftCardSandboxTestDeleteManyArgs} args - Arguments to filter AdminGiftCardSandboxTests to delete.
+     * @example
+     * // Delete a few AdminGiftCardSandboxTests
+     * const { count } = await prisma.adminGiftCardSandboxTest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AdminGiftCardSandboxTestDeleteManyArgs>(args?: SelectSubset<T, AdminGiftCardSandboxTestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminGiftCardSandboxTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AdminGiftCardSandboxTestUpdateManyArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AdminGiftCardSandboxTests and returns the data updated in the database.
+     * @param {AdminGiftCardSandboxTestUpdateManyAndReturnArgs} args - Arguments to update many AdminGiftCardSandboxTests.
+     * @example
+     * // Update many AdminGiftCardSandboxTests
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AdminGiftCardSandboxTests and only return the `id`
+     * const adminGiftCardSandboxTestWithIdOnly = await prisma.adminGiftCardSandboxTest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AdminGiftCardSandboxTestUpdateManyAndReturnArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AdminGiftCardSandboxTest.
+     * @param {AdminGiftCardSandboxTestUpsertArgs} args - Arguments to update or create a AdminGiftCardSandboxTest.
+     * @example
+     * // Update or create a AdminGiftCardSandboxTest
+     * const adminGiftCardSandboxTest = await prisma.adminGiftCardSandboxTest.upsert({
+     *   create: {
+     *     // ... data to create a AdminGiftCardSandboxTest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AdminGiftCardSandboxTest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AdminGiftCardSandboxTestUpsertArgs>(args: SelectSubset<T, AdminGiftCardSandboxTestUpsertArgs<ExtArgs>>): Prisma__AdminGiftCardSandboxTestClient<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AdminGiftCardSandboxTests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestCountArgs} args - Arguments to filter AdminGiftCardSandboxTests to count.
+     * @example
+     * // Count the number of AdminGiftCardSandboxTests
+     * const count = await prisma.adminGiftCardSandboxTest.count({
+     *   where: {
+     *     // ... the filter for the AdminGiftCardSandboxTests we want to count
+     *   }
+     * })
+    **/
+    count<T extends AdminGiftCardSandboxTestCountArgs>(
+      args?: Subset<T, AdminGiftCardSandboxTestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AdminGiftCardSandboxTestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AdminGiftCardSandboxTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AdminGiftCardSandboxTestAggregateArgs>(args: Subset<T, AdminGiftCardSandboxTestAggregateArgs>): Prisma.PrismaPromise<GetAdminGiftCardSandboxTestAggregateType<T>>
+
+    /**
+     * Group by AdminGiftCardSandboxTest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AdminGiftCardSandboxTestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AdminGiftCardSandboxTestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AdminGiftCardSandboxTestGroupByArgs['orderBy'] }
+        : { orderBy?: AdminGiftCardSandboxTestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AdminGiftCardSandboxTestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdminGiftCardSandboxTestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AdminGiftCardSandboxTest model
+   */
+  readonly fields: AdminGiftCardSandboxTestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AdminGiftCardSandboxTest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AdminGiftCardSandboxTestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    adminUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AdminGiftCardSandboxTest model
+   */
+  interface AdminGiftCardSandboxTestFieldRefs {
+    readonly id: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly adminUserId: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly idempotencyKey: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly reference: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly providerProductId: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly productName: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly countryCode: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly currencyCode: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly amount: FieldRef<"AdminGiftCardSandboxTest", 'Decimal'>
+    readonly quantity: FieldRef<"AdminGiftCardSandboxTest", 'Int'>
+    readonly recipientEmail: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly status: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly providerReference: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly providerStatus: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly providerMessage: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly redeemId: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly voucherCiphertext: FieldRef<"AdminGiftCardSandboxTest", 'String'>
+    readonly redeemDetails: FieldRef<"AdminGiftCardSandboxTest", 'Json'>
+    readonly providerMetadata: FieldRef<"AdminGiftCardSandboxTest", 'Json'>
+    readonly createdAt: FieldRef<"AdminGiftCardSandboxTest", 'DateTime'>
+    readonly updatedAt: FieldRef<"AdminGiftCardSandboxTest", 'DateTime'>
+    readonly completedAt: FieldRef<"AdminGiftCardSandboxTest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AdminGiftCardSandboxTest findUnique
+   */
+  export type AdminGiftCardSandboxTestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminGiftCardSandboxTest to fetch.
+     */
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+  }
+
+  /**
+   * AdminGiftCardSandboxTest findUniqueOrThrow
+   */
+  export type AdminGiftCardSandboxTestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminGiftCardSandboxTest to fetch.
+     */
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+  }
+
+  /**
+   * AdminGiftCardSandboxTest findFirst
+   */
+  export type AdminGiftCardSandboxTestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminGiftCardSandboxTest to fetch.
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminGiftCardSandboxTests to fetch.
+     */
+    orderBy?: AdminGiftCardSandboxTestOrderByWithRelationInput | AdminGiftCardSandboxTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminGiftCardSandboxTests.
+     */
+    cursor?: AdminGiftCardSandboxTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminGiftCardSandboxTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminGiftCardSandboxTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminGiftCardSandboxTests.
+     */
+    distinct?: AdminGiftCardSandboxTestScalarFieldEnum | AdminGiftCardSandboxTestScalarFieldEnum[]
+  }
+
+  /**
+   * AdminGiftCardSandboxTest findFirstOrThrow
+   */
+  export type AdminGiftCardSandboxTestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminGiftCardSandboxTest to fetch.
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminGiftCardSandboxTests to fetch.
+     */
+    orderBy?: AdminGiftCardSandboxTestOrderByWithRelationInput | AdminGiftCardSandboxTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AdminGiftCardSandboxTests.
+     */
+    cursor?: AdminGiftCardSandboxTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminGiftCardSandboxTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminGiftCardSandboxTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminGiftCardSandboxTests.
+     */
+    distinct?: AdminGiftCardSandboxTestScalarFieldEnum | AdminGiftCardSandboxTestScalarFieldEnum[]
+  }
+
+  /**
+   * AdminGiftCardSandboxTest findMany
+   */
+  export type AdminGiftCardSandboxTestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter, which AdminGiftCardSandboxTests to fetch.
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AdminGiftCardSandboxTests to fetch.
+     */
+    orderBy?: AdminGiftCardSandboxTestOrderByWithRelationInput | AdminGiftCardSandboxTestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AdminGiftCardSandboxTests.
+     */
+    cursor?: AdminGiftCardSandboxTestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AdminGiftCardSandboxTests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AdminGiftCardSandboxTests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AdminGiftCardSandboxTests.
+     */
+    distinct?: AdminGiftCardSandboxTestScalarFieldEnum | AdminGiftCardSandboxTestScalarFieldEnum[]
+  }
+
+  /**
+   * AdminGiftCardSandboxTest create
+   */
+  export type AdminGiftCardSandboxTestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AdminGiftCardSandboxTest.
+     */
+    data: XOR<AdminGiftCardSandboxTestCreateInput, AdminGiftCardSandboxTestUncheckedCreateInput>
+  }
+
+  /**
+   * AdminGiftCardSandboxTest createMany
+   */
+  export type AdminGiftCardSandboxTestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AdminGiftCardSandboxTests.
+     */
+    data: AdminGiftCardSandboxTestCreateManyInput | AdminGiftCardSandboxTestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AdminGiftCardSandboxTest createManyAndReturn
+   */
+  export type AdminGiftCardSandboxTestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * The data used to create many AdminGiftCardSandboxTests.
+     */
+    data: AdminGiftCardSandboxTestCreateManyInput | AdminGiftCardSandboxTestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminGiftCardSandboxTest update
+   */
+  export type AdminGiftCardSandboxTestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AdminGiftCardSandboxTest.
+     */
+    data: XOR<AdminGiftCardSandboxTestUpdateInput, AdminGiftCardSandboxTestUncheckedUpdateInput>
+    /**
+     * Choose, which AdminGiftCardSandboxTest to update.
+     */
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+  }
+
+  /**
+   * AdminGiftCardSandboxTest updateMany
+   */
+  export type AdminGiftCardSandboxTestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AdminGiftCardSandboxTests.
+     */
+    data: XOR<AdminGiftCardSandboxTestUpdateManyMutationInput, AdminGiftCardSandboxTestUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminGiftCardSandboxTests to update
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * Limit how many AdminGiftCardSandboxTests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminGiftCardSandboxTest updateManyAndReturn
+   */
+  export type AdminGiftCardSandboxTestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * The data used to update AdminGiftCardSandboxTests.
+     */
+    data: XOR<AdminGiftCardSandboxTestUpdateManyMutationInput, AdminGiftCardSandboxTestUncheckedUpdateManyInput>
+    /**
+     * Filter which AdminGiftCardSandboxTests to update
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * Limit how many AdminGiftCardSandboxTests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AdminGiftCardSandboxTest upsert
+   */
+  export type AdminGiftCardSandboxTestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AdminGiftCardSandboxTest to update in case it exists.
+     */
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+    /**
+     * In case the AdminGiftCardSandboxTest found by the `where` argument doesn't exist, create a new AdminGiftCardSandboxTest with this data.
+     */
+    create: XOR<AdminGiftCardSandboxTestCreateInput, AdminGiftCardSandboxTestUncheckedCreateInput>
+    /**
+     * In case the AdminGiftCardSandboxTest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AdminGiftCardSandboxTestUpdateInput, AdminGiftCardSandboxTestUncheckedUpdateInput>
+  }
+
+  /**
+   * AdminGiftCardSandboxTest delete
+   */
+  export type AdminGiftCardSandboxTestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+    /**
+     * Filter which AdminGiftCardSandboxTest to delete.
+     */
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+  }
+
+  /**
+   * AdminGiftCardSandboxTest deleteMany
+   */
+  export type AdminGiftCardSandboxTestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AdminGiftCardSandboxTests to delete
+     */
+    where?: AdminGiftCardSandboxTestWhereInput
+    /**
+     * Limit how many AdminGiftCardSandboxTests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AdminGiftCardSandboxTest without action
+   */
+  export type AdminGiftCardSandboxTestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AdminGiftCardSandboxTest
+     */
+    select?: AdminGiftCardSandboxTestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AdminGiftCardSandboxTest
+     */
+    omit?: AdminGiftCardSandboxTestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AdminGiftCardSandboxTestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model SupportTicket
    */
 
@@ -31183,6 +32626,34 @@ export namespace Prisma {
   export type GiftCardPurchaseScalarFieldEnum = (typeof GiftCardPurchaseScalarFieldEnum)[keyof typeof GiftCardPurchaseScalarFieldEnum]
 
 
+  export const AdminGiftCardSandboxTestScalarFieldEnum: {
+    id: 'id',
+    adminUserId: 'adminUserId',
+    idempotencyKey: 'idempotencyKey',
+    reference: 'reference',
+    providerProductId: 'providerProductId',
+    productName: 'productName',
+    countryCode: 'countryCode',
+    currencyCode: 'currencyCode',
+    amount: 'amount',
+    quantity: 'quantity',
+    recipientEmail: 'recipientEmail',
+    status: 'status',
+    providerReference: 'providerReference',
+    providerStatus: 'providerStatus',
+    providerMessage: 'providerMessage',
+    redeemId: 'redeemId',
+    voucherCiphertext: 'voucherCiphertext',
+    redeemDetails: 'redeemDetails',
+    providerMetadata: 'providerMetadata',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    completedAt: 'completedAt'
+  };
+
+  export type AdminGiftCardSandboxTestScalarFieldEnum = (typeof AdminGiftCardSandboxTestScalarFieldEnum)[keyof typeof AdminGiftCardSandboxTestScalarFieldEnum]
+
+
   export const SupportTicketScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -31666,6 +33137,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
     giftCardPurchases?: GiftCardPurchaseListRelationFilter
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
     supportMessages?: SupportMessageListRelationFilter
@@ -31710,6 +33182,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryOrderByRelationAggregateInput
     giftCardSales?: GiftCardSaleOrderByRelationAggregateInput
     giftCardPurchases?: GiftCardPurchaseOrderByRelationAggregateInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestOrderByRelationAggregateInput
     supportTickets?: SupportTicketOrderByRelationAggregateInput
     assignedSupportTickets?: SupportTicketOrderByRelationAggregateInput
     supportMessages?: SupportMessageOrderByRelationAggregateInput
@@ -31757,6 +33230,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
     giftCardPurchases?: GiftCardPurchaseListRelationFilter
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
     supportMessages?: SupportMessageListRelationFilter
@@ -33841,6 +35315,148 @@ export namespace Prisma {
     completedAt?: DateTimeNullableWithAggregatesFilter<"GiftCardPurchase"> | Date | string | null
   }
 
+  export type AdminGiftCardSandboxTestWhereInput = {
+    AND?: AdminGiftCardSandboxTestWhereInput | AdminGiftCardSandboxTestWhereInput[]
+    OR?: AdminGiftCardSandboxTestWhereInput[]
+    NOT?: AdminGiftCardSandboxTestWhereInput | AdminGiftCardSandboxTestWhereInput[]
+    id?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    adminUserId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    idempotencyKey?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    reference?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerProductId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    productName?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    countryCode?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    currencyCode?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    amount?: DecimalFilter<"AdminGiftCardSandboxTest"> | Decimal | DecimalJsLike | number | string
+    quantity?: IntFilter<"AdminGiftCardSandboxTest"> | number
+    recipientEmail?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    status?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerReference?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerStatus?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerMessage?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemId?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    voucherCiphertext?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemDetails?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    providerMetadata?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    createdAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AdminGiftCardSandboxTest"> | Date | string | null
+    adminUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AdminGiftCardSandboxTestOrderByWithRelationInput = {
+    id?: SortOrder
+    adminUserId?: SortOrder
+    idempotencyKey?: SortOrder
+    reference?: SortOrder
+    providerProductId?: SortOrder
+    productName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrder
+    amount?: SortOrder
+    quantity?: SortOrder
+    recipientEmail?: SortOrder
+    status?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerMessage?: SortOrderInput | SortOrder
+    redeemId?: SortOrderInput | SortOrder
+    voucherCiphertext?: SortOrderInput | SortOrder
+    redeemDetails?: SortOrderInput | SortOrder
+    providerMetadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    adminUser?: UserOrderByWithRelationInput
+  }
+
+  export type AdminGiftCardSandboxTestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    idempotencyKey?: string
+    reference?: string
+    AND?: AdminGiftCardSandboxTestWhereInput | AdminGiftCardSandboxTestWhereInput[]
+    OR?: AdminGiftCardSandboxTestWhereInput[]
+    NOT?: AdminGiftCardSandboxTestWhereInput | AdminGiftCardSandboxTestWhereInput[]
+    adminUserId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerProductId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    productName?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    countryCode?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    currencyCode?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    amount?: DecimalFilter<"AdminGiftCardSandboxTest"> | Decimal | DecimalJsLike | number | string
+    quantity?: IntFilter<"AdminGiftCardSandboxTest"> | number
+    recipientEmail?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    status?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerReference?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerStatus?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerMessage?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemId?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    voucherCiphertext?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemDetails?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    providerMetadata?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    createdAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AdminGiftCardSandboxTest"> | Date | string | null
+    adminUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "idempotencyKey" | "reference">
+
+  export type AdminGiftCardSandboxTestOrderByWithAggregationInput = {
+    id?: SortOrder
+    adminUserId?: SortOrder
+    idempotencyKey?: SortOrder
+    reference?: SortOrder
+    providerProductId?: SortOrder
+    productName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrder
+    amount?: SortOrder
+    quantity?: SortOrder
+    recipientEmail?: SortOrder
+    status?: SortOrder
+    providerReference?: SortOrderInput | SortOrder
+    providerStatus?: SortOrderInput | SortOrder
+    providerMessage?: SortOrderInput | SortOrder
+    redeemId?: SortOrderInput | SortOrder
+    voucherCiphertext?: SortOrderInput | SortOrder
+    redeemDetails?: SortOrderInput | SortOrder
+    providerMetadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrderInput | SortOrder
+    _count?: AdminGiftCardSandboxTestCountOrderByAggregateInput
+    _avg?: AdminGiftCardSandboxTestAvgOrderByAggregateInput
+    _max?: AdminGiftCardSandboxTestMaxOrderByAggregateInput
+    _min?: AdminGiftCardSandboxTestMinOrderByAggregateInput
+    _sum?: AdminGiftCardSandboxTestSumOrderByAggregateInput
+  }
+
+  export type AdminGiftCardSandboxTestScalarWhereWithAggregatesInput = {
+    AND?: AdminGiftCardSandboxTestScalarWhereWithAggregatesInput | AdminGiftCardSandboxTestScalarWhereWithAggregatesInput[]
+    OR?: AdminGiftCardSandboxTestScalarWhereWithAggregatesInput[]
+    NOT?: AdminGiftCardSandboxTestScalarWhereWithAggregatesInput | AdminGiftCardSandboxTestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    adminUserId?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    idempotencyKey?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    reference?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    providerProductId?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    productName?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    countryCode?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    currencyCode?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    amount?: DecimalWithAggregatesFilter<"AdminGiftCardSandboxTest"> | Decimal | DecimalJsLike | number | string
+    quantity?: IntWithAggregatesFilter<"AdminGiftCardSandboxTest"> | number
+    recipientEmail?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    status?: StringWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string
+    providerReference?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerStatus?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerMessage?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemId?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    voucherCiphertext?: StringNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemDetails?: JsonNullableWithAggregatesFilter<"AdminGiftCardSandboxTest">
+    providerMetadata?: JsonNullableWithAggregatesFilter<"AdminGiftCardSandboxTest">
+    createdAt?: DateTimeWithAggregatesFilter<"AdminGiftCardSandboxTest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AdminGiftCardSandboxTest"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"AdminGiftCardSandboxTest"> | Date | string | null
+  }
+
   export type SupportTicketWhereInput = {
     AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
     OR?: SupportTicketWhereInput[]
@@ -34153,6 +35769,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -34197,6 +35814,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -34241,6 +35859,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -34285,6 +35904,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -36670,6 +38290,180 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type AdminGiftCardSandboxTestCreateInput = {
+    id?: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    adminUser: UserCreateNestedOneWithoutAdminGiftCardSandboxTestsInput
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedCreateInput = {
+    id?: string
+    adminUserId: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminUser?: UserUpdateOneRequiredWithoutAdminGiftCardSandboxTestsNestedInput
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestCreateManyInput = {
+    id?: string
+    adminUserId: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type SupportTicketCreateInput = {
     id?: string
     subject: string
@@ -37104,6 +38898,12 @@ export namespace Prisma {
     none?: GiftCardPurchaseWhereInput
   }
 
+  export type AdminGiftCardSandboxTestListRelationFilter = {
+    every?: AdminGiftCardSandboxTestWhereInput
+    some?: AdminGiftCardSandboxTestWhereInput
+    none?: AdminGiftCardSandboxTestWhereInput
+  }
+
   export type SupportTicketListRelationFilter = {
     every?: SupportTicketWhereInput
     some?: SupportTicketWhereInput
@@ -37160,6 +38960,10 @@ export namespace Prisma {
   }
 
   export type GiftCardPurchaseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AdminGiftCardSandboxTestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -38977,6 +40781,87 @@ export namespace Prisma {
     _max?: NestedEnumGiftCardPurchaseStatusFilter<$PrismaModel>
   }
 
+  export type AdminGiftCardSandboxTestCountOrderByAggregateInput = {
+    id?: SortOrder
+    adminUserId?: SortOrder
+    idempotencyKey?: SortOrder
+    reference?: SortOrder
+    providerProductId?: SortOrder
+    productName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    amount?: SortOrder
+    quantity?: SortOrder
+    recipientEmail?: SortOrder
+    status?: SortOrder
+    providerReference?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    redeemId?: SortOrder
+    voucherCiphertext?: SortOrder
+    redeemDetails?: SortOrder
+    providerMetadata?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AdminGiftCardSandboxTestAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type AdminGiftCardSandboxTestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adminUserId?: SortOrder
+    idempotencyKey?: SortOrder
+    reference?: SortOrder
+    providerProductId?: SortOrder
+    productName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    amount?: SortOrder
+    quantity?: SortOrder
+    recipientEmail?: SortOrder
+    status?: SortOrder
+    providerReference?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    redeemId?: SortOrder
+    voucherCiphertext?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AdminGiftCardSandboxTestMinOrderByAggregateInput = {
+    id?: SortOrder
+    adminUserId?: SortOrder
+    idempotencyKey?: SortOrder
+    reference?: SortOrder
+    providerProductId?: SortOrder
+    productName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    amount?: SortOrder
+    quantity?: SortOrder
+    recipientEmail?: SortOrder
+    status?: SortOrder
+    providerReference?: SortOrder
+    providerStatus?: SortOrder
+    providerMessage?: SortOrder
+    redeemId?: SortOrder
+    voucherCiphertext?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type AdminGiftCardSandboxTestSumOrderByAggregateInput = {
+    amount?: SortOrder
+    quantity?: SortOrder
+  }
+
   export type EnumSupportTicketCategoryFilter<$PrismaModel = never> = {
     equals?: $Enums.SupportTicketCategory | EnumSupportTicketCategoryFieldRefInput<$PrismaModel>
     in?: $Enums.SupportTicketCategory[] | ListEnumSupportTicketCategoryFieldRefInput<$PrismaModel>
@@ -39279,6 +41164,13 @@ export namespace Prisma {
     connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
   }
 
+  export type AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput = {
+    create?: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput> | AdminGiftCardSandboxTestCreateWithoutAdminUserInput[] | AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput[]
+    connectOrCreate?: AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput | AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput[]
+    createMany?: AdminGiftCardSandboxTestCreateManyAdminUserInputEnvelope
+    connect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+  }
+
   export type SupportTicketCreateNestedManyWithoutUserInput = {
     create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
@@ -39387,6 +41279,13 @@ export namespace Prisma {
     connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
     createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
     connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput = {
+    create?: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput> | AdminGiftCardSandboxTestCreateWithoutAdminUserInput[] | AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput[]
+    connectOrCreate?: AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput | AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput[]
+    createMany?: AdminGiftCardSandboxTestCreateManyAdminUserInputEnvelope
+    connect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
   }
 
   export type SupportTicketUncheckedCreateNestedManyWithoutUserInput = {
@@ -39600,6 +41499,20 @@ export namespace Prisma {
     update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
+  export type AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput = {
+    create?: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput> | AdminGiftCardSandboxTestCreateWithoutAdminUserInput[] | AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput[]
+    connectOrCreate?: AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput | AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput[]
+    upsert?: AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput | AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput[]
+    createMany?: AdminGiftCardSandboxTestCreateManyAdminUserInputEnvelope
+    set?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    disconnect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    delete?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    connect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    update?: AdminGiftCardSandboxTestUpdateWithWhereUniqueWithoutAdminUserInput | AdminGiftCardSandboxTestUpdateWithWhereUniqueWithoutAdminUserInput[]
+    updateMany?: AdminGiftCardSandboxTestUpdateManyWithWhereWithoutAdminUserInput | AdminGiftCardSandboxTestUpdateManyWithWhereWithoutAdminUserInput[]
+    deleteMany?: AdminGiftCardSandboxTestScalarWhereInput | AdminGiftCardSandboxTestScalarWhereInput[]
   }
 
   export type SupportTicketUpdateManyWithoutUserNestedInput = {
@@ -39816,6 +41729,20 @@ export namespace Prisma {
     update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput = {
+    create?: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput> | AdminGiftCardSandboxTestCreateWithoutAdminUserInput[] | AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput[]
+    connectOrCreate?: AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput | AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput[]
+    upsert?: AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput | AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput[]
+    createMany?: AdminGiftCardSandboxTestCreateManyAdminUserInputEnvelope
+    set?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    disconnect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    delete?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    connect?: AdminGiftCardSandboxTestWhereUniqueInput | AdminGiftCardSandboxTestWhereUniqueInput[]
+    update?: AdminGiftCardSandboxTestUpdateWithWhereUniqueWithoutAdminUserInput | AdminGiftCardSandboxTestUpdateWithWhereUniqueWithoutAdminUserInput[]
+    updateMany?: AdminGiftCardSandboxTestUpdateManyWithWhereWithoutAdminUserInput | AdminGiftCardSandboxTestUpdateManyWithWhereWithoutAdminUserInput[]
+    deleteMany?: AdminGiftCardSandboxTestScalarWhereInput | AdminGiftCardSandboxTestScalarWhereInput[]
   }
 
   export type SupportTicketUncheckedUpdateManyWithoutUserNestedInput = {
@@ -41434,6 +43361,20 @@ export namespace Prisma {
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutGiftCardPurchaseInput, TransactionUpdateWithoutGiftCardPurchaseInput>, TransactionUncheckedUpdateWithoutGiftCardPurchaseInput>
   }
 
+  export type UserCreateNestedOneWithoutAdminGiftCardSandboxTestsInput = {
+    create?: XOR<UserCreateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedCreateWithoutAdminGiftCardSandboxTestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAdminGiftCardSandboxTestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutAdminGiftCardSandboxTestsNestedInput = {
+    create?: XOR<UserCreateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedCreateWithoutAdminGiftCardSandboxTestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAdminGiftCardSandboxTestsInput
+    upsert?: UserUpsertWithoutAdminGiftCardSandboxTestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAdminGiftCardSandboxTestsInput, UserUpdateWithoutAdminGiftCardSandboxTestsInput>, UserUncheckedUpdateWithoutAdminGiftCardSandboxTestsInput>
+  }
+
   export type UserCreateNestedOneWithoutSupportTicketsInput = {
     create?: XOR<UserCreateWithoutSupportTicketsInput, UserUncheckedCreateWithoutSupportTicketsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSupportTicketsInput
@@ -42805,6 +44746,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AdminGiftCardSandboxTestCreateWithoutAdminUserInput = {
+    id?: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput = {
+    id?: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput = {
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+    create: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput>
+  }
+
+  export type AdminGiftCardSandboxTestCreateManyAdminUserInputEnvelope = {
+    data: AdminGiftCardSandboxTestCreateManyAdminUserInput | AdminGiftCardSandboxTestCreateManyAdminUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type SupportTicketCreateWithoutUserInput = {
     id?: string
     subject: string
@@ -43453,6 +45452,50 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
   }
 
+  export type AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput = {
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+    update: XOR<AdminGiftCardSandboxTestUpdateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedUpdateWithoutAdminUserInput>
+    create: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput>
+  }
+
+  export type AdminGiftCardSandboxTestUpdateWithWhereUniqueWithoutAdminUserInput = {
+    where: AdminGiftCardSandboxTestWhereUniqueInput
+    data: XOR<AdminGiftCardSandboxTestUpdateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedUpdateWithoutAdminUserInput>
+  }
+
+  export type AdminGiftCardSandboxTestUpdateManyWithWhereWithoutAdminUserInput = {
+    where: AdminGiftCardSandboxTestScalarWhereInput
+    data: XOR<AdminGiftCardSandboxTestUpdateManyMutationInput, AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserInput>
+  }
+
+  export type AdminGiftCardSandboxTestScalarWhereInput = {
+    AND?: AdminGiftCardSandboxTestScalarWhereInput | AdminGiftCardSandboxTestScalarWhereInput[]
+    OR?: AdminGiftCardSandboxTestScalarWhereInput[]
+    NOT?: AdminGiftCardSandboxTestScalarWhereInput | AdminGiftCardSandboxTestScalarWhereInput[]
+    id?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    adminUserId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    idempotencyKey?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    reference?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerProductId?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    productName?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    countryCode?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    currencyCode?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    amount?: DecimalFilter<"AdminGiftCardSandboxTest"> | Decimal | DecimalJsLike | number | string
+    quantity?: IntFilter<"AdminGiftCardSandboxTest"> | number
+    recipientEmail?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    status?: StringFilter<"AdminGiftCardSandboxTest"> | string
+    providerReference?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerStatus?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    providerMessage?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemId?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    voucherCiphertext?: StringNullableFilter<"AdminGiftCardSandboxTest"> | string | null
+    redeemDetails?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    providerMetadata?: JsonNullableFilter<"AdminGiftCardSandboxTest">
+    createdAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    updatedAt?: DateTimeFilter<"AdminGiftCardSandboxTest"> | Date | string
+    completedAt?: DateTimeNullableFilter<"AdminGiftCardSandboxTest"> | Date | string | null
+  }
+
   export type SupportTicketUpsertWithWhereUniqueWithoutUserInput = {
     where: SupportTicketWhereUniqueInput
     update: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
@@ -43620,6 +45663,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -43663,6 +45707,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -43722,6 +45767,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -43765,6 +45811,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -43808,6 +45855,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -43851,6 +45899,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -43910,6 +45959,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -43953,6 +46003,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -43996,6 +46047,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -44039,6 +46091,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -44098,6 +46151,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -44141,6 +46195,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -44184,6 +46239,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -44227,6 +46283,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -44616,6 +46673,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -44659,6 +46717,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -45633,6 +47692,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -45676,6 +47736,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -45864,6 +47925,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -45907,6 +47969,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -46097,6 +48160,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -46140,6 +48204,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -46573,6 +48638,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -46616,6 +48682,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -47319,6 +49386,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -47362,6 +49430,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -47777,6 +49846,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -47820,6 +49890,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -48246,6 +50317,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -48289,6 +50361,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -48514,6 +50587,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -48557,6 +50631,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -48722,6 +50797,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -48765,6 +50841,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -48943,6 +51020,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -48986,6 +51064,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -49378,6 +51457,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -49421,6 +51501,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -49533,6 +51614,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -49576,6 +51658,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -49678,6 +51761,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -49721,6 +51805,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -49862,6 +51947,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -49905,6 +51991,7 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -50006,6 +52093,198 @@ export namespace Prisma {
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
+  export type UserCreateWithoutAdminGiftCardSandboxTestsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutAdminGiftCardSandboxTestsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutAdminGiftCardSandboxTestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedCreateWithoutAdminGiftCardSandboxTestsInput>
+  }
+
+  export type UserUpsertWithoutAdminGiftCardSandboxTestsInput = {
+    update: XOR<UserUpdateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedUpdateWithoutAdminGiftCardSandboxTestsInput>
+    create: XOR<UserCreateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedCreateWithoutAdminGiftCardSandboxTestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAdminGiftCardSandboxTestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAdminGiftCardSandboxTestsInput, UserUncheckedUpdateWithoutAdminGiftCardSandboxTestsInput>
+  }
+
+  export type UserUpdateWithoutAdminGiftCardSandboxTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAdminGiftCardSandboxTestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
   export type UserCreateWithoutSupportTicketsInput = {
     id?: string
     email: string
@@ -50043,6 +52322,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
     uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
@@ -50086,6 +52366,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
@@ -50134,6 +52415,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
     uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
@@ -50177,6 +52459,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
@@ -50270,6 +52553,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
     uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
@@ -50313,6 +52597,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
@@ -50367,6 +52652,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
     uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
@@ -50410,6 +52696,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
@@ -50506,6 +52793,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
@@ -50549,6 +52837,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
@@ -50687,6 +52976,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
@@ -50730,6 +53020,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
@@ -50818,6 +53109,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -50861,6 +53153,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -50909,6 +53202,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -50952,6 +53246,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -51046,6 +53341,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -51089,6 +53385,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -51143,6 +53440,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -51186,6 +53484,7 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -51383,6 +53682,30 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestCreateManyAdminUserInput = {
+    id?: string
+    idempotencyKey: string
+    reference: string
+    providerProductId: string
+    productName?: string | null
+    countryCode?: string | null
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    quantity?: number
+    recipientEmail: string
+    status?: string
+    providerReference?: string | null
+    providerStatus?: string | null
+    providerMessage?: string | null
+    redeemId?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -52056,6 +54379,78 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUpdateWithoutAdminUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedUpdateWithoutAdminUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    recipientEmail?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

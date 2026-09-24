@@ -3,6 +3,8 @@ import {
   BuyGiftCardCatalogFilters,
   BuyGiftCardCatalogProduct,
   BuyGiftCardProvider,
+  BuyGiftCardProviderPurchase,
+  BuyGiftCardPurchaseInput,
 } from './buy-gift-card-provider.interface';
 import { TopupmateClient } from './topupmate.client';
 
@@ -15,11 +17,53 @@ export class TopupmateProvider implements BuyGiftCardProvider {
     return this.normalizeCatalog(response);
   }
 
+  async purchase(input: BuyGiftCardPurchaseInput): Promise<BuyGiftCardProviderPurchase> {
+    return this.normalizePurchase(await this.client.purchase(input));
+  }
+
+  async retrieveVoucher(reference: string): Promise<BuyGiftCardProviderPurchase> {
+    return this.normalizePurchase(await this.client.retrieveVoucher(reference));
+  }
+
   private normalizeCatalog(response: unknown): BuyGiftCardCatalogProduct[] {
     const rows = this.extractRows(response);
     return rows
       .map((row) => this.normalizeProduct(row))
       .filter((product): product is BuyGiftCardCatalogProduct => product !== null);
+  }
+
+  private normalizePurchase(response: unknown): BuyGiftCardProviderPurchase {
+    const root = this.isRecord(response) ? response : {};
+    const data = this.isRecord(root.data) ? root.data : this.isRecord(root.msg) ? root.msg : root;
+    const voucherCode = this.stringValue(data, ['redeemCode', 'redeem_code', 'voucherCode', 'voucher_code', 'code']);
+    const redeemDetails = this.isRecord(data.redeem_details) ? data.redeem_details :
+      this.isRecord(data.redeemDetails) ? data.redeemDetails : null;
+    return {
+      providerReference: this.stringValue(data, ['reference', 'ref', 'transactionReference', 'transaction_reference', 'id']),
+      providerStatus: this.stringValue(data, ['status', 'state']),
+      providerMessage: this.stringValue(root, ['message', 'msg', 'detail']) ?? this.stringValue(data, ['message', 'msg', 'detail']),
+      redeemId: this.stringValue(data, ['redeemId', 'redeem_id']),
+      voucherCode,
+      redeemDetails,
+      providerAmount: this.stringValue(data, ['amount', 'senderAmount', 'sender_amount']),
+      providerMetadata: this.sanitize(root),
+    };
+  }
+
+  private sanitize(value: unknown): Record<string, unknown> {
+    if (Array.isArray(value)) return { items: value.map((item) => this.sanitizeValue(item)) };
+    return this.isRecord(value) ? this.sanitizeRecord(value) : {};
+  }
+
+  private sanitizeValue(value: unknown): unknown {
+    return this.isRecord(value) ? this.sanitizeRecord(value) : Array.isArray(value) ? value.map((item) => this.sanitizeValue(item)) : value;
+  }
+
+  private sanitizeRecord(value: Record<string, unknown>): Record<string, unknown> {
+    return Object.fromEntries(Object.entries(value).flatMap(([key, child]) => {
+      if (/code|voucher|token|secret|password|authorization/i.test(key)) return [];
+      return [[key, this.sanitizeValue(child)]];
+    }));
   }
 
   private extractRows(response: unknown): Record<string, unknown>[] {

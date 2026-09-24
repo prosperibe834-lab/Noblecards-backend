@@ -1,13 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { AdminGiftCardsGuard } from './admin-gift-cards.guard';
-import { BulkGiftCardRateAdjustmentDto, CreateGiftCardRateAdjustmentDto, UpdateGiftCardRateAdjustmentDto } from './gift-cards.dto';
+import { AdminGiftCardSandboxTestDto, BulkGiftCardRateAdjustmentDto, CreateGiftCardRateAdjustmentDto, UpdateGiftCardRateAdjustmentDto } from './gift-cards.dto';
+import { AdminGiftCardSandboxService } from './admin-gift-card-sandbox.service';
 import { GiftCardsService } from './gift-cards.service';
 
 @Controller('admin/gift-cards')
 @UseGuards(AuthGuard, AdminGiftCardsGuard)
 export class AdminGiftCardsController {
-  constructor(private readonly giftCards: GiftCardsService) {}
+  constructor(
+    private readonly giftCards: GiftCardsService,
+    private readonly sandbox: AdminGiftCardSandboxService,
+  ) {}
+
+  @Post('buy/sandbox-test')
+  runSandboxTest(@Req() request: { user: { userId: string } }, @Body() dto: AdminGiftCardSandboxTestDto) {
+    return this.sandbox.purchase(request.user.userId, dto);
+  }
 
   @Get('sales')
   getSales(@Query() query: Record<string, string | undefined>) {

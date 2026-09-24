@@ -5,8 +5,12 @@ const bcrypt = require('bcrypt');
 (async () => {
   const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
   const prisma = new PrismaClient({ adapter });
-  const email = 'browser.admin@example.com';
-  const passwordHash = await bcrypt.hash('AdminPass123!', 12);
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!email || !password) {
+    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set.');
+  }
+  const passwordHash = await bcrypt.hash(password, 12);
   const user = await prisma.user.upsert({
     where: { email },
     update: { passwordHash, isEmailVerified: true, isActive: true, role: 'ADMIN' },

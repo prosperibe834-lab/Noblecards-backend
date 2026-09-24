@@ -31,6 +31,20 @@ describe('TopupmateClient', () => {
     );
   });
 
+  it('submits a purchase and retrieves a voucher with the documented endpoints', async () => {
+    const fetchMock = jest.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response(201, { status: 'success', ref: 'nc-ref' }))
+      .mockResolvedValueOnce(response(200, { status: 'success', redeemId: 'redeem-1' }));
+    const client = new TopupmateClient(config);
+
+    await expect(client.purchase({ productId: '14971', amount: 10, email: 'buyer@example.com', sender: 'Buyer', units: 1, reference: 'nc-ref' })).resolves.toEqual({ status: 'success', ref: 'nc-ref' });
+    await expect(client.retrieveVoucher('nc-ref')).resolves.toEqual({ status: 'success', redeemId: 'redeem-1' });
+    expect(fetchMock.mock.calls[0][0]).toBe('https://connect.topupmate.com/api/giftcard/');
+    expect(fetchMock.mock.calls[0][1].method).toBe('POST');
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ product: 14971, amount: 10, email: 'buyer@example.com', sender: 'Buyer', units: 1, ref: 'nc-ref' });
+    expect(fetchMock.mock.calls[1][0]).toBe('https://connect.topupmate.com/api/giftcard/redeem/?ref=nc-ref');
+  });
+
   it.each([400, 401, 403, 404, 409, 422, 429, 500, 503])('maps provider HTTP %s without exposing the API key', async (status) => {
     jest.spyOn(global, 'fetch').mockResolvedValue(response(status, { message: 'provider failure', secret: 'must-not-return' }));
     const client = new TopupmateClient(config);
@@ -42,6 +56,20 @@ describe('TopupmateClient', () => {
       expect(error).toBeInstanceOf(BadGatewayException);
       expect(JSON.stringify(error)).not.toContain('test-topupmate-key');
     }
+  });
+
+  it('preserves Topupmate msg failures and nested provider messages', async () => {
+    jest.spyOn(global, 'fetch')
+      .mockResolvedValueOnce(response(400, { status: 'fail', msg: 'Insufficient balance fund your wallet and try again' }))
+      .mockResolvedValueOnce(response(422, { error: { message: 'Invalid denomination.' } }));
+    const client = new TopupmateClient(config);
+
+    await expect(client.getAvailableGiftCards({})).rejects.toMatchObject({
+      response: expect.objectContaining({ message: 'Insufficient balance fund your wallet and try again', providerStatus: 400 }),
+    });
+    await expect(client.getAvailableGiftCards({})).rejects.toMatchObject({
+      response: expect.objectContaining({ message: 'Invalid denomination.', providerStatus: 422 }),
+    });
   });
 
   it('fails closed when configuration is missing', async () => {
