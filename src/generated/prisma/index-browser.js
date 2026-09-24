@@ -433,6 +433,37 @@ exports.Prisma.GiftCardSellRateAdjustmentScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.GiftCardBuyRateAdjustmentScalarFieldEnum = {
+  id: 'id',
+  providerProductId: 'providerProductId',
+  brandName: 'brandName',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  minimumDenomination: 'minimumDenomination',
+  maximumDenomination: 'maximumDenomination',
+  adjustmentPercent: 'adjustmentPercent',
+  combinationKey: 'combinationKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GiftCardBuyBaseRateScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  providerProductId: 'providerProductId',
+  brandName: 'brandName',
+  countryCode: 'countryCode',
+  currencyCode: 'currencyCode',
+  minimumDenomination: 'minimumDenomination',
+  maximumDenomination: 'maximumDenomination',
+  ratePercent: 'ratePercent',
+  combinationKey: 'combinationKey',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   id: 'id',
   reference: 'reference',
@@ -453,6 +484,10 @@ exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   amount: 'amount',
   providerAmount: 'providerAmount',
   fee: 'fee',
+  baseBuyRatePercent: 'baseBuyRatePercent',
+  buyAdjustmentPercent: 'buyAdjustmentPercent',
+  buyAdjustmentAmount: 'buyAdjustmentAmount',
+  customerRatePercent: 'customerRatePercent',
   customerPrice: 'customerPrice',
   status: 'status',
   providerStatus: 'providerStatus',
@@ -731,6 +766,8 @@ exports.Prisma.ModelName = {
   ProviderWebhookEvent: 'ProviderWebhookEvent',
   GiftCardSale: 'GiftCardSale',
   GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+  GiftCardBuyRateAdjustment: 'GiftCardBuyRateAdjustment',
+  GiftCardBuyBaseRate: 'GiftCardBuyBaseRate',
   GiftCardPurchase: 'GiftCardPurchase',
   AdminGiftCardSandboxTest: 'AdminGiftCardSandboxTest',
   SupportTicket: 'SupportTicket',

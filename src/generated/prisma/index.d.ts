@@ -99,6 +99,16 @@ export type GiftCardSale = $Result.DefaultSelection<Prisma.$GiftCardSalePayload>
  */
 export type GiftCardSellRateAdjustment = $Result.DefaultSelection<Prisma.$GiftCardSellRateAdjustmentPayload>
 /**
+ * Model GiftCardBuyRateAdjustment
+ * 
+ */
+export type GiftCardBuyRateAdjustment = $Result.DefaultSelection<Prisma.$GiftCardBuyRateAdjustmentPayload>
+/**
+ * Model GiftCardBuyBaseRate
+ * 
+ */
+export type GiftCardBuyBaseRate = $Result.DefaultSelection<Prisma.$GiftCardBuyBaseRatePayload>
+/**
  * Model GiftCardPurchase
  * 
  */
@@ -701,6 +711,26 @@ export class PrismaClient<
   get giftCardSellRateAdjustment(): Prisma.GiftCardSellRateAdjustmentDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.giftCardBuyRateAdjustment`: Exposes CRUD operations for the **GiftCardBuyRateAdjustment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GiftCardBuyRateAdjustments
+    * const giftCardBuyRateAdjustments = await prisma.giftCardBuyRateAdjustment.findMany()
+    * ```
+    */
+  get giftCardBuyRateAdjustment(): Prisma.GiftCardBuyRateAdjustmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.giftCardBuyBaseRate`: Exposes CRUD operations for the **GiftCardBuyBaseRate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GiftCardBuyBaseRates
+    * const giftCardBuyBaseRates = await prisma.giftCardBuyBaseRate.findMany()
+    * ```
+    */
+  get giftCardBuyBaseRate(): Prisma.GiftCardBuyBaseRateDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.giftCardPurchase`: Exposes CRUD operations for the **GiftCardPurchase** model.
     * Example usage:
     * ```ts
@@ -1213,6 +1243,8 @@ export namespace Prisma {
     ProviderWebhookEvent: 'ProviderWebhookEvent',
     GiftCardSale: 'GiftCardSale',
     GiftCardSellRateAdjustment: 'GiftCardSellRateAdjustment',
+    GiftCardBuyRateAdjustment: 'GiftCardBuyRateAdjustment',
+    GiftCardBuyBaseRate: 'GiftCardBuyBaseRate',
     GiftCardPurchase: 'GiftCardPurchase',
     AdminGiftCardSandboxTest: 'AdminGiftCardSandboxTest',
     SupportTicket: 'SupportTicket',
@@ -1233,7 +1265,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2495,6 +2527,154 @@ export namespace Prisma {
           }
         }
       }
+      GiftCardBuyRateAdjustment: {
+        payload: Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>
+        fields: Prisma.GiftCardBuyRateAdjustmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GiftCardBuyRateAdjustmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GiftCardBuyRateAdjustmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          findFirst: {
+            args: Prisma.GiftCardBuyRateAdjustmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GiftCardBuyRateAdjustmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          findMany: {
+            args: Prisma.GiftCardBuyRateAdjustmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>[]
+          }
+          create: {
+            args: Prisma.GiftCardBuyRateAdjustmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          createMany: {
+            args: Prisma.GiftCardBuyRateAdjustmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GiftCardBuyRateAdjustmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>[]
+          }
+          delete: {
+            args: Prisma.GiftCardBuyRateAdjustmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          update: {
+            args: Prisma.GiftCardBuyRateAdjustmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.GiftCardBuyRateAdjustmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GiftCardBuyRateAdjustmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GiftCardBuyRateAdjustmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.GiftCardBuyRateAdjustmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyRateAdjustmentPayload>
+          }
+          aggregate: {
+            args: Prisma.GiftCardBuyRateAdjustmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGiftCardBuyRateAdjustment>
+          }
+          groupBy: {
+            args: Prisma.GiftCardBuyRateAdjustmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardBuyRateAdjustmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GiftCardBuyRateAdjustmentCountArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardBuyRateAdjustmentCountAggregateOutputType> | number
+          }
+        }
+      }
+      GiftCardBuyBaseRate: {
+        payload: Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>
+        fields: Prisma.GiftCardBuyBaseRateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GiftCardBuyBaseRateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GiftCardBuyBaseRateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          findFirst: {
+            args: Prisma.GiftCardBuyBaseRateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GiftCardBuyBaseRateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          findMany: {
+            args: Prisma.GiftCardBuyBaseRateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>[]
+          }
+          create: {
+            args: Prisma.GiftCardBuyBaseRateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          createMany: {
+            args: Prisma.GiftCardBuyBaseRateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GiftCardBuyBaseRateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>[]
+          }
+          delete: {
+            args: Prisma.GiftCardBuyBaseRateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          update: {
+            args: Prisma.GiftCardBuyBaseRateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          deleteMany: {
+            args: Prisma.GiftCardBuyBaseRateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GiftCardBuyBaseRateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GiftCardBuyBaseRateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>[]
+          }
+          upsert: {
+            args: Prisma.GiftCardBuyBaseRateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GiftCardBuyBaseRatePayload>
+          }
+          aggregate: {
+            args: Prisma.GiftCardBuyBaseRateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGiftCardBuyBaseRate>
+          }
+          groupBy: {
+            args: Prisma.GiftCardBuyBaseRateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardBuyBaseRateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GiftCardBuyBaseRateCountArgs<ExtArgs>
+            result: $Utils.Optional<GiftCardBuyBaseRateCountAggregateOutputType> | number
+          }
+        }
+      }
       GiftCardPurchase: {
         payload: Prisma.$GiftCardPurchasePayload<ExtArgs>
         fields: Prisma.GiftCardPurchaseFieldRefs
@@ -3005,6 +3185,8 @@ export namespace Prisma {
     providerWebhookEvent?: ProviderWebhookEventOmit
     giftCardSale?: GiftCardSaleOmit
     giftCardSellRateAdjustment?: GiftCardSellRateAdjustmentOmit
+    giftCardBuyRateAdjustment?: GiftCardBuyRateAdjustmentOmit
+    giftCardBuyBaseRate?: GiftCardBuyBaseRateOmit
     giftCardPurchase?: GiftCardPurchaseOmit
     adminGiftCardSandboxTest?: AdminGiftCardSandboxTestOmit
     supportTicket?: SupportTicketOmit
@@ -25803,6 +25985,2285 @@ export namespace Prisma {
 
 
   /**
+   * Model GiftCardBuyRateAdjustment
+   */
+
+  export type AggregateGiftCardBuyRateAdjustment = {
+    _count: GiftCardBuyRateAdjustmentCountAggregateOutputType | null
+    _avg: GiftCardBuyRateAdjustmentAvgAggregateOutputType | null
+    _sum: GiftCardBuyRateAdjustmentSumAggregateOutputType | null
+    _min: GiftCardBuyRateAdjustmentMinAggregateOutputType | null
+    _max: GiftCardBuyRateAdjustmentMaxAggregateOutputType | null
+  }
+
+  export type GiftCardBuyRateAdjustmentAvgAggregateOutputType = {
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    adjustmentPercent: Decimal | null
+  }
+
+  export type GiftCardBuyRateAdjustmentSumAggregateOutputType = {
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    adjustmentPercent: Decimal | null
+  }
+
+  export type GiftCardBuyRateAdjustmentMinAggregateOutputType = {
+    id: string | null
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    adjustmentPercent: Decimal | null
+    combinationKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GiftCardBuyRateAdjustmentMaxAggregateOutputType = {
+    id: string | null
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    adjustmentPercent: Decimal | null
+    combinationKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GiftCardBuyRateAdjustmentCountAggregateOutputType = {
+    id: number
+    providerProductId: number
+    brandName: number
+    countryCode: number
+    currencyCode: number
+    minimumDenomination: number
+    maximumDenomination: number
+    adjustmentPercent: number
+    combinationKey: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GiftCardBuyRateAdjustmentAvgAggregateInputType = {
+    minimumDenomination?: true
+    maximumDenomination?: true
+    adjustmentPercent?: true
+  }
+
+  export type GiftCardBuyRateAdjustmentSumAggregateInputType = {
+    minimumDenomination?: true
+    maximumDenomination?: true
+    adjustmentPercent?: true
+  }
+
+  export type GiftCardBuyRateAdjustmentMinAggregateInputType = {
+    id?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    adjustmentPercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GiftCardBuyRateAdjustmentMaxAggregateInputType = {
+    id?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    adjustmentPercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GiftCardBuyRateAdjustmentCountAggregateInputType = {
+    id?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    adjustmentPercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GiftCardBuyRateAdjustmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardBuyRateAdjustment to aggregate.
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyRateAdjustments to fetch.
+     */
+    orderBy?: GiftCardBuyRateAdjustmentOrderByWithRelationInput | GiftCardBuyRateAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GiftCardBuyRateAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyRateAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyRateAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GiftCardBuyRateAdjustments
+    **/
+    _count?: true | GiftCardBuyRateAdjustmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GiftCardBuyRateAdjustmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GiftCardBuyRateAdjustmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GiftCardBuyRateAdjustmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GiftCardBuyRateAdjustmentMaxAggregateInputType
+  }
+
+  export type GetGiftCardBuyRateAdjustmentAggregateType<T extends GiftCardBuyRateAdjustmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateGiftCardBuyRateAdjustment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGiftCardBuyRateAdjustment[P]>
+      : GetScalarType<T[P], AggregateGiftCardBuyRateAdjustment[P]>
+  }
+
+
+
+
+  export type GiftCardBuyRateAdjustmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    orderBy?: GiftCardBuyRateAdjustmentOrderByWithAggregationInput | GiftCardBuyRateAdjustmentOrderByWithAggregationInput[]
+    by: GiftCardBuyRateAdjustmentScalarFieldEnum[] | GiftCardBuyRateAdjustmentScalarFieldEnum
+    having?: GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GiftCardBuyRateAdjustmentCountAggregateInputType | true
+    _avg?: GiftCardBuyRateAdjustmentAvgAggregateInputType
+    _sum?: GiftCardBuyRateAdjustmentSumAggregateInputType
+    _min?: GiftCardBuyRateAdjustmentMinAggregateInputType
+    _max?: GiftCardBuyRateAdjustmentMaxAggregateInputType
+  }
+
+  export type GiftCardBuyRateAdjustmentGroupByOutputType = {
+    id: string
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    adjustmentPercent: Decimal
+    combinationKey: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: GiftCardBuyRateAdjustmentCountAggregateOutputType | null
+    _avg: GiftCardBuyRateAdjustmentAvgAggregateOutputType | null
+    _sum: GiftCardBuyRateAdjustmentSumAggregateOutputType | null
+    _min: GiftCardBuyRateAdjustmentMinAggregateOutputType | null
+    _max: GiftCardBuyRateAdjustmentMaxAggregateOutputType | null
+  }
+
+  type GetGiftCardBuyRateAdjustmentGroupByPayload<T extends GiftCardBuyRateAdjustmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GiftCardBuyRateAdjustmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GiftCardBuyRateAdjustmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GiftCardBuyRateAdjustmentGroupByOutputType[P]>
+            : GetScalarType<T[P], GiftCardBuyRateAdjustmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GiftCardBuyRateAdjustmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    adjustmentPercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyRateAdjustment"]>
+
+  export type GiftCardBuyRateAdjustmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    adjustmentPercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyRateAdjustment"]>
+
+  export type GiftCardBuyRateAdjustmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    adjustmentPercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyRateAdjustment"]>
+
+  export type GiftCardBuyRateAdjustmentSelectScalar = {
+    id?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    adjustmentPercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GiftCardBuyRateAdjustmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "providerProductId" | "brandName" | "countryCode" | "currencyCode" | "minimumDenomination" | "maximumDenomination" | "adjustmentPercent" | "combinationKey" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["giftCardBuyRateAdjustment"]>
+
+  export type $GiftCardBuyRateAdjustmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GiftCardBuyRateAdjustment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      providerProductId: string | null
+      brandName: string | null
+      countryCode: string | null
+      currencyCode: string | null
+      minimumDenomination: Prisma.Decimal | null
+      maximumDenomination: Prisma.Decimal | null
+      adjustmentPercent: Prisma.Decimal
+      combinationKey: string
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["giftCardBuyRateAdjustment"]>
+    composites: {}
+  }
+
+  type GiftCardBuyRateAdjustmentGetPayload<S extends boolean | null | undefined | GiftCardBuyRateAdjustmentDefaultArgs> = $Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload, S>
+
+  type GiftCardBuyRateAdjustmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GiftCardBuyRateAdjustmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GiftCardBuyRateAdjustmentCountAggregateInputType | true
+    }
+
+  export interface GiftCardBuyRateAdjustmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GiftCardBuyRateAdjustment'], meta: { name: 'GiftCardBuyRateAdjustment' } }
+    /**
+     * Find zero or one GiftCardBuyRateAdjustment that matches the filter.
+     * @param {GiftCardBuyRateAdjustmentFindUniqueArgs} args - Arguments to find a GiftCardBuyRateAdjustment
+     * @example
+     * // Get one GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GiftCardBuyRateAdjustmentFindUniqueArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentFindUniqueArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GiftCardBuyRateAdjustment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GiftCardBuyRateAdjustmentFindUniqueOrThrowArgs} args - Arguments to find a GiftCardBuyRateAdjustment
+     * @example
+     * // Get one GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GiftCardBuyRateAdjustmentFindUniqueOrThrowArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardBuyRateAdjustment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentFindFirstArgs} args - Arguments to find a GiftCardBuyRateAdjustment
+     * @example
+     * // Get one GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GiftCardBuyRateAdjustmentFindFirstArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentFindFirstArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardBuyRateAdjustment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentFindFirstOrThrowArgs} args - Arguments to find a GiftCardBuyRateAdjustment
+     * @example
+     * // Get one GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GiftCardBuyRateAdjustmentFindFirstOrThrowArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GiftCardBuyRateAdjustments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustments = await prisma.giftCardBuyRateAdjustment.findMany()
+     * 
+     * // Get first 10 GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustments = await prisma.giftCardBuyRateAdjustment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const giftCardBuyRateAdjustmentWithIdOnly = await prisma.giftCardBuyRateAdjustment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GiftCardBuyRateAdjustmentFindManyArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GiftCardBuyRateAdjustment.
+     * @param {GiftCardBuyRateAdjustmentCreateArgs} args - Arguments to create a GiftCardBuyRateAdjustment.
+     * @example
+     * // Create one GiftCardBuyRateAdjustment
+     * const GiftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.create({
+     *   data: {
+     *     // ... data to create a GiftCardBuyRateAdjustment
+     *   }
+     * })
+     * 
+     */
+    create<T extends GiftCardBuyRateAdjustmentCreateArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentCreateArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GiftCardBuyRateAdjustments.
+     * @param {GiftCardBuyRateAdjustmentCreateManyArgs} args - Arguments to create many GiftCardBuyRateAdjustments.
+     * @example
+     * // Create many GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GiftCardBuyRateAdjustmentCreateManyArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GiftCardBuyRateAdjustments and returns the data saved in the database.
+     * @param {GiftCardBuyRateAdjustmentCreateManyAndReturnArgs} args - Arguments to create many GiftCardBuyRateAdjustments.
+     * @example
+     * // Create many GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GiftCardBuyRateAdjustments and only return the `id`
+     * const giftCardBuyRateAdjustmentWithIdOnly = await prisma.giftCardBuyRateAdjustment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GiftCardBuyRateAdjustmentCreateManyAndReturnArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GiftCardBuyRateAdjustment.
+     * @param {GiftCardBuyRateAdjustmentDeleteArgs} args - Arguments to delete one GiftCardBuyRateAdjustment.
+     * @example
+     * // Delete one GiftCardBuyRateAdjustment
+     * const GiftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.delete({
+     *   where: {
+     *     // ... filter to delete one GiftCardBuyRateAdjustment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GiftCardBuyRateAdjustmentDeleteArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentDeleteArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GiftCardBuyRateAdjustment.
+     * @param {GiftCardBuyRateAdjustmentUpdateArgs} args - Arguments to update one GiftCardBuyRateAdjustment.
+     * @example
+     * // Update one GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GiftCardBuyRateAdjustmentUpdateArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentUpdateArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GiftCardBuyRateAdjustments.
+     * @param {GiftCardBuyRateAdjustmentDeleteManyArgs} args - Arguments to filter GiftCardBuyRateAdjustments to delete.
+     * @example
+     * // Delete a few GiftCardBuyRateAdjustments
+     * const { count } = await prisma.giftCardBuyRateAdjustment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GiftCardBuyRateAdjustmentDeleteManyArgs>(args?: SelectSubset<T, GiftCardBuyRateAdjustmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardBuyRateAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GiftCardBuyRateAdjustmentUpdateManyArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardBuyRateAdjustments and returns the data updated in the database.
+     * @param {GiftCardBuyRateAdjustmentUpdateManyAndReturnArgs} args - Arguments to update many GiftCardBuyRateAdjustments.
+     * @example
+     * // Update many GiftCardBuyRateAdjustments
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GiftCardBuyRateAdjustments and only return the `id`
+     * const giftCardBuyRateAdjustmentWithIdOnly = await prisma.giftCardBuyRateAdjustment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GiftCardBuyRateAdjustmentUpdateManyAndReturnArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GiftCardBuyRateAdjustment.
+     * @param {GiftCardBuyRateAdjustmentUpsertArgs} args - Arguments to update or create a GiftCardBuyRateAdjustment.
+     * @example
+     * // Update or create a GiftCardBuyRateAdjustment
+     * const giftCardBuyRateAdjustment = await prisma.giftCardBuyRateAdjustment.upsert({
+     *   create: {
+     *     // ... data to create a GiftCardBuyRateAdjustment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GiftCardBuyRateAdjustment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GiftCardBuyRateAdjustmentUpsertArgs>(args: SelectSubset<T, GiftCardBuyRateAdjustmentUpsertArgs<ExtArgs>>): Prisma__GiftCardBuyRateAdjustmentClient<$Result.GetResult<Prisma.$GiftCardBuyRateAdjustmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GiftCardBuyRateAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentCountArgs} args - Arguments to filter GiftCardBuyRateAdjustments to count.
+     * @example
+     * // Count the number of GiftCardBuyRateAdjustments
+     * const count = await prisma.giftCardBuyRateAdjustment.count({
+     *   where: {
+     *     // ... the filter for the GiftCardBuyRateAdjustments we want to count
+     *   }
+     * })
+    **/
+    count<T extends GiftCardBuyRateAdjustmentCountArgs>(
+      args?: Subset<T, GiftCardBuyRateAdjustmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GiftCardBuyRateAdjustmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GiftCardBuyRateAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GiftCardBuyRateAdjustmentAggregateArgs>(args: Subset<T, GiftCardBuyRateAdjustmentAggregateArgs>): Prisma.PrismaPromise<GetGiftCardBuyRateAdjustmentAggregateType<T>>
+
+    /**
+     * Group by GiftCardBuyRateAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyRateAdjustmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GiftCardBuyRateAdjustmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GiftCardBuyRateAdjustmentGroupByArgs['orderBy'] }
+        : { orderBy?: GiftCardBuyRateAdjustmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GiftCardBuyRateAdjustmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGiftCardBuyRateAdjustmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GiftCardBuyRateAdjustment model
+   */
+  readonly fields: GiftCardBuyRateAdjustmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GiftCardBuyRateAdjustment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GiftCardBuyRateAdjustmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GiftCardBuyRateAdjustment model
+   */
+  interface GiftCardBuyRateAdjustmentFieldRefs {
+    readonly id: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly providerProductId: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly brandName: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly countryCode: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly currencyCode: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly minimumDenomination: FieldRef<"GiftCardBuyRateAdjustment", 'Decimal'>
+    readonly maximumDenomination: FieldRef<"GiftCardBuyRateAdjustment", 'Decimal'>
+    readonly adjustmentPercent: FieldRef<"GiftCardBuyRateAdjustment", 'Decimal'>
+    readonly combinationKey: FieldRef<"GiftCardBuyRateAdjustment", 'String'>
+    readonly isActive: FieldRef<"GiftCardBuyRateAdjustment", 'Boolean'>
+    readonly createdAt: FieldRef<"GiftCardBuyRateAdjustment", 'DateTime'>
+    readonly updatedAt: FieldRef<"GiftCardBuyRateAdjustment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GiftCardBuyRateAdjustment findUnique
+   */
+  export type GiftCardBuyRateAdjustmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyRateAdjustment to fetch.
+     */
+    where: GiftCardBuyRateAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment findUniqueOrThrow
+   */
+  export type GiftCardBuyRateAdjustmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyRateAdjustment to fetch.
+     */
+    where: GiftCardBuyRateAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment findFirst
+   */
+  export type GiftCardBuyRateAdjustmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyRateAdjustment to fetch.
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyRateAdjustments to fetch.
+     */
+    orderBy?: GiftCardBuyRateAdjustmentOrderByWithRelationInput | GiftCardBuyRateAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardBuyRateAdjustments.
+     */
+    cursor?: GiftCardBuyRateAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyRateAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyRateAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyRateAdjustments.
+     */
+    distinct?: GiftCardBuyRateAdjustmentScalarFieldEnum | GiftCardBuyRateAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment findFirstOrThrow
+   */
+  export type GiftCardBuyRateAdjustmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyRateAdjustment to fetch.
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyRateAdjustments to fetch.
+     */
+    orderBy?: GiftCardBuyRateAdjustmentOrderByWithRelationInput | GiftCardBuyRateAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardBuyRateAdjustments.
+     */
+    cursor?: GiftCardBuyRateAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyRateAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyRateAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyRateAdjustments.
+     */
+    distinct?: GiftCardBuyRateAdjustmentScalarFieldEnum | GiftCardBuyRateAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment findMany
+   */
+  export type GiftCardBuyRateAdjustmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyRateAdjustments to fetch.
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyRateAdjustments to fetch.
+     */
+    orderBy?: GiftCardBuyRateAdjustmentOrderByWithRelationInput | GiftCardBuyRateAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GiftCardBuyRateAdjustments.
+     */
+    cursor?: GiftCardBuyRateAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyRateAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyRateAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyRateAdjustments.
+     */
+    distinct?: GiftCardBuyRateAdjustmentScalarFieldEnum | GiftCardBuyRateAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment create
+   */
+  export type GiftCardBuyRateAdjustmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a GiftCardBuyRateAdjustment.
+     */
+    data: XOR<GiftCardBuyRateAdjustmentCreateInput, GiftCardBuyRateAdjustmentUncheckedCreateInput>
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment createMany
+   */
+  export type GiftCardBuyRateAdjustmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GiftCardBuyRateAdjustments.
+     */
+    data: GiftCardBuyRateAdjustmentCreateManyInput | GiftCardBuyRateAdjustmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment createManyAndReturn
+   */
+  export type GiftCardBuyRateAdjustmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many GiftCardBuyRateAdjustments.
+     */
+    data: GiftCardBuyRateAdjustmentCreateManyInput | GiftCardBuyRateAdjustmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment update
+   */
+  export type GiftCardBuyRateAdjustmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a GiftCardBuyRateAdjustment.
+     */
+    data: XOR<GiftCardBuyRateAdjustmentUpdateInput, GiftCardBuyRateAdjustmentUncheckedUpdateInput>
+    /**
+     * Choose, which GiftCardBuyRateAdjustment to update.
+     */
+    where: GiftCardBuyRateAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment updateMany
+   */
+  export type GiftCardBuyRateAdjustmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GiftCardBuyRateAdjustments.
+     */
+    data: XOR<GiftCardBuyRateAdjustmentUpdateManyMutationInput, GiftCardBuyRateAdjustmentUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardBuyRateAdjustments to update
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * Limit how many GiftCardBuyRateAdjustments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment updateManyAndReturn
+   */
+  export type GiftCardBuyRateAdjustmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data used to update GiftCardBuyRateAdjustments.
+     */
+    data: XOR<GiftCardBuyRateAdjustmentUpdateManyMutationInput, GiftCardBuyRateAdjustmentUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardBuyRateAdjustments to update
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * Limit how many GiftCardBuyRateAdjustments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment upsert
+   */
+  export type GiftCardBuyRateAdjustmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the GiftCardBuyRateAdjustment to update in case it exists.
+     */
+    where: GiftCardBuyRateAdjustmentWhereUniqueInput
+    /**
+     * In case the GiftCardBuyRateAdjustment found by the `where` argument doesn't exist, create a new GiftCardBuyRateAdjustment with this data.
+     */
+    create: XOR<GiftCardBuyRateAdjustmentCreateInput, GiftCardBuyRateAdjustmentUncheckedCreateInput>
+    /**
+     * In case the GiftCardBuyRateAdjustment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GiftCardBuyRateAdjustmentUpdateInput, GiftCardBuyRateAdjustmentUncheckedUpdateInput>
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment delete
+   */
+  export type GiftCardBuyRateAdjustmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter which GiftCardBuyRateAdjustment to delete.
+     */
+    where: GiftCardBuyRateAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment deleteMany
+   */
+  export type GiftCardBuyRateAdjustmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardBuyRateAdjustments to delete
+     */
+    where?: GiftCardBuyRateAdjustmentWhereInput
+    /**
+     * Limit how many GiftCardBuyRateAdjustments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyRateAdjustment without action
+   */
+  export type GiftCardBuyRateAdjustmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyRateAdjustment
+     */
+    select?: GiftCardBuyRateAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyRateAdjustment
+     */
+    omit?: GiftCardBuyRateAdjustmentOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GiftCardBuyBaseRate
+   */
+
+  export type AggregateGiftCardBuyBaseRate = {
+    _count: GiftCardBuyBaseRateCountAggregateOutputType | null
+    _avg: GiftCardBuyBaseRateAvgAggregateOutputType | null
+    _sum: GiftCardBuyBaseRateSumAggregateOutputType | null
+    _min: GiftCardBuyBaseRateMinAggregateOutputType | null
+    _max: GiftCardBuyBaseRateMaxAggregateOutputType | null
+  }
+
+  export type GiftCardBuyBaseRateAvgAggregateOutputType = {
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    ratePercent: Decimal | null
+  }
+
+  export type GiftCardBuyBaseRateSumAggregateOutputType = {
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    ratePercent: Decimal | null
+  }
+
+  export type GiftCardBuyBaseRateMinAggregateOutputType = {
+    id: string | null
+    provider: string | null
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    ratePercent: Decimal | null
+    combinationKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GiftCardBuyBaseRateMaxAggregateOutputType = {
+    id: string | null
+    provider: string | null
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    ratePercent: Decimal | null
+    combinationKey: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GiftCardBuyBaseRateCountAggregateOutputType = {
+    id: number
+    provider: number
+    providerProductId: number
+    brandName: number
+    countryCode: number
+    currencyCode: number
+    minimumDenomination: number
+    maximumDenomination: number
+    ratePercent: number
+    combinationKey: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GiftCardBuyBaseRateAvgAggregateInputType = {
+    minimumDenomination?: true
+    maximumDenomination?: true
+    ratePercent?: true
+  }
+
+  export type GiftCardBuyBaseRateSumAggregateInputType = {
+    minimumDenomination?: true
+    maximumDenomination?: true
+    ratePercent?: true
+  }
+
+  export type GiftCardBuyBaseRateMinAggregateInputType = {
+    id?: true
+    provider?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    ratePercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GiftCardBuyBaseRateMaxAggregateInputType = {
+    id?: true
+    provider?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    ratePercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GiftCardBuyBaseRateCountAggregateInputType = {
+    id?: true
+    provider?: true
+    providerProductId?: true
+    brandName?: true
+    countryCode?: true
+    currencyCode?: true
+    minimumDenomination?: true
+    maximumDenomination?: true
+    ratePercent?: true
+    combinationKey?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GiftCardBuyBaseRateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardBuyBaseRate to aggregate.
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyBaseRates to fetch.
+     */
+    orderBy?: GiftCardBuyBaseRateOrderByWithRelationInput | GiftCardBuyBaseRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GiftCardBuyBaseRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyBaseRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyBaseRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GiftCardBuyBaseRates
+    **/
+    _count?: true | GiftCardBuyBaseRateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GiftCardBuyBaseRateAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GiftCardBuyBaseRateSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GiftCardBuyBaseRateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GiftCardBuyBaseRateMaxAggregateInputType
+  }
+
+  export type GetGiftCardBuyBaseRateAggregateType<T extends GiftCardBuyBaseRateAggregateArgs> = {
+        [P in keyof T & keyof AggregateGiftCardBuyBaseRate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGiftCardBuyBaseRate[P]>
+      : GetScalarType<T[P], AggregateGiftCardBuyBaseRate[P]>
+  }
+
+
+
+
+  export type GiftCardBuyBaseRateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GiftCardBuyBaseRateWhereInput
+    orderBy?: GiftCardBuyBaseRateOrderByWithAggregationInput | GiftCardBuyBaseRateOrderByWithAggregationInput[]
+    by: GiftCardBuyBaseRateScalarFieldEnum[] | GiftCardBuyBaseRateScalarFieldEnum
+    having?: GiftCardBuyBaseRateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GiftCardBuyBaseRateCountAggregateInputType | true
+    _avg?: GiftCardBuyBaseRateAvgAggregateInputType
+    _sum?: GiftCardBuyBaseRateSumAggregateInputType
+    _min?: GiftCardBuyBaseRateMinAggregateInputType
+    _max?: GiftCardBuyBaseRateMaxAggregateInputType
+  }
+
+  export type GiftCardBuyBaseRateGroupByOutputType = {
+    id: string
+    provider: string
+    providerProductId: string | null
+    brandName: string | null
+    countryCode: string | null
+    currencyCode: string | null
+    minimumDenomination: Decimal | null
+    maximumDenomination: Decimal | null
+    ratePercent: Decimal
+    combinationKey: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: GiftCardBuyBaseRateCountAggregateOutputType | null
+    _avg: GiftCardBuyBaseRateAvgAggregateOutputType | null
+    _sum: GiftCardBuyBaseRateSumAggregateOutputType | null
+    _min: GiftCardBuyBaseRateMinAggregateOutputType | null
+    _max: GiftCardBuyBaseRateMaxAggregateOutputType | null
+  }
+
+  type GetGiftCardBuyBaseRateGroupByPayload<T extends GiftCardBuyBaseRateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GiftCardBuyBaseRateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GiftCardBuyBaseRateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GiftCardBuyBaseRateGroupByOutputType[P]>
+            : GetScalarType<T[P], GiftCardBuyBaseRateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GiftCardBuyBaseRateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    ratePercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyBaseRate"]>
+
+  export type GiftCardBuyBaseRateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    ratePercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyBaseRate"]>
+
+  export type GiftCardBuyBaseRateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    ratePercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["giftCardBuyBaseRate"]>
+
+  export type GiftCardBuyBaseRateSelectScalar = {
+    id?: boolean
+    provider?: boolean
+    providerProductId?: boolean
+    brandName?: boolean
+    countryCode?: boolean
+    currencyCode?: boolean
+    minimumDenomination?: boolean
+    maximumDenomination?: boolean
+    ratePercent?: boolean
+    combinationKey?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GiftCardBuyBaseRateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "provider" | "providerProductId" | "brandName" | "countryCode" | "currencyCode" | "minimumDenomination" | "maximumDenomination" | "ratePercent" | "combinationKey" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["giftCardBuyBaseRate"]>
+
+  export type $GiftCardBuyBaseRatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GiftCardBuyBaseRate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      provider: string
+      providerProductId: string | null
+      brandName: string | null
+      countryCode: string | null
+      currencyCode: string | null
+      minimumDenomination: Prisma.Decimal | null
+      maximumDenomination: Prisma.Decimal | null
+      ratePercent: Prisma.Decimal
+      combinationKey: string
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["giftCardBuyBaseRate"]>
+    composites: {}
+  }
+
+  type GiftCardBuyBaseRateGetPayload<S extends boolean | null | undefined | GiftCardBuyBaseRateDefaultArgs> = $Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload, S>
+
+  type GiftCardBuyBaseRateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GiftCardBuyBaseRateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GiftCardBuyBaseRateCountAggregateInputType | true
+    }
+
+  export interface GiftCardBuyBaseRateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GiftCardBuyBaseRate'], meta: { name: 'GiftCardBuyBaseRate' } }
+    /**
+     * Find zero or one GiftCardBuyBaseRate that matches the filter.
+     * @param {GiftCardBuyBaseRateFindUniqueArgs} args - Arguments to find a GiftCardBuyBaseRate
+     * @example
+     * // Get one GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GiftCardBuyBaseRateFindUniqueArgs>(args: SelectSubset<T, GiftCardBuyBaseRateFindUniqueArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GiftCardBuyBaseRate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GiftCardBuyBaseRateFindUniqueOrThrowArgs} args - Arguments to find a GiftCardBuyBaseRate
+     * @example
+     * // Get one GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GiftCardBuyBaseRateFindUniqueOrThrowArgs>(args: SelectSubset<T, GiftCardBuyBaseRateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardBuyBaseRate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateFindFirstArgs} args - Arguments to find a GiftCardBuyBaseRate
+     * @example
+     * // Get one GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GiftCardBuyBaseRateFindFirstArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateFindFirstArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GiftCardBuyBaseRate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateFindFirstOrThrowArgs} args - Arguments to find a GiftCardBuyBaseRate
+     * @example
+     * // Get one GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GiftCardBuyBaseRateFindFirstOrThrowArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateFindFirstOrThrowArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GiftCardBuyBaseRates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GiftCardBuyBaseRates
+     * const giftCardBuyBaseRates = await prisma.giftCardBuyBaseRate.findMany()
+     * 
+     * // Get first 10 GiftCardBuyBaseRates
+     * const giftCardBuyBaseRates = await prisma.giftCardBuyBaseRate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const giftCardBuyBaseRateWithIdOnly = await prisma.giftCardBuyBaseRate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GiftCardBuyBaseRateFindManyArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GiftCardBuyBaseRate.
+     * @param {GiftCardBuyBaseRateCreateArgs} args - Arguments to create a GiftCardBuyBaseRate.
+     * @example
+     * // Create one GiftCardBuyBaseRate
+     * const GiftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.create({
+     *   data: {
+     *     // ... data to create a GiftCardBuyBaseRate
+     *   }
+     * })
+     * 
+     */
+    create<T extends GiftCardBuyBaseRateCreateArgs>(args: SelectSubset<T, GiftCardBuyBaseRateCreateArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GiftCardBuyBaseRates.
+     * @param {GiftCardBuyBaseRateCreateManyArgs} args - Arguments to create many GiftCardBuyBaseRates.
+     * @example
+     * // Create many GiftCardBuyBaseRates
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GiftCardBuyBaseRateCreateManyArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GiftCardBuyBaseRates and returns the data saved in the database.
+     * @param {GiftCardBuyBaseRateCreateManyAndReturnArgs} args - Arguments to create many GiftCardBuyBaseRates.
+     * @example
+     * // Create many GiftCardBuyBaseRates
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GiftCardBuyBaseRates and only return the `id`
+     * const giftCardBuyBaseRateWithIdOnly = await prisma.giftCardBuyBaseRate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GiftCardBuyBaseRateCreateManyAndReturnArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GiftCardBuyBaseRate.
+     * @param {GiftCardBuyBaseRateDeleteArgs} args - Arguments to delete one GiftCardBuyBaseRate.
+     * @example
+     * // Delete one GiftCardBuyBaseRate
+     * const GiftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.delete({
+     *   where: {
+     *     // ... filter to delete one GiftCardBuyBaseRate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GiftCardBuyBaseRateDeleteArgs>(args: SelectSubset<T, GiftCardBuyBaseRateDeleteArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GiftCardBuyBaseRate.
+     * @param {GiftCardBuyBaseRateUpdateArgs} args - Arguments to update one GiftCardBuyBaseRate.
+     * @example
+     * // Update one GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GiftCardBuyBaseRateUpdateArgs>(args: SelectSubset<T, GiftCardBuyBaseRateUpdateArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GiftCardBuyBaseRates.
+     * @param {GiftCardBuyBaseRateDeleteManyArgs} args - Arguments to filter GiftCardBuyBaseRates to delete.
+     * @example
+     * // Delete a few GiftCardBuyBaseRates
+     * const { count } = await prisma.giftCardBuyBaseRate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GiftCardBuyBaseRateDeleteManyArgs>(args?: SelectSubset<T, GiftCardBuyBaseRateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardBuyBaseRates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GiftCardBuyBaseRates
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GiftCardBuyBaseRateUpdateManyArgs>(args: SelectSubset<T, GiftCardBuyBaseRateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GiftCardBuyBaseRates and returns the data updated in the database.
+     * @param {GiftCardBuyBaseRateUpdateManyAndReturnArgs} args - Arguments to update many GiftCardBuyBaseRates.
+     * @example
+     * // Update many GiftCardBuyBaseRates
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GiftCardBuyBaseRates and only return the `id`
+     * const giftCardBuyBaseRateWithIdOnly = await prisma.giftCardBuyBaseRate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GiftCardBuyBaseRateUpdateManyAndReturnArgs>(args: SelectSubset<T, GiftCardBuyBaseRateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GiftCardBuyBaseRate.
+     * @param {GiftCardBuyBaseRateUpsertArgs} args - Arguments to update or create a GiftCardBuyBaseRate.
+     * @example
+     * // Update or create a GiftCardBuyBaseRate
+     * const giftCardBuyBaseRate = await prisma.giftCardBuyBaseRate.upsert({
+     *   create: {
+     *     // ... data to create a GiftCardBuyBaseRate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GiftCardBuyBaseRate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GiftCardBuyBaseRateUpsertArgs>(args: SelectSubset<T, GiftCardBuyBaseRateUpsertArgs<ExtArgs>>): Prisma__GiftCardBuyBaseRateClient<$Result.GetResult<Prisma.$GiftCardBuyBaseRatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GiftCardBuyBaseRates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateCountArgs} args - Arguments to filter GiftCardBuyBaseRates to count.
+     * @example
+     * // Count the number of GiftCardBuyBaseRates
+     * const count = await prisma.giftCardBuyBaseRate.count({
+     *   where: {
+     *     // ... the filter for the GiftCardBuyBaseRates we want to count
+     *   }
+     * })
+    **/
+    count<T extends GiftCardBuyBaseRateCountArgs>(
+      args?: Subset<T, GiftCardBuyBaseRateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GiftCardBuyBaseRateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GiftCardBuyBaseRate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GiftCardBuyBaseRateAggregateArgs>(args: Subset<T, GiftCardBuyBaseRateAggregateArgs>): Prisma.PrismaPromise<GetGiftCardBuyBaseRateAggregateType<T>>
+
+    /**
+     * Group by GiftCardBuyBaseRate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GiftCardBuyBaseRateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GiftCardBuyBaseRateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GiftCardBuyBaseRateGroupByArgs['orderBy'] }
+        : { orderBy?: GiftCardBuyBaseRateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GiftCardBuyBaseRateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGiftCardBuyBaseRateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GiftCardBuyBaseRate model
+   */
+  readonly fields: GiftCardBuyBaseRateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GiftCardBuyBaseRate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GiftCardBuyBaseRateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GiftCardBuyBaseRate model
+   */
+  interface GiftCardBuyBaseRateFieldRefs {
+    readonly id: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly provider: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly providerProductId: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly brandName: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly countryCode: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly currencyCode: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly minimumDenomination: FieldRef<"GiftCardBuyBaseRate", 'Decimal'>
+    readonly maximumDenomination: FieldRef<"GiftCardBuyBaseRate", 'Decimal'>
+    readonly ratePercent: FieldRef<"GiftCardBuyBaseRate", 'Decimal'>
+    readonly combinationKey: FieldRef<"GiftCardBuyBaseRate", 'String'>
+    readonly isActive: FieldRef<"GiftCardBuyBaseRate", 'Boolean'>
+    readonly createdAt: FieldRef<"GiftCardBuyBaseRate", 'DateTime'>
+    readonly updatedAt: FieldRef<"GiftCardBuyBaseRate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GiftCardBuyBaseRate findUnique
+   */
+  export type GiftCardBuyBaseRateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyBaseRate to fetch.
+     */
+    where: GiftCardBuyBaseRateWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyBaseRate findUniqueOrThrow
+   */
+  export type GiftCardBuyBaseRateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyBaseRate to fetch.
+     */
+    where: GiftCardBuyBaseRateWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyBaseRate findFirst
+   */
+  export type GiftCardBuyBaseRateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyBaseRate to fetch.
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyBaseRates to fetch.
+     */
+    orderBy?: GiftCardBuyBaseRateOrderByWithRelationInput | GiftCardBuyBaseRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardBuyBaseRates.
+     */
+    cursor?: GiftCardBuyBaseRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyBaseRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyBaseRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyBaseRates.
+     */
+    distinct?: GiftCardBuyBaseRateScalarFieldEnum | GiftCardBuyBaseRateScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyBaseRate findFirstOrThrow
+   */
+  export type GiftCardBuyBaseRateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyBaseRate to fetch.
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyBaseRates to fetch.
+     */
+    orderBy?: GiftCardBuyBaseRateOrderByWithRelationInput | GiftCardBuyBaseRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GiftCardBuyBaseRates.
+     */
+    cursor?: GiftCardBuyBaseRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyBaseRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyBaseRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyBaseRates.
+     */
+    distinct?: GiftCardBuyBaseRateScalarFieldEnum | GiftCardBuyBaseRateScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyBaseRate findMany
+   */
+  export type GiftCardBuyBaseRateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter, which GiftCardBuyBaseRates to fetch.
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GiftCardBuyBaseRates to fetch.
+     */
+    orderBy?: GiftCardBuyBaseRateOrderByWithRelationInput | GiftCardBuyBaseRateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GiftCardBuyBaseRates.
+     */
+    cursor?: GiftCardBuyBaseRateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GiftCardBuyBaseRates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GiftCardBuyBaseRates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GiftCardBuyBaseRates.
+     */
+    distinct?: GiftCardBuyBaseRateScalarFieldEnum | GiftCardBuyBaseRateScalarFieldEnum[]
+  }
+
+  /**
+   * GiftCardBuyBaseRate create
+   */
+  export type GiftCardBuyBaseRateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * The data needed to create a GiftCardBuyBaseRate.
+     */
+    data: XOR<GiftCardBuyBaseRateCreateInput, GiftCardBuyBaseRateUncheckedCreateInput>
+  }
+
+  /**
+   * GiftCardBuyBaseRate createMany
+   */
+  export type GiftCardBuyBaseRateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GiftCardBuyBaseRates.
+     */
+    data: GiftCardBuyBaseRateCreateManyInput | GiftCardBuyBaseRateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GiftCardBuyBaseRate createManyAndReturn
+   */
+  export type GiftCardBuyBaseRateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * The data used to create many GiftCardBuyBaseRates.
+     */
+    data: GiftCardBuyBaseRateCreateManyInput | GiftCardBuyBaseRateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GiftCardBuyBaseRate update
+   */
+  export type GiftCardBuyBaseRateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * The data needed to update a GiftCardBuyBaseRate.
+     */
+    data: XOR<GiftCardBuyBaseRateUpdateInput, GiftCardBuyBaseRateUncheckedUpdateInput>
+    /**
+     * Choose, which GiftCardBuyBaseRate to update.
+     */
+    where: GiftCardBuyBaseRateWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyBaseRate updateMany
+   */
+  export type GiftCardBuyBaseRateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GiftCardBuyBaseRates.
+     */
+    data: XOR<GiftCardBuyBaseRateUpdateManyMutationInput, GiftCardBuyBaseRateUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardBuyBaseRates to update
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * Limit how many GiftCardBuyBaseRates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyBaseRate updateManyAndReturn
+   */
+  export type GiftCardBuyBaseRateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * The data used to update GiftCardBuyBaseRates.
+     */
+    data: XOR<GiftCardBuyBaseRateUpdateManyMutationInput, GiftCardBuyBaseRateUncheckedUpdateManyInput>
+    /**
+     * Filter which GiftCardBuyBaseRates to update
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * Limit how many GiftCardBuyBaseRates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyBaseRate upsert
+   */
+  export type GiftCardBuyBaseRateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * The filter to search for the GiftCardBuyBaseRate to update in case it exists.
+     */
+    where: GiftCardBuyBaseRateWhereUniqueInput
+    /**
+     * In case the GiftCardBuyBaseRate found by the `where` argument doesn't exist, create a new GiftCardBuyBaseRate with this data.
+     */
+    create: XOR<GiftCardBuyBaseRateCreateInput, GiftCardBuyBaseRateUncheckedCreateInput>
+    /**
+     * In case the GiftCardBuyBaseRate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GiftCardBuyBaseRateUpdateInput, GiftCardBuyBaseRateUncheckedUpdateInput>
+  }
+
+  /**
+   * GiftCardBuyBaseRate delete
+   */
+  export type GiftCardBuyBaseRateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+    /**
+     * Filter which GiftCardBuyBaseRate to delete.
+     */
+    where: GiftCardBuyBaseRateWhereUniqueInput
+  }
+
+  /**
+   * GiftCardBuyBaseRate deleteMany
+   */
+  export type GiftCardBuyBaseRateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GiftCardBuyBaseRates to delete
+     */
+    where?: GiftCardBuyBaseRateWhereInput
+    /**
+     * Limit how many GiftCardBuyBaseRates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GiftCardBuyBaseRate without action
+   */
+  export type GiftCardBuyBaseRateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardBuyBaseRate
+     */
+    select?: GiftCardBuyBaseRateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardBuyBaseRate
+     */
+    omit?: GiftCardBuyBaseRateOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model GiftCardPurchase
    */
 
@@ -25819,6 +28280,10 @@ export namespace Prisma {
     amount: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
+    baseBuyRatePercent: Decimal | null
+    buyAdjustmentPercent: Decimal | null
+    buyAdjustmentAmount: Decimal | null
+    customerRatePercent: Decimal | null
     customerPrice: Decimal | null
   }
 
@@ -25827,6 +28292,10 @@ export namespace Prisma {
     amount: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
+    baseBuyRatePercent: Decimal | null
+    buyAdjustmentPercent: Decimal | null
+    buyAdjustmentAmount: Decimal | null
+    customerRatePercent: Decimal | null
     customerPrice: Decimal | null
   }
 
@@ -25850,6 +28319,10 @@ export namespace Prisma {
     amount: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
+    baseBuyRatePercent: Decimal | null
+    buyAdjustmentPercent: Decimal | null
+    buyAdjustmentAmount: Decimal | null
+    customerRatePercent: Decimal | null
     customerPrice: Decimal | null
     status: $Enums.GiftCardPurchaseStatus | null
     providerStatus: string | null
@@ -25881,6 +28354,10 @@ export namespace Prisma {
     amount: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
+    baseBuyRatePercent: Decimal | null
+    buyAdjustmentPercent: Decimal | null
+    buyAdjustmentAmount: Decimal | null
+    customerRatePercent: Decimal | null
     customerPrice: Decimal | null
     status: $Enums.GiftCardPurchaseStatus | null
     providerStatus: string | null
@@ -25912,6 +28389,10 @@ export namespace Prisma {
     amount: number
     providerAmount: number
     fee: number
+    baseBuyRatePercent: number
+    buyAdjustmentPercent: number
+    buyAdjustmentAmount: number
+    customerRatePercent: number
     customerPrice: number
     status: number
     providerStatus: number
@@ -25933,6 +28414,10 @@ export namespace Prisma {
     amount?: true
     providerAmount?: true
     fee?: true
+    baseBuyRatePercent?: true
+    buyAdjustmentPercent?: true
+    buyAdjustmentAmount?: true
+    customerRatePercent?: true
     customerPrice?: true
   }
 
@@ -25941,6 +28426,10 @@ export namespace Prisma {
     amount?: true
     providerAmount?: true
     fee?: true
+    baseBuyRatePercent?: true
+    buyAdjustmentPercent?: true
+    buyAdjustmentAmount?: true
+    customerRatePercent?: true
     customerPrice?: true
   }
 
@@ -25964,6 +28453,10 @@ export namespace Prisma {
     amount?: true
     providerAmount?: true
     fee?: true
+    baseBuyRatePercent?: true
+    buyAdjustmentPercent?: true
+    buyAdjustmentAmount?: true
+    customerRatePercent?: true
     customerPrice?: true
     status?: true
     providerStatus?: true
@@ -25995,6 +28488,10 @@ export namespace Prisma {
     amount?: true
     providerAmount?: true
     fee?: true
+    baseBuyRatePercent?: true
+    buyAdjustmentPercent?: true
+    buyAdjustmentAmount?: true
+    customerRatePercent?: true
     customerPrice?: true
     status?: true
     providerStatus?: true
@@ -26026,6 +28523,10 @@ export namespace Prisma {
     amount?: true
     providerAmount?: true
     fee?: true
+    baseBuyRatePercent?: true
+    buyAdjustmentPercent?: true
+    buyAdjustmentAmount?: true
+    customerRatePercent?: true
     customerPrice?: true
     status?: true
     providerStatus?: true
@@ -26147,6 +28648,10 @@ export namespace Prisma {
     amount: Decimal
     providerAmount: Decimal | null
     fee: Decimal
+    baseBuyRatePercent: Decimal
+    buyAdjustmentPercent: Decimal
+    buyAdjustmentAmount: Decimal
+    customerRatePercent: Decimal
     customerPrice: Decimal
     status: $Enums.GiftCardPurchaseStatus
     providerStatus: string | null
@@ -26200,6 +28705,10 @@ export namespace Prisma {
     amount?: boolean
     providerAmount?: boolean
     fee?: boolean
+    baseBuyRatePercent?: boolean
+    buyAdjustmentPercent?: boolean
+    buyAdjustmentAmount?: boolean
+    customerRatePercent?: boolean
     customerPrice?: boolean
     status?: boolean
     providerStatus?: boolean
@@ -26237,6 +28746,10 @@ export namespace Prisma {
     amount?: boolean
     providerAmount?: boolean
     fee?: boolean
+    baseBuyRatePercent?: boolean
+    buyAdjustmentPercent?: boolean
+    buyAdjustmentAmount?: boolean
+    customerRatePercent?: boolean
     customerPrice?: boolean
     status?: boolean
     providerStatus?: boolean
@@ -26274,6 +28787,10 @@ export namespace Prisma {
     amount?: boolean
     providerAmount?: boolean
     fee?: boolean
+    baseBuyRatePercent?: boolean
+    buyAdjustmentPercent?: boolean
+    buyAdjustmentAmount?: boolean
+    customerRatePercent?: boolean
     customerPrice?: boolean
     status?: boolean
     providerStatus?: boolean
@@ -26311,6 +28828,10 @@ export namespace Prisma {
     amount?: boolean
     providerAmount?: boolean
     fee?: boolean
+    baseBuyRatePercent?: boolean
+    buyAdjustmentPercent?: boolean
+    buyAdjustmentAmount?: boolean
+    customerRatePercent?: boolean
     customerPrice?: boolean
     status?: boolean
     providerStatus?: boolean
@@ -26325,7 +28846,7 @@ export namespace Prisma {
     completedAt?: boolean
   }
 
-  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
+  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "baseBuyRatePercent" | "buyAdjustmentPercent" | "buyAdjustmentAmount" | "customerRatePercent" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
   export type GiftCardPurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -26369,6 +28890,10 @@ export namespace Prisma {
       amount: Prisma.Decimal
       providerAmount: Prisma.Decimal | null
       fee: Prisma.Decimal
+      baseBuyRatePercent: Prisma.Decimal
+      buyAdjustmentPercent: Prisma.Decimal
+      buyAdjustmentAmount: Prisma.Decimal
+      customerRatePercent: Prisma.Decimal
       customerPrice: Prisma.Decimal
       status: $Enums.GiftCardPurchaseStatus
       providerStatus: string | null
@@ -26826,6 +29351,10 @@ export namespace Prisma {
     readonly amount: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly providerAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly fee: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly baseBuyRatePercent: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly buyAdjustmentPercent: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly buyAdjustmentAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly customerRatePercent: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly customerPrice: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly status: FieldRef<"GiftCardPurchase", 'GiftCardPurchaseStatus'>
     readonly providerStatus: FieldRef<"GiftCardPurchase", 'String'>
@@ -32589,6 +35118,43 @@ export namespace Prisma {
   export type GiftCardSellRateAdjustmentScalarFieldEnum = (typeof GiftCardSellRateAdjustmentScalarFieldEnum)[keyof typeof GiftCardSellRateAdjustmentScalarFieldEnum]
 
 
+  export const GiftCardBuyRateAdjustmentScalarFieldEnum: {
+    id: 'id',
+    providerProductId: 'providerProductId',
+    brandName: 'brandName',
+    countryCode: 'countryCode',
+    currencyCode: 'currencyCode',
+    minimumDenomination: 'minimumDenomination',
+    maximumDenomination: 'maximumDenomination',
+    adjustmentPercent: 'adjustmentPercent',
+    combinationKey: 'combinationKey',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GiftCardBuyRateAdjustmentScalarFieldEnum = (typeof GiftCardBuyRateAdjustmentScalarFieldEnum)[keyof typeof GiftCardBuyRateAdjustmentScalarFieldEnum]
+
+
+  export const GiftCardBuyBaseRateScalarFieldEnum: {
+    id: 'id',
+    provider: 'provider',
+    providerProductId: 'providerProductId',
+    brandName: 'brandName',
+    countryCode: 'countryCode',
+    currencyCode: 'currencyCode',
+    minimumDenomination: 'minimumDenomination',
+    maximumDenomination: 'maximumDenomination',
+    ratePercent: 'ratePercent',
+    combinationKey: 'combinationKey',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GiftCardBuyBaseRateScalarFieldEnum = (typeof GiftCardBuyBaseRateScalarFieldEnum)[keyof typeof GiftCardBuyBaseRateScalarFieldEnum]
+
+
   export const GiftCardPurchaseScalarFieldEnum: {
     id: 'id',
     reference: 'reference',
@@ -32609,6 +35175,10 @@ export namespace Prisma {
     amount: 'amount',
     providerAmount: 'providerAmount',
     fee: 'fee',
+    baseBuyRatePercent: 'baseBuyRatePercent',
+    buyAdjustmentPercent: 'buyAdjustmentPercent',
+    buyAdjustmentAmount: 'buyAdjustmentAmount',
+    customerRatePercent: 'customerRatePercent',
     customerPrice: 'customerPrice',
     status: 'status',
     providerStatus: 'providerStatus',
@@ -35121,6 +37691,189 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"GiftCardSellRateAdjustment"> | Date | string
   }
 
+  export type GiftCardBuyRateAdjustmentWhereInput = {
+    AND?: GiftCardBuyRateAdjustmentWhereInput | GiftCardBuyRateAdjustmentWhereInput[]
+    OR?: GiftCardBuyRateAdjustmentWhereInput[]
+    NOT?: GiftCardBuyRateAdjustmentWhereInput | GiftCardBuyRateAdjustmentWhereInput[]
+    id?: StringFilter<"GiftCardBuyRateAdjustment"> | string
+    providerProductId?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    brandName?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    countryCode?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    currencyCode?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    minimumDenomination?: DecimalNullableFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFilter<"GiftCardBuyRateAdjustment"> | string
+    isActive?: BoolFilter<"GiftCardBuyRateAdjustment"> | boolean
+    createdAt?: DateTimeFilter<"GiftCardBuyRateAdjustment"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardBuyRateAdjustment"> | Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentOrderByWithRelationInput = {
+    id?: SortOrder
+    providerProductId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrderInput | SortOrder
+    minimumDenomination?: SortOrderInput | SortOrder
+    maximumDenomination?: SortOrderInput | SortOrder
+    adjustmentPercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyRateAdjustmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    combinationKey?: string
+    AND?: GiftCardBuyRateAdjustmentWhereInput | GiftCardBuyRateAdjustmentWhereInput[]
+    OR?: GiftCardBuyRateAdjustmentWhereInput[]
+    NOT?: GiftCardBuyRateAdjustmentWhereInput | GiftCardBuyRateAdjustmentWhereInput[]
+    providerProductId?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    brandName?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    countryCode?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    currencyCode?: StringNullableFilter<"GiftCardBuyRateAdjustment"> | string | null
+    minimumDenomination?: DecimalNullableFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFilter<"GiftCardBuyRateAdjustment"> | boolean
+    createdAt?: DateTimeFilter<"GiftCardBuyRateAdjustment"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardBuyRateAdjustment"> | Date | string
+  }, "id" | "combinationKey">
+
+  export type GiftCardBuyRateAdjustmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    providerProductId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrderInput | SortOrder
+    minimumDenomination?: SortOrderInput | SortOrder
+    maximumDenomination?: SortOrderInput | SortOrder
+    adjustmentPercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GiftCardBuyRateAdjustmentCountOrderByAggregateInput
+    _avg?: GiftCardBuyRateAdjustmentAvgOrderByAggregateInput
+    _max?: GiftCardBuyRateAdjustmentMaxOrderByAggregateInput
+    _min?: GiftCardBuyRateAdjustmentMinOrderByAggregateInput
+    _sum?: GiftCardBuyRateAdjustmentSumOrderByAggregateInput
+  }
+
+  export type GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput = {
+    AND?: GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput | GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput[]
+    OR?: GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput[]
+    NOT?: GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput | GiftCardBuyRateAdjustmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string
+    providerProductId?: StringNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string | null
+    countryCode?: StringNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string | null
+    currencyCode?: StringNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string | null
+    minimumDenomination?: DecimalNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | string
+    isActive?: BoolWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GiftCardBuyRateAdjustment"> | Date | string
+  }
+
+  export type GiftCardBuyBaseRateWhereInput = {
+    AND?: GiftCardBuyBaseRateWhereInput | GiftCardBuyBaseRateWhereInput[]
+    OR?: GiftCardBuyBaseRateWhereInput[]
+    NOT?: GiftCardBuyBaseRateWhereInput | GiftCardBuyBaseRateWhereInput[]
+    id?: StringFilter<"GiftCardBuyBaseRate"> | string
+    provider?: StringFilter<"GiftCardBuyBaseRate"> | string
+    providerProductId?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    brandName?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    countryCode?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    currencyCode?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    minimumDenomination?: DecimalNullableFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFilter<"GiftCardBuyBaseRate"> | string
+    isActive?: BoolFilter<"GiftCardBuyBaseRate"> | boolean
+    createdAt?: DateTimeFilter<"GiftCardBuyBaseRate"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardBuyBaseRate"> | Date | string
+  }
+
+  export type GiftCardBuyBaseRateOrderByWithRelationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrderInput | SortOrder
+    minimumDenomination?: SortOrderInput | SortOrder
+    maximumDenomination?: SortOrderInput | SortOrder
+    ratePercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    combinationKey?: string
+    AND?: GiftCardBuyBaseRateWhereInput | GiftCardBuyBaseRateWhereInput[]
+    OR?: GiftCardBuyBaseRateWhereInput[]
+    NOT?: GiftCardBuyBaseRateWhereInput | GiftCardBuyBaseRateWhereInput[]
+    provider?: StringFilter<"GiftCardBuyBaseRate"> | string
+    providerProductId?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    brandName?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    countryCode?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    currencyCode?: StringNullableFilter<"GiftCardBuyBaseRate"> | string | null
+    minimumDenomination?: DecimalNullableFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string
+    isActive?: BoolFilter<"GiftCardBuyBaseRate"> | boolean
+    createdAt?: DateTimeFilter<"GiftCardBuyBaseRate"> | Date | string
+    updatedAt?: DateTimeFilter<"GiftCardBuyBaseRate"> | Date | string
+  }, "id" | "combinationKey">
+
+  export type GiftCardBuyBaseRateOrderByWithAggregationInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrderInput | SortOrder
+    brandName?: SortOrderInput | SortOrder
+    countryCode?: SortOrderInput | SortOrder
+    currencyCode?: SortOrderInput | SortOrder
+    minimumDenomination?: SortOrderInput | SortOrder
+    maximumDenomination?: SortOrderInput | SortOrder
+    ratePercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GiftCardBuyBaseRateCountOrderByAggregateInput
+    _avg?: GiftCardBuyBaseRateAvgOrderByAggregateInput
+    _max?: GiftCardBuyBaseRateMaxOrderByAggregateInput
+    _min?: GiftCardBuyBaseRateMinOrderByAggregateInput
+    _sum?: GiftCardBuyBaseRateSumOrderByAggregateInput
+  }
+
+  export type GiftCardBuyBaseRateScalarWhereWithAggregatesInput = {
+    AND?: GiftCardBuyBaseRateScalarWhereWithAggregatesInput | GiftCardBuyBaseRateScalarWhereWithAggregatesInput[]
+    OR?: GiftCardBuyBaseRateScalarWhereWithAggregatesInput[]
+    NOT?: GiftCardBuyBaseRateScalarWhereWithAggregatesInput | GiftCardBuyBaseRateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GiftCardBuyBaseRate"> | string
+    provider?: StringWithAggregatesFilter<"GiftCardBuyBaseRate"> | string
+    providerProductId?: StringNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | string | null
+    brandName?: StringNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | string | null
+    countryCode?: StringNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | string | null
+    currencyCode?: StringNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | string | null
+    minimumDenomination?: DecimalNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: DecimalNullableWithAggregatesFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalWithAggregatesFilter<"GiftCardBuyBaseRate"> | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringWithAggregatesFilter<"GiftCardBuyBaseRate"> | string
+    isActive?: BoolWithAggregatesFilter<"GiftCardBuyBaseRate"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"GiftCardBuyBaseRate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GiftCardBuyBaseRate"> | Date | string
+  }
+
   export type GiftCardPurchaseWhereInput = {
     AND?: GiftCardPurchaseWhereInput | GiftCardPurchaseWhereInput[]
     OR?: GiftCardPurchaseWhereInput[]
@@ -35144,6 +37897,10 @@ export namespace Prisma {
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -35181,6 +37938,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrderInput | SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrderInput | SortOrder
@@ -35222,6 +37983,10 @@ export namespace Prisma {
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -35259,6 +38024,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrderInput | SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrderInput | SortOrder
@@ -35301,6 +38070,10 @@ export namespace Prisma {
     amount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusWithAggregatesFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
@@ -38055,6 +40828,223 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GiftCardBuyRateAdjustmentCreateInput = {
+    id?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentUncheckedCreateInput = {
+    id?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentCreateManyInput = {
+    id?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyRateAdjustmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    adjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyBaseRateCreateInput = {
+    id?: string
+    provider?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    ratePercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyBaseRateUncheckedCreateInput = {
+    id?: string
+    provider?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    ratePercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyBaseRateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyBaseRateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyBaseRateCreateManyInput = {
+    id?: string
+    provider?: string
+    providerProductId?: string | null
+    brandName?: string | null
+    countryCode?: string | null
+    currencyCode?: string | null
+    minimumDenomination?: Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: Decimal | DecimalJsLike | number | string | null
+    ratePercent: Decimal | DecimalJsLike | number | string
+    combinationKey: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GiftCardBuyBaseRateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GiftCardBuyBaseRateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    provider?: StringFieldUpdateOperationsInput | string
+    providerProductId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandName?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyCode?: NullableStringFieldUpdateOperationsInput | string | null
+    minimumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    maximumDenomination?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    ratePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    combinationKey?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GiftCardPurchaseCreateInput = {
     id?: string
     reference: string
@@ -38072,6 +41062,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -38109,6 +41103,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -38140,6 +41138,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38177,6 +41179,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38211,6 +41217,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -38242,6 +41252,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38276,6 +41290,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40647,6 +43665,123 @@ export namespace Prisma {
     adjustmentPercent?: SortOrder
   }
 
+  export type GiftCardBuyRateAdjustmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    adjustmentPercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyRateAdjustmentAvgOrderByAggregateInput = {
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    adjustmentPercent?: SortOrder
+  }
+
+  export type GiftCardBuyRateAdjustmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    adjustmentPercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyRateAdjustmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    adjustmentPercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyRateAdjustmentSumOrderByAggregateInput = {
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    adjustmentPercent?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateCountOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    ratePercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateAvgOrderByAggregateInput = {
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    ratePercent?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    ratePercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateMinOrderByAggregateInput = {
+    id?: SortOrder
+    provider?: SortOrder
+    providerProductId?: SortOrder
+    brandName?: SortOrder
+    countryCode?: SortOrder
+    currencyCode?: SortOrder
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    ratePercent?: SortOrder
+    combinationKey?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GiftCardBuyBaseRateSumOrderByAggregateInput = {
+    minimumDenomination?: SortOrder
+    maximumDenomination?: SortOrder
+    ratePercent?: SortOrder
+  }
+
   export type EnumGiftCardPurchaseStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.GiftCardPurchaseStatus | EnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
     in?: $Enums.GiftCardPurchaseStatus[] | ListEnumGiftCardPurchaseStatusFieldRefInput<$PrismaModel>
@@ -40679,6 +43814,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
@@ -40698,6 +43837,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
   }
 
@@ -40721,6 +43864,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
@@ -40752,6 +43899,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
@@ -40768,6 +43919,10 @@ export namespace Prisma {
     amount?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
+    baseBuyRatePercent?: SortOrder
+    buyAdjustmentPercent?: SortOrder
+    buyAdjustmentAmount?: SortOrder
+    customerRatePercent?: SortOrder
     customerPrice?: SortOrder
   }
 
@@ -44687,6 +47842,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -44722,6 +47881,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -45438,6 +48601,10 @@ export namespace Prisma {
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -46567,6 +49734,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -46602,6 +49773,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -48495,6 +51670,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -48530,6 +51709,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -49009,6 +52192,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49044,6 +52231,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -53673,6 +56864,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -54302,6 +57497,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54337,6 +57536,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54370,6 +57573,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54777,6 +57984,10 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
@@ -55107,6 +58318,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55142,6 +58357,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
@@ -55175,6 +58394,10 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null

@@ -8,6 +8,8 @@ import { GiftCardsService } from './gift-cards.service';
 import { SogoClient } from './sogo.client';
 import { BUY_GIFT_CARD_PROVIDER } from './buy-gift-card-provider.interface';
 import { BuyGiftCardService } from './buy-gift-card.service';
+import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
+import { BuyGiftCardBaseRateService } from './buy-gift-card-base-rate.service';
 import { TopupmateClient } from './topupmate.client';
 import { TopupmateProvider } from './topupmate.provider';
 import { TremendousClient } from './tremendous.client';
@@ -23,6 +25,8 @@ import { AdminGiftCardSandboxService } from './admin-gift-card-sandbox.service';
     SogoClient,
     AdminGiftCardsGuard,
     BuyGiftCardService,
+    BuyGiftCardRateService,
+    BuyGiftCardBaseRateService,
     TopupmateClient,
     TopupmateProvider,
     TremendousClient,

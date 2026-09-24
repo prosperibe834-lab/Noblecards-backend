@@ -462,6 +462,43 @@ model GiftCardSellRateAdjustment {
   @@index([slug, cardCountry, cardCurrency, payoutCurrency, cardType, isActive])
 }
 
+model GiftCardBuyRateAdjustment {
+  id                  String   @id @default(uuid())
+  providerProductId   String?
+  brandName           String?
+  countryCode         String?
+  currencyCode        String?
+  minimumDenomination Decimal? @db.Decimal(18, 2)
+  maximumDenomination Decimal? @db.Decimal(18, 2)
+  adjustmentPercent   Decimal  @db.Decimal(9, 4)
+  combinationKey      String   @unique
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([providerProductId, countryCode, currencyCode, isActive])
+  @@index([brandName, countryCode, currencyCode, isActive])
+}
+
+model GiftCardBuyBaseRate {
+  id                  String   @id @default(uuid())
+  provider            String   @default("TREMENDOUS")
+  providerProductId   String?
+  brandName           String?
+  countryCode         String?
+  currencyCode        String?
+  minimumDenomination Decimal? @db.Decimal(18, 2)
+  maximumDenomination Decimal? @db.Decimal(18, 2)
+  ratePercent         Decimal  @db.Decimal(9, 4)
+  combinationKey      String   @unique
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([provider, providerProductId, countryCode, currencyCode, isActive])
+  @@index([provider, brandName, countryCode, currencyCode, isActive])
+}
+
 model GiftCardPurchase {
   id                  String                 @id @default(uuid())
   reference           String                 @unique
@@ -482,6 +519,10 @@ model GiftCardPurchase {
   amount              Decimal                @db.Decimal(18, 2)
   providerAmount      Decimal?               @db.Decimal(18, 2)
   fee                 Decimal                @default(0.00) @db.Decimal(18, 2)
+  baseBuyRatePercent  Decimal                @default(0.00) @db.Decimal(9, 4)
+  buyAdjustmentPercent Decimal               @default(0.00) @db.Decimal(9, 4)
+  buyAdjustmentAmount  Decimal               @default(0.00) @db.Decimal(18, 2)
+  customerRatePercent Decimal                @default(0.00) @db.Decimal(9, 4)
   customerPrice       Decimal                @db.Decimal(18, 2)
   status              GiftCardPurchaseStatus @default(PENDING)
   providerStatus      String?

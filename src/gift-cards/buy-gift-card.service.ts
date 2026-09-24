@@ -14,6 +14,8 @@ import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption
 import { PrismaService } from '../prisma/prisma.service';
 import { WalletsService } from '../wallets/wallets.service';
 import type { BuyGiftCardProvider } from './buy-gift-card-provider.interface';
+import { BuyGiftCardBaseRateService } from './buy-gift-card-base-rate.service';
+import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
 import {
   BUY_GIFT_CARD_PROVIDER,
   BuyGiftCardCatalogFilters,
@@ -30,6 +32,8 @@ export class BuyGiftCardService {
     private readonly wallets: WalletsService,
     private readonly encryption: BeneficiaryEncryptionService,
     private readonly config: ConfigService,
+    private readonly buyRates?: BuyGiftCardRateService,
+    private readonly baseRates?: BuyGiftCardBaseRateService,
   ) {}
 
   async getCatalog(filters: BuyGiftCardCatalogFilters) {
@@ -37,13 +41,14 @@ export class BuyGiftCardService {
     const normalizedCountry = filters.countryCode?.toUpperCase();
     const normalizedCurrency = filters.currency?.toUpperCase();
     const normalizedProduct = filters.productName?.trim().toLowerCase();
+    const filteredProducts = products.filter((product) =>
+      (!normalizedCountry || product.countryCode?.toUpperCase() === normalizedCountry) &&
+      (!normalizedCurrency || product.currency?.toUpperCase() === normalizedCurrency) &&
+      (!normalizedProduct || product.productName.toLowerCase().includes(normalizedProduct) || product.brandName?.toLowerCase().includes(normalizedProduct)),
+    );
     return {
       provider: products[0]?.provider ?? 'BUY_PROVIDER',
-      products: products.filter((product) =>
-        (!normalizedCountry || product.countryCode?.toUpperCase() === normalizedCountry) &&
-        (!normalizedCurrency || product.currency?.toUpperCase() === normalizedCurrency) &&
-        (!normalizedProduct || product.productName.toLowerCase().includes(normalizedProduct) || product.brandName?.toLowerCase().includes(normalizedProduct)),
-      ),
+      products: await Promise.all(filteredProducts.map((product) => this.withQuote(product))),
     };
   }
 
@@ -56,7 +61,7 @@ export class BuyGiftCardService {
     }
 
     const product = await this.getPurchasableProduct(input.productId, input.amount);
-    const pricing = this.calculatePrice(product, input.amount, input.quantity);
+    const pricing = await this.calculatePrice(product, input.amount, input.quantity);
     const user = await (this.prisma as any).user.findUnique({ where: { id: userId }, select: { email: true, firstName: true, lastName: true, displayName: true } });
     if (!user?.email) throw new NotFoundException('User email not found.');
     const deliveryEmail = input.deliveryEmail ?? user.email;
@@ -85,7 +90,12 @@ export class BuyGiftCardService {
             brandNameSnapshot: product.brandName, productNameSnapshot: product.productName,
             countryCode: product.countryCode ?? 'UNKNOWN', currencyCode: pricing.currencyCode,
             denominationType: product.denominationType, quantity: input.quantity, amount: new Decimal(String(input.amount)),
-            providerAmount: pricing.providerAmount, fee: pricing.fee, customerPrice: pricing.customerPrice,
+            providerAmount: pricing.providerAmount, fee: pricing.fee,
+            baseBuyRatePercent: pricing.baseBuyRatePercent,
+            buyAdjustmentPercent: pricing.buyAdjustmentPercent,
+            buyAdjustmentAmount: pricing.buyAdjustmentAmount,
+            customerRatePercent: pricing.customerRatePercent,
+            customerPrice: pricing.customerPrice,
             status: GiftCardPurchaseStatus.PROCESSING, providerMetadata: this.sanitizeForStorage(product.providerMetadata),
             metadata: { deliveryEmail },
           },
@@ -139,7 +149,51 @@ export class BuyGiftCardService {
     return product;
   }
 
-  private calculatePrice(product: BuyGiftCardCatalogProduct, amount: number, quantity: number) {
+  private async withQuote(product: BuyGiftCardCatalogProduct) {
+    if (!Array.isArray(product.denominations) || !product.providerMetadata || typeof product.providerMetadata !== 'object') {
+      return {
+        ...product,
+        productId: product.providerProductId,
+        baseBuyRatePercent: null,
+        buyMarkupPercent: '0',
+        customerRatePercent: null,
+        providerBasePrice: null,
+        providerAmount: null,
+        customerPrice: null,
+      };
+    }
+    const amount = this.defaultAmount(product);
+    if (amount == null) {
+      return {
+        ...product,
+        productId: product.providerProductId,
+        baseBuyRatePercent: null,
+        buyMarkupPercent: '0',
+        customerRatePercent: null,
+        providerAmount: null,
+        customerPrice: null,
+      };
+    }
+    const pricing = await this.calculatePricing(product, amount, 1, false);
+    return {
+      ...product,
+      productId: product.providerProductId,
+      country: product.countryCode ?? product.country,
+      currency: pricing.currencyCode,
+      baseBuyRatePercent: pricing.baseBuyRatePercent?.toString() ?? null,
+      buyMarkupPercent: pricing.buyAdjustmentPercent.toString(),
+      customerRatePercent: pricing.customerRatePercent?.toString() ?? null,
+      providerBasePrice: pricing.providerBasePrice?.toString() ?? null,
+      providerAmount: pricing.providerAmount.toString(),
+      customerPrice: pricing.customerPrice?.toString() ?? null,
+    };
+  }
+
+  private async calculatePrice(product: BuyGiftCardCatalogProduct, amount: number, quantity: number) {
+    return this.calculatePricing(product, amount, quantity, true);
+  }
+
+  private async calculatePricing(product: BuyGiftCardCatalogProduct, amount: number, quantity: number, requireBaseRate: boolean) {
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) throw new BadRequestException('Gift card quantity is invalid.');
     const metadata = product.providerMetadata;
     const senderCurrency = this.readString(metadata, ['senderCurrencyCode', 'sender_currency_code']) ?? product.currency ?? 'USD';
@@ -147,7 +201,39 @@ export class BuyGiftCardService {
     const feePercent = Number(this.config.get<string>('BUY_GIFT_CARD_FEE_PERCENT') ?? this.config.get<string>('TOPUPMATE_NOBLECARDS_FEE_PERCENT') ?? 0);
     if (!Number.isFinite(feePercent) || feePercent < 0 || feePercent > 100) throw new BadRequestException('Buy gift card pricing configuration is invalid.');
     const fee = providerAmount.mul(feePercent).div(100).toDecimalPlaces(2);
-    return { currencyCode: senderCurrency.toUpperCase(), providerAmount, fee, customerPrice: providerAmount.plus(fee).toDecimalPlaces(2) };
+    const baseAdjustment = this.baseRates ? await this.baseRates.resolve(product, amount) : null;
+    if (requireBaseRate && this.baseRates && !baseAdjustment) {
+      throw new BadRequestException('Buy Base Rate is not configured for this product.');
+    }
+    const baseBuyRatePercent = baseAdjustment?.ratePercent ?? null;
+    const adjustment = this.buyRates ? await this.buyRates.resolve(product, amount) : null;
+    const buyAdjustmentPercent = adjustment?.adjustmentPercent ?? new Decimal('0');
+    const customerRatePercent = baseBuyRatePercent?.plus(buyAdjustmentPercent) ?? null;
+    const providerBasePrice = baseBuyRatePercent == null
+      ? null
+      : providerAmount.mul(baseBuyRatePercent).div(100).toDecimalPlaces(2);
+    const buyAdjustmentAmount = providerAmount.mul(buyAdjustmentPercent).div(100).toDecimalPlaces(2);
+    const rateAmount = providerBasePrice == null
+      ? providerAmount.plus(buyAdjustmentAmount)
+      : providerBasePrice.plus(buyAdjustmentAmount);
+    return {
+      currencyCode: senderCurrency.toUpperCase(),
+      providerAmount,
+      fee,
+      baseBuyRatePercent,
+      providerBasePrice,
+      buyAdjustmentPercent,
+      buyAdjustmentAmount,
+      customerRatePercent,
+      customerPrice: rateAmount.plus(fee).toDecimalPlaces(2),
+    };
+  }
+
+  private defaultAmount(product: BuyGiftCardCatalogProduct) {
+    const denomination = product.denominations.map(Number).find(Number.isFinite);
+    if (denomination != null) return denomination;
+    const minimum = product.minimumAmount == null ? null : Number(product.minimumAmount);
+    return minimum != null && Number.isFinite(minimum) ? minimum : null;
   }
 
   private senderAmount(metadata: Record<string, unknown>, amount: number) {
@@ -219,7 +305,12 @@ export class BuyGiftCardService {
       providerProductId: purchase.providerProductId, providerReference: purchase.providerReference, redeemId: purchase.redeemId,
       brandName: purchase.brandNameSnapshot, productName: purchase.productNameSnapshot, countryCode: purchase.countryCode,
       currencyCode: purchase.currencyCode, amount: purchase.amount?.toString(), quantity: purchase.quantity,
-      providerAmount: purchase.providerAmount?.toString() ?? null, fee: purchase.fee?.toString(), customerPrice: purchase.customerPrice?.toString(),
+      providerAmount: purchase.providerAmount?.toString() ?? null, fee: purchase.fee?.toString(),
+      baseBuyRatePercent: purchase.baseBuyRatePercent?.toString() ?? '0',
+      buyAdjustmentPercent: purchase.buyAdjustmentPercent?.toString() ?? '0',
+      buyAdjustmentAmount: purchase.buyAdjustmentAmount?.toString() ?? '0',
+      customerRatePercent: purchase.customerRatePercent?.toString() ?? '0',
+      customerPrice: purchase.customerPrice?.toString(),
       providerStatus: purchase.providerStatus, providerMessage: purchase.providerMessage, voucherCode: voucher?.code ?? null,
       redeemDetails: purchase.redeemDetails, createdAt: purchase.createdAt, completedAt: purchase.completedAt,
     };

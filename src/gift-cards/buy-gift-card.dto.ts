@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEmail, IsIn, IsInt, IsNumber, IsOptional, IsString, Length, Matches, Max, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsEmail, IsIn, IsInt, IsNumber, IsOptional, IsString, Length, Matches, Max, MaxLength, Min } from 'class-validator';
 
 export class BuyGiftCardCatalogQueryDto {
   @IsOptional()
@@ -53,4 +53,127 @@ export class BuyGiftCardPurchaseDto {
   @IsString()
   @Matches(/^[A-Za-z0-9._:-]{1,128}$/)
   idempotencyKey?: string;
+}
+
+export class CreateBuyGiftCardRateAdjustmentDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  providerProductId?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  brandName?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{2}$/)
+  countryCode?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{3}$/)
+  currencyCode?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0)
+  minimumDenomination?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0)
+  maximumDenomination?: number;
+
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(-100)
+  @Max(100)
+  adjustmentPercent!: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+export class UpdateBuyGiftCardRateAdjustmentDto extends CreateBuyGiftCardRateAdjustmentDto {}
+
+export class CreateBuyGiftCardBaseRateDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(40)
+  provider?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  providerProductId?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  brandName?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{2}$/)
+  countryCode?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{3}$/)
+  currencyCode?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0)
+  minimumDenomination?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0)
+  maximumDenomination?: number;
+
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(0)
+  @Max(100)
+  ratePercent!: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+export class UpdateBuyGiftCardBaseRateDto extends CreateBuyGiftCardBaseRateDto {}
+
+export class BulkBuyGiftCardRateAdjustmentDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  providerProductId?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  brandName?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{2}$/)
+  countryCode?: string;
+
+  @IsOptional()
+  @Matches(/^[A-Z]{3}$/)
+  currencyCode?: string;
+
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(-100)
+  @Max(100)
+  adjustmentPercent!: number;
+
+  @IsOptional()
+  @IsBoolean()
+  reset?: boolean;
 }

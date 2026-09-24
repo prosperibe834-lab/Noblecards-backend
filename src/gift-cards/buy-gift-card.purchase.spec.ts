@@ -54,7 +54,7 @@ const makePurchase = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
-function makeService(providerResult: any = { providerReference: 'tp-1', providerStatus: 'success', providerMessage: 'ok', redeemId: 'r-1', voucherCode: 'CODE-1', redeemDetails: { instructions: 'online' }, providerAmount: '12.01', providerMetadata: {} }) {
+function makeService(providerResult: any = { providerReference: 'tp-1', providerStatus: 'success', providerMessage: 'ok', redeemId: 'r-1', voucherCode: 'CODE-1', redeemDetails: { instructions: 'online' }, providerAmount: '12.01', providerMetadata: {} }, rateService?: any, baseRateService?: any) {
   const purchase = makePurchase();
   const tx = {
     transaction: { create: jest.fn().mockResolvedValue({ id: 'tx-1' }), update: jest.fn().mockResolvedValue({}) },
@@ -83,7 +83,7 @@ function makeService(providerResult: any = { providerReference: 'tp-1', provider
   } as any;
   const encryption = { encrypt: jest.fn().mockReturnValue('encrypted'), decrypt: jest.fn().mockReturnValue({ code: 'CODE-1' }) } as any;
   const config = { get: jest.fn().mockReturnValue('0') } as any;
-  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config), provider, prisma, tx, wallets, encryption };
+  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config, rateService, baseRateService), provider, prisma, tx, wallets, encryption };
 }
 
 describe('BuyGiftCardService purchase flow', () => {
@@ -133,5 +133,43 @@ describe('BuyGiftCardService purchase flow', () => {
     const { service, prisma } = makeService();
     prisma.giftCardPurchase.findUnique.mockResolvedValue(makePurchase({ userId: 'other-user' }));
     await expect(service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-1' })).rejects.toThrow(/another user/i);
+  });
+
+  it('applies the persisted Buy adjustment while ignoring a client final-price override', async () => {
+    const rateService = { resolve: jest.fn().mockResolvedValue({ adjustmentPercent: new Decimal('10') }) };
+    const { service, tx, wallets } = makeService(undefined, rateService);
+
+    await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-rate', ...( { customerPrice: 0.01 } as any) });
+
+    expect(rateService.resolve).toHaveBeenCalledWith(product, 10);
+    expect(wallets.holdFunds).toHaveBeenCalledWith(expect.objectContaining({ amount: new Decimal('13.21') }), tx);
+    expect(tx.giftCardPurchase.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({
+        providerAmount: new Decimal('12.01'),
+        fee: new Decimal('0'),
+        buyAdjustmentPercent: new Decimal('10'),
+        buyAdjustmentAmount: new Decimal('1.20'),
+        customerPrice: new Decimal('13.21'),
+      }),
+    }));
+  });
+
+  it('adds Buy markup percentage points to the configured Base Buy Rate', async () => {
+    const rateService = { resolve: jest.fn().mockResolvedValue({ adjustmentPercent: new Decimal('3') }) };
+    const baseRateService = { resolve: jest.fn().mockResolvedValue({ ratePercent: new Decimal('80') }) };
+    const { service, provider, tx, wallets } = makeService(undefined, rateService, baseRateService);
+    provider.getCatalog.mockResolvedValue([{ ...product, denominations: ['100'], providerMetadata: {} }]);
+
+    await service.purchase('user-1', { productId: '14971', amount: 100, quantity: 1, idempotencyKey: 'request-base-rate', ...( { customerPrice: 999 } as any) });
+
+    expect(wallets.holdFunds).toHaveBeenCalledWith(expect.objectContaining({ amount: new Decimal('83') }), tx);
+    expect(tx.giftCardPurchase.create).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({
+        baseBuyRatePercent: new Decimal('80'),
+        buyAdjustmentPercent: new Decimal('3'),
+        customerRatePercent: new Decimal('83'),
+        customerPrice: new Decimal('83'),
+      }),
+    }));
   });
 });
