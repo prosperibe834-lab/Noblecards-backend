@@ -258,6 +258,14 @@ export class GiftCardsService {
     return this.toAdminSale(sale);
   }
 
+  async getUserSales(userId: string) {
+    const sales = await (this.prisma as any).giftCardSale.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return sales.map((sale: any) => this.toSafeResponse(sale));
+  }
+
   async getUserSale(userId: string, id: string) {
     const sale = await (this.prisma as any).giftCardSale.findFirst({ where: { id, userId } });
     if (!sale) throw new NotFoundException('Gift card sale not found.');

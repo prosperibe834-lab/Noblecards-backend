@@ -62,4 +62,22 @@ export class GiftCardsController {
   getUserSale(@Req() request: { user: { userId: string } }, @Param('id') id: string) {
     return this.giftCards.getUserSale(request.user.userId, id);
   }
-}
+
+  @Get('orders')
+  async getUserOrders(@Req() request: { user: { userId: string } }) {
+    const [purchases, sales] = await Promise.all([
+      this.buyGiftCards.getOrders(request.user.userId),
+      this.giftCards.getUserSales(request.user.userId),
+    ]);
+    return {
+      items: [...purchases, ...sales],
+      purchases,
+      sales,
+    };
+  }
+
+  @Get('buy/history')
+  getBuyHistory(@Req() request: { user: { userId: string } }) {
+    return this.buyGiftCards.getOrders(request.user.userId);
+  }
+} 

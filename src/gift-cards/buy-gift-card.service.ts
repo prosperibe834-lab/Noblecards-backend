@@ -127,6 +127,14 @@ export class BuyGiftCardService {
     return this.toSafeResponse(purchase);
   }
 
+  async getOrders(userId: string) {
+    const purchases = await (this.prisma as any).giftCardPurchase.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return purchases.map((purchase: any) => this.toSafeResponse(purchase));
+  }
+
   async retrieveVoucher(userId: string, id: string) {
     const purchase = await (this.prisma as any).giftCardPurchase.findFirst({ where: { id, userId } });
     if (!purchase) throw new NotFoundException('Gift card purchase not found.');
