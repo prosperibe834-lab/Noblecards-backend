@@ -5,6 +5,7 @@ import {
   Injectable,
   NotFoundException,
   RequestTimeoutException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Decimal } from '@prisma/client-runtime-utils';
@@ -16,6 +17,7 @@ import { WalletsService } from '../wallets/wallets.service';
 import type { BuyGiftCardProvider } from './buy-gift-card-provider.interface';
 import { BuyGiftCardBaseRateService } from './buy-gift-card-base-rate.service';
 import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
+import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
 import {
   BUY_GIFT_CARD_PROVIDER,
   BuyGiftCardCatalogFilters,
@@ -34,6 +36,7 @@ export class BuyGiftCardService {
     private readonly config: ConfigService,
     private readonly buyRates?: BuyGiftCardRateService,
     private readonly baseRates?: BuyGiftCardBaseRateService,
+    private readonly exchangeRates?: ExchangeRatesService,
   ) {}
 
   async getCatalog(filters: BuyGiftCardCatalogFilters) {
@@ -46,13 +49,27 @@ export class BuyGiftCardService {
       (!normalizedCurrency || product.currency?.toUpperCase() === normalizedCurrency) &&
       (!normalizedProduct || product.productName.toLowerCase().includes(normalizedProduct) || product.brandName?.toLowerCase().includes(normalizedProduct)),
     );
+    const quotedProducts = await Promise.all(filteredProducts.map((product) => this.withQuote(product)));
     return {
       provider: products[0]?.provider ?? 'BUY_PROVIDER',
-      products: await Promise.all(filteredProducts.map((product) => this.withQuote(product))),
+      products: quotedProducts.map((product) => ({
+        ...product,
+        supportedCountries: quotedProducts
+          .filter((candidate) => candidate.providerProductId === product.providerProductId)
+          .map((candidate) => ({
+            countryCode: candidate.countryCode,
+            country: candidate.country,
+            currency: candidate.currency,
+            denominations: candidate.denominations,
+            minimumAmount: candidate.minimumAmount,
+            maximumAmount: candidate.maximumAmount,
+            customerRatePercent: candidate.customerRatePercent,
+          })),
+      })),
     };
   }
 
-  async purchase(userId: string, input: { productId: string; amount: number; quantity: number; deliveryEmail?: string; idempotencyKey?: string }) {
+  async purchase(userId: string, input: { productId: string; amount: number; quantity: number; countryCode?: string; currencyCode?: string; deliveryEmail?: string; idempotencyKey?: string }) {
     const idempotencyKey = input.idempotencyKey ?? `nc-buy-${randomUUID()}`;
     const existing = await (this.prisma as any).giftCardPurchase.findUnique({ where: { idempotencyKey } });
     if (existing) {
@@ -60,7 +77,7 @@ export class BuyGiftCardService {
       return this.toSafeResponse(existing);
     }
 
-    const product = await this.getPurchasableProduct(input.productId, input.amount);
+    const product = await this.getPurchasableProduct(input.productId, input.amount, input.countryCode, input.currencyCode);
     const pricing = await this.calculatePrice(product, input.amount, input.quantity);
     const user = await (this.prisma as any).user.findUnique({ where: { id: userId }, select: { email: true, firstName: true, lastName: true, displayName: true } });
     if (!user?.email) throw new NotFoundException('User email not found.');
@@ -97,7 +114,10 @@ export class BuyGiftCardService {
             customerRatePercent: pricing.customerRatePercent,
             customerPrice: pricing.customerPrice,
             status: GiftCardPurchaseStatus.PROCESSING, providerMetadata: this.sanitizeForStorage(product.providerMetadata),
-            metadata: { deliveryEmail },
+            metadata: {
+              deliveryEmail,
+              cardCurrencyCode: product.currency ?? 'USD',
+            },
           },
         });
       });
@@ -111,7 +131,7 @@ export class BuyGiftCardService {
 
     let providerResult: BuyGiftCardProviderPurchase;
     try {
-      providerResult = await this.provider.purchase({ productId: product.providerProductId, amount: input.amount, currencyCode: pricing.currencyCode, email: deliveryEmail, sender, units: input.quantity, reference } satisfies BuyGiftCardPurchaseInput);
+      providerResult = await this.provider.purchase({ productId: product.providerProductId, amount: input.amount, currencyCode: product.currency ?? 'USD', email: deliveryEmail, sender, units: input.quantity, reference } satisfies BuyGiftCardPurchaseInput);
     } catch (error) {
       return this.handleProviderError(purchase, error);
     }
@@ -125,6 +145,32 @@ export class BuyGiftCardService {
     const purchase = await (this.prisma as any).giftCardPurchase.findFirst({ where: { id, userId } });
     if (!purchase) throw new NotFoundException('Gift card purchase not found.');
     return this.toSafeResponse(purchase);
+  }
+
+  async quote(input: { productId: string; countryCode: string; currencyCode: string; amount: number; quantity: number }) {
+    const product = await this.getPurchasableProduct(
+      input.productId,
+      input.amount,
+      input.countryCode,
+      input.currencyCode,
+    );
+    const pricing = await this.calculatePrice(product, input.amount, input.quantity);
+    return {
+      productId: product.providerProductId,
+      countryCode: product.countryCode,
+      currencyCode: product.currency,
+      faceValue: input.amount,
+      quantity: input.quantity,
+      fxRate: pricing.fxRate.toString(),
+      usdFaceValue: pricing.usdFaceValue.toString(),
+      providerAmount: pricing.providerAmount.toString(),
+      baseBuyRatePercent: pricing.baseBuyRatePercent?.toString() ?? null,
+      buyAdjustmentPercent: pricing.buyAdjustmentPercent.toString(),
+      customerRatePercent: pricing.customerRatePercent?.toString() ?? null,
+      fee: pricing.fee.toString(),
+      customerPrice: pricing.customerPrice.toString(),
+      walletCurrencyCode: pricing.currencyCode,
+    };
   }
 
   async getOrders(userId: string) {
@@ -143,10 +189,20 @@ export class BuyGiftCardService {
     return this.toSafeResponse(await this.persistVoucher(purchase, providerResult));
   }
 
-  private async getPurchasableProduct(productId: string, amount: number) {
+  private async getPurchasableProduct(productId: string, amount: number, countryCode?: string, currencyCode?: string) {
     if (!Number.isFinite(amount) || amount <= 0) throw new BadRequestException('Gift card amount must be greater than zero.');
-    const products = await this.provider.getCatalog({});
-    const product = products.find((item) => item.providerProductId === productId);
+    const products = await this.provider.getCatalog({
+      productId,
+      ...(countryCode ? { countryCode } : {}),
+      ...(currencyCode ? { currency: currencyCode } : {}),
+    });
+    const candidates = products.filter((item) => item.providerProductId === productId);
+    const product = countryCode || currencyCode
+      ? candidates.find((item) =>
+          (!countryCode || item.countryCode?.toUpperCase() === countryCode.toUpperCase()) &&
+          (!currencyCode || item.currency?.toUpperCase() === currencyCode.toUpperCase()),
+        )
+      : candidates.length === 1 ? candidates[0] : undefined;
     if (!product) throw new NotFoundException('Gift card product is not available.');
     const denominations = product.denominations.map(Number).filter(Number.isFinite);
     const minimum = product.minimumAmount == null ? null : Number(product.minimumAmount);
@@ -168,6 +224,7 @@ export class BuyGiftCardService {
         providerBasePrice: null,
         providerAmount: null,
         customerPrice: null,
+        walletCurrencyCode: 'USD',
       };
     }
     const amount = this.defaultAmount(product);
@@ -180,14 +237,14 @@ export class BuyGiftCardService {
         customerRatePercent: null,
         providerAmount: null,
         customerPrice: null,
+        walletCurrencyCode: 'USD',
       };
     }
     const pricing = await this.calculatePricing(product, amount, 1, false);
     return {
       ...product,
       productId: product.providerProductId,
-      country: product.countryCode ?? product.country,
-      currency: pricing.currencyCode,
+      walletCurrencyCode: pricing.currencyCode,
       baseBuyRatePercent: pricing.baseBuyRatePercent?.toString() ?? null,
       buyMarkupPercent: pricing.buyAdjustmentPercent.toString(),
       customerRatePercent: pricing.customerRatePercent?.toString() ?? null,
@@ -203,9 +260,21 @@ export class BuyGiftCardService {
 
   private async calculatePricing(product: BuyGiftCardCatalogProduct, amount: number, quantity: number, requireBaseRate: boolean) {
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) throw new BadRequestException('Gift card quantity is invalid.');
-    const metadata = product.providerMetadata;
-    const senderCurrency = this.readString(metadata, ['senderCurrencyCode', 'sender_currency_code']) ?? product.currency ?? 'USD';
-    const providerAmount = new Decimal(String(this.senderAmount(metadata, amount) * quantity)).toDecimalPlaces(2);
+    let fxRates;
+    try {
+      if (!this.exchangeRates) throw new Error('Exchange-rate service is unavailable.');
+      fxRates = await this.exchangeRates.getRates();
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new ServiceUnavailableException(`Buy gift-card pricing is unavailable because USD exchange rates could not be loaded: ${detail}`);
+    }
+    const cardCurrency = product.currency?.toUpperCase() ?? 'USD';
+    const fxRate = cardCurrency === 'USD' ? 1 : fxRates.rates[cardCurrency];
+    if (!Number.isFinite(fxRate) || fxRate <= 0) {
+      throw new ServiceUnavailableException(`Buy gift-card pricing is unavailable because no USD exchange rate exists for ${cardCurrency}.`);
+    }
+    const usdFaceValue = new Decimal(String(amount / fxRate)).toDecimalPlaces(2);
+    const providerAmount = usdFaceValue.mul(quantity).toDecimalPlaces(2);
     const feePercent = Number(this.config.get<string>('BUY_GIFT_CARD_FEE_PERCENT') ?? this.config.get<string>('TOPUPMATE_NOBLECARDS_FEE_PERCENT') ?? 0);
     if (!Number.isFinite(feePercent) || feePercent < 0 || feePercent > 100) throw new BadRequestException('Buy gift card pricing configuration is invalid.');
     const fee = providerAmount.mul(feePercent).div(100).toDecimalPlaces(2);
@@ -225,7 +294,9 @@ export class BuyGiftCardService {
       ? providerAmount.plus(buyAdjustmentAmount)
       : providerBasePrice.plus(buyAdjustmentAmount);
     return {
-      currencyCode: senderCurrency.toUpperCase(),
+      currencyCode: 'USD',
+      fxRate: new Decimal(String(fxRate)),
+      usdFaceValue,
       providerAmount,
       fee,
       baseBuyRatePercent,
@@ -242,20 +313,6 @@ export class BuyGiftCardService {
     if (denomination != null) return denomination;
     const minimum = product.minimumAmount == null ? null : Number(product.minimumAmount);
     return minimum != null && Number.isFinite(minimum) ? minimum : null;
-  }
-
-  private senderAmount(metadata: Record<string, unknown>, amount: number) {
-    const mapping = metadata.fixedRecipientToSenderDenominationsMap;
-    if (mapping && typeof mapping === 'object' && !Array.isArray(mapping)) {
-      const entry = Object.entries(mapping as Record<string, unknown>).find(([key]) => Number(key) === amount);
-      if (entry) return Number(entry[1]);
-    }
-    const recipients = Array.isArray(metadata.fixedRecipientDenominations) ? metadata.fixedRecipientDenominations.map(Number) : [];
-    const senders = Array.isArray(metadata.fixedSenderDenominations) ? metadata.fixedSenderDenominations.map(Number) : [];
-    const index = recipients.findIndex((value) => value === amount);
-    if (index >= 0 && Number.isFinite(senders[index])) return senders[index];
-    const rate = Number(metadata.recipientCurrencyToSenderCurrencyExchangeRate);
-    return Number.isFinite(rate) && rate > 0 ? amount * rate : amount;
   }
 
   private classifyProviderResult(result: BuyGiftCardProviderPurchase) {
@@ -312,6 +369,7 @@ export class BuyGiftCardService {
       id: purchase.id, reference: purchase.reference, status: purchase.status, provider: purchase.provider,
       providerProductId: purchase.providerProductId, providerReference: purchase.providerReference, redeemId: purchase.redeemId,
       brandName: purchase.brandNameSnapshot, productName: purchase.productNameSnapshot, countryCode: purchase.countryCode,
+      cardCurrencyCode: purchase.metadata?.cardCurrencyCode ?? purchase.currencyCode,
       currencyCode: purchase.currencyCode, amount: purchase.amount?.toString(), quantity: purchase.quantity,
       providerAmount: purchase.providerAmount?.toString() ?? null, fee: purchase.fee?.toString(),
       baseBuyRatePercent: purchase.baseBuyRatePercent?.toString() ?? '0',

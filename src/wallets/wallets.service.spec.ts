@@ -12,20 +12,41 @@ describe('WalletsService held funds', () => {
 
   beforeEach(() => {
     prisma = {
-      wallet: { findFirst: jest.fn().mockResolvedValue({ id: walletId, userId }) },
+      wallet: {
+        findFirst: jest.fn().mockResolvedValue({ id: walletId, userId }),
+        upsert: jest.fn().mockResolvedValue({ id: walletId, userId }),
+      },
       walletBalance: {
         findUnique: jest.fn().mockResolvedValue({
           id: 'balance-1',
           availableBalance: new Decimal('100.00'),
           pendingBalance: new Decimal('0.00'),
         }),
+        upsert: jest.fn().mockResolvedValue({ id: 'balance-1' }),
       },
+      currency: { findUnique: jest.fn().mockResolvedValue({ code: 'USD' }) },
       ledgerEntry: { findUnique: jest.fn().mockResolvedValue(null) },
       $executeRaw: jest.fn().mockResolvedValue(1),
       $transaction: jest.fn((callback: (tx: any) => unknown) => callback(prisma)),
     };
     ledger = { recordEntry: jest.fn().mockResolvedValue({ id: 'ledger-1' }) };
     service = new WalletsService(prisma as never, ledger as never as LedgerService);
+  });
+
+  it('ensures every created or fetched wallet has an initialized USD balance', async () => {
+    await expect(service.getOrCreateWallet(userId)).resolves.toEqual({ id: walletId, userId });
+
+    expect(prisma.walletBalance.upsert).toHaveBeenCalledWith({
+      where: { walletId_currencyCode: { walletId, currencyCode: 'USD' } },
+      update: {},
+      create: {
+        walletId,
+        currencyCode: 'USD',
+        availableBalance: new Decimal('0'),
+        pendingBalance: new Decimal('0'),
+      },
+      include: { currency: true },
+    });
   });
 
   it('holds funds atomically and records both balance snapshots', async () => {

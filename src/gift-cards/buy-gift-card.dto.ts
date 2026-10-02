@@ -32,6 +32,14 @@ export class BuyGiftCardPurchaseDto {
   @MaxLength(120)
   productId!: string;
 
+  @IsString()
+  @Matches(/^[A-Za-z]{2}$/)
+  countryCode!: string;
+
+  @IsString()
+  @Length(3, 10)
+  currencyCode!: string;
+
   @Type(() => Number)
   @IsNumber({ allowNaN: false, allowInfinity: false })
   @Min(1)
@@ -53,6 +61,33 @@ export class BuyGiftCardPurchaseDto {
   @IsString()
   @Matches(/^[A-Za-z0-9._:-]{1,128}$/)
   idempotencyKey?: string;
+}
+
+export class BuyGiftCardQuoteDto {
+  @IsString()
+  @MaxLength(120)
+  productId!: string;
+
+  @IsString()
+  @Matches(/^[A-Za-z]{2}$/)
+  countryCode!: string;
+
+  @IsString()
+  @Length(3, 10)
+  currencyCode!: string;
+
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false, allowInfinity: false })
+  @Min(1)
+  @Max(100000)
+  amount!: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(20)
+  quantity = 1;
 }
 
 export class CreateBuyGiftCardRateAdjustmentDto {

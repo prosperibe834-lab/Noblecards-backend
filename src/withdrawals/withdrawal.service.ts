@@ -7,6 +7,7 @@ import { EmailService } from '../email/email.service';
 import { Optional } from '@nestjs/common';
 import { WalletsService } from '../wallets/wallets.service';
 import { BeneficiaryVerificationStatus, PaymentMethod, TransactionStatus, TransactionType, WithdrawalQuoteStatus } from '../generated/prisma';
+import { Prisma } from '../generated/prisma/client';
 
 export type CreateWithdrawalInput = {
   quoteId: string;
@@ -132,6 +133,44 @@ export class WithdrawalService {
       throw new BadRequestException('Transaction PIN must be a 4-digit number.');
     }
     await this.users.verifyTransactionPin(userId, pin);
+  }
+
+  async listWithdrawals(userId: string, filters: { status?: string; currency?: string; country?: string; provider?: string } = {}) {
+    const withdrawals = await this.prisma.$queryRaw<Array<any>>`
+      SELECT w.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
+      FROM "Withdrawal" w
+      LEFT JOIN "Transaction" t ON w."transactionId" = t.id
+      WHERE w."userId" = ${userId}
+        ${filters.status ? Prisma.sql`AND w."status" = ${filters.status}` : Prisma.empty}
+        ${filters.currency ? Prisma.sql`AND w."destinationCurrencyCode" = ${filters.currency.toUpperCase()}` : Prisma.empty}
+        ${filters.country ? Prisma.sql`AND w."countryCode" = ${filters.country.toUpperCase()}` : Prisma.empty}
+        ${filters.provider ? Prisma.sql`AND w."provider" = ${filters.provider}` : Prisma.empty}
+      ORDER BY w."createdAt" DESC
+    `;
+
+    return withdrawals.map((withdrawal) => ({
+      id: withdrawal.id,
+      reference: withdrawal.reference,
+      status: withdrawal.status,
+      sourceCurrency: withdrawal.sourceCurrencyCode,
+      destinationCurrency: withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
+      sourceAmount: withdrawal.sourceAmount?.toString?.() ?? '0',
+      destinationAmount: withdrawal.destinationAmount?.toString?.() ?? '0',
+      fee: withdrawal.fee?.toString?.() ?? '0',
+      amountReceived: withdrawal.amountReceived?.toString?.() ?? '0',
+      currency: withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
+      country: withdrawal.country ?? withdrawal.countryCode ?? '',
+      countryCode: withdrawal.countryCode,
+      paymentMethod: withdrawal.paymentMethod,
+      provider: withdrawal.provider,
+      createdAt: withdrawal.createdAt,
+      updatedAt: withdrawal.updatedAt,
+      transaction: withdrawal.transactionId ? {
+        id: withdrawal.transactionId,
+        status: withdrawal.transactionStatus,
+        reference: withdrawal.transactionReference,
+      } : null,
+    }));
   }
 
   async createWithdrawal(userId: string, input: CreateWithdrawalInput): Promise<WithdrawalResponse> {

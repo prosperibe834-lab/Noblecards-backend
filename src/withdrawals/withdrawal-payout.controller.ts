@@ -22,6 +22,11 @@ export class WithdrawalPayoutController {
     return this.withdrawals.createWithdrawal(request.user.userId, dto);
   }
 
+  @Get()
+  list(@Req() request: { user: { userId: string } }, @Query('status') status?: string, @Query('currency') currency?: string, @Query('country') country?: string, @Query('provider') provider?: string) {
+    return this.withdrawals.listWithdrawals(request.user.userId, { status, currency, country, provider });
+  }
+
   @Get('banks')
   banks(@Req() request: { user: { userId: string } }, @Query('countryCode') countryCode = 'NG', @Query('currencyCode') currencyCode = 'NGN') {
     return this.beneficiaries.getBanksForUser(request.user.userId, countryCode, currencyCode).then((banks) => ({ banks }));

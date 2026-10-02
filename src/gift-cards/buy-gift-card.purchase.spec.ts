@@ -54,7 +54,7 @@ const makePurchase = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
-function makeService(providerResult: any = { providerReference: 'tp-1', providerStatus: 'success', providerMessage: 'ok', redeemId: 'r-1', voucherCode: 'CODE-1', redeemDetails: { instructions: 'online' }, providerAmount: '12.01', providerMetadata: {} }, rateService?: any, baseRateService?: any) {
+function makeService(providerResult: any = { providerReference: 'tp-1', providerStatus: 'success', providerMessage: 'ok', redeemId: 'r-1', voucherCode: 'CODE-1', redeemDetails: { instructions: 'online' }, providerAmount: '12.01', providerMetadata: {} }, rateService?: any, baseRateService?: any, fxRates: Record<string, number> = { USD: 1, EUR: 1, GBP: 1, CAD: 1, NGN: 1 }) {
   const purchase = makePurchase();
   const tx = {
     transaction: { create: jest.fn().mockResolvedValue({ id: 'tx-1' }), update: jest.fn().mockResolvedValue({}) },
@@ -83,7 +83,8 @@ function makeService(providerResult: any = { providerReference: 'tp-1', provider
   } as any;
   const encryption = { encrypt: jest.fn().mockReturnValue('encrypted'), decrypt: jest.fn().mockReturnValue({ code: 'CODE-1' }) } as any;
   const config = { get: jest.fn().mockReturnValue('0') } as any;
-  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config, rateService, baseRateService), provider, prisma, tx, wallets, encryption };
+  const exchangeRates = { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: fxRates, updatedAt: '2026-09-30T00:00:00.000Z' }) } as any;
+  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config, rateService, baseRateService, exchangeRates), provider, prisma, tx, wallets, encryption, exchangeRates };
 }
 
 describe('BuyGiftCardService purchase flow', () => {
@@ -91,10 +92,48 @@ describe('BuyGiftCardService purchase flow', () => {
     const { service, provider, wallets, encryption } = makeService();
     const result = await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-1' });
     expect(provider.purchase).toHaveBeenCalledWith(expect.objectContaining({ productId: '14971', amount: 10, units: 1, reference: expect.stringMatching(/^NC-BUY-/) }));
+    expect(provider.purchase).toHaveBeenCalledWith(expect.objectContaining({ currencyCode: 'EUR' }));
     expect(wallets.holdFunds).toHaveBeenCalledTimes(1);
     expect(wallets.finalizeHeldFunds).toHaveBeenCalledTimes(1);
     expect(encryption.encrypt).toHaveBeenCalledWith({ code: 'CODE-1' });
     expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+  });
+
+  it('uses the explicitly selected country and currency when provider product IDs repeat', async () => {
+    const { service, provider, tx } = makeService();
+    provider.getCatalog.mockResolvedValue([
+      product,
+      {
+        ...product,
+        country: 'United Kingdom',
+        countryCode: 'GB',
+        currency: 'GBP',
+        providerMetadata: { senderCurrencyCode: 'GBP' },
+      },
+    ]);
+
+    await service.purchase('user-1', {
+      productId: product.providerProductId,
+      countryCode: 'GB',
+      currencyCode: 'GBP',
+      amount: 10,
+      quantity: 1,
+    });
+
+    expect(provider.getCatalog).toHaveBeenCalledWith({
+      productId: product.providerProductId,
+      countryCode: 'GB',
+      currency: 'GBP',
+    });
+
+    expect(tx.giftCardPurchase.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ countryCode: 'GB' }),
+      }),
+    );
+    expect(provider.purchase).toHaveBeenCalledWith(
+      expect.objectContaining({ currencyCode: 'GBP' }),
+    );
   });
 
   it('rejects an unavailable product or denomination before charging', async () => {
@@ -142,14 +181,14 @@ describe('BuyGiftCardService purchase flow', () => {
     await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-rate', ...( { customerPrice: 0.01 } as any) });
 
     expect(rateService.resolve).toHaveBeenCalledWith(product, 10);
-    expect(wallets.holdFunds).toHaveBeenCalledWith(expect.objectContaining({ amount: new Decimal('13.21') }), tx);
+    expect(wallets.holdFunds).toHaveBeenCalledWith(expect.objectContaining({ amount: new Decimal('11') }), tx);
     expect(tx.giftCardPurchase.create).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({
-        providerAmount: new Decimal('12.01'),
+        providerAmount: new Decimal('10'),
         fee: new Decimal('0'),
         buyAdjustmentPercent: new Decimal('10'),
-        buyAdjustmentAmount: new Decimal('1.20'),
-        customerPrice: new Decimal('13.21'),
+        buyAdjustmentAmount: new Decimal('1'),
+        customerPrice: new Decimal('11'),
       }),
     }));
   });
@@ -171,5 +210,59 @@ describe('BuyGiftCardService purchase flow', () => {
         customerPrice: new Decimal('83'),
       }),
     }));
+  });
+
+  it('converts a EUR denomination to USD before applying the configured Buy rate', async () => {
+    const rateService = { resolve: jest.fn().mockResolvedValue({ adjustmentPercent: new Decimal('3') }) };
+    const baseRateService = { resolve: jest.fn().mockResolvedValue({ ratePercent: new Decimal('80') }) };
+    const { service, provider } = makeService(undefined, rateService, baseRateService, {
+      USD: 1,
+      EUR: 0.92,
+    });
+    provider.getCatalog.mockResolvedValue([
+      {
+        ...product,
+        country: 'Germany',
+        countryCode: 'DE',
+        denominations: ['15'],
+        minimumAmount: '15',
+        maximumAmount: '15',
+      },
+    ]);
+
+    const quote = await service.quote({
+      productId: product.providerProductId,
+      countryCode: 'DE',
+      currencyCode: 'EUR',
+      amount: 15,
+      quantity: 1,
+    });
+
+    expect(quote).toEqual(expect.objectContaining({
+      currencyCode: 'EUR',
+      walletCurrencyCode: 'USD',
+      faceValue: 15,
+      fxRate: '0.92',
+      usdFaceValue: '16.3',
+      customerRatePercent: '83',
+      customerPrice: '13.53',
+    }));
+  });
+
+  it('does not quote or charge when the selected currency has no valid USD FX rate', async () => {
+    const { service, wallets } = makeService(undefined, undefined, undefined, {
+      USD: 1,
+    });
+
+    await expect(
+      service.quote({
+        productId: product.providerProductId,
+        countryCode: 'IT',
+        currencyCode: 'EUR',
+        amount: 10,
+        quantity: 1,
+      }),
+    ).rejects.toThrow(/no USD exchange rate exists for EUR/i);
+    expect(wallets.holdFunds).not.toHaveBeenCalled();
   });
 });

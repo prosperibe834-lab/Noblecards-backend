@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { BuyGiftCardCatalogQueryDto, BuyGiftCardPurchaseDto } from './buy-gift-card.dto';
+import { BuyGiftCardCatalogQueryDto, BuyGiftCardPurchaseDto, BuyGiftCardQuoteDto } from './buy-gift-card.dto';
 import { BuyGiftCardService } from './buy-gift-card.service';
 import { QuoteGiftCardSaleDto, SubmitGiftCardSaleDto } from './gift-cards.dto';
 import { GiftCardsService } from './gift-cards.service';
@@ -21,6 +21,11 @@ export class GiftCardsController {
       productName: query.product,
       subcategory: query.subcategory,
     });
+  }
+
+  @Post('buy/quote')
+  quoteBuy(@Body() dto: BuyGiftCardQuoteDto) {
+    return this.buyGiftCards.quote(dto);
   }
 
   @Post('buy')

@@ -16,9 +16,10 @@ import { TremendousClient } from './tremendous.client';
 import { TremendousProvider } from './tremendous.provider';
 import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption.service';
 import { AdminGiftCardSandboxService } from './admin-gift-card-sandbox.service';
+import { ExchangeRatesModule } from '../exchange-rates/exchange-rates.module';
 
 @Module({
-  imports: [AuthModule, WalletsModule],
+  imports: [AuthModule, WalletsModule, ExchangeRatesModule],
   controllers: [GiftCardsController, AdminGiftCardsController],
   providers: [
     GiftCardsService,

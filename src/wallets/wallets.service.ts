@@ -131,11 +131,13 @@ export class WalletsService {
   }
 
   async getOrCreateWallet(userId: string) {
-    return (this.prisma as any).wallet.upsert({
+    const wallet = await (this.prisma as any).wallet.upsert({
       where: { userId },
       update: {},
       create: { id: randomUUID(), userId },
     });
+    await this.ensureBalance(wallet.id, 'USD');
+    return wallet;
   }
 
   async getWallet(userId: string) {
@@ -192,18 +194,13 @@ export class WalletsService {
   }
 
   async ensureBalance(walletId: string, currencyCode: string) {
-    const existing = await (this.prisma as any).walletBalance.findUnique({
-      where: { walletId_currencyCode: { walletId, currencyCode } },
-      include: { currency: true },
-    });
-
-    if (existing) return existing;
-
     const currency = await (this.prisma as any).currency.findUnique({ where: { code: currencyCode } });
     if (!currency) throw new NotFoundException(`Currency ${currencyCode} is not configured.`);
 
-    return (this.prisma as any).walletBalance.create({
-      data: {
+    return (this.prisma as any).walletBalance.upsert({
+      where: { walletId_currencyCode: { walletId, currencyCode } },
+      update: {},
+      create: {
         walletId,
         currencyCode,
         availableBalance: new Decimal(0),

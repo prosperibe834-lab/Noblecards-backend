@@ -12,6 +12,7 @@ export class ExchangeRatesService {
   private readonly logger = new Logger(ExchangeRatesService.name);
   private cache: ExchangeRatesResponse | null = null;
   private cacheExpiresAt = 0;
+  private inFlightFetch: Promise<ExchangeRatesResponse> | null = null;
 
   constructor(private readonly config: ConfigService) {}
 
@@ -20,7 +21,7 @@ export class ExchangeRatesService {
   }
 
   private getTimeoutMs() {
-    return Number(this.config.get<number | string>('EXCHANGE_RATE_TIMEOUT_MS', 8000));
+    return Number(this.config.get<number | string>('EXCHANGE_RATE_TIMEOUT_MS', 15_000));
   }
 
   private getCacheTtlMs() {
@@ -126,10 +127,22 @@ export class ExchangeRatesService {
       return this.cache!;
     }
 
-    return this.fetchRatesFromProvider();
+    if (this.inFlightFetch) {
+      return this.inFlightFetch;
+    }
+
+    const fetchPromise = this.fetchRatesFromProvider();
+    this.inFlightFetch = fetchPromise;
+    try {
+      return await fetchPromise;
+    } finally {
+      if (this.inFlightFetch === fetchPromise) {
+        this.inFlightFetch = null;
+      }
+    }
   }
 
   getCachedRates(): ExchangeRatesResponse | null {
-    return this.cache;
+    return this.isCacheValid() ? this.cache : null;
   }
 }
