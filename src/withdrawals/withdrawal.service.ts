@@ -173,6 +173,48 @@ export class WithdrawalService {
     }));
   }
 
+  async getWithdrawal(userId: string, id: string) {
+    const withdrawal = await (this.prisma as any).withdrawal.findFirst({
+      where: { id, userId },
+      include: { transaction: true, beneficiary: true },
+    });
+    if (!withdrawal) throw new NotFoundException('Withdrawal not found.');
+
+    return {
+      id: withdrawal.id,
+      reference: withdrawal.reference,
+      status: withdrawal.status,
+      sourceCurrency: withdrawal.sourceCurrencyCode,
+      sourceAmount: withdrawal.sourceAmount.toString(),
+      destinationCurrency: withdrawal.destinationCurrencyCode,
+      destinationAmount: withdrawal.destinationAmount.toString(),
+      exchangeRate: withdrawal.exchangeRate.toString(),
+      fee: withdrawal.fee.toString(),
+      amountReceived: withdrawal.amountReceived.toString(),
+      country: withdrawal.country,
+      countryCode: withdrawal.countryCode,
+      paymentMethod: withdrawal.paymentMethod,
+      failureReason: withdrawal.failureReason ?? null,
+      createdAt: withdrawal.createdAt,
+      updatedAt: withdrawal.updatedAt,
+      transaction: withdrawal.transaction
+        ? {
+            id: withdrawal.transaction.id,
+            reference: withdrawal.transaction.reference,
+            status: withdrawal.transaction.status,
+          }
+        : null,
+      beneficiary: withdrawal.beneficiary
+        ? {
+            institutionName: withdrawal.beneficiary.institutionName,
+            accountLast4: withdrawal.beneficiary.accountLast4,
+            country: withdrawal.beneficiary.country,
+            countryCode: withdrawal.beneficiary.countryCode,
+          }
+        : null,
+    };
+  }
+
   async createWithdrawal(userId: string, input: CreateWithdrawalInput): Promise<WithdrawalResponse> {
     this.ensureIdempotencyKey(input.idempotencyKey);
     await this.verifyPin(userId, input.pin);

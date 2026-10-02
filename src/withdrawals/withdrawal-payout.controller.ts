@@ -32,6 +32,11 @@ export class WithdrawalPayoutController {
     return this.beneficiaries.getBanksForUser(request.user.userId, countryCode, currencyCode).then((banks) => ({ banks }));
   }
 
+  @Get(':withdrawalId')
+  get(@Req() request: { user: { userId: string } }, @Param('withdrawalId') withdrawalId: string) {
+    return this.withdrawals.getWithdrawal(request.user.userId, withdrawalId);
+  }
+
   @Post('beneficiaries/verify')
   verifyBeneficiary(@Req() request: { user: { userId: string } }, @Body() dto: ResolveBeneficiaryAccountDto) {
     return this.beneficiaries.resolveAccountForUser(request.user.userId, { ...dto, method: PaymentMethod.BANK_TRANSFER });

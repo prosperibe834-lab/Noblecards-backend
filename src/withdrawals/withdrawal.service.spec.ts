@@ -90,6 +90,95 @@ describe('WithdrawalService', () => {
     expect(result.quoteId).toBe('quote-1');
   });
 
+  it('returns receipt details only for the authenticated withdrawal owner', async () => {
+    const { service, prisma } = makeService();
+    const createdAt = new Date('2026-10-02T10:00:00.000Z');
+    prisma.withdrawal.findFirst.mockResolvedValue({
+      id: 'withdrawal-2',
+      reference: 'WD-EXACT-2',
+      userId: 'user-1',
+      status: TransactionStatus.PENDING,
+      sourceCurrencyCode: 'USD',
+      sourceAmount: new Decimal('75.25'),
+      destinationCurrencyCode: 'NGN',
+      destinationAmount: new Decimal('112875.00'),
+      exchangeRate: new Decimal('1500.00'),
+      fee: new Decimal('2.50'),
+      amountReceived: new Decimal('110000.00'),
+      country: 'Nigeria',
+      countryCode: 'NG',
+      paymentMethod: PaymentMethod.BANK_TRANSFER,
+      createdAt,
+      updatedAt: createdAt,
+      transaction: { id: 'transaction-2', reference: 'TX-EXACT-2', status: TransactionStatus.PENDING },
+      beneficiary: { institutionName: 'Customer Bank', accountLast4: '1234', country: 'Nigeria', countryCode: 'NG' },
+    });
+
+    const result = await service.getWithdrawal('user-1', 'withdrawal-2');
+
+    expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith({
+      where: { id: 'withdrawal-2', userId: 'user-1' },
+      include: { transaction: true, beneficiary: true },
+    });
+    expect(result).toMatchObject({
+      id: 'withdrawal-2',
+      reference: 'WD-EXACT-2',
+      sourceAmount: '75.25',
+      destinationAmount: '112875',
+      amountReceived: '110000',
+      transaction: { reference: 'TX-EXACT-2' },
+      beneficiary: { institutionName: 'Customer Bank', accountLast4: '1234' },
+    });
+  });
+
+  it('does not return a withdrawal owned by another customer', async () => {
+    const { service, prisma } = makeService();
+    prisma.withdrawal.findFirst.mockResolvedValue(null);
+
+    await expect(service.getWithdrawal('user-2', 'withdrawal-2')).rejects.toBeInstanceOf(NotFoundException);
+    expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith({
+      where: { id: 'withdrawal-2', userId: 'user-2' },
+      include: { transaction: true, beneficiary: true },
+    });
+  });
+
+  it.each(['PENDING', 'PROCESSING', 'SUCCESSFUL', 'FAILED', 'CANCELLED', 'REJECTED'])(
+    'returns receipt details when the withdrawal status is %s',
+    async (status) => {
+      const { service, prisma } = makeService();
+      prisma.withdrawal.findFirst.mockResolvedValue({
+        id: 'withdrawal-status-test',
+        reference: 'WD-STATUS-TEST',
+        status,
+        sourceCurrencyCode: 'USD',
+        sourceAmount: new Decimal('25.00'),
+        destinationCurrencyCode: 'NGN',
+        destinationAmount: new Decimal('37500.00'),
+        exchangeRate: new Decimal('1500.00'),
+        fee: new Decimal('1.00'),
+        amountReceived: new Decimal('36500.00'),
+        country: 'Nigeria',
+        countryCode: 'NG',
+        paymentMethod: PaymentMethod.BANK_TRANSFER,
+        createdAt: new Date('2026-10-02T10:00:00.000Z'),
+        updatedAt: new Date('2026-10-02T10:00:00.000Z'),
+        transaction: null,
+        beneficiary: null,
+      });
+
+      await expect(service.getWithdrawal('user-1', 'withdrawal-status-test'))
+        .resolves.toMatchObject({
+          id: 'withdrawal-status-test',
+          status,
+          reference: 'WD-STATUS-TEST',
+          sourceAmount: '25',
+        });
+      expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+        where: { id: 'withdrawal-status-test', userId: 'user-1' },
+      }));
+    },
+  );
+
   it('rejects an expired quote before creating a withdrawal', async () => {
     const { service } = makeService({
       quote: { ...baseQuote, status: WithdrawalQuoteStatus.EXPIRED, expiresAt: new Date(Date.now() - 1000) },
