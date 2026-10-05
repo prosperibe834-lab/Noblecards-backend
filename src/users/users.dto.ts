@@ -4,6 +4,7 @@ import {
   Length,
   Matches,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class UpdateProfileDto {
@@ -21,14 +22,39 @@ export class UpdateProfileDto {
   @IsOptional() @IsString() @MaxLength(500) profileImageUrl?: string;
 }
 
-export class CreateTransactionPinDto {
-  @IsString()
-  @Matches(/^\d{4}$/)
-  pin!: string;
+export class CreateOrUpdateTransactionPinDto {
+  @IsOptional() @IsString() @Matches(/^\d{4}$/)
+  pin?: string;
+
+  @IsOptional() @IsString() @Matches(/^\d{4}$/)
+  currentPin?: string;
+
+  @IsOptional() @IsString() @Matches(/^\d{4}$/)
+  newPin?: string;
 }
 
 export class VerifyTransactionPinDto {
   @IsString()
   @Matches(/^\d{4}$/)
   pin!: string;
+}
+
+export class VerifyTransactionPinResetCodeDto {
+  @IsString()
+  @Matches(/^\d{6}$/)
+  code!: string;
+}
+
+export class CompleteTransactionPinResetDto {
+  @IsString()
+  @MinLength(20)
+  resetToken!: string;
+
+  @IsString()
+  @Matches(/^\d{4}$/)
+  pin!: string;
+
+  @IsString()
+  @Matches(/^\d{4}$/)
+  confirmPin!: string;
 }

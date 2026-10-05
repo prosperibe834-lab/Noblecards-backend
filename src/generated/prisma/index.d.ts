@@ -29,6 +29,11 @@ export type PendingRegistration = $Result.DefaultSelection<Prisma.$PendingRegist
  */
 export type PasswordResetChallenge = $Result.DefaultSelection<Prisma.$PasswordResetChallengePayload>
 /**
+ * Model TransactionPinResetChallenge
+ * 
+ */
+export type TransactionPinResetChallenge = $Result.DefaultSelection<Prisma.$TransactionPinResetChallengePayload>
+/**
  * Model RefreshSession
  * 
  */
@@ -569,6 +574,16 @@ export class PrismaClient<
     * ```
     */
   get passwordResetChallenge(): Prisma.PasswordResetChallengeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transactionPinResetChallenge`: Exposes CRUD operations for the **TransactionPinResetChallenge** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TransactionPinResetChallenges
+    * const transactionPinResetChallenges = await prisma.transactionPinResetChallenge.findMany()
+    * ```
+    */
+  get transactionPinResetChallenge(): Prisma.TransactionPinResetChallengeDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.refreshSession`: Exposes CRUD operations for the **RefreshSession** model.
@@ -1229,6 +1244,7 @@ export namespace Prisma {
     User: 'User',
     PendingRegistration: 'PendingRegistration',
     PasswordResetChallenge: 'PasswordResetChallenge',
+    TransactionPinResetChallenge: 'TransactionPinResetChallenge',
     RefreshSession: 'RefreshSession',
     Wallet: 'Wallet',
     Currency: 'Currency',
@@ -1265,7 +1281,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "transactionPinResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1488,6 +1504,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PasswordResetChallengeCountArgs<ExtArgs>
             result: $Utils.Optional<PasswordResetChallengeCountAggregateOutputType> | number
+          }
+        }
+      }
+      TransactionPinResetChallenge: {
+        payload: Prisma.$TransactionPinResetChallengePayload<ExtArgs>
+        fields: Prisma.TransactionPinResetChallengeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionPinResetChallengeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionPinResetChallengeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionPinResetChallengeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionPinResetChallengeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          findMany: {
+            args: Prisma.TransactionPinResetChallengeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>[]
+          }
+          create: {
+            args: Prisma.TransactionPinResetChallengeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          createMany: {
+            args: Prisma.TransactionPinResetChallengeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionPinResetChallengeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionPinResetChallengeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          update: {
+            args: Prisma.TransactionPinResetChallengeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionPinResetChallengeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionPinResetChallengeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionPinResetChallengeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionPinResetChallengeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPinResetChallengePayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionPinResetChallengeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransactionPinResetChallenge>
+          }
+          groupBy: {
+            args: Prisma.TransactionPinResetChallengeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionPinResetChallengeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionPinResetChallengeCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionPinResetChallengeCountAggregateOutputType> | number
           }
         }
       }
@@ -3171,6 +3261,7 @@ export namespace Prisma {
     user?: UserOmit
     pendingRegistration?: PendingRegistrationOmit
     passwordResetChallenge?: PasswordResetChallengeOmit
+    transactionPinResetChallenge?: TransactionPinResetChallengeOmit
     refreshSession?: RefreshSessionOmit
     wallet?: WalletOmit
     currency?: CurrencyOmit
@@ -3273,6 +3364,7 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     passwordResets: number
+    transactionPinResets: number
     refreshSessions: number
     deposits: number
     transactions: number
@@ -3291,6 +3383,7 @@ export namespace Prisma {
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | UserCountOutputTypeCountPasswordResetsArgs
+    transactionPinResets?: boolean | UserCountOutputTypeCountTransactionPinResetsArgs
     refreshSessions?: boolean | UserCountOutputTypeCountRefreshSessionsArgs
     deposits?: boolean | UserCountOutputTypeCountDepositsArgs
     transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
@@ -3323,6 +3416,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPasswordResetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PasswordResetChallengeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransactionPinResetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionPinResetChallengeWhereInput
   }
 
   /**
@@ -4161,6 +4261,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
+    transactionPinResets?: boolean | User$transactionPinResetsArgs<ExtArgs>
     pendingVerification?: boolean | User$pendingVerificationArgs<ExtArgs>
     refreshSessions?: boolean | User$refreshSessionsArgs<ExtArgs>
     wallet?: boolean | User$walletArgs<ExtArgs>
@@ -4267,6 +4368,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
+    transactionPinResets?: boolean | User$transactionPinResetsArgs<ExtArgs>
     pendingVerification?: boolean | User$pendingVerificationArgs<ExtArgs>
     refreshSessions?: boolean | User$refreshSessionsArgs<ExtArgs>
     wallet?: boolean | User$walletArgs<ExtArgs>
@@ -4292,6 +4394,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       passwordResets: Prisma.$PasswordResetChallengePayload<ExtArgs>[]
+      transactionPinResets: Prisma.$TransactionPinResetChallengePayload<ExtArgs>[]
       pendingVerification: Prisma.$PendingRegistrationPayload<ExtArgs> | null
       refreshSessions: Prisma.$RefreshSessionPayload<ExtArgs>[]
       wallet: Prisma.$WalletPayload<ExtArgs> | null
@@ -4730,6 +4833,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     passwordResets<T extends User$passwordResetsArgs<ExtArgs> = {}>(args?: Subset<T, User$passwordResetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PasswordResetChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transactionPinResets<T extends User$transactionPinResetsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionPinResetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     pendingVerification<T extends User$pendingVerificationArgs<ExtArgs> = {}>(args?: Subset<T, User$pendingVerificationArgs<ExtArgs>>): Prisma__PendingRegistrationClient<$Result.GetResult<Prisma.$PendingRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     refreshSessions<T extends User$refreshSessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     wallet<T extends User$walletArgs<ExtArgs> = {}>(args?: Subset<T, User$walletArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -5214,6 +5318,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PasswordResetChallengeScalarFieldEnum | PasswordResetChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * User.transactionPinResets
+   */
+  export type User$transactionPinResetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    where?: TransactionPinResetChallengeWhereInput
+    orderBy?: TransactionPinResetChallengeOrderByWithRelationInput | TransactionPinResetChallengeOrderByWithRelationInput[]
+    cursor?: TransactionPinResetChallengeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionPinResetChallengeScalarFieldEnum | TransactionPinResetChallengeScalarFieldEnum[]
   }
 
   /**
@@ -7988,6 +8116,1168 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PasswordResetChallengeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TransactionPinResetChallenge
+   */
+
+  export type AggregateTransactionPinResetChallenge = {
+    _count: TransactionPinResetChallengeCountAggregateOutputType | null
+    _avg: TransactionPinResetChallengeAvgAggregateOutputType | null
+    _sum: TransactionPinResetChallengeSumAggregateOutputType | null
+    _min: TransactionPinResetChallengeMinAggregateOutputType | null
+    _max: TransactionPinResetChallengeMaxAggregateOutputType | null
+  }
+
+  export type TransactionPinResetChallengeAvgAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type TransactionPinResetChallengeSumAggregateOutputType = {
+    attempts: number | null
+  }
+
+  export type TransactionPinResetChallengeMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    codeHash: string | null
+    expiresAt: Date | null
+    attempts: number | null
+    verifiedAt: Date | null
+    resetTokenHash: string | null
+    resetTokenExpiresAt: Date | null
+    consumedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type TransactionPinResetChallengeMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    codeHash: string | null
+    expiresAt: Date | null
+    attempts: number | null
+    verifiedAt: Date | null
+    resetTokenHash: string | null
+    resetTokenExpiresAt: Date | null
+    consumedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type TransactionPinResetChallengeCountAggregateOutputType = {
+    id: number
+    userId: number
+    codeHash: number
+    expiresAt: number
+    attempts: number
+    verifiedAt: number
+    resetTokenHash: number
+    resetTokenExpiresAt: number
+    consumedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type TransactionPinResetChallengeAvgAggregateInputType = {
+    attempts?: true
+  }
+
+  export type TransactionPinResetChallengeSumAggregateInputType = {
+    attempts?: true
+  }
+
+  export type TransactionPinResetChallengeMinAggregateInputType = {
+    id?: true
+    userId?: true
+    codeHash?: true
+    expiresAt?: true
+    attempts?: true
+    verifiedAt?: true
+    resetTokenHash?: true
+    resetTokenExpiresAt?: true
+    consumedAt?: true
+    createdAt?: true
+  }
+
+  export type TransactionPinResetChallengeMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    codeHash?: true
+    expiresAt?: true
+    attempts?: true
+    verifiedAt?: true
+    resetTokenHash?: true
+    resetTokenExpiresAt?: true
+    consumedAt?: true
+    createdAt?: true
+  }
+
+  export type TransactionPinResetChallengeCountAggregateInputType = {
+    id?: true
+    userId?: true
+    codeHash?: true
+    expiresAt?: true
+    attempts?: true
+    verifiedAt?: true
+    resetTokenHash?: true
+    resetTokenExpiresAt?: true
+    consumedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type TransactionPinResetChallengeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransactionPinResetChallenge to aggregate.
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionPinResetChallenges to fetch.
+     */
+    orderBy?: TransactionPinResetChallengeOrderByWithRelationInput | TransactionPinResetChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionPinResetChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionPinResetChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionPinResetChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TransactionPinResetChallenges
+    **/
+    _count?: true | TransactionPinResetChallengeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionPinResetChallengeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionPinResetChallengeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionPinResetChallengeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionPinResetChallengeMaxAggregateInputType
+  }
+
+  export type GetTransactionPinResetChallengeAggregateType<T extends TransactionPinResetChallengeAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransactionPinResetChallenge]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransactionPinResetChallenge[P]>
+      : GetScalarType<T[P], AggregateTransactionPinResetChallenge[P]>
+  }
+
+
+
+
+  export type TransactionPinResetChallengeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionPinResetChallengeWhereInput
+    orderBy?: TransactionPinResetChallengeOrderByWithAggregationInput | TransactionPinResetChallengeOrderByWithAggregationInput[]
+    by: TransactionPinResetChallengeScalarFieldEnum[] | TransactionPinResetChallengeScalarFieldEnum
+    having?: TransactionPinResetChallengeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionPinResetChallengeCountAggregateInputType | true
+    _avg?: TransactionPinResetChallengeAvgAggregateInputType
+    _sum?: TransactionPinResetChallengeSumAggregateInputType
+    _min?: TransactionPinResetChallengeMinAggregateInputType
+    _max?: TransactionPinResetChallengeMaxAggregateInputType
+  }
+
+  export type TransactionPinResetChallengeGroupByOutputType = {
+    id: string
+    userId: string
+    codeHash: string
+    expiresAt: Date
+    attempts: number
+    verifiedAt: Date | null
+    resetTokenHash: string | null
+    resetTokenExpiresAt: Date | null
+    consumedAt: Date | null
+    createdAt: Date
+    _count: TransactionPinResetChallengeCountAggregateOutputType | null
+    _avg: TransactionPinResetChallengeAvgAggregateOutputType | null
+    _sum: TransactionPinResetChallengeSumAggregateOutputType | null
+    _min: TransactionPinResetChallengeMinAggregateOutputType | null
+    _max: TransactionPinResetChallengeMaxAggregateOutputType | null
+  }
+
+  type GetTransactionPinResetChallengeGroupByPayload<T extends TransactionPinResetChallengeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionPinResetChallengeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionPinResetChallengeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionPinResetChallengeGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionPinResetChallengeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionPinResetChallengeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    codeHash?: boolean
+    expiresAt?: boolean
+    attempts?: boolean
+    verifiedAt?: boolean
+    resetTokenHash?: boolean
+    resetTokenExpiresAt?: boolean
+    consumedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionPinResetChallenge"]>
+
+  export type TransactionPinResetChallengeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    codeHash?: boolean
+    expiresAt?: boolean
+    attempts?: boolean
+    verifiedAt?: boolean
+    resetTokenHash?: boolean
+    resetTokenExpiresAt?: boolean
+    consumedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionPinResetChallenge"]>
+
+  export type TransactionPinResetChallengeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    codeHash?: boolean
+    expiresAt?: boolean
+    attempts?: boolean
+    verifiedAt?: boolean
+    resetTokenHash?: boolean
+    resetTokenExpiresAt?: boolean
+    consumedAt?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transactionPinResetChallenge"]>
+
+  export type TransactionPinResetChallengeSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    codeHash?: boolean
+    expiresAt?: boolean
+    attempts?: boolean
+    verifiedAt?: boolean
+    resetTokenHash?: boolean
+    resetTokenExpiresAt?: boolean
+    consumedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type TransactionPinResetChallengeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "codeHash" | "expiresAt" | "attempts" | "verifiedAt" | "resetTokenHash" | "resetTokenExpiresAt" | "consumedAt" | "createdAt", ExtArgs["result"]["transactionPinResetChallenge"]>
+  export type TransactionPinResetChallengeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionPinResetChallengeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionPinResetChallengeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $TransactionPinResetChallengePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TransactionPinResetChallenge"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      codeHash: string
+      expiresAt: Date
+      attempts: number
+      verifiedAt: Date | null
+      resetTokenHash: string | null
+      resetTokenExpiresAt: Date | null
+      consumedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["transactionPinResetChallenge"]>
+    composites: {}
+  }
+
+  type TransactionPinResetChallengeGetPayload<S extends boolean | null | undefined | TransactionPinResetChallengeDefaultArgs> = $Result.GetResult<Prisma.$TransactionPinResetChallengePayload, S>
+
+  type TransactionPinResetChallengeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionPinResetChallengeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionPinResetChallengeCountAggregateInputType | true
+    }
+
+  export interface TransactionPinResetChallengeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TransactionPinResetChallenge'], meta: { name: 'TransactionPinResetChallenge' } }
+    /**
+     * Find zero or one TransactionPinResetChallenge that matches the filter.
+     * @param {TransactionPinResetChallengeFindUniqueArgs} args - Arguments to find a TransactionPinResetChallenge
+     * @example
+     * // Get one TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionPinResetChallengeFindUniqueArgs>(args: SelectSubset<T, TransactionPinResetChallengeFindUniqueArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TransactionPinResetChallenge that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionPinResetChallengeFindUniqueOrThrowArgs} args - Arguments to find a TransactionPinResetChallenge
+     * @example
+     * // Get one TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionPinResetChallengeFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionPinResetChallengeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransactionPinResetChallenge that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeFindFirstArgs} args - Arguments to find a TransactionPinResetChallenge
+     * @example
+     * // Get one TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionPinResetChallengeFindFirstArgs>(args?: SelectSubset<T, TransactionPinResetChallengeFindFirstArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TransactionPinResetChallenge that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeFindFirstOrThrowArgs} args - Arguments to find a TransactionPinResetChallenge
+     * @example
+     * // Get one TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionPinResetChallengeFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionPinResetChallengeFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TransactionPinResetChallenges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TransactionPinResetChallenges
+     * const transactionPinResetChallenges = await prisma.transactionPinResetChallenge.findMany()
+     * 
+     * // Get first 10 TransactionPinResetChallenges
+     * const transactionPinResetChallenges = await prisma.transactionPinResetChallenge.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionPinResetChallengeWithIdOnly = await prisma.transactionPinResetChallenge.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionPinResetChallengeFindManyArgs>(args?: SelectSubset<T, TransactionPinResetChallengeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TransactionPinResetChallenge.
+     * @param {TransactionPinResetChallengeCreateArgs} args - Arguments to create a TransactionPinResetChallenge.
+     * @example
+     * // Create one TransactionPinResetChallenge
+     * const TransactionPinResetChallenge = await prisma.transactionPinResetChallenge.create({
+     *   data: {
+     *     // ... data to create a TransactionPinResetChallenge
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionPinResetChallengeCreateArgs>(args: SelectSubset<T, TransactionPinResetChallengeCreateArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TransactionPinResetChallenges.
+     * @param {TransactionPinResetChallengeCreateManyArgs} args - Arguments to create many TransactionPinResetChallenges.
+     * @example
+     * // Create many TransactionPinResetChallenges
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionPinResetChallengeCreateManyArgs>(args?: SelectSubset<T, TransactionPinResetChallengeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TransactionPinResetChallenges and returns the data saved in the database.
+     * @param {TransactionPinResetChallengeCreateManyAndReturnArgs} args - Arguments to create many TransactionPinResetChallenges.
+     * @example
+     * // Create many TransactionPinResetChallenges
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TransactionPinResetChallenges and only return the `id`
+     * const transactionPinResetChallengeWithIdOnly = await prisma.transactionPinResetChallenge.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionPinResetChallengeCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionPinResetChallengeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TransactionPinResetChallenge.
+     * @param {TransactionPinResetChallengeDeleteArgs} args - Arguments to delete one TransactionPinResetChallenge.
+     * @example
+     * // Delete one TransactionPinResetChallenge
+     * const TransactionPinResetChallenge = await prisma.transactionPinResetChallenge.delete({
+     *   where: {
+     *     // ... filter to delete one TransactionPinResetChallenge
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionPinResetChallengeDeleteArgs>(args: SelectSubset<T, TransactionPinResetChallengeDeleteArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TransactionPinResetChallenge.
+     * @param {TransactionPinResetChallengeUpdateArgs} args - Arguments to update one TransactionPinResetChallenge.
+     * @example
+     * // Update one TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionPinResetChallengeUpdateArgs>(args: SelectSubset<T, TransactionPinResetChallengeUpdateArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TransactionPinResetChallenges.
+     * @param {TransactionPinResetChallengeDeleteManyArgs} args - Arguments to filter TransactionPinResetChallenges to delete.
+     * @example
+     * // Delete a few TransactionPinResetChallenges
+     * const { count } = await prisma.transactionPinResetChallenge.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionPinResetChallengeDeleteManyArgs>(args?: SelectSubset<T, TransactionPinResetChallengeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransactionPinResetChallenges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TransactionPinResetChallenges
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionPinResetChallengeUpdateManyArgs>(args: SelectSubset<T, TransactionPinResetChallengeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TransactionPinResetChallenges and returns the data updated in the database.
+     * @param {TransactionPinResetChallengeUpdateManyAndReturnArgs} args - Arguments to update many TransactionPinResetChallenges.
+     * @example
+     * // Update many TransactionPinResetChallenges
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TransactionPinResetChallenges and only return the `id`
+     * const transactionPinResetChallengeWithIdOnly = await prisma.transactionPinResetChallenge.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionPinResetChallengeUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionPinResetChallengeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TransactionPinResetChallenge.
+     * @param {TransactionPinResetChallengeUpsertArgs} args - Arguments to update or create a TransactionPinResetChallenge.
+     * @example
+     * // Update or create a TransactionPinResetChallenge
+     * const transactionPinResetChallenge = await prisma.transactionPinResetChallenge.upsert({
+     *   create: {
+     *     // ... data to create a TransactionPinResetChallenge
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TransactionPinResetChallenge we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionPinResetChallengeUpsertArgs>(args: SelectSubset<T, TransactionPinResetChallengeUpsertArgs<ExtArgs>>): Prisma__TransactionPinResetChallengeClient<$Result.GetResult<Prisma.$TransactionPinResetChallengePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TransactionPinResetChallenges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeCountArgs} args - Arguments to filter TransactionPinResetChallenges to count.
+     * @example
+     * // Count the number of TransactionPinResetChallenges
+     * const count = await prisma.transactionPinResetChallenge.count({
+     *   where: {
+     *     // ... the filter for the TransactionPinResetChallenges we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionPinResetChallengeCountArgs>(
+      args?: Subset<T, TransactionPinResetChallengeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionPinResetChallengeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TransactionPinResetChallenge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionPinResetChallengeAggregateArgs>(args: Subset<T, TransactionPinResetChallengeAggregateArgs>): Prisma.PrismaPromise<GetTransactionPinResetChallengeAggregateType<T>>
+
+    /**
+     * Group by TransactionPinResetChallenge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionPinResetChallengeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionPinResetChallengeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionPinResetChallengeGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionPinResetChallengeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionPinResetChallengeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionPinResetChallengeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TransactionPinResetChallenge model
+   */
+  readonly fields: TransactionPinResetChallengeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TransactionPinResetChallenge.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionPinResetChallengeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TransactionPinResetChallenge model
+   */
+  interface TransactionPinResetChallengeFieldRefs {
+    readonly id: FieldRef<"TransactionPinResetChallenge", 'String'>
+    readonly userId: FieldRef<"TransactionPinResetChallenge", 'String'>
+    readonly codeHash: FieldRef<"TransactionPinResetChallenge", 'String'>
+    readonly expiresAt: FieldRef<"TransactionPinResetChallenge", 'DateTime'>
+    readonly attempts: FieldRef<"TransactionPinResetChallenge", 'Int'>
+    readonly verifiedAt: FieldRef<"TransactionPinResetChallenge", 'DateTime'>
+    readonly resetTokenHash: FieldRef<"TransactionPinResetChallenge", 'String'>
+    readonly resetTokenExpiresAt: FieldRef<"TransactionPinResetChallenge", 'DateTime'>
+    readonly consumedAt: FieldRef<"TransactionPinResetChallenge", 'DateTime'>
+    readonly createdAt: FieldRef<"TransactionPinResetChallenge", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TransactionPinResetChallenge findUnique
+   */
+  export type TransactionPinResetChallengeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionPinResetChallenge to fetch.
+     */
+    where: TransactionPinResetChallengeWhereUniqueInput
+  }
+
+  /**
+   * TransactionPinResetChallenge findUniqueOrThrow
+   */
+  export type TransactionPinResetChallengeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionPinResetChallenge to fetch.
+     */
+    where: TransactionPinResetChallengeWhereUniqueInput
+  }
+
+  /**
+   * TransactionPinResetChallenge findFirst
+   */
+  export type TransactionPinResetChallengeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionPinResetChallenge to fetch.
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionPinResetChallenges to fetch.
+     */
+    orderBy?: TransactionPinResetChallengeOrderByWithRelationInput | TransactionPinResetChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransactionPinResetChallenges.
+     */
+    cursor?: TransactionPinResetChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionPinResetChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionPinResetChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransactionPinResetChallenges.
+     */
+    distinct?: TransactionPinResetChallengeScalarFieldEnum | TransactionPinResetChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionPinResetChallenge findFirstOrThrow
+   */
+  export type TransactionPinResetChallengeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionPinResetChallenge to fetch.
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionPinResetChallenges to fetch.
+     */
+    orderBy?: TransactionPinResetChallengeOrderByWithRelationInput | TransactionPinResetChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TransactionPinResetChallenges.
+     */
+    cursor?: TransactionPinResetChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionPinResetChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionPinResetChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransactionPinResetChallenges.
+     */
+    distinct?: TransactionPinResetChallengeScalarFieldEnum | TransactionPinResetChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionPinResetChallenge findMany
+   */
+  export type TransactionPinResetChallengeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter, which TransactionPinResetChallenges to fetch.
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TransactionPinResetChallenges to fetch.
+     */
+    orderBy?: TransactionPinResetChallengeOrderByWithRelationInput | TransactionPinResetChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TransactionPinResetChallenges.
+     */
+    cursor?: TransactionPinResetChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TransactionPinResetChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TransactionPinResetChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TransactionPinResetChallenges.
+     */
+    distinct?: TransactionPinResetChallengeScalarFieldEnum | TransactionPinResetChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * TransactionPinResetChallenge create
+   */
+  export type TransactionPinResetChallengeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TransactionPinResetChallenge.
+     */
+    data: XOR<TransactionPinResetChallengeCreateInput, TransactionPinResetChallengeUncheckedCreateInput>
+  }
+
+  /**
+   * TransactionPinResetChallenge createMany
+   */
+  export type TransactionPinResetChallengeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TransactionPinResetChallenges.
+     */
+    data: TransactionPinResetChallengeCreateManyInput | TransactionPinResetChallengeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TransactionPinResetChallenge createManyAndReturn
+   */
+  export type TransactionPinResetChallengeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * The data used to create many TransactionPinResetChallenges.
+     */
+    data: TransactionPinResetChallengeCreateManyInput | TransactionPinResetChallengeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransactionPinResetChallenge update
+   */
+  export type TransactionPinResetChallengeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TransactionPinResetChallenge.
+     */
+    data: XOR<TransactionPinResetChallengeUpdateInput, TransactionPinResetChallengeUncheckedUpdateInput>
+    /**
+     * Choose, which TransactionPinResetChallenge to update.
+     */
+    where: TransactionPinResetChallengeWhereUniqueInput
+  }
+
+  /**
+   * TransactionPinResetChallenge updateMany
+   */
+  export type TransactionPinResetChallengeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TransactionPinResetChallenges.
+     */
+    data: XOR<TransactionPinResetChallengeUpdateManyMutationInput, TransactionPinResetChallengeUncheckedUpdateManyInput>
+    /**
+     * Filter which TransactionPinResetChallenges to update
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * Limit how many TransactionPinResetChallenges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransactionPinResetChallenge updateManyAndReturn
+   */
+  export type TransactionPinResetChallengeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * The data used to update TransactionPinResetChallenges.
+     */
+    data: XOR<TransactionPinResetChallengeUpdateManyMutationInput, TransactionPinResetChallengeUncheckedUpdateManyInput>
+    /**
+     * Filter which TransactionPinResetChallenges to update
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * Limit how many TransactionPinResetChallenges to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TransactionPinResetChallenge upsert
+   */
+  export type TransactionPinResetChallengeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TransactionPinResetChallenge to update in case it exists.
+     */
+    where: TransactionPinResetChallengeWhereUniqueInput
+    /**
+     * In case the TransactionPinResetChallenge found by the `where` argument doesn't exist, create a new TransactionPinResetChallenge with this data.
+     */
+    create: XOR<TransactionPinResetChallengeCreateInput, TransactionPinResetChallengeUncheckedCreateInput>
+    /**
+     * In case the TransactionPinResetChallenge was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionPinResetChallengeUpdateInput, TransactionPinResetChallengeUncheckedUpdateInput>
+  }
+
+  /**
+   * TransactionPinResetChallenge delete
+   */
+  export type TransactionPinResetChallengeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
+    /**
+     * Filter which TransactionPinResetChallenge to delete.
+     */
+    where: TransactionPinResetChallengeWhereUniqueInput
+  }
+
+  /**
+   * TransactionPinResetChallenge deleteMany
+   */
+  export type TransactionPinResetChallengeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TransactionPinResetChallenges to delete
+     */
+    where?: TransactionPinResetChallengeWhereInput
+    /**
+     * Limit how many TransactionPinResetChallenges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TransactionPinResetChallenge without action
+   */
+  export type TransactionPinResetChallengeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionPinResetChallenge
+     */
+    select?: TransactionPinResetChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionPinResetChallenge
+     */
+    omit?: TransactionPinResetChallengeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionPinResetChallengeInclude<ExtArgs> | null
   }
 
 
@@ -34820,6 +36110,22 @@ export namespace Prisma {
   export type PasswordResetChallengeScalarFieldEnum = (typeof PasswordResetChallengeScalarFieldEnum)[keyof typeof PasswordResetChallengeScalarFieldEnum]
 
 
+  export const TransactionPinResetChallengeScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    codeHash: 'codeHash',
+    expiresAt: 'expiresAt',
+    attempts: 'attempts',
+    verifiedAt: 'verifiedAt',
+    resetTokenHash: 'resetTokenHash',
+    resetTokenExpiresAt: 'resetTokenExpiresAt',
+    consumedAt: 'consumedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type TransactionPinResetChallengeScalarFieldEnum = (typeof TransactionPinResetChallengeScalarFieldEnum)[keyof typeof TransactionPinResetChallengeScalarFieldEnum]
+
+
   export const RefreshSessionScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -35697,6 +37003,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
+    transactionPinResets?: TransactionPinResetChallengeListRelationFilter
     pendingVerification?: XOR<PendingRegistrationNullableScalarRelationFilter, PendingRegistrationWhereInput> | null
     refreshSessions?: RefreshSessionListRelationFilter
     wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
@@ -35742,6 +37049,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     passwordResets?: PasswordResetChallengeOrderByRelationAggregateInput
+    transactionPinResets?: TransactionPinResetChallengeOrderByRelationAggregateInput
     pendingVerification?: PendingRegistrationOrderByWithRelationInput
     refreshSessions?: RefreshSessionOrderByRelationAggregateInput
     wallet?: WalletOrderByWithRelationInput
@@ -35790,6 +37098,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
+    transactionPinResets?: TransactionPinResetChallengeListRelationFilter
     pendingVerification?: XOR<PendingRegistrationNullableScalarRelationFilter, PendingRegistrationWhereInput> | null
     refreshSessions?: RefreshSessionListRelationFilter
     wallet?: XOR<WalletNullableScalarRelationFilter, WalletWhereInput> | null
@@ -36049,6 +37358,88 @@ export namespace Prisma {
     attempts?: IntWithAggregatesFilter<"PasswordResetChallenge"> | number
     consumedAt?: DateTimeNullableWithAggregatesFilter<"PasswordResetChallenge"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"PasswordResetChallenge"> | Date | string
+  }
+
+  export type TransactionPinResetChallengeWhereInput = {
+    AND?: TransactionPinResetChallengeWhereInput | TransactionPinResetChallengeWhereInput[]
+    OR?: TransactionPinResetChallengeWhereInput[]
+    NOT?: TransactionPinResetChallengeWhereInput | TransactionPinResetChallengeWhereInput[]
+    id?: StringFilter<"TransactionPinResetChallenge"> | string
+    userId?: StringFilter<"TransactionPinResetChallenge"> | string
+    codeHash?: StringFilter<"TransactionPinResetChallenge"> | string
+    expiresAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+    attempts?: IntFilter<"TransactionPinResetChallenge"> | number
+    verifiedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    resetTokenHash?: StringNullableFilter<"TransactionPinResetChallenge"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    consumedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    createdAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type TransactionPinResetChallengeOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    codeHash?: SortOrder
+    expiresAt?: SortOrder
+    attempts?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    resetTokenHash?: SortOrderInput | SortOrder
+    resetTokenExpiresAt?: SortOrderInput | SortOrder
+    consumedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type TransactionPinResetChallengeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TransactionPinResetChallengeWhereInput | TransactionPinResetChallengeWhereInput[]
+    OR?: TransactionPinResetChallengeWhereInput[]
+    NOT?: TransactionPinResetChallengeWhereInput | TransactionPinResetChallengeWhereInput[]
+    userId?: StringFilter<"TransactionPinResetChallenge"> | string
+    codeHash?: StringFilter<"TransactionPinResetChallenge"> | string
+    expiresAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+    attempts?: IntFilter<"TransactionPinResetChallenge"> | number
+    verifiedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    resetTokenHash?: StringNullableFilter<"TransactionPinResetChallenge"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    consumedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    createdAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type TransactionPinResetChallengeOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    codeHash?: SortOrder
+    expiresAt?: SortOrder
+    attempts?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    resetTokenHash?: SortOrderInput | SortOrder
+    resetTokenExpiresAt?: SortOrderInput | SortOrder
+    consumedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: TransactionPinResetChallengeCountOrderByAggregateInput
+    _avg?: TransactionPinResetChallengeAvgOrderByAggregateInput
+    _max?: TransactionPinResetChallengeMaxOrderByAggregateInput
+    _min?: TransactionPinResetChallengeMinOrderByAggregateInput
+    _sum?: TransactionPinResetChallengeSumOrderByAggregateInput
+  }
+
+  export type TransactionPinResetChallengeScalarWhereWithAggregatesInput = {
+    AND?: TransactionPinResetChallengeScalarWhereWithAggregatesInput | TransactionPinResetChallengeScalarWhereWithAggregatesInput[]
+    OR?: TransactionPinResetChallengeScalarWhereWithAggregatesInput[]
+    NOT?: TransactionPinResetChallengeScalarWhereWithAggregatesInput | TransactionPinResetChallengeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TransactionPinResetChallenge"> | string
+    userId?: StringWithAggregatesFilter<"TransactionPinResetChallenge"> | string
+    codeHash?: StringWithAggregatesFilter<"TransactionPinResetChallenge"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"TransactionPinResetChallenge"> | Date | string
+    attempts?: IntWithAggregatesFilter<"TransactionPinResetChallenge"> | number
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"TransactionPinResetChallenge"> | Date | string | null
+    resetTokenHash?: StringNullableWithAggregatesFilter<"TransactionPinResetChallenge"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableWithAggregatesFilter<"TransactionPinResetChallenge"> | Date | string | null
+    consumedAt?: DateTimeNullableWithAggregatesFilter<"TransactionPinResetChallenge"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"TransactionPinResetChallenge"> | Date | string
   }
 
   export type RefreshSessionWhereInput = {
@@ -38532,6 +39923,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -38577,6 +39969,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -38622,6 +40015,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -38667,6 +40061,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -38966,6 +40361,96 @@ export namespace Prisma {
     codeHash?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: IntFieldUpdateOperationsInput | number
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeCreateInput = {
+    id?: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutTransactionPinResetsInput
+  }
+
+  export type TransactionPinResetChallengeUncheckedCreateInput = {
+    id?: string
+    userId: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type TransactionPinResetChallengeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTransactionPinResetsNestedInput
+  }
+
+  export type TransactionPinResetChallengeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeCreateManyInput = {
+    id?: string
+    userId: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type TransactionPinResetChallengeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -41858,6 +43343,12 @@ export namespace Prisma {
     none?: PasswordResetChallengeWhereInput
   }
 
+  export type TransactionPinResetChallengeListRelationFilter = {
+    every?: TransactionPinResetChallengeWhereInput
+    some?: TransactionPinResetChallengeWhereInput
+    none?: TransactionPinResetChallengeWhereInput
+  }
+
   export type PendingRegistrationNullableScalarRelationFilter = {
     is?: PendingRegistrationWhereInput | null
     isNot?: PendingRegistrationWhereInput | null
@@ -41946,6 +43437,10 @@ export namespace Prisma {
   }
 
   export type PasswordResetChallengeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -42297,6 +43792,53 @@ export namespace Prisma {
   }
 
   export type PasswordResetChallengeSumOrderByAggregateInput = {
+    attempts?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    codeHash?: SortOrder
+    expiresAt?: SortOrder
+    attempts?: SortOrder
+    verifiedAt?: SortOrder
+    resetTokenHash?: SortOrder
+    resetTokenExpiresAt?: SortOrder
+    consumedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeAvgOrderByAggregateInput = {
+    attempts?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    codeHash?: SortOrder
+    expiresAt?: SortOrder
+    attempts?: SortOrder
+    verifiedAt?: SortOrder
+    resetTokenHash?: SortOrder
+    resetTokenExpiresAt?: SortOrder
+    consumedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    codeHash?: SortOrder
+    expiresAt?: SortOrder
+    attempts?: SortOrder
+    verifiedAt?: SortOrder
+    resetTokenHash?: SortOrder
+    resetTokenExpiresAt?: SortOrder
+    consumedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type TransactionPinResetChallengeSumOrderByAggregateInput = {
     attempts?: SortOrder
   }
 
@@ -44251,6 +45793,13 @@ export namespace Prisma {
     connect?: PasswordResetChallengeWhereUniqueInput | PasswordResetChallengeWhereUniqueInput[]
   }
 
+  export type TransactionPinResetChallengeCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput> | TransactionPinResetChallengeCreateWithoutUserInput[] | TransactionPinResetChallengeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionPinResetChallengeCreateOrConnectWithoutUserInput | TransactionPinResetChallengeCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionPinResetChallengeCreateManyUserInputEnvelope
+    connect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+  }
+
   export type PendingRegistrationCreateNestedOneWithoutExistingUserInput = {
     create?: XOR<PendingRegistrationCreateWithoutExistingUserInput, PendingRegistrationUncheckedCreateWithoutExistingUserInput>
     connectOrCreate?: PendingRegistrationCreateOrConnectWithoutExistingUserInput
@@ -44366,6 +45915,13 @@ export namespace Prisma {
     connectOrCreate?: PasswordResetChallengeCreateOrConnectWithoutUserInput | PasswordResetChallengeCreateOrConnectWithoutUserInput[]
     createMany?: PasswordResetChallengeCreateManyUserInputEnvelope
     connect?: PasswordResetChallengeWhereUniqueInput | PasswordResetChallengeWhereUniqueInput[]
+  }
+
+  export type TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput> | TransactionPinResetChallengeCreateWithoutUserInput[] | TransactionPinResetChallengeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionPinResetChallengeCreateOrConnectWithoutUserInput | TransactionPinResetChallengeCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionPinResetChallengeCreateManyUserInputEnvelope
+    connect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
   }
 
   export type PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput = {
@@ -44522,6 +46078,20 @@ export namespace Prisma {
     update?: PasswordResetChallengeUpdateWithWhereUniqueWithoutUserInput | PasswordResetChallengeUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PasswordResetChallengeUpdateManyWithWhereWithoutUserInput | PasswordResetChallengeUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PasswordResetChallengeScalarWhereInput | PasswordResetChallengeScalarWhereInput[]
+  }
+
+  export type TransactionPinResetChallengeUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput> | TransactionPinResetChallengeCreateWithoutUserInput[] | TransactionPinResetChallengeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionPinResetChallengeCreateOrConnectWithoutUserInput | TransactionPinResetChallengeCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionPinResetChallengeUpsertWithWhereUniqueWithoutUserInput | TransactionPinResetChallengeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionPinResetChallengeCreateManyUserInputEnvelope
+    set?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    disconnect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    delete?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    connect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    update?: TransactionPinResetChallengeUpdateWithWhereUniqueWithoutUserInput | TransactionPinResetChallengeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionPinResetChallengeUpdateManyWithWhereWithoutUserInput | TransactionPinResetChallengeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionPinResetChallengeScalarWhereInput | TransactionPinResetChallengeScalarWhereInput[]
   }
 
   export type PendingRegistrationUpdateOneWithoutExistingUserNestedInput = {
@@ -44752,6 +46322,20 @@ export namespace Prisma {
     update?: PasswordResetChallengeUpdateWithWhereUniqueWithoutUserInput | PasswordResetChallengeUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PasswordResetChallengeUpdateManyWithWhereWithoutUserInput | PasswordResetChallengeUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PasswordResetChallengeScalarWhereInput | PasswordResetChallengeScalarWhereInput[]
+  }
+
+  export type TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput> | TransactionPinResetChallengeCreateWithoutUserInput[] | TransactionPinResetChallengeUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionPinResetChallengeCreateOrConnectWithoutUserInput | TransactionPinResetChallengeCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionPinResetChallengeUpsertWithWhereUniqueWithoutUserInput | TransactionPinResetChallengeUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionPinResetChallengeCreateManyUserInputEnvelope
+    set?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    disconnect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    delete?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    connect?: TransactionPinResetChallengeWhereUniqueInput | TransactionPinResetChallengeWhereUniqueInput[]
+    update?: TransactionPinResetChallengeUpdateWithWhereUniqueWithoutUserInput | TransactionPinResetChallengeUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionPinResetChallengeUpdateManyWithWhereWithoutUserInput | TransactionPinResetChallengeUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionPinResetChallengeScalarWhereInput | TransactionPinResetChallengeScalarWhereInput[]
   }
 
   export type PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput = {
@@ -44998,6 +46582,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutPasswordResetsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPasswordResetsInput, UserUpdateWithoutPasswordResetsInput>, UserUncheckedUpdateWithoutPasswordResetsInput>
+  }
+
+  export type UserCreateNestedOneWithoutTransactionPinResetsInput = {
+    create?: XOR<UserCreateWithoutTransactionPinResetsInput, UserUncheckedCreateWithoutTransactionPinResetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionPinResetsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutTransactionPinResetsNestedInput = {
+    create?: XOR<UserCreateWithoutTransactionPinResetsInput, UserUncheckedCreateWithoutTransactionPinResetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionPinResetsInput
+    upsert?: UserUpsertWithoutTransactionPinResetsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransactionPinResetsInput, UserUpdateWithoutTransactionPinResetsInput>, UserUncheckedUpdateWithoutTransactionPinResetsInput>
   }
 
   export type UserCreateNestedOneWithoutRefreshSessionsInput = {
@@ -47359,6 +48957,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TransactionPinResetChallengeCreateWithoutUserInput = {
+    id?: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type TransactionPinResetChallengeUncheckedCreateWithoutUserInput = {
+    id?: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type TransactionPinResetChallengeCreateOrConnectWithoutUserInput = {
+    where: TransactionPinResetChallengeWhereUniqueInput
+    create: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionPinResetChallengeCreateManyUserInputEnvelope = {
+    data: TransactionPinResetChallengeCreateManyUserInput | TransactionPinResetChallengeCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PendingRegistrationCreateWithoutExistingUserInput = {
     id?: string
     email: string
@@ -48186,6 +49818,38 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PasswordResetChallenge"> | Date | string
   }
 
+  export type TransactionPinResetChallengeUpsertWithWhereUniqueWithoutUserInput = {
+    where: TransactionPinResetChallengeWhereUniqueInput
+    update: XOR<TransactionPinResetChallengeUpdateWithoutUserInput, TransactionPinResetChallengeUncheckedUpdateWithoutUserInput>
+    create: XOR<TransactionPinResetChallengeCreateWithoutUserInput, TransactionPinResetChallengeUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionPinResetChallengeUpdateWithWhereUniqueWithoutUserInput = {
+    where: TransactionPinResetChallengeWhereUniqueInput
+    data: XOR<TransactionPinResetChallengeUpdateWithoutUserInput, TransactionPinResetChallengeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionPinResetChallengeUpdateManyWithWhereWithoutUserInput = {
+    where: TransactionPinResetChallengeScalarWhereInput
+    data: XOR<TransactionPinResetChallengeUpdateManyMutationInput, TransactionPinResetChallengeUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TransactionPinResetChallengeScalarWhereInput = {
+    AND?: TransactionPinResetChallengeScalarWhereInput | TransactionPinResetChallengeScalarWhereInput[]
+    OR?: TransactionPinResetChallengeScalarWhereInput[]
+    NOT?: TransactionPinResetChallengeScalarWhereInput | TransactionPinResetChallengeScalarWhereInput[]
+    id?: StringFilter<"TransactionPinResetChallenge"> | string
+    userId?: StringFilter<"TransactionPinResetChallenge"> | string
+    codeHash?: StringFilter<"TransactionPinResetChallenge"> | string
+    expiresAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+    attempts?: IntFilter<"TransactionPinResetChallenge"> | number
+    verifiedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    resetTokenHash?: StringNullableFilter<"TransactionPinResetChallenge"> | string | null
+    resetTokenExpiresAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    consumedAt?: DateTimeNullableFilter<"TransactionPinResetChallenge"> | Date | string | null
+    createdAt?: DateTimeFilter<"TransactionPinResetChallenge"> | Date | string
+  }
+
   export type PendingRegistrationUpsertWithoutExistingUserInput = {
     update: XOR<PendingRegistrationUpdateWithoutExistingUserInput, PendingRegistrationUncheckedUpdateWithoutExistingUserInput>
     create: XOR<PendingRegistrationCreateWithoutExistingUserInput, PendingRegistrationUncheckedCreateWithoutExistingUserInput>
@@ -48821,6 +50485,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
@@ -48865,6 +50530,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
@@ -48925,6 +50591,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
@@ -48969,6 +50636,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
@@ -49012,6 +50680,7 @@ export namespace Prisma {
     transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -49056,6 +50725,7 @@ export namespace Prisma {
     transactionPinLockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -49116,6 +50786,7 @@ export namespace Prisma {
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -49160,6 +50831,203 @@ export namespace Prisma {
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserCreateWithoutTransactionPinResetsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutTransactionPinResetsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutTransactionPinResetsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransactionPinResetsInput, UserUncheckedCreateWithoutTransactionPinResetsInput>
+  }
+
+  export type UserUpsertWithoutTransactionPinResetsInput = {
+    update: XOR<UserUpdateWithoutTransactionPinResetsInput, UserUncheckedUpdateWithoutTransactionPinResetsInput>
+    create: XOR<UserCreateWithoutTransactionPinResetsInput, UserUncheckedCreateWithoutTransactionPinResetsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransactionPinResetsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransactionPinResetsInput, UserUncheckedUpdateWithoutTransactionPinResetsInput>
+  }
+
+  export type UserUpdateWithoutTransactionPinResetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransactionPinResetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -49205,6 +51073,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
@@ -49249,6 +51118,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
@@ -49309,6 +51179,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
@@ -49353,6 +51224,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
@@ -49397,6 +51269,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     deposits?: DepositCreateNestedManyWithoutUserInput
@@ -49441,6 +51314,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
@@ -49839,6 +51713,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     deposits?: DepositUpdateManyWithoutUserNestedInput
@@ -49883,6 +51758,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
@@ -50858,6 +52734,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -50902,6 +52779,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -51091,6 +52969,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -51135,6 +53014,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -51326,6 +53206,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -51370,6 +53251,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -51812,6 +53694,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -51856,6 +53739,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -52568,6 +54452,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -52612,6 +54497,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -53028,6 +54914,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -53072,6 +54959,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -53499,6 +55387,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -53543,6 +55432,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -53769,6 +55659,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -53813,6 +55704,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -53979,6 +55871,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -54023,6 +55916,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -54202,6 +56096,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -54246,6 +56141,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -54639,6 +56535,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -54683,6 +56580,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -54796,6 +56694,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -54840,6 +56739,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -54943,6 +56843,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -54987,6 +56888,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -55129,6 +57031,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -55173,6 +57076,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -55311,6 +57215,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -55355,6 +57260,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -55415,6 +57321,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -55459,6 +57366,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -55503,6 +57411,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -55547,6 +57456,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -55596,6 +57506,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -55640,6 +57551,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -55734,6 +57646,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -55778,6 +57691,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -55833,6 +57747,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -55877,6 +57792,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -55974,6 +57890,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -56018,6 +57935,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -56157,6 +58075,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -56201,6 +58120,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -56290,6 +58210,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -56334,6 +58255,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -56383,6 +58305,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
     wallet?: WalletCreateNestedOneWithoutUserInput
@@ -56427,6 +58350,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
     pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
     refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
     wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
@@ -56522,6 +58446,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -56566,6 +58491,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -56621,6 +58547,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
     wallet?: WalletUpdateOneWithoutUserNestedInput
@@ -56665,6 +58592,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
     pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
     refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
     wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
@@ -56687,6 +58615,18 @@ export namespace Prisma {
     codeHash: string
     expiresAt: Date | string
     attempts?: number
+    consumedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type TransactionPinResetChallengeCreateManyUserInput = {
+    id?: string
+    codeHash: string
+    expiresAt: Date | string
+    attempts?: number
+    verifiedAt?: Date | string | null
+    resetTokenHash?: string | null
+    resetTokenExpiresAt?: Date | string | null
     consumedAt?: Date | string | null
     createdAt?: Date | string
   }
@@ -56996,6 +58936,42 @@ export namespace Prisma {
     codeHash?: StringFieldUpdateOperationsInput | string
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attempts?: IntFieldUpdateOperationsInput | number
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionPinResetChallengeUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    codeHash?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempts?: IntFieldUpdateOperationsInput | number
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    resetTokenHash?: NullableStringFieldUpdateOperationsInput | string | null
+    resetTokenExpiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     consumedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -34,6 +34,7 @@ model User {
   createdAt                    DateTime                 @default(now())
   updatedAt                    DateTime                 @updatedAt
   passwordResets               PasswordResetChallenge[]
+  transactionPinResets         TransactionPinResetChallenge[]
   pendingVerification          PendingRegistration?
   refreshSessions              RefreshSession[]
   wallet                       Wallet?
@@ -83,6 +84,22 @@ model PasswordResetChallenge {
   consumedAt DateTime?
   createdAt  DateTime  @default(now())
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+model TransactionPinResetChallenge {
+  id                  String    @id @default(uuid())
+  userId              String
+  codeHash            String
+  expiresAt           DateTime
+  attempts            Int       @default(0)
+  verifiedAt          DateTime?
+  resetTokenHash     String?
+  resetTokenExpiresAt DateTime?
+  consumedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, expiresAt])
 }

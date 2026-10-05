@@ -34,6 +34,16 @@ export class EmailService {
     `);
   }
 
+  async sendTransactionPinResetCode(email: string, code: string): Promise<void> {
+    await this.send(email, 'Reset your NobleCards transaction PIN', `
+      <h2>Reset your NobleCards transaction PIN</h2>
+      <p>Your transaction PIN reset code is:</p>
+      <h1 style="font-size: 32px; letter-spacing: 8px;">${code}</h1>
+      <p>Enter this code in the NobleCards app to verify your identity before changing your transaction PIN.</p>
+      <p>This code will expire shortly. If you did not request this, you can safely ignore this email.</p>
+    `);
+  }
+
   async sendWithdrawalCreatedEmail(email: string, reference: string, amount: string, currency: string): Promise<void> {
     await this.send(email, 'Your NobleCards withdrawal is processing', `
       <h2>Withdrawal request received</h2>

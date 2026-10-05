@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id                           String                     @id @default(uuid())
-  email                        String                     @unique
+  id                           String                         @id @default(uuid())
+  email                        String                         @unique
   passwordHash                 String
   firstName                    String
   lastName                     String
-  username                     String?                    @unique
+  username                     String?                        @unique
   displayName                  String?
-  phone                        String?                    @unique
+  phone                        String?                        @unique
   country                      String?
   countryCode                  String?
   gender                       String?
@@ -23,17 +23,18 @@ model User {
   bio                          String?
   address                      String?
   profileImageUrl              String?
-  isEmailVerified              Boolean                    @default(false)
-  isProfileComplete            Boolean                    @default(false)
-  isVerified                   Boolean                    @default(false)
-  isActive                     Boolean                    @default(true)
-  role                         UserRole                   @default(USER)
+  isEmailVerified              Boolean                        @default(false)
+  isProfileComplete            Boolean                        @default(false)
+  isVerified                   Boolean                        @default(false)
+  isActive                     Boolean                        @default(true)
+  role                         UserRole                       @default(USER)
   transactionPinHash           String?
-  transactionPinFailedAttempts Int                        @default(0)
+  transactionPinFailedAttempts Int                            @default(0)
   transactionPinLockedUntil    DateTime?
-  createdAt                    DateTime                   @default(now())
-  updatedAt                    DateTime                   @updatedAt
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
   passwordResets               PasswordResetChallenge[]
+  transactionPinResets         TransactionPinResetChallenge[]
   pendingVerification          PendingRegistration?
   refreshSessions              RefreshSession[]
   wallet                       Wallet?
@@ -45,11 +46,11 @@ model User {
   giftCardSales                GiftCardSale[]
   giftCardPurchases            GiftCardPurchase[]
   adminGiftCardSandboxTests    AdminGiftCardSandboxTest[]
-  supportTickets               SupportTicket[]            @relation("UserSupportTickets")
-  assignedSupportTickets       SupportTicket[]            @relation("AssignedSupportTickets")
+  supportTickets               SupportTicket[]                @relation("UserSupportTickets")
+  assignedSupportTickets       SupportTicket[]                @relation("AssignedSupportTickets")
   supportMessages              SupportMessage[]
-  uploadedSupportAttachments   SupportAttachment[]        @relation("UserSupportAttachments")
-  uploadedAdminAttachments     SupportAttachment[]        @relation("AdminSupportAttachments")
+  uploadedSupportAttachments   SupportAttachment[]            @relation("UserSupportAttachments")
+  uploadedAdminAttachments     SupportAttachment[]            @relation("AdminSupportAttachments")
 }
 
 model PendingRegistration {
@@ -83,6 +84,22 @@ model PasswordResetChallenge {
   consumedAt DateTime?
   createdAt  DateTime  @default(now())
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+}
+
+model TransactionPinResetChallenge {
+  id                  String    @id @default(uuid())
+  userId              String
+  codeHash            String
+  expiresAt           DateTime
+  attempts            Int       @default(0)
+  verifiedAt          DateTime?
+  resetTokenHash      String?
+  resetTokenExpiresAt DateTime?
+  consumedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, expiresAt])
 }

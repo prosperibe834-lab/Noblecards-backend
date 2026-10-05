@@ -1,11 +1,16 @@
-import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpException, HttpStatus, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { createHash, randomBytes, randomInt } from 'node:crypto';
+import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly email?: EmailService,
+  ) {}
 
   findByEmail(email: string) {
     return this.prisma.user.findFirst({ where: { email: { equals: email, mode: 'insensitive' } } });
@@ -235,6 +240,53 @@ export class UsersService {
     }
   }
 
+  async updateTransactionPin(userId: string, currentPin: string, newPin: string) {
+    if (!/^\d{4}$/.test(currentPin) || !/^\d{4}$/.test(newPin)) {
+      throw new BadRequestException('Transaction PIN must be exactly 4 digits.');
+    }
+
+    const transactionPinHash = await bcrypt.hash(newPin, 12);
+    const updated = await this.prisma.$transaction(async (transaction) => {
+      const rows = await transaction.$queryRaw<Array<{
+        transactionPinHash: string | null;
+        transactionPinFailedAttempts: number;
+        transactionPinLockedUntil: Date | null;
+      }>>`
+        SELECT "transactionPinHash", "transactionPinFailedAttempts", "transactionPinLockedUntil"
+        FROM "User"
+        WHERE "id" = ${userId}
+        FOR UPDATE
+      `;
+      const user = rows[0];
+      if (!user) throw new NotFoundException('User not found.');
+      if (!user.transactionPinHash) throw new BadRequestException('Transaction PIN is not configured.');
+      if (user.transactionPinLockedUntil && user.transactionPinLockedUntil > new Date()) {
+        throw new HttpException('Transaction PIN is temporarily locked.', HttpStatus.TOO_MANY_REQUESTS);
+      }
+
+      const valid = await bcrypt.compare(currentPin, user.transactionPinHash);
+      if (!valid) {
+        const failedAttempts = user.transactionPinFailedAttempts + 1;
+        await transaction.user.update({
+          where: { id: userId },
+          data: {
+            transactionPinFailedAttempts: failedAttempts,
+            transactionPinLockedUntil: failedAttempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : null,
+          },
+        });
+        return false;
+      }
+
+      await transaction.user.update({
+        where: { id: userId },
+        data: { transactionPinHash, transactionPinFailedAttempts: 0, transactionPinLockedUntil: null },
+      });
+      return true;
+    });
+
+    if (!updated) throw new BadRequestException('Invalid transaction PIN.');
+  }
+
   async verifyTransactionPin(userId: string, pin: string) {
     if (!/^\d{4}$/.test(pin)) {
       throw new BadRequestException('Transaction PIN must be exactly 4 digits.');
@@ -279,6 +331,124 @@ export class UsersService {
     });
   }
 
+  async requestTransactionPinReset(userId: string) {
+    const user = await this.findById(userId);
+    if (!user) throw new NotFoundException('User not found.');
+
+    await this.prisma.transactionPinResetChallenge.deleteMany({ where: { userId } });
+    const code = this.newCode();
+    await this.prisma.transactionPinResetChallenge.create({
+      data: {
+        userId,
+        codeHash: this.hash(code),
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+        attempts: 0,
+      },
+    });
+
+    if (!this.email) {
+      throw new HttpException('Email delivery is not configured.', HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    await this.email.sendTransactionPinResetCode(user.email, code);
+    return { sent: true };
+  }
+
+  async verifyTransactionPinResetCode(userId: string, code: string) {
+    if (!/^\d{6}$/.test(code)) {
+      throw new BadRequestException('Transaction PIN reset code must be exactly 6 digits.');
+    }
+
+    const challenge = await this.prisma.transactionPinResetChallenge.findFirst({
+      where: { userId, consumedAt: null },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (!challenge) throw new BadRequestException('Invalid or expired transaction PIN reset code.');
+    if (challenge.expiresAt <= new Date()) {
+      throw new BadRequestException('Invalid or expired transaction PIN reset code.');
+    }
+    if (challenge.verifiedAt && challenge.resetTokenHash && challenge.resetTokenExpiresAt && challenge.resetTokenExpiresAt > new Date()) {
+      throw new BadRequestException('This transaction PIN reset code has already been used.');
+    }
+    if (challenge.attempts >= 5) {
+      throw new HttpException('Too many transaction PIN reset attempts.', HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    const valid = this.hash(code) === challenge.codeHash;
+    if (!valid) {
+      const nextAttempts = challenge.attempts + 1;
+      await this.prisma.transactionPinResetChallenge.update({
+        where: { id: challenge.id },
+        data: { attempts: nextAttempts },
+      });
+      if (nextAttempts >= 5) {
+        throw new HttpException('Too many transaction PIN reset attempts.', HttpStatus.TOO_MANY_REQUESTS);
+      }
+      throw new BadRequestException('Invalid or expired transaction PIN reset code.');
+    }
+
+    const resetToken = randomBytes(32).toString('base64url');
+    const resetTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    await this.prisma.transactionPinResetChallenge.update({
+      where: { id: challenge.id },
+      data: {
+        attempts: 0,
+        verifiedAt: new Date(),
+        resetTokenHash: this.hash(resetToken),
+        resetTokenExpiresAt,
+      },
+    });
+
+    return { verified: true, resetToken };
+  }
+
+  async completeTransactionPinReset(userId: string, resetToken: string, pin: string, confirmPin: string) {
+    if (!/^\d{4}$/.test(pin)) {
+      throw new BadRequestException('Transaction PIN must be exactly 4 digits.');
+    }
+    if (pin !== confirmPin) {
+      throw new BadRequestException('Transaction PIN confirmation does not match.');
+    }
+
+    const user = await this.findById(userId);
+    if (!user) throw new NotFoundException('User not found.');
+
+    const challenge = await this.prisma.transactionPinResetChallenge.findFirst({
+      where: { userId, consumedAt: null },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (!challenge || !challenge.verifiedAt || !challenge.resetTokenHash || !challenge.resetTokenExpiresAt) {
+      throw new BadRequestException('Transaction PIN reset session is invalid or expired.');
+    }
+    if (challenge.resetTokenExpiresAt <= new Date()) {
+      throw new BadRequestException('Transaction PIN reset session is invalid or expired.');
+    }
+    if (this.hash(resetToken) !== challenge.resetTokenHash) {
+      throw new BadRequestException('Transaction PIN reset session is invalid or expired.');
+    }
+
+    const transactionPinHash = await bcrypt.hash(pin, 12);
+    await this.prisma.$transaction(async (transaction) => {
+      await transaction.user.update({
+        where: { id: userId },
+        data: {
+          transactionPinHash,
+          transactionPinFailedAttempts: 0,
+          transactionPinLockedUntil: null,
+        },
+      });
+      await transaction.transactionPinResetChallenge.update({
+        where: { id: challenge.id },
+        data: {
+          consumedAt: new Date(),
+          resetTokenHash: null,
+          resetTokenExpiresAt: null,
+        },
+      });
+    });
+
+    return { reset: true };
+  }
+
   async updateProfile(userId: string, dto: UpdateProfileDto) {
     const user = await this.findById(userId);
     if (!user) throw new NotFoundException('User not found.');
@@ -321,6 +491,14 @@ export class UsersService {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) throw new BadRequestException('Invalid date of birth.');
     return date;
+  }
+
+  private newCode() {
+    return randomInt(100000, 1_000_000).toString();
+  }
+
+  private hash(value: string) {
+    return createHash('sha256').update(value).digest('hex');
   }
 
   private recalculateVerification(user: Parameters<UsersService['toPublicUser']>[0] & { username?: string | null; displayName?: string | null; dateOfBirth?: Date | null; bio?: string | null; address?: string | null; profileImageUrl?: string | null }) {

@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { AuthGuard } from '../auth/auth.guard';
-import { CreateTransactionPinDto, UpdateProfileDto, VerifyTransactionPinDto } from './users.dto';
+import { CompleteTransactionPinResetDto, CreateOrUpdateTransactionPinDto, UpdateProfileDto, VerifyTransactionPinDto, VerifyTransactionPinResetCodeDto } from './users.dto';
 import { UsersService } from './users.service';
 
 const uploadDirectory = join(process.cwd(), 'uploads', 'profile');
@@ -30,10 +30,17 @@ export class UsersController {
   @Post('transaction-pin')
   async createTransactionPin(
     @Req() request: { user: { userId: string } },
-    @Body() dto: CreateTransactionPinDto,
+    @Body() dto: CreateOrUpdateTransactionPinDto,
   ) {
-    await this.users.createTransactionPin(request.user.userId, dto.pin);
-    return { created: true, hasTransactionPin: true };
+    if (dto.pin !== undefined && dto.currentPin === undefined && dto.newPin === undefined) {
+      await this.users.createTransactionPin(request.user.userId, dto.pin);
+      return { created: true, hasTransactionPin: true };
+    }
+    if (dto.pin === undefined && dto.currentPin !== undefined && dto.newPin !== undefined) {
+      await this.users.updateTransactionPin(request.user.userId, dto.currentPin, dto.newPin);
+      return { updated: true, hasTransactionPin: true };
+    }
+    throw new BadRequestException('Provide either pin or currentPin and newPin.');
   }
 
   @Post('transaction-pin/verify')
@@ -43,6 +50,27 @@ export class UsersController {
   ) {
     await this.users.verifyTransactionPin(request.user.userId, dto.pin);
     return { verified: true };
+  }
+
+  @Post('transaction-pin/reset/request')
+  async requestTransactionPinReset(@Req() request: { user: { userId: string } }) {
+    return this.users.requestTransactionPinReset(request.user.userId);
+  }
+
+  @Post('transaction-pin/reset/verify')
+  async verifyTransactionPinReset(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: VerifyTransactionPinResetCodeDto,
+  ) {
+    return this.users.verifyTransactionPinResetCode(request.user.userId, dto.code);
+  }
+
+  @Post('transaction-pin/reset/complete')
+  async completeTransactionPinReset(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: CompleteTransactionPinResetDto,
+  ) {
+    return this.users.completeTransactionPinReset(request.user.userId, dto.resetToken, dto.pin, dto.confirmPin);
   }
 
   @Patch()

@@ -177,6 +177,19 @@ exports.Prisma.PasswordResetChallengeScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.TransactionPinResetChallengeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  codeHash: 'codeHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  verifiedAt: 'verifiedAt',
+  resetTokenHash: 'resetTokenHash',
+  resetTokenExpiresAt: 'resetTokenExpiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.RefreshSessionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -752,6 +765,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   PendingRegistration: 'PendingRegistration',
   PasswordResetChallenge: 'PasswordResetChallenge',
+  TransactionPinResetChallenge: 'TransactionPinResetChallenge',
   RefreshSession: 'RefreshSession',
   Wallet: 'Wallet',
   Currency: 'Currency',
