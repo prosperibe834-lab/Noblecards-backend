@@ -24,6 +24,11 @@ export class LoginDto extends EmailDto {
   @IsString() @MinLength(1) password!: string;
 }
 
+export class ChangePasswordDto {
+  @IsString() @MinLength(1) currentPassword!: string;
+  @IsString() @MinLength(8) newPassword!: string;
+}
+
 export class ResetPasswordDto extends EmailCodeDto {
   @IsString() @MinLength(8) newPassword!: string;
 }

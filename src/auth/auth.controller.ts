@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { EmailCodeDto, EmailDto, LoginDto, RefreshDto, RegisterDto, ResendOtpDto, ResetPasswordDto } from './auth.dto';
+import { ChangePasswordDto, EmailCodeDto, EmailDto, LoginDto, RefreshDto, RegisterDto, ResendOtpDto, ResetPasswordDto } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -13,6 +13,18 @@ export class AuthController {
   @Post('login') login(@Body() dto: LoginDto) { return this.authService.login(dto); }
   @Post('forgot-password') forgotPassword(@Body() dto: EmailDto) { return this.authService.forgotPassword(dto); }
   @Post('reset-password') resetPassword(@Body() dto: ResetPasswordDto) { return this.authService.resetPassword(dto); }
+  @UseGuards(AuthGuard)
+  @Post('change-password') changePassword(
+    @Req() request: { user: { userId: string; sessionId: string } },
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(
+      request.user.userId,
+      request.user.sessionId,
+      dto.currentPassword,
+      dto.newPassword,
+    );
+  }
   @Post('refresh') refresh(@Body() dto: RefreshDto) { return this.authService.refresh(dto.refreshToken); }
 
   @UseGuards(AuthGuard)

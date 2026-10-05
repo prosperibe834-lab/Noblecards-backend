@@ -70,6 +70,27 @@ export class AuthService {
     return this.issueSession(user);
   }
 
+  async changePassword(userId: string, sessionId: string, currentPassword: string, newPassword: string) {
+    if (newPassword.length < 8) throw new BadRequestException('New password must be at least 8 characters.');
+    if (currentPassword === newPassword) throw new BadRequestException('New password must be different from your current password.');
+
+    const user = await this.users.findById(userId);
+    if (!user || !(await bcrypt.compare(currentPassword, user.passwordHash))) {
+      throw new UnauthorizedException('Current password is incorrect.');
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    const changedAt = new Date();
+    await this.prisma.$transaction([
+      this.prisma.user.update({ where: { id: userId }, data: { passwordHash } }),
+      this.prisma.refreshSession.updateMany({
+        where: { userId, id: { not: sessionId }, revokedAt: null },
+        data: { revokedAt: changedAt },
+      }),
+    ]);
+    return { updated: true };
+  }
+
   async forgotPassword(dto: EmailDto) {
     const user = await this.users.findByEmail(this.normalizeEmail(dto.email));
     if (user) {
