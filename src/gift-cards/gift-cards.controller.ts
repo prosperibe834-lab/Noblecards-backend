@@ -75,7 +75,10 @@ export class GiftCardsController {
       this.giftCards.getUserSales(request.user.userId),
     ]);
     return {
-      items: [...purchases, ...sales],
+      items: [
+        ...purchases.map((purchase) => ({ ...purchase, transactionType: 'buy' })),
+        ...sales.map((sale) => ({ ...sale, transactionType: 'sell' })),
+      ],
       purchases,
       sales,
     };
