@@ -43,10 +43,20 @@ describe('TremendousClient', () => {
       reward: {
         value: { denomination: 1, currency_code: 'USD' },
         recipient: { name: 'Buyer', email: 'buyer@example.com' },
-        delivery: { method: 'EMAIL' },
+        delivery: { method: 'LINK' },
         products: ['PRODUCT-1'],
       },
     });
+  });
+
+  it('generates a reward link through the documented reward endpoint', async () => {
+    const fetchMock = jest.spyOn(global, 'fetch').mockResolvedValue(response(200, {
+      reward: { id: 'REWARD-1', link: 'https://testflight.tremendous.com/rewards/payout/token' },
+    }));
+    await new TremendousClient(config).generateRewardLink('REWARD-1');
+    expect(fetchMock.mock.calls[0][0]).toBe('https://testflight.tremendous.com/api/v2/rewards/REWARD-1/generate_link');
+    expect(fetchMock.mock.calls[0][1].method).toBe('POST');
+    expect(fetchMock.mock.calls[0][1].body).toBeUndefined();
   });
 
   it.each([401, 403, 429, 500])('maps HTTP %s without exposing credentials', async (status) => {

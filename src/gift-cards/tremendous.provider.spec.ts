@@ -42,4 +42,70 @@ describe('TremendousProvider', () => {
     expect(result).toEqual(expect.objectContaining({ providerReference: 'ORDER-1', providerStatus: 'DELIVERED', redeemId: 'REWARD-1', voucherCode: 'SECRET-CODE' }));
     expect(result.providerMetadata).not.toHaveProperty('rewards.0.code');
   });
+
+  it('preserves the PIN in redeemDetails while stripping the actual secret code from provider metadata', async () => {
+    const client = {
+      getProducts: jest.fn(),
+      createOrder: jest.fn().mockResolvedValue({
+        id: 'ORDER-2',
+        status: 'DELIVERED',
+        rewards: [{
+          id: 'REWARD-2',
+          code: 'SECRET-CODE',
+          pin: '4826',
+          amount: '25',
+          redemption_instructions: 'Redeem online.',
+        }],
+      }),
+      getOrder: jest.fn(),
+    } as any;
+
+    const result = await new TremendousProvider(client).purchase({
+      productId: 'PRODUCT-1',
+      amount: 25,
+      currencyCode: 'USD',
+      email: 'buyer@example.com',
+      sender: 'Buyer',
+      units: 1,
+      reference: 'NC-BUY-2',
+    });
+
+    expect(result.voucherCode).toBe('SECRET-CODE');
+    expect(result.redeemDetails).toMatchObject({ pin: '4826', redemption_instructions: 'Redeem online.' });
+    expect(result.providerMetadata).not.toHaveProperty('rewards.0.code');
+    expect(result.providerMetadata).not.toHaveProperty('rewards.0.pin');
+  });
+
+  it('generates a link from Tremendous response.reward.link without retaining it in purchase details', async () => {
+    const link = 'https://testflight.tremendous.com/rewards/payout/secret-token';
+    const client = {
+      getProducts: jest.fn(),
+      createOrder: jest.fn().mockResolvedValue({
+        order: { id: 'ORDER-LINK', status: 'EXECUTED', rewards: [{
+          id: 'REWARD-LINK',
+          delivery: { method: 'LINK', status: 'SUCCEEDED', link },
+        }] },
+      }),
+      getOrder: jest.fn(),
+      generateRewardLink: jest.fn().mockResolvedValue({ reward: { id: 'REWARD-LINK', link } }),
+    } as any;
+    const provider = new TremendousProvider(client);
+    const purchase = await provider.purchase({ productId: 'PRODUCT-1', amount: 25, currencyCode: 'USD', email: 'buyer@example.com', sender: 'Buyer', units: 1, reference: 'NC-BUY-LINK' });
+
+    expect(purchase.redeemId).toBe('REWARD-LINK');
+    expect(purchase.redeemDetails).toMatchObject({ delivery: { method: 'LINK' } });
+    expect(JSON.stringify(purchase)).not.toContain(link);
+    await expect(provider.generateRedemptionLink('REWARD-LINK')).resolves.toBe(link);
+    expect(client.generateRewardLink).toHaveBeenCalledWith('REWARD-LINK');
+  });
+
+  it('rejects generated URLs outside Tremendous HTTPS origins', async () => {
+    const client = {
+      getProducts: jest.fn(),
+      createOrder: jest.fn(),
+      getOrder: jest.fn(),
+      generateRewardLink: jest.fn().mockResolvedValue({ reward: { link: 'https://evil.example/redeem' } }),
+    } as any;
+    await expect(new TremendousProvider(client).generateRedemptionLink('REWARD-LINK')).rejects.toThrow('TREMENDOUS_REDEMPTION_LINK_INVALID');
+  });
 });

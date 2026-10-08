@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '../generated/prisma/client';
 
 type PaymentMethod = 'BANK_TRANSFER' | 'CARD' | 'USSD' | 'MOBILE_MONEY' | 'WALLET_TRANSFER' | 'APPLE_PAY' | 'GOOGLE_PAY' | 'WISE' | 'OTHER';
 type PaymentProvider = 'FLUTTERWAVE' | 'MANUAL' | 'INTERNAL';
@@ -14,16 +14,7 @@ import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { FlutterwaveService } from '../flutterwave/flutterwave.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
-import { ConfigService } from '@nestjs/config';
 import { CreateCardDepositDto, CreateDepositDto, DepositPaymentMethodOption, DepositProviderOption } from './deposits.dto';
-
-type CardDetails = {
-  cardNumber: string;
-  cvv: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cardHolderName: string;
-};
 
 @Injectable()
 export class DepositsService {
@@ -37,59 +28,104 @@ export class DepositsService {
     private readonly config: ConfigService,
   ) {}
 
-  private async calculateFees(amount: Decimal, currencyCode: string, amountAlreadyInCurrency = false) {
-    const providerPercent = Number(this.config.get('DEPOSIT_PROVIDER_FEE_PERCENT', 2));
-    const noblePercent = Number(this.config.get('DEPOSIT_NOBLECARDS_FEE_PERCENT', 1));
-    const rateMap = await this.exchangeRates.getRates();
-    const exchangeRate = new Decimal(String(rateMap.rates[currencyCode] ?? 1));
-    const baseAmount = amountAlreadyInCurrency ? amount : amount.mul(exchangeRate);
-    const providerFee = baseAmount.mul(providerPercent).div(100).toDecimalPlaces(2);
-    const nobleCardsFee = baseAmount.mul(noblePercent).div(100).toDecimalPlaces(2);
-    const totalFees = providerFee.plus(nobleCardsFee).toDecimalPlaces(2);
+  private getFeeConfig() {
+    const providerPercent = Number(this.config.get<number | string>('DEPOSIT_PROVIDER_FEE_PERCENT', 2));
+    const noblePercent = Number(this.config.get<number | string>('DEPOSIT_NOBLECARDS_FEE_PERCENT', 1));
+
+    if (!Number.isFinite(providerPercent) || providerPercent < 0) {
+      throw new BadRequestException('DEPOSIT_PROVIDER_FEE_PERCENT must be a valid non-negative number.');
+    }
+
+    if (!Number.isFinite(noblePercent) || noblePercent < 0) {
+      throw new BadRequestException('DEPOSIT_NOBLECARDS_FEE_PERCENT must be a valid non-negative number.');
+    }
+
     return {
-      providerFee,
-      nobleCardsFee,
-      totalFees,
-      customerPayableAmount: baseAmount.plus(totalFees).toDecimalPlaces(2),
-      exchangeRate: exchangeRate.mul(new Decimal(1).plus(new Decimal(providerPercent + noblePercent).div(100))).toDecimalPlaces(8),
-      walletCreditAmount: amountAlreadyInCurrency ? amount.div(exchangeRate).toDecimalPlaces(2) : amount.toDecimalPlaces(2),
+      providerPercent,
+      noblePercent,
     };
   }
 
-  async createDeposit(userId: string, dto: CreateDepositDto, card?: CardDetails) {
+  private calculateDepositFees(amount: Decimal, exchangeRate: Decimal = new Decimal(1)) {
+    const { providerPercent, noblePercent } = this.getFeeConfig();
+    const totalFeePercent = new Decimal(providerPercent).plus(new Decimal(noblePercent));
+    const feeMultiplier = new Decimal(1).plus(totalFeePercent.div(new Decimal(100)));
+    const effectiveExchangeRate = exchangeRate.mul(feeMultiplier);
+    const baseLocalAmount = amount.mul(exchangeRate);
+    const providerFee = baseLocalAmount.mul(new Decimal(providerPercent)).div(new Decimal(100));
+    const nobleCardsFee = baseLocalAmount.mul(new Decimal(noblePercent)).div(new Decimal(100));
+    const totalFees = providerFee.plus(nobleCardsFee);
+    const customerPayableAmount = baseLocalAmount.plus(totalFees);
+
+    return {
+      rawExchangeRate: exchangeRate.toDecimalPlaces(8),
+      effectiveExchangeRate: effectiveExchangeRate.toDecimalPlaces(8),
+      baseLocalAmount: baseLocalAmount.toDecimalPlaces(2),
+      providerFee: providerFee.toDecimalPlaces(2),
+      nobleCardsFee: nobleCardsFee.toDecimalPlaces(2),
+      totalFees: totalFees.toDecimalPlaces(2),
+      customerPayableAmount: customerPayableAmount.toDecimalPlaces(2),
+      exchangeRate: effectiveExchangeRate.toDecimalPlaces(8),
+      walletCreditAmount: amount.toDecimalPlaces(2),
+      walletCreditCurrency: 'USD',
+      requestedAmount: amount.toDecimalPlaces(2),
+      requestedCurrency: 'USD',
+    };
+  }
+
+  private assertSupportedFlutterwaveCurrency(currencyCode: string, provider: PaymentProvider) {
+    if (provider !== 'FLUTTERWAVE') {
+      return;
+    }
+
+    const normalizedCode = currencyCode.toUpperCase();
+    const supportedCodes = ['USD', 'NGN', 'GBP', 'GHS'];
+    if (!supportedCodes.includes(normalizedCode)) {
+      throw new BadRequestException(
+        `Currency ${normalizedCode} is not supported by the configured Flutterwave account for deposits. Supported Flutterwave currencies: ${supportedCodes.join(', ')}.`,
+      );
+    }
+  }
+
+  async createDeposit(userId: string, dto: CreateDepositDto) {
     const logger = new (require('@nestjs/common').Logger)('DepositsService');
     logger.log('[createDeposit] Processing deposit request');
-    logger.log('[createDeposit] userId=' + userId + ', currency=' + dto.currency + ', amount=' + dto.amount);
+    logger.log(`[createDeposit] userId=${userId}, currency=${dto.currency}, amount=${dto.amount}`);
     
-    const currencyRows = await this.prisma.$queryRaw<Array<any>>`
-      SELECT * FROM "Currency" WHERE "code" = ${dto.currency.toUpperCase()}
-    `;
-    const currencyRecord = currencyRows[0] ?? null;
+    // Get currency directly from Prisma instead of using CurrenciesService
+    const prismaClient = this.prisma as any;
+    const currency = await prismaClient.currency.findUnique({
+      where: { code: dto.currency.toUpperCase() },
+    });
     
-    if (!currencyRecord) throw new NotFoundException('Currency ' + dto.currency.toUpperCase() + ' was not found.');
-    if (!currencyRecord.enabled || !currencyRecord.depositEnabled) {
-      throw new BadRequestException('Deposits are disabled for ' + dto.currency + '.');
+    if (!currency) throw new NotFoundException(`Currency ${dto.currency.toUpperCase()} was not found.`);
+    if (!currency.enabled || !currency.depositEnabled) {
+      throw new BadRequestException(`Deposits are disabled for ${dto.currency}.`);
     }
     if (!Number.isFinite(dto.amount) || dto.amount <= 0) {
       throw new BadRequestException('Deposit amount must be greater than zero.');
     }
+
     const provider = (dto.provider ?? DepositProviderOption.FLUTTERWAVE) as PaymentProvider;
-    const paymentMethod = (dto.paymentMethod ?? DepositPaymentMethodOption.BANK_TRANSFER) as PaymentMethod;
-    if (provider !== 'MANUAL' && !['USD', 'NGN', 'GBP', 'GHS'].includes(currencyRecord.code)) {
-      throw new BadRequestException('Currency ' + currencyRecord.code + ' is not supported by the configured Flutterwave account.');
-    }
-    const currency = currencyRecord;
-    const normalizedKey = dto.idempotencyKey ?? userId + ':' + currency.code + ':' + dto.amount + ':' + Date.now();
-    const existingRows = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-      FROM "Deposit" d
-      LEFT JOIN "Transaction" t ON d."transactionId" = t.id
-      WHERE d."userId" = ${userId} AND d."idempotencyKey" = ${normalizedKey}
-      LIMIT 1
-    `;
-    const existing = existingRows[0] ?? null;
+    this.assertSupportedFlutterwaveCurrency(currency.code, provider);
+
+    const normalizedKey = dto.idempotencyKey ?? `${userId}:${currency.code}:${dto.amount}:${Date.now()}`;
+    const existing = await prismaClient.deposit.findFirst({
+      where: { userId, idempotencyKey: normalizedKey },
+      include: { transaction: true },
+    });
     if (existing) {
-      logger.log('[createDeposit] Idempotent deposit found: ' + existing.id);
+      logger.log(`[createDeposit] Idempotent deposit found: ${existing.id}`);
+      const existingFeeBreakdown = {
+        providerFee: existing.fee ? existing.fee.toString() : '0.00',
+        nobleCardsFee: '0.00',
+        totalFees: existing.fee ? existing.fee.toString() : '0.00',
+        customerPayableAmount: existing.amount ? existing.amount.toString() : '0.00',
+        walletCreditAmount: existing.netAmount ? existing.netAmount.toString() : '0.00',
+        walletCreditCurrency: existing.currencyCode,
+        exchangeRate: '1',
+      };
+
       return {
         id: existing.id,
         status: existing.status,
@@ -97,110 +133,90 @@ export class DepositsService {
         amount: existing.amount.toString(),
         currency: existing.currencyCode,
         walletId: existing.walletId,
-        transaction: existing.transactionId ? { id: existing.transactionId, status: existing.transactionStatus, reference: existing.transactionReference } : null,
+        fee: existing.fee ? existing.fee.toString() : '0.00',
+        netAmount: existing.netAmount ? existing.netAmount.toString() : '0.00',
+        requestedAmount: existing.amount ? existing.amount.toString() : '0.00',
+        requestedCurrency: existing.currencyCode,
+        providerFee: existingFeeBreakdown.providerFee,
+        nobleCardsFee: existingFeeBreakdown.nobleCardsFee,
+        totalFees: existingFeeBreakdown.totalFees,
+        customerPayableAmount: existingFeeBreakdown.customerPayableAmount,
+        walletCreditAmount: existingFeeBreakdown.walletCreditAmount,
+        walletCreditCurrency: existingFeeBreakdown.walletCreditCurrency,
+        exchangeRate: existingFeeBreakdown.exchangeRate,
+        transaction: existing.transaction ? { id: existing.transaction.id, status: existing.transaction.status, reference: existing.transaction.reference } : null,
       };
     }
 
-    const walletRows = await this.prisma.$queryRaw`
-      INSERT INTO "Wallet" ("id", "userId", "createdAt", "updatedAt")
-      VALUES (${randomUUID()}, ${userId}, NOW(), NOW())
-      ON CONFLICT ("userId") DO UPDATE SET "updatedAt" = "Wallet"."updatedAt"
-      RETURNING "id", "userId", "createdAt", "updatedAt"
-    ` as any[];
-    const wallet = walletRows[0];
+    const wallet = await this.wallets.getOrCreateWallet(userId);
     const requestedAmount = new Decimal(dto.amount.toFixed(2));
-    const localCurrencyBankTransfer = paymentMethod === 'BANK_TRANSFER' && ['NGN', 'GHS', 'GBP'].includes(currency.code);
-
-    const feeBreakdown = await this.calculateFees(requestedAmount, currency.code, localCurrencyBankTransfer);
-    const amount = feeBreakdown.customerPayableAmount;
-    const fee = feeBreakdown.totalFees;
-    const netAmount = localCurrencyBankTransfer ? feeBreakdown.walletCreditAmount : requestedAmount;
-
-    if (currency.code === 'NGN' && paymentMethod === 'BANK_TRANSFER') {
-      logger.log(`[createDeposit][NGN TRACE] Requested USD: ${feeBreakdown.walletCreditAmount.toFixed(2)}`);
-      logger.log(`[createDeposit][NGN TRACE] Calculated customer payable NGN: ${amount.toFixed(2)}`);
+    const rateMap = await this.exchangeRates.getRates();
+    const targetCurrency = currency.code.toUpperCase();
+    const exchangeRateValue = rateMap.rates[targetCurrency];
+    if (!exchangeRateValue || !Number.isFinite(exchangeRateValue) || exchangeRateValue <= 0) {
+      throw new BadRequestException(`No exchange rate is available for ${targetCurrency}.`);
     }
+    const exchangeRate = new Decimal(String(exchangeRateValue));
+    const feeBreakdown = this.calculateDepositFees(requestedAmount, exchangeRate);
+    const paymentAmount = feeBreakdown.customerPayableAmount;
+    const fee = feeBreakdown.totalFees;
+    const netAmount = requestedAmount;
 
-    logger.log('[createDeposit] paymentMethod=' + paymentMethod + ', provider=' + provider);
+    const paymentMethod = (dto.paymentMethod ?? DepositPaymentMethodOption.BANK_TRANSFER) as PaymentMethod;
 
-    const transactionId = randomUUID();
-    const transactionReference = `DPT-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
-    const transactionMetadata = {
-      source: 'deposit-creation',
-      country: dto.country ?? null,
-      countryCode: dto.countryCode ?? null,
-    };
-    const transaction = {
-      id: transactionId,
-      reference: transactionReference,
-      status: 'PENDING' as TransactionStatus,
-    };
-    await this.prisma.$executeRaw`
-      INSERT INTO "Transaction" (
-        "id", "userId", "walletId", "currencyCode", "type", "amount", "fee",
-        "netAmount", "status", "provider", "paymentMethod", "reference", "metadata", "createdAt", "updatedAt"
-      ) VALUES (
-        ${transactionId}, ${userId}, ${wallet.id}, ${currency.code}, 'DEPOSIT',
-        ${amount.toString()}, ${fee.toString()}, ${netAmount.toString()}, 'PENDING',
-        ${provider}, ${paymentMethod}, ${transactionReference}, ${JSON.stringify(transactionMetadata)}, NOW(), NOW()
-      )
-    `;
+    logger.log(`[createDeposit] paymentMethod=${paymentMethod}, provider=${provider}`);
 
-    const depositId = randomUUID();
-    const depositMetadata = {
-      source: 'deposit-creation',
-      country: dto.country ?? null,
-      countryCode: dto.countryCode ?? null,
-      requestedAmount: requestedAmount.toFixed(2),
-      requestedCurrency: 'USD',
-      exchangeRate: feeBreakdown.exchangeRate.toFixed(8),
-      providerFee: feeBreakdown.providerFee.toFixed(2),
-      nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
-      fee: feeBreakdown.totalFees.toFixed(2),
-      walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
-      walletCreditCurrency: 'USD',
-    };
-    await this.prisma.$executeRaw`
-      INSERT INTO "Deposit" (
-        "id", "userId", "walletId", "currencyCode", "amount", "fee", "netAmount",
-        "provider", "paymentMethod", "country", "countryCode", "status",
-        "idempotencyKey", "metadata", "exchangeRate", "transactionId", "createdAt", "updatedAt"
-      ) VALUES (
-        ${depositId}, ${userId}, ${wallet.id}, ${currency.code}, ${amount.toString()},
-        ${fee.toString()}, ${netAmount.toString()}, ${provider}, ${paymentMethod},
-        ${dto.country ?? null}, ${dto.countryCode ?? null}, 'PENDING', ${normalizedKey},
-        ${JSON.stringify(depositMetadata)}, ${feeBreakdown.exchangeRate.toString()}, ${transaction.id}, NOW(), NOW()
-      )
-    `;
-    const deposit = {
-      id: depositId,
+    const transaction = await this.transactions.createPendingDepositTransaction({
       userId,
       walletId: wallet.id,
       currencyCode: currency.code,
-      amount,
-      fee,
+      amount: paymentAmount,
       netAmount,
+      fee,
       provider,
       paymentMethod,
-      country: dto.country ?? null,
-      countryCode: dto.countryCode ?? null,
-      status: 'PENDING' as DepositStatus,
-      idempotencyKey: normalizedKey,
-      metadata: depositMetadata,
-      transactionId: transaction.id,
-    };
+      metadata: {
+        source: 'deposit-creation',
+        country: dto.country ?? null,
+        countryCode: dto.countryCode ?? null,
+      },
+    });
 
-    logger.log('[createDeposit] Deposit row created: ' + deposit.id);
+    const deposit = await prismaClient.deposit.create({
+      data: {
+        userId,
+        walletId: wallet.id,
+        currencyCode: currency.code,
+        amount: paymentAmount,
+        fee,
+        netAmount,
+        provider,
+        paymentMethod,
+        country: dto.country ?? null,
+        countryCode: dto.countryCode ?? null,
+        status: 'PENDING',
+        idempotencyKey: normalizedKey,
+        metadata: {
+          source: 'deposit-creation',
+          country: dto.country ?? null,
+          countryCode: dto.countryCode ?? null,
+        },
+        transactionId: transaction.id,
+      },
+      include: { transaction: true },
+    });
+
+    logger.log(`[createDeposit] Deposit row created: ${deposit.id}`);
 
     // Route BANK_TRANSFER + NGN to Dynamic Virtual Account flow
     // Route BANK_TRANSFER + GBP to UK Bank Account Charge flow
+    // Route BANK_TRANSFER + GHS to Ghana Virtual Account flow
     // Other methods use standard redirect checkout
     let paymentIntent;
     if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'NGN') {
-      logger.log('[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for NGN BANK_TRANSFER');
-      logger.log(`[createDeposit][NGN TRACE] Flutterwave amount sent: ${amount.toFixed(2)}, currency: NGN`);
+      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for NGN BANK_TRANSFER`);
       paymentIntent = await this.flutterwave.createVirtualAccount({
-        amount: amount.toNumber(),
+        amount: paymentAmount.toNumber(),
         currency: currency.code,
         reference: transaction.reference,
         userId,
@@ -210,9 +226,9 @@ export class DepositsService {
         countryCode: dto.countryCode,
       });
     } else if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GHS') {
-      logger.log('[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for GHS BANK_TRANSFER');
+      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for GHS BANK_TRANSFER`);
       paymentIntent = await this.flutterwave.createGhsVirtualAccount({
-        amount: amount.toNumber(),
+        amount: paymentAmount.toNumber(),
         currency: currency.code,
         reference: transaction.reference,
         userId,
@@ -221,10 +237,11 @@ export class DepositsService {
         country: dto.country,
         countryCode: dto.countryCode,
       });
+      logger.log(`[createDeposit] GHS Virtual Account Response: ${JSON.stringify(paymentIntent)}`);
     } else if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GBP') {
-      logger.log('[createDeposit] CALLING FLUTTERWAVE CREATE GBP BANK CHARGE for GBP BANK_TRANSFER');
+      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE GBP BANK CHARGE for GBP BANK_TRANSFER`);
       paymentIntent = await this.flutterwave.createGbpBankCharge({
-        amount: amount.toNumber(),
+        amount: paymentAmount.toNumber(),
         currency: currency.code,
         reference: transaction.reference,
         userId,
@@ -232,20 +249,10 @@ export class DepositsService {
         depositId: deposit.id,
         country: dto.country,
         countryCode: dto.countryCode,
-      });
-    } else if (paymentMethod === 'CARD' && card) {
-      paymentIntent = await this.flutterwave.createCardCharge({
-        amount: amount.toNumber(),
-        currency: currency.code,
-        reference: transaction.reference,
-        userId,
-        walletId: wallet.id,
-        depositId: deposit.id,
-        card,
       });
     } else {
       paymentIntent = await this.flutterwave.createPayment({
-        amount: amount.toNumber(),
+        amount: paymentAmount.toNumber(),
         currency: currency.code,
         reference: transaction.reference,
         userId,
@@ -257,44 +264,43 @@ export class DepositsService {
       });
     }
 
-    const updatedMetadata = {
-      ...(deposit.metadata as Record<string, unknown> ?? {}),
-      flutterwave: paymentIntent.meta,
-      providerReference: paymentIntent.providerReference,
-      providerTransactionId: paymentIntent.providerTransactionId,
-      ...(paymentIntent.paymentLink && { paymentLink: paymentIntent.paymentLink }),
-      ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
-      ...(paymentIntent.bankName && {
-        bankTransfer: {
-          bankName: paymentIntent.bankName,
-          accountNumber: paymentIntent.accountNumber,
-          accountName: paymentIntent.accountName,
-          expiresAt: paymentIntent.expiresAt,
+    await prismaClient.deposit.update({
+      where: { id: deposit.id },
+      data: {
+        providerReference: paymentIntent.providerReference,
+        providerTransactionId: paymentIntent.providerTransactionId,
+        metadata: {
+          ...(deposit.metadata as Record<string, unknown> ?? {}),
+          flutterwave: paymentIntent.meta,
+          providerReference: paymentIntent.providerReference,
+          providerTransactionId: paymentIntent.providerTransactionId,
+          ...(paymentIntent.paymentLink && { paymentLink: paymentIntent.paymentLink }),
+          ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
+          ...(paymentIntent.bankName && {
+            bankTransfer: {
+              bankName: paymentIntent.bankName,
+              accountNumber: paymentIntent.accountNumber,
+              accountName: paymentIntent.accountName,
+              expiresAt: paymentIntent.expiresAt,
+            },
+          }),
         },
-      }),
-    };
-    await this.prisma.$executeRaw`
-      UPDATE "Deposit"
-      SET "providerReference" = ${paymentIntent.providerReference},
-          "providerTransactionId" = ${paymentIntent.providerTransactionId},
-          "metadata" = ${JSON.stringify(updatedMetadata)},
-          "updatedAt" = NOW()
-      WHERE "id" = ${deposit.id}
-    `;
+      },
+    });
 
-    logger.log('[GBP DEBUG 4] DepositsService paymentIntent: ' + JSON.stringify({
+    logger.log(`[GBP DEBUG 4] DepositsService paymentIntent: ${JSON.stringify({
       paymentMethod,
       currency: currency.code,
       authorizationUrl: paymentIntent.authorizationUrl ?? null,
       providerReference: paymentIntent.providerReference,
       providerTransactionId: paymentIntent.providerTransactionId,
       meta: paymentIntent.meta,
-    }));
-    logger.log('[GBP DEBUG 5] Final authorizationUrl before database/response: ' + (paymentIntent.authorizationUrl ?? 'NONE'));
+    })}`);
+    logger.log(`[GBP DEBUG 5] Final authorizationUrl before database/response: ${paymentIntent.authorizationUrl ?? 'NONE'}`);
 
-    // For local bank transfers, return account details instead of payment link
+    // For NGN or GHS bank transfer, return account details instead of payment link
     if (paymentMethod === 'BANK_TRANSFER' && (currency.code === 'NGN' || currency.code === 'GHS')) {
-      return {
+      const bankTransferResponse = {
         id: deposit.id,
         status: deposit.status,
         provider: deposit.provider,
@@ -302,14 +308,14 @@ export class DepositsService {
         amount: deposit.amount.toString(),
         fee: deposit.fee.toString(),
         netAmount: deposit.netAmount.toString(),
-        requestedAmount: requestedAmount.toFixed(2),
-        requestedCurrency: 'USD',
+        requestedAmount: feeBreakdown.requestedAmount.toFixed(2),
+        requestedCurrency: feeBreakdown.requestedCurrency,
         providerFee: feeBreakdown.providerFee.toFixed(2),
         nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
         totalFees: feeBreakdown.totalFees.toFixed(2),
         customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
         walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
-        walletCreditCurrency: 'USD',
+        walletCreditCurrency: feeBreakdown.walletCreditCurrency,
         exchangeRate: feeBreakdown.exchangeRate.toFixed(2),
         paymentMethod: 'BANK_TRANSFER',
         bankTransfer: {
@@ -329,6 +335,8 @@ export class DepositsService {
           status: transaction.status,
         },
       };
+      logger.log(`[createDeposit] ${currency.code} BANK_TRANSFER response to Flutter: ${JSON.stringify(bankTransferResponse)}`);
+      return bankTransferResponse;
     }
 
     // For GBP bank transfer, return authorization URL
@@ -341,6 +349,15 @@ export class DepositsService {
         amount: deposit.amount.toString(),
         fee: deposit.fee.toString(),
         netAmount: deposit.netAmount.toString(),
+        requestedAmount: feeBreakdown.requestedAmount.toFixed(2),
+        requestedCurrency: feeBreakdown.requestedCurrency,
+        providerFee: feeBreakdown.providerFee.toFixed(2),
+        nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+        totalFees: feeBreakdown.totalFees.toFixed(2),
+        customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
+        walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
+        walletCreditCurrency: feeBreakdown.walletCreditCurrency,
+        exchangeRate: feeBreakdown.exchangeRate.toFixed(2),
         paymentMethod: 'BANK_TRANSFER',
         authorizationUrl: paymentIntent.authorizationUrl,
         providerReference: paymentIntent.providerReference,
@@ -353,9 +370,9 @@ export class DepositsService {
         },
       };
 
-      logger.log('[GBP DEBUG 6] Final POST /deposits response: ' + JSON.stringify(responsePayload));
-      logger.log('[createDeposit] GBP API response authorizationUrl=' + (responsePayload.authorizationUrl ?? 'NONE'));
-      logger.log('[createDeposit] GBP API response authorizationUrl type=' + typeof responsePayload.authorizationUrl);
+      logger.log(`[GBP DEBUG 6] Final POST /deposits response: ${JSON.stringify(responsePayload)}`);
+      logger.log(`[createDeposit] GBP API response authorizationUrl=${responsePayload.authorizationUrl ?? 'NONE'}`);
+      logger.log(`[createDeposit] GBP API response authorizationUrl type=${typeof responsePayload.authorizationUrl}`);
 
       return responsePayload;
     }
@@ -368,17 +385,16 @@ export class DepositsService {
       amount: deposit.amount.toString(),
       fee: deposit.fee.toString(),
       netAmount: deposit.netAmount.toString(),
-      requestedAmount: requestedAmount.toFixed(2),
-      requestedCurrency: 'USD',
+      requestedAmount: feeBreakdown.requestedAmount.toFixed(2),
+      requestedCurrency: feeBreakdown.requestedCurrency,
       providerFee: feeBreakdown.providerFee.toFixed(2),
       nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
       totalFees: feeBreakdown.totalFees.toFixed(2),
       customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
       walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
-      walletCreditCurrency: 'USD',
+      walletCreditCurrency: feeBreakdown.walletCreditCurrency,
       exchangeRate: feeBreakdown.exchangeRate.toFixed(2),
       paymentLink: paymentIntent.paymentLink,
-      authorizationUrl: paymentIntent.authorizationUrl,
       providerReference: paymentIntent.providerReference,
       providerTransactionId: paymentIntent.providerTransactionId,
       walletId: wallet.id,
@@ -391,38 +407,170 @@ export class DepositsService {
   }
 
   async createCardDeposit(userId: string, dto: CreateCardDepositDto) {
-    const currency = dto.currency.toUpperCase();
-    if (!['NGN', 'GHS', 'GBP'].includes(currency)) {
+    const currencyCode = dto.currency.toUpperCase();
+    if (!['NGN', 'GHS', 'GBP'].includes(currencyCode)) {
       throw new BadRequestException('Card deposits support NGN, GHS, and GBP only.');
+    }
+    if (!Number.isFinite(dto.requestedAmount) || dto.requestedAmount <= 0 || !Number.isFinite(dto.amount) || dto.amount <= 0) {
+      throw new BadRequestException('Card deposit amount must be greater than zero.');
+    }
+
+    const currencies = await this.prisma.$queryRaw<Array<any>>`
+      SELECT * FROM "Currency" WHERE "code" = ${currencyCode}
+    `;
+    const currency = currencies[0];
+    if (!currency) throw new NotFoundException(`Currency ${currencyCode} was not found.`);
+    if (!currency.enabled || !currency.depositEnabled) {
+      throw new BadRequestException(`Deposits are disabled for ${currencyCode}.`);
     }
 
     const requestedAmount = new Decimal(dto.requestedAmount.toFixed(2));
     const payableAmount = new Decimal(dto.amount.toFixed(2));
-    const feeBreakdown = await this.calculateFees(requestedAmount, currency);
+    const rateMap = await this.exchangeRates.getRates();
+    const rate = rateMap.rates[currencyCode];
+    if (!Number.isFinite(rate) || rate <= 0) {
+      throw new BadRequestException(`No exchange rate is available for ${currencyCode}.`);
+    }
+    const feeBreakdown = this.calculateDepositFees(requestedAmount, new Decimal(String(rate)));
     if (!payableAmount.eq(feeBreakdown.customerPayableAmount)) {
       throw new BadRequestException('Card payable amount does not match the current exchange rate and fee calculation.');
     }
 
-    return this.createDeposit(userId, {
-      amount: requestedAmount.toNumber(),
-      currency,
-      provider: DepositProviderOption.FLUTTERWAVE,
-      paymentMethod: DepositPaymentMethodOption.CARD,
-      idempotencyKey: dto.idempotencyKey,
-    }, dto.card);
+    const provider: PaymentProvider = 'FLUTTERWAVE';
+    const paymentMethod: PaymentMethod = 'CARD';
+    const idempotencyKey = dto.idempotencyKey ?? `${userId}:${currencyCode}:${dto.requestedAmount}:${Date.now()}`;
+    const existingRows = await this.prisma.$queryRaw<Array<any>>`
+      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
+      FROM "Deposit" d
+      LEFT JOIN "Transaction" t ON t.id = d."transactionId"
+      WHERE d."userId" = ${userId} AND d."idempotencyKey" = ${idempotencyKey}
+      LIMIT 1
+    `;
+    const existing = existingRows[0];
+    if (existing) {
+      return {
+        id: existing.id,
+        status: existing.status,
+        provider: existing.provider,
+        amount: existing.amount.toString(),
+        currency: existing.currencyCode,
+        netAmount: existing.netAmount.toString(),
+        authorizationUrl: existing.metadata?.authorizationUrl ?? null,
+        providerReference: existing.providerReference,
+        providerTransactionId: existing.providerTransactionId,
+        walletId: existing.walletId,
+      };
+    }
+
+    const walletRows = await this.prisma.$queryRaw<Array<any>>`
+      INSERT INTO "Wallet" ("id", "userId", "createdAt", "updatedAt")
+      VALUES (${randomUUID()}, ${userId}, NOW(), NOW())
+      ON CONFLICT ("userId") DO UPDATE SET "updatedAt" = "Wallet"."updatedAt"
+      RETURNING "id"
+    `;
+    const wallet = walletRows[0];
+    if (!wallet) throw new NotFoundException('Wallet could not be found for card deposit.');
+
+    const transactionId = randomUUID();
+    const transactionReference = `DPT-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
+    const depositId = randomUUID();
+    const amount = feeBreakdown.customerPayableAmount;
+    const fee = feeBreakdown.totalFees;
+    const netAmount = requestedAmount;
+    const metadata = {
+      source: 'deposit-creation',
+      requestedAmount: requestedAmount.toFixed(2),
+      requestedCurrency: 'USD',
+      exchangeRate: feeBreakdown.exchangeRate.toFixed(8),
+      providerFee: feeBreakdown.providerFee.toFixed(2),
+      nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+      walletCreditAmount: requestedAmount.toFixed(2),
+      walletCreditCurrency: 'USD',
+    };
+
+    await this.prisma.$executeRaw`
+      INSERT INTO "Transaction" (
+        "id", "userId", "walletId", "currencyCode", "type", "amount", "fee", "netAmount",
+        "status", "provider", "paymentMethod", "reference", "metadata", "createdAt", "updatedAt"
+      ) VALUES (
+        ${transactionId}, ${userId}, ${wallet.id}, ${currencyCode}, 'DEPOSIT', ${amount.toString()}, ${fee.toString()},
+        ${netAmount.toString()}, 'PENDING', ${provider}, ${paymentMethod}, ${transactionReference},
+        ${JSON.stringify({ source: 'deposit-creation' })}, NOW(), NOW()
+      )
+    `;
+    await this.prisma.$executeRaw`
+      INSERT INTO "Deposit" (
+        "id", "userId", "walletId", "currencyCode", "amount", "fee", "netAmount", "provider", "paymentMethod",
+        "status", "idempotencyKey", "metadata", "exchangeRate", "transactionId", "createdAt", "updatedAt"
+      ) VALUES (
+        ${depositId}, ${userId}, ${wallet.id}, ${currencyCode}, ${amount.toString()}, ${fee.toString()},
+        ${netAmount.toString()}, ${provider}, ${paymentMethod}, 'PENDING', ${idempotencyKey}, ${JSON.stringify(metadata)},
+        ${feeBreakdown.exchangeRate.toString()}, ${transactionId}, NOW(), NOW()
+      )
+    `;
+
+    const paymentIntent = await this.flutterwave.createCardCharge({
+      amount: amount.toNumber(),
+      currency: currencyCode,
+      reference: transactionReference,
+      userId,
+      walletId: wallet.id,
+      depositId,
+      card: dto.card,
+    });
+    const updatedMetadata = {
+      ...metadata,
+      flutterwave: paymentIntent.meta,
+      providerReference: paymentIntent.providerReference,
+      providerTransactionId: paymentIntent.providerTransactionId,
+      ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
+    };
+    await this.prisma.$executeRaw`
+      UPDATE "Deposit"
+      SET "providerReference" = ${paymentIntent.providerReference},
+          "providerTransactionId" = ${paymentIntent.providerTransactionId},
+          "metadata" = ${JSON.stringify(updatedMetadata)},
+          "updatedAt" = NOW()
+      WHERE "id" = ${depositId}
+    `;
+
+    return {
+      id: depositId,
+      status: 'PENDING',
+      provider,
+      currency: currencyCode,
+      amount: amount.toString(),
+      fee: fee.toString(),
+      netAmount: netAmount.toString(),
+      requestedAmount: requestedAmount.toFixed(2),
+      requestedCurrency: 'USD',
+      providerFee: feeBreakdown.providerFee.toFixed(2),
+      nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+      totalFees: feeBreakdown.totalFees.toFixed(2),
+      customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
+      walletCreditAmount: requestedAmount.toFixed(2),
+      walletCreditCurrency: 'USD',
+      exchangeRate: feeBreakdown.exchangeRate.toFixed(2),
+      authorizationUrl: paymentIntent.authorizationUrl,
+      providerReference: paymentIntent.providerReference,
+      providerTransactionId: paymentIntent.providerTransactionId,
+      walletId: wallet.id,
+      transaction: { id: transactionId, reference: transactionReference, status: 'PENDING' },
+    };
   }
 
   async listDeposits(userId: string, filters: { status?: string; currency?: string; provider?: string }) {
-    const deposits = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-      FROM "Deposit" d
-      LEFT JOIN "Transaction" t ON d."transactionId" = t.id
-      WHERE d."userId" = ${userId}
-        ${filters.status ? Prisma.sql`AND d."status" = ${filters.status}` : Prisma.empty}
-        ${filters.currency ? Prisma.sql`AND d."currencyCode" = ${filters.currency.toUpperCase()}` : Prisma.empty}
-        ${filters.provider ? Prisma.sql`AND d."provider" = ${filters.provider}` : Prisma.empty}
-      ORDER BY d."createdAt" DESC
-    `;
+    const prisma = this.prisma as any;
+    const deposits = await prisma.deposit.findMany({
+      where: {
+        userId,
+        ...(filters.status ? { status: filters.status as DepositStatus } : {}),
+        ...(filters.currency ? { currencyCode: filters.currency.toUpperCase() } : {}),
+        ...(filters.provider ? { provider: filters.provider as PaymentProvider } : {}),
+      },
+      include: { transaction: true },
+      orderBy: { createdAt: 'desc' },
+    });
 
     return deposits.map((deposit) => ({
       id: deposit.id,
@@ -434,98 +582,20 @@ export class DepositsService {
       netAmount: deposit.netAmount.toString(),
       createdAt: deposit.createdAt,
       updatedAt: deposit.updatedAt,
-      transaction: deposit.transactionId ? {
-        id: deposit.transactionId,
-        status: deposit.transactionStatus,
-        reference: deposit.transactionReference,
+      transaction: deposit.transaction ? {
+        id: deposit.transaction.id,
+        status: deposit.transaction.status,
+        reference: deposit.transaction.reference,
       } : null,
     }));
   }
 
-  async getAdminDeposits() {
-    const rateMap = await this.exchangeRates.getRates();
-    const deposits = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, u.email, u."firstName", u."lastName", u.username, u.phone,
-        t.reference AS "transactionReference", t.status AS "transactionStatus",
-        t."providerReference" AS "transactionProviderReference",
-        t."providerTransactionId" AS "transactionProviderTransactionId",
-        l."balanceBefore" AS "ledgerBalanceBefore", l."balanceAfter" AS "ledgerBalanceAfter"
-      FROM "Deposit" d
-      JOIN "User" u ON u.id = d."userId"
-      LEFT JOIN "Transaction" t ON t.id = d."transactionId"
-      LEFT JOIN "LedgerEntry" l ON l.reference = 'deposit-' || d.id
-      ORDER BY d."createdAt" DESC
-    `;
-
-    const rows = deposits.map((deposit) => {
-      const metadata = deposit.metadata && typeof deposit.metadata === 'object' ? deposit.metadata : {};
-      const walletCredit = Number(metadata.walletCreditAmount ?? deposit.netAmount ?? 0);
-      const requestedAmount = Number(metadata.requestedAmount ?? walletCredit);
-      const localAmount = Number(deposit.amount ?? 0);
-      const storedRate = Number(metadata.exchangeRate ?? 0);
-      const currentRate = Number(rateMap.rates[String(deposit.currencyCode).toUpperCase()] ?? 1);
-      const baseRate = storedRate > 0 ? storedRate / 1.03 : currentRate;
-      const status = String(deposit.status);
-      const method = deposit.paymentMethod === 'BANK_TRANSFER' ? 'Bank Transfer' : deposit.paymentMethod === 'CARD' ? 'Card' : 'Payment Providers';
-      const feeLocal = Number(deposit.fee ?? 0);
-      const feeUsd = baseRate > 0 ? feeLocal / baseRate : feeLocal;
-      return {
-        id: deposit.id,
-        userId: deposit.userId,
-        userName: `${deposit.firstName} ${deposit.lastName}`.trim() || deposit.email,
-        userTag: deposit.username ? `@${deposit.username}` : deposit.email,
-        email: deposit.email,
-        phone: deposit.phone ?? 'N/A',
-        avatar: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(`${deposit.firstName} ${deposit.lastName}`),
-        originalAmount: localAmount,
-        currency: deposit.currencyCode,
-        usdValue: walletCredit,
-        exchangeRate: baseRate,
-        nobleRate: baseRate,
-        markup: 0,
-        fee: feeUsd,
-        providerFee: Number(metadata.providerFee ?? 0) / (baseRate || 1),
-        netAmount: walletCredit,
-        method,
-        provider: deposit.provider,
-        providerRef: deposit.providerReference ?? metadata.providerReference ?? '',
-        paymentRef: deposit.transactionReference ?? '',
-        status: status === 'SUCCESSFUL' ? 'Completed' : status.charAt(0) + status.slice(1).toLowerCase(),
-        reconciliation: { providerAmount: walletCredit, ledgerAmount: status === 'SUCCESSFUL' ? walletCredit : 0, difference: status === 'SUCCESSFUL' ? 0 : walletCredit, status: status === 'SUCCESSFUL' ? 'Reconciled' : 'Mismatch' },
-        walletSnapshot: { balanceBefore: Number(deposit.ledgerBalanceBefore ?? 0), depositAmount: status === 'SUCCESSFUL' ? walletCredit : 0, balanceAfter: Number(deposit.ledgerBalanceAfter ?? 0) },
-        createdAt: deposit.createdAt,
-        updatedAt: deposit.updatedAt,
-        completedAt: status === 'SUCCESSFUL' ? deposit.updatedAt : null,
-        timeline: [{ step: 'Deposit Request Created', time: deposit.createdAt, completed: true }, { step: 'Wallet Ledger Credited', time: deposit.updatedAt, completed: status === 'SUCCESSFUL' }],
-        auditTrail: [{ event: status === 'SUCCESSFUL' ? 'Completed' : status, description: `${method} deposit via ${deposit.provider}`, time: deposit.updatedAt, actor: 'NobleCards Backend' }],
-        requestedAmount,
-        requestedCurrency: metadata.requestedCurrency ?? 'USD',
-        walletCreditAmount: walletCredit,
-        walletCreditCurrency: metadata.walletCreditCurrency ?? 'USD',
-        localPayableAmount: localAmount,
-        cardDetails: null,
-      };
-    });
-
-    const volume = rows.reduce((sum, row) => sum + row.usdValue, 0);
-    const byStatus = (status: string) => rows.filter((row) => row.status === status).reduce((sum, row) => sum + row.usdValue, 0);
-    const byMethod = ['Bank Transfer', 'Card', 'Payment Providers'].map((method) => ({ method, amount: rows.filter((row) => row.method === method).reduce((sum, row) => sum + row.usdValue, 0) }));
-    const byDay = Object.values(rows.reduce((groups: Record<string, { date: string; volume: number }>, row) => { const date = new Date(row.createdAt).toLocaleDateString(); groups[date] ??= { date, volume: 0 }; groups[date].volume += row.usdValue; return groups; }, {})).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    return {
-      deposits: rows,
-      stats: { totalDepositsVolume: volume, todaysDepositsVolume: rows.filter((row) => new Date(row.createdAt).toDateString() === new Date().toDateString()).reduce((sum, row) => sum + row.usdValue, 0), pendingDepositsVolume: byStatus('Pending'), processingDepositsVolume: byStatus('Processing'), completedDepositsVolume: byStatus('Completed'), failedDepositsVolume: byStatus('Failed'), nobleRevenueFees: rows.reduce((sum, row) => sum + row.fee, 0), needsAttentionCount: rows.filter((row) => row.status !== 'Completed').length },
-      chartData: { volumeOverTime: byDay, statusBreakdown: ['Completed', 'Pending', 'Processing', 'Failed'].map((status, index) => ({ name: status, value: byStatus(status), color: ['#10b981', '#f59e0b', '#3b82f6', '#ef4444'][index] })).filter((item) => item.value > 0), methodBreakdown: byMethod },
-    };
-  }
-
   async getDeposit(userId: string, id: string) {
-    const depositRows = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-      FROM "Deposit" d
-      LEFT JOIN "Transaction" t ON d."transactionId" = t.id
-      WHERE d."id" = ${id} AND d."userId" = ${userId}
-    `;
-    const deposit = depositRows[0] ?? null;
+    const prisma = this.prisma as any;
+    const deposit = await prisma.deposit.findFirst({
+      where: { id, userId },
+      include: { transaction: true },
+    });
     if (!deposit) throw new NotFoundException('Deposit not found.');
     return deposit;
   }

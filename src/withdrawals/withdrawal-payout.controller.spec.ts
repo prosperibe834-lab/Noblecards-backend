@@ -1,11 +1,53 @@
 jest.mock('../auth/auth.guard', () => ({ AuthGuard: class AuthGuard {} }));
 
+import { RequestMethod } from '@nestjs/common';
+import {
+  GUARDS_METADATA,
+  METHOD_METADATA,
+  PATH_METADATA,
+} from '@nestjs/common/constants';
+import { AppModule } from '../app.module';
+import { AuthGuard } from '../auth/auth.guard';
+import { WithdrawalsModule } from './withdrawals.module';
 import { WithdrawalPayoutController } from './withdrawal-payout.controller';
 import { WithdrawalService } from './withdrawal.service';
 import { WithdrawalPayoutService } from './withdrawal-payout.service';
 import { BeneficiaryService } from './beneficiary.service';
 
 describe('WithdrawalPayoutController', () => {
+  it('registers the authenticated GET /withdrawals route in AppModule', async () => {
+    const handler = Object.getOwnPropertyDescriptor(
+      WithdrawalPayoutController.prototype,
+      'list',
+    )?.value;
+    const listWithdrawals = jest.fn().mockResolvedValue([]);
+    const withdrawals = {
+      listWithdrawals,
+    } as unknown as WithdrawalService;
+    const controller = new WithdrawalPayoutController(
+      {} as WithdrawalPayoutService,
+      withdrawals,
+    );
+
+    expect(Reflect.getMetadata('imports', AppModule)).toContain(WithdrawalsModule);
+    expect(Reflect.getMetadata(PATH_METADATA, WithdrawalPayoutController)).toBe(
+      'withdrawals',
+    );
+    expect(Reflect.getMetadata(METHOD_METADATA, handler)).toBe(RequestMethod.GET);
+    expect(
+      Reflect.getMetadata(GUARDS_METADATA, WithdrawalPayoutController),
+    ).toContain(AuthGuard);
+    await expect(
+      controller.list({ user: { userId: 'user-1' } }),
+    ).resolves.toEqual([]);
+    expect(listWithdrawals).toHaveBeenCalledWith('user-1', {
+      status: undefined,
+      currency: undefined,
+      country: undefined,
+      provider: undefined,
+    });
+  });
+
   it('delegates POST /withdrawals using the authenticated user ID and DTO', async () => {
     const result = { id: 'withdrawal-1', status: 'PENDING' };
     const withdrawals = {

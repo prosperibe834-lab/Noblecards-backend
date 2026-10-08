@@ -8,21 +8,25 @@ type LedgerEntryType = 'CREDIT' | 'DEBIT' | 'HOLD' | 'RELEASE' | 'FEE' | 'REFUND
 export class LedgerService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async recordEntry(input: {
-    walletId: string;
-    currencyCode: string;
-    type: LedgerEntryType;
-    amount: Decimal | string | number;
-    balanceBefore: Decimal | string | number;
-    balanceAfter: Decimal | string | number;
-    pendingBalanceBefore?: Decimal | string | number | null;
-    pendingBalanceAfter?: Decimal | string | number | null;
-    transactionId?: string | null;
-    reference?: string | null;
-    operationKey?: string | null;
-    reason?: string | null;
-  }, client: any = this.prisma) {
-    return client.ledgerEntry.create({
+  async recordEntry(
+    input: {
+      walletId: string;
+      currencyCode: string;
+      type: LedgerEntryType;
+      amount: Decimal | string | number;
+      balanceBefore: Decimal | string | number;
+      balanceAfter: Decimal | string | number;
+      pendingBalanceBefore?: Decimal | string | number | null;
+      pendingBalanceAfter?: Decimal | string | number | null;
+      transactionId?: string | null;
+      operationKey?: string | null;
+      reference?: string | null;
+      reason?: string | null;
+    },
+    tx?: any,
+  ) {
+    const client = tx ?? this.prisma;
+    return (client as any).ledgerEntry.create({
       data: {
         walletId: input.walletId,
         currencyCode: input.currencyCode,
@@ -33,8 +37,8 @@ export class LedgerService {
         balanceAfter: input.balanceAfter instanceof Decimal ? input.balanceAfter : new Decimal(String(input.balanceAfter)),
         pendingBalanceBefore: input.pendingBalanceBefore == null ? null : input.pendingBalanceBefore instanceof Decimal ? input.pendingBalanceBefore : new Decimal(String(input.pendingBalanceBefore)),
         pendingBalanceAfter: input.pendingBalanceAfter == null ? null : input.pendingBalanceAfter instanceof Decimal ? input.pendingBalanceAfter : new Decimal(String(input.pendingBalanceAfter)),
-        reference: input.reference ?? null,
         operationKey: input.operationKey ?? null,
+        reference: input.reference ?? null,
         reason: input.reason ?? null,
       },
     });

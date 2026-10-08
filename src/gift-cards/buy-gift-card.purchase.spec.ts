@@ -65,7 +65,10 @@ function makeService(providerResult: any = { providerReference: 'tp-1', provider
     },
   };
   const prisma = {
-    giftCardPurchase: { findUnique: jest.fn().mockResolvedValue(null) },
+    giftCardPurchase: {
+      findUnique: jest.fn().mockResolvedValue(null),
+      updateMany: jest.fn().mockResolvedValue({ count: 1 }),
+    },
     user: { findUnique: jest.fn().mockResolvedValue({ email: 'buyer@example.com', firstName: 'Test', lastName: 'Buyer', displayName: null }) },
     $transaction: jest.fn(async (callback: any) => callback(tx)),
   } as any;
@@ -73,6 +76,7 @@ function makeService(providerResult: any = { providerReference: 'tp-1', provider
     getCatalog: jest.fn().mockResolvedValue([product]),
     purchase: jest.fn().mockResolvedValue(providerResult),
     retrieveVoucher: jest.fn(),
+    generateRedemptionLink: jest.fn().mockResolvedValue('https://testflight.tremendous.com/rewards/payout/token'),
   } as any;
   const wallets = {
     getOrCreateWallet: jest.fn().mockResolvedValue({ id: 'wallet-1' }),
@@ -84,12 +88,13 @@ function makeService(providerResult: any = { providerReference: 'tp-1', provider
   const encryption = { encrypt: jest.fn().mockReturnValue('encrypted'), decrypt: jest.fn().mockReturnValue({ code: 'CODE-1' }) } as any;
   const config = { get: jest.fn().mockReturnValue('0') } as any;
   const exchangeRates = { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: fxRates, updatedAt: '2026-09-30T00:00:00.000Z' }) } as any;
-  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config, rateService, baseRateService, exchangeRates), provider, prisma, tx, wallets, encryption, exchangeRates };
+  const email = { sendGiftCardPurchaseSuccessEmail: jest.fn().mockResolvedValue(undefined) } as any;
+  return { service: new BuyGiftCardService(provider, prisma, wallets, encryption, config, rateService, baseRateService, exchangeRates, email), provider, prisma, tx, wallets, encryption, exchangeRates, email };
 }
 
 describe('BuyGiftCardService purchase flow', () => {
   it('validates the real catalog product, holds funds, submits, and finalizes once', async () => {
-    const { service, provider, wallets, encryption } = makeService();
+    const { service, provider, wallets, encryption, email, prisma, tx } = makeService();
     const result = await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-1' });
     expect(provider.purchase).toHaveBeenCalledWith(expect.objectContaining({ productId: '14971', amount: 10, units: 1, reference: expect.stringMatching(/^NC-BUY-/) }));
     expect(provider.purchase).toHaveBeenCalledWith(expect.objectContaining({ currencyCode: 'EUR' }));
@@ -97,6 +102,94 @@ describe('BuyGiftCardService purchase flow', () => {
     expect(wallets.finalizeHeldFunds).toHaveBeenCalledTimes(1);
     expect(encryption.encrypt).toHaveBeenCalledWith({ code: 'CODE-1' });
     expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(prisma.giftCardPurchase.updateMany).toHaveBeenCalledTimes(1);
+    expect(email.sendGiftCardPurchaseSuccessEmail).toHaveBeenCalledTimes(1);
+    expect(prisma.user.findUnique).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns a redemption link only for an owned successful LINK reward', async () => {
+    const { service, provider, prisma } = makeService();
+    prisma.giftCardPurchase.findFirst = jest.fn().mockResolvedValue(makePurchase({
+      status: GiftCardPurchaseStatus.SUCCESSFUL,
+      redeemId: 'REWARD-1',
+      redeemDetails: { delivery: { method: 'LINK' } },
+    }));
+
+    await expect(service.getRedemptionLink('user-1', 'purchase-1')).resolves.toEqual({
+      url: 'https://testflight.tremendous.com/rewards/payout/token',
+    });
+    expect(prisma.giftCardPurchase.findFirst).toHaveBeenCalledWith({ where: { id: 'purchase-1', userId: 'user-1' } });
+    expect(provider.generateRedemptionLink).toHaveBeenCalledWith('REWARD-1');
+  });
+
+  it('rejects missing, unsuccessful, and previous EMAIL-delivery purchases without generating a link', async () => {
+    const { service, provider, prisma } = makeService();
+    prisma.giftCardPurchase.findFirst = jest.fn().mockResolvedValueOnce(null);
+    await expect(service.getRedemptionLink('user-1', 'missing')).rejects.toThrow(/not found/i);
+
+    prisma.giftCardPurchase.findFirst.mockResolvedValueOnce(makePurchase({ status: GiftCardPurchaseStatus.FAILED }));
+    await expect(service.getRedemptionLink('user-1', 'failed')).rejects.toThrow(/not available/i);
+
+    prisma.giftCardPurchase.findFirst.mockResolvedValueOnce(makePurchase({
+      status: GiftCardPurchaseStatus.SUCCESSFUL,
+      redeemId: 'OLD-REWARD',
+      redeemDetails: { delivery: { method: 'EMAIL' } },
+    }));
+    await expect(service.getRedemptionLink('user-1', 'email')).rejects.toThrow(/previous delivery method/i);
+    expect(provider.generateRedemptionLink).not.toHaveBeenCalled();
+  });
+
+  it('maps Tremendous link failures to a safe application error', async () => {
+    const { service, provider, prisma } = makeService();
+    prisma.giftCardPurchase.findFirst = jest.fn().mockResolvedValue(makePurchase({
+      status: GiftCardPurchaseStatus.SUCCESSFUL,
+      redeemId: 'REWARD-1',
+      redeemDetails: { delivery: { method: 'LINK' } },
+    }));
+    provider.generateRedemptionLink.mockRejectedValue(new Error('provider returned private details'));
+
+    await expect(service.getRedemptionLink('user-1', 'purchase-1')).rejects.toThrow('Unable to open this gift card right now. Please try again.');
+  });
+
+  it('never returns a stored redemption URL in a purchase response', async () => {
+    const { service, prisma } = makeService();
+    prisma.giftCardPurchase.findFirst = jest.fn().mockResolvedValue(makePurchase({
+      status: GiftCardPurchaseStatus.SUCCESSFUL,
+      redeemDetails: { delivery: { method: 'LINK', link: 'https://testflight.tremendous.com/rewards/payout/secret' } },
+    }));
+
+    const result = await service.getPurchase('user-1', 'purchase-1');
+
+    expect(JSON.stringify(result)).not.toContain('/rewards/payout/secret');
+  });
+
+  it('keeps buy details usable when the stored voucher payload is malformed', async () => {
+    const { service, prisma, encryption } = makeService();
+    encryption.decrypt.mockImplementation(() => {
+      throw new Error('Beneficiary payload could not be decrypted and parsed.');
+    });
+    prisma.giftCardPurchase.findFirst = jest.fn().mockResolvedValue(makePurchase({
+      status: GiftCardPurchaseStatus.SUCCESSFUL,
+      voucherCiphertext: 'v1:malformed',
+      redeemDetails: { code: 'LEGACY-CODE', pin: '5432' },
+      providerMetadata: { code: 'LEGACY-FALLBACK' },
+    }));
+
+    const result = await service.getPurchase('user-1', 'purchase-1');
+
+    expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(result.voucherCode).toBe('LEGACY-CODE');
+    expect(result.redeemDetails).toEqual({ pin: '5432' });
+  });
+
+  it('does not send a second success email after the email-attempt claim is taken', async () => {
+    const { service, prisma, email } = makeService();
+    prisma.giftCardPurchase.updateMany.mockResolvedValue({ count: 0 });
+
+    await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1 });
+
+    expect(prisma.giftCardPurchase.updateMany).toHaveBeenCalledTimes(1);
+    expect(email.sendGiftCardPurchaseSuccessEmail).not.toHaveBeenCalled();
   });
 
   it('uses the explicitly selected country and currency when provider product IDs repeat', async () => {
@@ -128,7 +221,7 @@ describe('BuyGiftCardService purchase flow', () => {
 
     expect(tx.giftCardPurchase.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ countryCode: 'GB' }),
+        data: expect.objectContaining({ countryCode: 'GB', provider: 'TREMENDOUS' }),
       }),
     );
     expect(provider.purchase).toHaveBeenCalledWith(
@@ -161,10 +254,11 @@ describe('BuyGiftCardService purchase flow', () => {
   });
 
   it('returns an existing idempotent purchase without submitting again', async () => {
-    const { service, prisma, provider } = makeService();
+    const { service, prisma, provider, email } = makeService();
     prisma.giftCardPurchase.findUnique.mockResolvedValue(makePurchase({ userId: 'user-1', status: GiftCardPurchaseStatus.UNDER_REVIEW }));
     const result = await service.purchase('user-1', { productId: '14971', amount: 10, quantity: 1, idempotencyKey: 'request-1' });
     expect(provider.purchase).not.toHaveBeenCalled();
+    expect(email.sendGiftCardPurchaseSuccessEmail).not.toHaveBeenCalled();
     expect(result.id).toBe('purchase-1');
   });
 

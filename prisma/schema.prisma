@@ -549,6 +549,7 @@ model GiftCardPurchase {
   providerMetadata    Json?
   errorMessage        String?
   metadata            Json?
+  successEmailAttemptedAt DateTime?
   createdAt           DateTime               @default(now())
   updatedAt           DateTime               @updatedAt
   completedAt         DateTime?

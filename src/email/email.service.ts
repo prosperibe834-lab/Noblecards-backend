@@ -75,6 +75,35 @@ export class EmailService {
     `);
   }
 
+  async sendGiftCardPurchaseSuccessEmail(email: string, details: {
+    firstName: string | null;
+    brand: string;
+    amount: string;
+    currency: string;
+    reference: string;
+    purchasedAt: Date;
+  }): Promise<void> {
+    const escape = (value: string) => value.replace(/[&<>"']/g, (character) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    })[character]!);
+    const firstName = escape(details.firstName?.trim() || 'there');
+    await this.send(email, 'Your NobleCards Gift Card Purchase Was Successful', `
+      <div style="font-family:Arial,sans-serif;color:#202124;max-width:600px;margin:0 auto;line-height:1.6">
+        <h1 style="color:#18794e">NobleCards</h1>
+        <p>Hello ${firstName},</p>
+        <p>Your gift card purchase was successfully completed.</p>
+        <p><strong>Gift Card:</strong> ${escape(details.brand)}</p>
+        <p><strong>Amount:</strong> ${escape(details.amount)} ${escape(details.currency)}</p>
+        <p><strong>Order ID:</strong> ${escape(details.reference)}</p>
+        <p><strong>Date:</strong> ${escape(details.purchasedAt.toISOString())}</p>
+        <p><strong>Status:</strong> Completed</p>
+        <p>Your gift card is ready to view securely in NobleCards. Open the app and select your purchase to view it.</p>
+        <p>Thank you for using NobleCards.</p>
+        <p>NobleCards Team</p>
+      </div>
+    `);
+  }
+
   private async send(to: string, subject: string, html: string): Promise<void> {
     if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !this.smtpPassword) {
       throw new ServiceUnavailableException('Email delivery is not configured.');

@@ -25,6 +25,18 @@ export class TremendousProvider implements BuyGiftCardProvider {
     return this.normalizePurchase(await this.client.getOrder(reference));
   }
 
+  async generateRedemptionLink(redeemId: string): Promise<string> {
+    const response = await this.client.generateRewardLink(redeemId);
+    const root = this.isRecord(response) && this.isRecord(response.reward) ? response.reward : {};
+    const link = this.stringValue(root, ['link']);
+    if (!link) throw new Error('TREMENDOUS_REDEMPTION_LINK_MISSING');
+    const url = new URL(link);
+    if (url.protocol !== 'https:' || !/(^|\.)tremendous\.com$/i.test(url.hostname)) {
+      throw new Error('TREMENDOUS_REDEMPTION_LINK_INVALID');
+    }
+    return url.toString();
+  }
+
   private normalizeCatalog(response: TremendousResponse, filters: BuyGiftCardCatalogFilters): BuyGiftCardCatalogProduct[] {
     const products = this.isRecord(response) && Array.isArray(response.products) ? response.products.filter(this.isRecord) : [];
     return products.flatMap((product) => this.normalizeProduct(product, filters));
@@ -112,7 +124,7 @@ export class TremendousProvider implements BuyGiftCardProvider {
       providerMessage: this.findString(root, ['message', 'detail', 'error']),
       redeemId: this.findString(reward, ['id', 'reward_id', 'rewardId']),
       voucherCode,
-      redeemDetails: this.sanitize(reward),
+      redeemDetails: this.sanitizeReward(reward),
       providerAmount: this.findString(reward, ['amount', 'denomination']),
       providerMetadata: this.sanitize(root),
     };
@@ -154,8 +166,17 @@ export class TremendousProvider implements BuyGiftCardProvider {
     if (!value || typeof value !== 'object') return {};
     if (Array.isArray(value)) return { items: value.slice(0, 10).map((item) => this.sanitize(item)) };
     return Object.fromEntries(Object.entries(value as Record<string, unknown>).flatMap(([key, child]) => {
-      if (/code|pin|token|secret|password|authorization/i.test(key)) return [];
+      if (/code|pin|token|secret|password|authorization|link|url/i.test(key)) return [];
       return [[key, child && typeof child === 'object' ? this.sanitize(child) : child]];
+    }));
+  }
+
+  private sanitizeReward(value: unknown): Record<string, unknown> {
+    if (!value || typeof value !== 'object') return {};
+    if (Array.isArray(value)) return { items: value.slice(0, 10).map((item) => this.sanitizeReward(item)) };
+    return Object.fromEntries(Object.entries(value as Record<string, unknown>).flatMap(([key, child]) => {
+      if (/code|token|secret|password|authorization|link|url/i.test(key)) return [];
+      return [[key, child && typeof child === 'object' ? this.sanitizeReward(child) : child]];
     }));
   }
 

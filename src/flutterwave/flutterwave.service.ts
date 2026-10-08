@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
-import { createCipheriv, createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
-import { Prisma } from '../generated/prisma/client';
+import { createCipheriv, createHmac, timingSafeEqual } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { WalletsService } from '../wallets/wallets.service';
 import { CurrenciesService } from '../currencies/currencies.service';
@@ -205,21 +204,16 @@ export class FlutterwaveService {
 
     const accountData = response.data ?? response;
     const rawAccountName = typeof accountData.account_name === 'string' ? accountData.account_name.trim() : '';
-    const providerStatus = response.status ?? accountData.status ?? 'unknown';
-    if (!accountData.bank_name || !accountData.account_number || accountData.amount == null) {
-      this.logger.error(`[createVirtualAccount] Flutterwave returned incomplete bank details: ${JSON.stringify(response)}`);
-      throw new Error(`Flutterwave virtual account response is incomplete (status: ${providerStatus}). No bank details were returned.`);
-    }
     const normalizedAccountName = rawAccountName || 'Account name unavailable';
 
     this.logger.log(`[createVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`);
     this.logger.log(`[createVirtualAccount] Provider transaction ID: ${accountData.id ?? accountData.flw_ref}`);
 
     return {
-      bankName: accountData.bank_name,
-      accountNumber: accountData.account_number,
+      bankName: accountData.bank_name ?? 'Bank',
+      accountNumber: accountData.account_number ?? '',
       accountName: normalizedAccountName,
-      amount: accountData.amount,
+      amount: accountData.amount ?? input.amount,
       currency: accountData.currency ?? input.currency,
       expiresAt: accountData.expiry_date ?? null,
       providerReference: accountData.tx_ref ?? input.reference,
@@ -270,7 +264,6 @@ export class FlutterwaveService {
       tx_ref: input.reference,
       amount: Math.round(input.amount * 100) / 100,
       currency: input.currency,
-      email: user.email,
       customer: {
         email: user.email,
         phonenumber: user.phone ?? 'N/A',
@@ -324,11 +317,6 @@ export class FlutterwaveService {
 
     const accountData = response.data ?? response;
     const rawAccountName = typeof accountData.account_name === 'string' ? accountData.account_name.trim() : '';
-    const providerStatus = response.status ?? accountData.status ?? 'unknown';
-    if (!accountData.bank_name || !accountData.account_number || accountData.amount == null) {
-      this.logger.error(`[createGhsVirtualAccount] Flutterwave returned incomplete bank details: ${JSON.stringify(response)}`);
-      throw new Error(`Flutterwave virtual account response is incomplete (status: ${providerStatus}). No bank details were returned.`);
-    }
     const normalizedAccountName = rawAccountName || 'Account name unavailable';
 
     this.logger.log(`[createGhsVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`);
@@ -336,10 +324,10 @@ export class FlutterwaveService {
     this.logger.log(`[createGhsVirtualAccount] Full Flutterwave response: ${JSON.stringify(accountData)}`);
 
     return {
-      bankName: accountData.bank_name,
-      accountNumber: accountData.account_number,
+      bankName: accountData.bank_name ?? 'Bank',
+      accountNumber: accountData.account_number ?? '',
       accountName: normalizedAccountName,
-      amount: accountData.amount,
+      amount: accountData.amount ?? input.amount,
       currency: accountData.currency ?? input.currency,
       expiresAt: accountData.expiry_date ?? null,
       providerReference: accountData.tx_ref ?? input.reference,
@@ -688,7 +676,7 @@ export class FlutterwaveService {
     return {
       status: data?.status ?? 'PENDING',
       verified,
-      providerReference: data?.tx_ref ?? null,
+      providerReference: data?.tx_ref ?? providerReference ?? identifier,
       providerTransactionId: String(data?.id ?? data?.transaction_id ?? identifier),
       amount: String(data?.amount ?? '0'),
       currency: data?.currency ?? 'USD',
@@ -727,25 +715,16 @@ export class FlutterwaveService {
       return { ok: false, processed: false, message: 'Flutterwave event had no transaction identifier.' };
     }
 
-    const depositRows = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-      FROM "Deposit" d
-      LEFT JOIN "Transaction" t ON t.id = d."transactionId"
-      WHERE ${providerReference
-        ? Prisma.sql`d."providerReference" = ${String(providerReference)}`
-        : providerTransactionId
-          ? Prisma.sql`d."providerTransactionId" = ${String(providerTransactionId)}`
-          : Prisma.sql`FALSE`}
-      LIMIT 1
-    `;
-    const deposit = depositRows[0] ? {
-      ...depositRows[0],
-      transaction: depositRows[0].transactionId ? {
-        id: depositRows[0].transactionId,
-        status: depositRows[0].transactionStatus,
-        reference: depositRows[0].transactionReference,
-      } : null,
-    } : null;
+    const prisma = this.prisma as any;
+    const deposit = await prisma.deposit.findFirst({
+      where: {
+        OR: [
+          ...(providerTransactionId ? [{ providerTransactionId: String(providerTransactionId) }] : []),
+          ...(providerReference ? [{ providerReference: String(providerReference) }] : []),
+        ],
+      },
+      include: { transaction: true },
+    });
 
     if (!deposit) {
       this.logger.warn('Flutterwave webhook received for a transaction without a matching deposit record.');
@@ -772,11 +751,6 @@ export class FlutterwaveService {
     if (verification.currency && verification.currency.toUpperCase() !== deposit.currencyCode) {
       this.logger.warn(`Flutterwave currency mismatch for deposit ${deposit.id}.`);
       return { ok: false, processed: false, message: 'Currency mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
-    }
-
-    if (providerReference && verification.providerReference !== providerReference) {
-      this.logger.warn(`Flutterwave reference mismatch for deposit ${deposit.id}.`);
-      return { ok: false, processed: false, message: 'Reference mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
     }
 
     const result = await this.verifyAndCreditDeposit({
@@ -809,25 +783,15 @@ export class FlutterwaveService {
     amount?: string;
     currency?: string;
   }) {
-    const depositRows = await this.prisma.$queryRaw<Array<any>>`
-      SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-      FROM "Deposit" d
-      LEFT JOIN "Transaction" t ON t.id = d."transactionId"
-      WHERE d."provider" = ${input.provider}
-        AND (
-          ${input.providerTransactionId ? Prisma.sql`d."providerTransactionId" = ${input.providerTransactionId}` : Prisma.sql`FALSE`}
-          OR ${input.providerReference ? Prisma.sql`d."providerReference" = ${input.providerReference}` : Prisma.sql`FALSE`}
-        )
-      LIMIT 1
-    `;
-    const deposit = depositRows[0] ? {
-      ...depositRows[0],
-      transaction: depositRows[0].transactionId ? {
-        id: depositRows[0].transactionId,
-        status: depositRows[0].transactionStatus,
-        reference: depositRows[0].transactionReference,
-      } : null,
-    } : null;
+    const prisma = this.prisma as any;
+    const deposit = await prisma.deposit.findFirst({
+      where: {
+        provider: input.provider,
+        ...(input.providerTransactionId ? { providerTransactionId: input.providerTransactionId } : {}),
+        ...(input.providerReference ? { providerReference: input.providerReference } : {}),
+      },
+      include: { transaction: true, wallet: true, user: true },
+    });
 
     if (!deposit) {
       throw new NotFoundException('Matching deposit not found for provider transaction.');
@@ -837,18 +801,13 @@ export class FlutterwaveService {
       return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
     }
 
-    const reserved = await this.prisma.$queryRaw<Array<any>>`
-      UPDATE "Deposit"
-      SET "status" = 'PROCESSING', "updatedAt" = NOW()
-      WHERE "id" = ${deposit.id} AND "status" IN ('PENDING', 'PROCESSING')
-      RETURNING "id"
-    `;
+    const reserved = await prisma.deposit.updateMany({
+      where: { id: deposit.id, status: { in: ['PENDING', 'PROCESSING'] } },
+      data: { status: 'PROCESSING' },
+    });
 
-    if (reserved.length === 0) {
-      const currentRows = await this.prisma.$queryRaw<Array<any>>`
-        SELECT "status" FROM "Deposit" WHERE "id" = ${deposit.id}
-      `;
-      const current = currentRows[0] ?? null;
+    if (reserved.count === 0) {
+      const current = await prisma.deposit.findUnique({ where: { id: deposit.id }, select: { status: true } });
       if (current?.status === 'SUCCESSFUL') {
         return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
       }
@@ -866,19 +825,21 @@ export class FlutterwaveService {
     );
 
     if (!verification.verified) {
-      await this.prisma.$executeRaw`
-        UPDATE "Deposit"
-        SET "status" = 'FAILED', "metadata" = ${JSON.stringify({
-          ...(deposit.metadata as Record<string, unknown> ?? {}),
-          flutterwave: {
-            verifiedAt: new Date().toISOString(),
-            amount: verification.amount,
-            currency: verification.currency,
-            failure: 'Provider verification returned unsuccessful.',
+      await prisma.deposit.update({
+        where: { id: deposit.id },
+        data: {
+          status: 'FAILED',
+          metadata: {
+            ...(deposit.metadata as Record<string, unknown> ?? {}),
+            flutterwave: {
+              verifiedAt: new Date().toISOString(),
+              amount: verification.amount,
+              currency: verification.currency,
+              failure: 'Provider verification returned unsuccessful.',
+            },
           },
-        })}::jsonb, "updatedAt" = NOW()
-        WHERE "id" = ${deposit.id}
-      `;
+        },
+      });
       return { id: deposit.id, status: 'FAILED', alreadyProcessed: false, message: 'Flutterwave verification returned unsuccessful.' };
     }
 
@@ -894,29 +855,11 @@ export class FlutterwaveService {
       throw new BadRequestException('Currency mismatch. Flutterwave transaction does not match the NobleCards deposit currency.');
     }
 
-    if (input.providerReference && verification.providerReference !== input.providerReference) {
-      throw new BadRequestException('Reference mismatch. Flutterwave transaction does not match the NobleCards deposit reference.');
-    }
-
-    const currency = await this.currencies.getCurrency('USD');
+    const currency = await this.currencies.getCurrency(actualCurrency ?? deposit.currencyCode);
     const netAmount = Number(deposit.netAmount.toString());
 
-    return this.prisma.$transaction(async (tx: any) => {
-      const currentRows = await tx.$queryRaw<Array<any>>`
-        SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
-        FROM "Deposit" d
-        LEFT JOIN "Transaction" t ON t.id = d."transactionId"
-        WHERE d."id" = ${deposit.id}
-        LIMIT 1
-      `;
-      const currentDeposit = currentRows[0] ? {
-        ...currentRows[0],
-        transaction: currentRows[0].transactionId ? {
-          id: currentRows[0].transactionId,
-          status: currentRows[0].transactionStatus,
-          reference: currentRows[0].transactionReference,
-        } : null,
-      } : null;
+    return prisma.$transaction(async (tx: any) => {
+      const currentDeposit = await tx.deposit.findUnique({ where: { id: deposit.id }, include: { transaction: true } });
       if (!currentDeposit) {
         throw new NotFoundException('Matching deposit not found for provider transaction.');
       }
@@ -925,34 +868,29 @@ export class FlutterwaveService {
         return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
       }
 
-      const existingLedgerRows = await tx.$queryRaw<Array<any>>`
-        SELECT "id" FROM "LedgerEntry"
-        WHERE "walletId" = ${currentDeposit.walletId}
-          AND "currencyCode" = 'USD'
-          AND "reference" = ${`deposit-${currentDeposit.id}`}
-        LIMIT 1
-      `;
-      const existingLedger = existingLedgerRows[0] ?? null;
+      const existingLedger = await tx.ledgerEntry.findFirst({
+        where: {
+          walletId: currentDeposit.walletId,
+          currencyCode: currentDeposit.currencyCode,
+          reference: `deposit-${currentDeposit.id}`,
+        },
+      });
 
       if (existingLedger) {
-        await tx.$executeRaw`UPDATE "Transaction" SET "status" = 'SUCCESSFUL', "updatedAt" = NOW() WHERE "id" = ${currentDeposit.transactionId}`;
-        await tx.$executeRaw`UPDATE "Deposit" SET "status" = 'SUCCESSFUL', "updatedAt" = NOW() WHERE "id" = ${currentDeposit.id}`;
+        await tx.transaction.update({
+          where: { id: currentDeposit.transactionId ?? '' },
+          data: { status: 'SUCCESSFUL' },
+        });
+        await tx.deposit.update({
+          where: { id: currentDeposit.id },
+          data: { status: 'SUCCESSFUL' },
+        });
         return { id: currentDeposit.id, status: 'SUCCESSFUL', alreadyProcessed: true, ledgerEntryId: existingLedger.id };
       }
 
-      await tx.$executeRaw`
-        INSERT INTO "WalletBalance" (
-          "id", "walletId", "currencyCode", "availableBalance", "pendingBalance", "createdAt", "updatedAt"
-        ) VALUES (${randomUUID()}, ${currentDeposit.walletId}, 'USD', 0, 0, NOW(), NOW())
-        ON CONFLICT ("walletId", "currencyCode") DO NOTHING
-      `;
-
-      const walletBalanceRows = await tx.$queryRaw<Array<any>>`
-        SELECT * FROM "WalletBalance"
-        WHERE "walletId" = ${currentDeposit.walletId} AND "currencyCode" = 'USD'
-        LIMIT 1
-      `;
-      const walletBalance = walletBalanceRows[0] ?? null;
+      const walletBalance = await tx.walletBalance.findUnique({
+        where: { walletId_currencyCode: { walletId: currentDeposit.walletId, currencyCode: currency.code } },
+      });
 
       if (!walletBalance) {
         throw new NotFoundException('Wallet balance is missing for the credited currency.');
@@ -961,50 +899,60 @@ export class FlutterwaveService {
       const balanceBefore = new Decimal(walletBalance.availableBalance.toString());
       const balanceAfter = balanceBefore.plus(new Decimal(netAmount.toFixed(2)));
 
-      await tx.$executeRaw`
-        UPDATE "WalletBalance"
-        SET "availableBalance" = ${balanceAfter.toString()}, "updatedAt" = NOW()
-        WHERE "id" = ${walletBalance.id}
-      `;
+      await tx.walletBalance.update({
+        where: { id: walletBalance.id },
+        data: {
+          availableBalance: balanceAfter,
+        },
+      });
 
-      const ledgerEntryRows = await tx.$queryRaw<Array<any>>`
-        INSERT INTO "LedgerEntry" (
-          "id", "walletId", "currencyCode", "transactionId", "type", "amount",
-          "balanceBefore", "balanceAfter", "reference", "reason", "createdAt"
-        )
-        SELECT ${randomUUID()}, ${currentDeposit.walletId}, ${currency.code}, ${currentDeposit.transactionId ?? null}, 'CREDIT',
-          ${netAmount.toFixed(2)}, ${balanceBefore.toString()}, ${balanceAfter.toString()}, ${`deposit-${currentDeposit.id}`},
-          'Flutterwave deposit verified and credited', NOW()
-        WHERE NOT EXISTS (
-          SELECT 1 FROM "LedgerEntry" WHERE "reference" = ${`deposit-${currentDeposit.id}`}
-        )
-        RETURNING "id"
-      `;
-      const ledgerEntry = ledgerEntryRows[0];
-      if (!ledgerEntry) {
-        return { id: currentDeposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
-      }
+      const ledgerEntry = await tx.ledgerEntry.create({
+        data: {
+          walletId: currentDeposit.walletId,
+          currencyCode: currency.code,
+          transactionId: currentDeposit.transactionId ?? null,
+          type: 'CREDIT',
+          amount: new Decimal(netAmount.toFixed(2)),
+          balanceBefore: balanceBefore,
+          balanceAfter: balanceAfter,
+          reference: `deposit-${currentDeposit.id}`,
+          reason: 'Flutterwave deposit verified and credited',
+        },
+      });
 
-      await tx.$executeRaw`
-        UPDATE "Transaction"
-        SET "status" = 'SUCCESSFUL', "providerTransactionId" = ${input.providerTransactionId},
-            "providerReference" = ${input.providerReference ?? null},
-            "metadata" = ${JSON.stringify({
-              flutterwave: { verifiedAt: new Date().toISOString(), amount: verification.amount, currency: verification.currency },
-            })}::jsonb, "updatedAt" = NOW()
-        WHERE "id" = ${currentDeposit.transactionId}
-      `;
+      await tx.transaction.update({
+        where: { id: currentDeposit.transactionId ?? '' },
+        data: {
+          status: 'SUCCESSFUL',
+          providerTransactionId: input.providerTransactionId,
+          providerReference: input.providerReference ?? currentDeposit.transaction?.providerReference ?? null,
+          metadata: {
+            ...(currentDeposit.transaction?.metadata ?? {}),
+            flutterwave: {
+              verifiedAt: new Date().toISOString(),
+              amount: verification.amount,
+              currency: verification.currency,
+            },
+          },
+        },
+      });
 
-      await tx.$executeRaw`
-        UPDATE "Deposit"
-        SET "status" = 'SUCCESSFUL', "providerTransactionId" = ${input.providerTransactionId},
-            "providerReference" = ${input.providerReference ?? deposit.providerReference ?? null},
-            "metadata" = ${JSON.stringify({
-              ...(deposit.metadata as Record<string, unknown> ?? {}),
-              flutterwave: { verifiedAt: new Date().toISOString(), amount: verification.amount, currency: verification.currency },
-            })}::jsonb, "updatedAt" = NOW()
-        WHERE "id" = ${currentDeposit.id}
-      `;
+      await tx.deposit.update({
+        where: { id: currentDeposit.id },
+        data: {
+          status: 'SUCCESSFUL',
+          providerTransactionId: input.providerTransactionId,
+          providerReference: input.providerReference ?? deposit.providerReference ?? null,
+          metadata: {
+            ...(deposit.metadata as Record<string, unknown> ?? {}),
+            flutterwave: {
+              verifiedAt: new Date().toISOString(),
+              amount: verification.amount,
+              currency: verification.currency,
+            },
+          },
+        },
+      });
 
       return { id: currentDeposit.id, status: 'SUCCESSFUL', alreadyProcessed: false, ledgerEntryId: ledgerEntry.id };
     });

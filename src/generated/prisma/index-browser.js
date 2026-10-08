@@ -510,6 +510,7 @@ exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   providerMetadata: 'providerMetadata',
   errorMessage: 'errorMessage',
   metadata: 'metadata',
+  successEmailAttemptedAt: 'successEmailAttemptedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   completedAt: 'completedAt'

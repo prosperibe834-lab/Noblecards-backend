@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { Public } from '../auth/public.decorator';
 import { CreateCardDepositDto, CreateDepositDto } from './deposits.dto';
 import { DepositsService } from './deposits.service';
 
@@ -58,21 +57,5 @@ export class DepositsController {
       amount: deposit.amount.toString(),
       currency: deposit.currencyCode,
     });
-  }
-
-  @Post('__test/ghs-diagnostic')
-  @Public()
-  async testGhsDiagnostic(@Body() dto: CreateDepositDto) {
-    // Test endpoint to run GHS deposit without auth for diagnostic logging
-    // This endpoint is UNSAFE - should only exist during debugging
-    const testUserId = dto['userId'] || 'test-diagnostic-user';
-    this.logger.log('[TEST ENDPOINT] GHS Diagnostic - userId=' + testUserId);
-    try {
-      const result = await this.depositsService.createDeposit(testUserId, dto);
-      return result;
-    } catch (error) {
-      this.logger.error('[TEST ENDPOINT] Error: ' + (error instanceof Error ? error.message : String(error)));
-      throw error;
-    }
   }
 }

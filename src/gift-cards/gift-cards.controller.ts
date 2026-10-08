@@ -43,6 +43,11 @@ export class GiftCardsController {
     return this.buyGiftCards.retrieveVoucher(request.user.userId, id);
   }
 
+  @Post('buy/:id/view-link')
+  viewGiftCardLink(@Req() request: { user: { userId: string } }, @Param('id') id: string) {
+    return this.buyGiftCards.getRedemptionLink(request.user.userId, id);
+  }
+
   @Get('sell/catalog')
   getSellCatalog() {
     return this.giftCards.getSellCatalog();
@@ -66,22 +71,6 @@ export class GiftCardsController {
   @Get('sell/:id')
   getUserSale(@Req() request: { user: { userId: string } }, @Param('id') id: string) {
     return this.giftCards.getUserSale(request.user.userId, id);
-  }
-
-  @Get('orders')
-  async getUserOrders(@Req() request: { user: { userId: string } }) {
-    const [purchases, sales] = await Promise.all([
-      this.buyGiftCards.getOrders(request.user.userId),
-      this.giftCards.getUserSales(request.user.userId),
-    ]);
-    return {
-      items: [
-        ...purchases.map((purchase) => ({ ...purchase, transactionType: 'buy' })),
-        ...sales.map((sale) => ({ ...sale, transactionType: 'sell' })),
-      ],
-      purchases,
-      sales,
-    };
   }
 
   @Get('buy/history')

@@ -18,6 +18,7 @@ import type { BuyGiftCardProvider } from './buy-gift-card-provider.interface';
 import { BuyGiftCardBaseRateService } from './buy-gift-card-base-rate.service';
 import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
+import { EmailService } from '../email/email.service';
 import {
   BUY_GIFT_CARD_PROVIDER,
   BuyGiftCardCatalogFilters,
@@ -37,6 +38,7 @@ export class BuyGiftCardService {
     private readonly buyRates?: BuyGiftCardRateService,
     private readonly baseRates?: BuyGiftCardBaseRateService,
     private readonly exchangeRates?: ExchangeRatesService,
+    private readonly email?: EmailService,
   ) {}
 
   async getCatalog(filters: BuyGiftCardCatalogFilters) {
@@ -103,7 +105,7 @@ export class BuyGiftCardService {
         return tx.giftCardPurchase.create({
           data: {
             reference, idempotencyKey, userId, walletId: wallet.id, transactionId: transaction.id,
-            provider: PaymentProvider.TOPUPMATE, providerProductId: product.providerProductId,
+            provider: PaymentProvider.TREMENDOUS, providerProductId: product.providerProductId,
             brandNameSnapshot: product.brandName, productNameSnapshot: product.productName,
             countryCode: product.countryCode ?? 'UNKNOWN', currencyCode: pricing.currencyCode,
             denominationType: product.denominationType, quantity: input.quantity, amount: new Decimal(String(input.amount)),
@@ -187,6 +189,29 @@ export class BuyGiftCardService {
     if (purchase.status !== GiftCardPurchaseStatus.SUCCESSFUL) throw new ConflictException('Voucher is not available until the purchase is successful.');
     const providerResult = await this.provider.retrieveVoucher(purchase.reference);
     return this.toSafeResponse(await this.persistVoucher(purchase, providerResult));
+  }
+
+  async getRedemptionLink(userId: string, id: string) {
+    const purchase = await (this.prisma as any).giftCardPurchase.findFirst({ where: { id, userId } });
+    if (!purchase) throw new NotFoundException('Gift card purchase not found.');
+    if (purchase.status !== GiftCardPurchaseStatus.SUCCESSFUL) {
+      throw new ConflictException('The gift card is not available to view until the purchase is successful.');
+    }
+    const delivery = this.isRecord(purchase.redeemDetails) && this.isRecord(purchase.redeemDetails.delivery)
+      ? this.readString(purchase.redeemDetails.delivery, ['method'])?.toUpperCase()
+      : undefined;
+    if (delivery !== 'LINK') {
+      throw new ConflictException('This gift card uses the previous delivery method and cannot be opened in-app.');
+    }
+    if (!purchase.redeemId) throw new ConflictException('The gift-card reward is not available to view yet.');
+    if (!this.provider.generateRedemptionLink) {
+      throw new ServiceUnavailableException('Secure gift-card viewing is unavailable right now.');
+    }
+    try {
+      return { url: await this.provider.generateRedemptionLink(purchase.redeemId) };
+    } catch {
+      throw new ServiceUnavailableException('Unable to open this gift card right now. Please try again.');
+    }
   }
 
   private async getPurchasableProduct(productId: string, amount: number, countryCode?: string, currencyCode?: string) {
@@ -351,6 +376,7 @@ export class BuyGiftCardService {
         providerMetadata: this.sanitizeForStorage(result.providerMetadata), completedAt: status === GiftCardPurchaseStatus.SUCCESSFUL ? new Date() : null,
       } });
     });
+    if (status === GiftCardPurchaseStatus.SUCCESSFUL) await this.sendPurchaseSuccessEmailOnce(updated);
     return this.toSafeResponse(updated);
   }
 
@@ -364,7 +390,17 @@ export class BuyGiftCardService {
   }
 
   private toSafeResponse(purchase: any) {
-    const voucher = purchase.status === GiftCardPurchaseStatus.SUCCESSFUL && typeof purchase.voucherCiphertext === 'string' ? this.encryption.decrypt<{ code?: string }>(purchase.voucherCiphertext) : null;
+    const voucher = purchase.status === GiftCardPurchaseStatus.SUCCESSFUL && typeof purchase.voucherCiphertext === 'string'
+      ? (() => {
+          try {
+            return this.encryption.decrypt<{ code?: string }>(purchase.voucherCiphertext);
+          } catch {
+            return null;
+          }
+        })()
+      : null;
+    const fallbackCode = this.readNestedString(purchase.redeemDetails, ['code', 'voucherCode', 'redemptionCode', 'giftCardCode', 'cardCode'])
+      ?? this.readNestedString(purchase.providerMetadata, ['code', 'voucherCode', 'redemptionCode', 'giftCardCode', 'cardCode']);
     return {
       id: purchase.id, reference: purchase.reference, status: purchase.status, provider: purchase.provider,
       providerProductId: purchase.providerProductId, providerReference: purchase.providerReference, redeemId: purchase.redeemId,
@@ -377,8 +413,8 @@ export class BuyGiftCardService {
       buyAdjustmentAmount: purchase.buyAdjustmentAmount?.toString() ?? '0',
       customerRatePercent: purchase.customerRatePercent?.toString() ?? '0',
       customerPrice: purchase.customerPrice?.toString(),
-      providerStatus: purchase.providerStatus, providerMessage: purchase.providerMessage, voucherCode: voucher?.code ?? null,
-      redeemDetails: purchase.redeemDetails, createdAt: purchase.createdAt, completedAt: purchase.completedAt,
+      providerStatus: purchase.providerStatus, providerMessage: purchase.providerMessage, voucherCode: voucher?.code ?? fallbackCode ?? null,
+      redeemDetails: this.sanitizeForStorage(purchase.redeemDetails), createdAt: purchase.createdAt, completedAt: purchase.completedAt,
     };
   }
 
@@ -386,14 +422,66 @@ export class BuyGiftCardService {
     if (!value || typeof value !== 'object') return {};
     if (Array.isArray(value)) return { items: value.map((item) => this.sanitizeForStorage(item)) };
     return Object.fromEntries(Object.entries(value as Record<string, unknown>).flatMap(([key, child]) => {
-      if (/code|voucher|token|secret|password|authorization/i.test(key)) return [];
+      if (/pin/i.test(key)) return [[key, child && typeof child === 'object' ? this.sanitizeForStorage(child) : child]];
+      if (/code|voucher|token|secret|password|authorization|link|url/i.test(key)) return [];
       return [[key, child && typeof child === 'object' ? this.sanitizeForStorage(child) : child]];
     }));
+  }
+
+  private async sendPurchaseSuccessEmailOnce(purchase: any) {
+    if (!this.email) return;
+    try {
+      const claim = await (this.prisma as any).giftCardPurchase.updateMany({
+        where: { id: purchase.id, successEmailAttemptedAt: null, status: GiftCardPurchaseStatus.SUCCESSFUL },
+        data: { successEmailAttemptedAt: new Date() },
+      });
+      if (claim.count !== 1) return;
+      const user = await (this.prisma as any).user.findUnique({
+        where: { id: purchase.userId },
+        select: { email: true, firstName: true },
+      });
+      if (!user?.email) return;
+      await this.email.sendGiftCardPurchaseSuccessEmail(user.email, {
+        firstName: user.firstName,
+        brand: purchase.brandNameSnapshot ?? purchase.productNameSnapshot ?? 'Gift Card',
+        amount: purchase.amount?.toString() ?? '0',
+        currency: purchase.metadata?.cardCurrencyCode ?? purchase.currencyCode,
+        reference: purchase.reference,
+        purchasedAt: purchase.completedAt ?? new Date(),
+      });
+    } catch {
+      // Email failure must not undo a completed wallet/provider purchase.
+    }
+  }
+
+  private readNestedString(value: unknown, keys: string[]): string | null {
+    if (!value || typeof value !== 'object') return null;
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        const nested = this.readNestedString(item, keys);
+        if (nested) return nested;
+      }
+      return null;
+    }
+    const source = value as Record<string, unknown>;
+    for (const key of keys) {
+      const current = source[key];
+      if (typeof current === 'string' && current.trim()) return current.trim();
+    }
+    for (const child of Object.values(source)) {
+      const nested = this.readNestedString(child, keys);
+      if (nested) return nested;
+    }
+    return null;
   }
 
   private readString(source: Record<string, unknown>, keys: string[]) {
     for (const key of keys) if (typeof source[key] === 'string' && source[key]) return source[key] as string;
     return null;
+  }
+
+  private isRecord(value: unknown): value is Record<string, any> {
+    return Boolean(value && typeof value === 'object' && !Array.isArray(value));
   }
 
   assertPurchaseDisabled(): never {

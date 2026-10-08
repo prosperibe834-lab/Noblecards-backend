@@ -29619,6 +29619,7 @@ export namespace Prisma {
     providerMessage: string | null
     voucherCiphertext: string | null
     errorMessage: string | null
+    successEmailAttemptedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     completedAt: Date | null
@@ -29654,6 +29655,7 @@ export namespace Prisma {
     providerMessage: string | null
     voucherCiphertext: string | null
     errorMessage: string | null
+    successEmailAttemptedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     completedAt: Date | null
@@ -29692,6 +29694,7 @@ export namespace Prisma {
     providerMetadata: number
     errorMessage: number
     metadata: number
+    successEmailAttemptedAt: number
     createdAt: number
     updatedAt: number
     completedAt: number
@@ -29753,6 +29756,7 @@ export namespace Prisma {
     providerMessage?: true
     voucherCiphertext?: true
     errorMessage?: true
+    successEmailAttemptedAt?: true
     createdAt?: true
     updatedAt?: true
     completedAt?: true
@@ -29788,6 +29792,7 @@ export namespace Prisma {
     providerMessage?: true
     voucherCiphertext?: true
     errorMessage?: true
+    successEmailAttemptedAt?: true
     createdAt?: true
     updatedAt?: true
     completedAt?: true
@@ -29826,6 +29831,7 @@ export namespace Prisma {
     providerMetadata?: true
     errorMessage?: true
     metadata?: true
+    successEmailAttemptedAt?: true
     createdAt?: true
     updatedAt?: true
     completedAt?: true
@@ -29951,6 +29957,7 @@ export namespace Prisma {
     providerMetadata: JsonValue | null
     errorMessage: string | null
     metadata: JsonValue | null
+    successEmailAttemptedAt: Date | null
     createdAt: Date
     updatedAt: Date
     completedAt: Date | null
@@ -30008,6 +30015,7 @@ export namespace Prisma {
     providerMetadata?: boolean
     errorMessage?: boolean
     metadata?: boolean
+    successEmailAttemptedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     completedAt?: boolean
@@ -30049,6 +30057,7 @@ export namespace Prisma {
     providerMetadata?: boolean
     errorMessage?: boolean
     metadata?: boolean
+    successEmailAttemptedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     completedAt?: boolean
@@ -30090,6 +30099,7 @@ export namespace Prisma {
     providerMetadata?: boolean
     errorMessage?: boolean
     metadata?: boolean
+    successEmailAttemptedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     completedAt?: boolean
@@ -30131,12 +30141,13 @@ export namespace Prisma {
     providerMetadata?: boolean
     errorMessage?: boolean
     metadata?: boolean
+    successEmailAttemptedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     completedAt?: boolean
   }
 
-  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "baseBuyRatePercent" | "buyAdjustmentPercent" | "buyAdjustmentAmount" | "customerRatePercent" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
+  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "baseBuyRatePercent" | "buyAdjustmentPercent" | "buyAdjustmentAmount" | "customerRatePercent" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "successEmailAttemptedAt" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
   export type GiftCardPurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -30193,6 +30204,7 @@ export namespace Prisma {
       providerMetadata: Prisma.JsonValue | null
       errorMessage: string | null
       metadata: Prisma.JsonValue | null
+      successEmailAttemptedAt: Date | null
       createdAt: Date
       updatedAt: Date
       completedAt: Date | null
@@ -30654,6 +30666,7 @@ export namespace Prisma {
     readonly providerMetadata: FieldRef<"GiftCardPurchase", 'Json'>
     readonly errorMessage: FieldRef<"GiftCardPurchase", 'String'>
     readonly metadata: FieldRef<"GiftCardPurchase", 'Json'>
+    readonly successEmailAttemptedAt: FieldRef<"GiftCardPurchase", 'DateTime'>
     readonly createdAt: FieldRef<"GiftCardPurchase", 'DateTime'>
     readonly updatedAt: FieldRef<"GiftCardPurchase", 'DateTime'>
     readonly completedAt: FieldRef<"GiftCardPurchase", 'DateTime'>
@@ -36494,6 +36507,7 @@ export namespace Prisma {
     providerMetadata: 'providerMetadata',
     errorMessage: 'errorMessage',
     metadata: 'metadata',
+    successEmailAttemptedAt: 'successEmailAttemptedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     completedAt: 'completedAt'
@@ -39301,6 +39315,7 @@ export namespace Prisma {
     providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
     errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
     metadata?: JsonNullableFilter<"GiftCardPurchase">
+    successEmailAttemptedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
     createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
@@ -39342,6 +39357,7 @@ export namespace Prisma {
     providerMetadata?: SortOrderInput | SortOrder
     errorMessage?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    successEmailAttemptedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     completedAt?: SortOrderInput | SortOrder
@@ -39387,6 +39403,7 @@ export namespace Prisma {
     providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
     errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
     metadata?: JsonNullableFilter<"GiftCardPurchase">
+    successEmailAttemptedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
     createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
@@ -39428,6 +39445,7 @@ export namespace Prisma {
     providerMetadata?: SortOrderInput | SortOrder
     errorMessage?: SortOrderInput | SortOrder
     metadata?: SortOrderInput | SortOrder
+    successEmailAttemptedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     completedAt?: SortOrderInput | SortOrder
@@ -39474,6 +39492,7 @@ export namespace Prisma {
     providerMetadata?: JsonNullableWithAggregatesFilter<"GiftCardPurchase">
     errorMessage?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
     metadata?: JsonNullableWithAggregatesFilter<"GiftCardPurchase">
+    successEmailAttemptedAt?: DateTimeNullableWithAggregatesFilter<"GiftCardPurchase"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"GiftCardPurchase"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GiftCardPurchase"> | Date | string
     completedAt?: DateTimeNullableWithAggregatesFilter<"GiftCardPurchase"> | Date | string | null
@@ -42560,6 +42579,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -42601,6 +42621,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -42636,6 +42657,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42677,6 +42699,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42715,6 +42738,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -42750,6 +42774,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -42788,6 +42813,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -45369,6 +45395,7 @@ export namespace Prisma {
     providerMetadata?: SortOrder
     errorMessage?: SortOrder
     metadata?: SortOrder
+    successEmailAttemptedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     completedAt?: SortOrder
@@ -45416,6 +45443,7 @@ export namespace Prisma {
     providerMessage?: SortOrder
     voucherCiphertext?: SortOrder
     errorMessage?: SortOrder
+    successEmailAttemptedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     completedAt?: SortOrder
@@ -45451,6 +45479,7 @@ export namespace Prisma {
     providerMessage?: SortOrder
     voucherCiphertext?: SortOrder
     errorMessage?: SortOrder
+    successEmailAttemptedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     completedAt?: SortOrder
@@ -49487,6 +49516,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -49526,6 +49556,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -50278,6 +50309,7 @@ export namespace Prisma {
     providerMetadata?: JsonNullableFilter<"GiftCardPurchase">
     errorMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
     metadata?: JsonNullableFilter<"GiftCardPurchase">
+    successEmailAttemptedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
     createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
@@ -51621,6 +51653,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -51660,6 +51693,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -53565,6 +53599,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -53604,6 +53639,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -54089,6 +54125,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54128,6 +54165,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58817,6 +58855,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -59486,6 +59525,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59525,6 +59565,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59562,6 +59603,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -59973,6 +60015,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
@@ -60307,6 +60350,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -60346,6 +60390,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -60383,6 +60428,7 @@ export namespace Prisma {
     providerMetadata?: NullableJsonNullValueInput | InputJsonValue
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

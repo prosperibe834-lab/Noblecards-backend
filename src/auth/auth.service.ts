@@ -32,12 +32,10 @@ export class AuthService {
     const user = await this.prisma.$transaction(async (transaction) => {
       if (pending.existingUserId) {
         const updated = await transaction.user.update({ where: { id: pending.existingUserId }, data: { isEmailVerified: true } });
-        await this.initializeWallet(transaction, updated.id);
         await transaction.pendingRegistration.delete({ where: { id: pending.id } });
         return updated;
       }
       const created = await transaction.user.create({ data: { email: pending.email, passwordHash: pending.passwordHash, firstName: pending.firstName, lastName: pending.lastName, phone: pending.phone, country: pending.country, countryCode: pending.countryCode, gender: pending.gender, isEmailVerified: true } });
-      await this.initializeWallet(transaction, created.id);
       await transaction.pendingRegistration.delete({ where: { id: pending.id } });
       return created;
     });
@@ -68,27 +66,6 @@ export class AuthService {
     if (!user.isEmailVerified) throw new UnauthorizedException('Please verify your email before signing in.');
     if (!user.isActive) throw new UnauthorizedException('This account is inactive.');
     return this.issueSession(user);
-  }
-
-  async changePassword(userId: string, sessionId: string, currentPassword: string, newPassword: string) {
-    if (newPassword.length < 8) throw new BadRequestException('New password must be at least 8 characters.');
-    if (currentPassword === newPassword) throw new BadRequestException('New password must be different from your current password.');
-
-    const user = await this.users.findById(userId);
-    if (!user || !(await bcrypt.compare(currentPassword, user.passwordHash))) {
-      throw new UnauthorizedException('Current password is incorrect.');
-    }
-
-    const passwordHash = await bcrypt.hash(newPassword, 12);
-    const changedAt = new Date();
-    await this.prisma.$transaction([
-      this.prisma.user.update({ where: { id: userId }, data: { passwordHash } }),
-      this.prisma.refreshSession.updateMany({
-        where: { userId, id: { not: sessionId }, revokedAt: null },
-        data: { revokedAt: changedAt },
-      }),
-    ]);
-    return { updated: true };
   }
 
   async forgotPassword(dto: EmailDto) {
@@ -126,24 +103,6 @@ export class AuthService {
     const session = await this.prisma.refreshSession.create({ data: { userId: user.id, tokenHash: this.hash(refreshToken), expiresAt: new Date(Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_IN_DAYS ?? 30) * 86_400_000) } });
     const accessToken = await this.jwt.signAsync({ userId: user.id, sessionId: session.id });
     return { user: this.users.toPublicUser(user), accessToken, refreshToken };
-  }
-
-  private async initializeWallet(transaction: any, userId: string) {
-    const wallet = await transaction.wallet.upsert({
-      where: { userId },
-      update: {},
-      create: { userId },
-    });
-    await transaction.walletBalance.upsert({
-      where: { walletId_currencyCode: { walletId: wallet.id, currencyCode: 'USD' } },
-      update: {},
-      create: {
-        walletId: wallet.id,
-        currencyCode: 'USD',
-        availableBalance: '0.00',
-        pendingBalance: '0.00',
-      },
-    });
   }
 
   private registrationData(dto: RegisterDto, passwordHash: string) { return { passwordHash, firstName: dto.firstName.trim(), lastName: dto.lastName.trim(), phone: dto.phone?.trim() || null, country: dto.country?.trim() || null, countryCode: dto.countryCode?.trim() || null, gender: dto.gender?.trim() || null }; }

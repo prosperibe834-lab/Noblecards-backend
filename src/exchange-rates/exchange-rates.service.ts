@@ -110,13 +110,18 @@ export class ExchangeRatesService {
       this.cache = normalized;
       this.cacheExpiresAt = Date.now() + this.getCacheTtlMs();
       return normalized;
-    } catch (error) {
-      this.logger.warn(`FX provider fetch failed: ${error instanceof Error ? error.message : String(error)}`);
+    } catch (error: unknown) {
+      const failure = controller.signal.aborted
+        ? new Error(`FX provider request timed out after ${timeoutMs} ms.`)
+        : error;
+      this.logger.warn(
+        `FX provider fetch failed: ${failure instanceof Error ? failure.message : String(failure)}`,
+      );
       if (this.isCacheValid()) {
         this.logger.warn('Using cached exchange rates after provider failure.');
         return this.cache!;
       }
-      throw error;
+      throw failure;
     } finally {
       clearTimeout(timeout);
     }

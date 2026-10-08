@@ -36,7 +36,7 @@ export class TremendousClient {
       reward: {
         value: { denomination: input.amount, currency_code: input.currencyCode },
         recipient: { name: input.sender, email: input.email },
-        delivery: { method: 'EMAIL' },
+        delivery: { method: 'LINK' },
         products: [input.productId],
       },
     });
@@ -44,6 +44,10 @@ export class TremendousClient {
 
   getOrder(reference: string): Promise<TremendousResponse> {
     return this.request('GET', `/orders/${encodeURIComponent(reference)}`);
+  }
+
+  generateRewardLink(rewardId: string): Promise<TremendousResponse> {
+    return this.request('POST', `/rewards/${encodeURIComponent(rewardId)}/generate_link`);
   }
 
   private required(name: string): string {

@@ -48,6 +48,7 @@ export interface BuyGiftCardProvider {
   getCatalog(filters: BuyGiftCardCatalogFilters): Promise<BuyGiftCardCatalogProduct[]>;
   purchase(input: BuyGiftCardPurchaseInput): Promise<BuyGiftCardProviderPurchase>;
   retrieveVoucher(reference: string): Promise<BuyGiftCardProviderPurchase>;
+  generateRedemptionLink?(redeemId: string): Promise<string>;
 }
 
 export const BUY_GIFT_CARD_PROVIDER = Symbol('BUY_GIFT_CARD_PROVIDER');

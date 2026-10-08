@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
-import { PrismaService } from '../prisma/prisma.service';
 import { LedgerService } from '../ledger/ledger.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class WalletsService {
-  constructor(private readonly prisma: PrismaService, private readonly ledger: LedgerService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly ledger: LedgerService,
+  ) {}
 
   private validateAmount(amount: Decimal | string | number) {
     const value = amount instanceof Decimal ? amount : new Decimal(String(amount));
@@ -118,15 +121,45 @@ export class WalletsService {
     }
   }
 
-  holdFunds(input: { userId: string; walletId: string; currencyCode: string; amount: Decimal | string | number; transactionId?: string | null; reference: string }, tx?: any) {
+  holdFunds(
+    input: {
+      userId: string;
+      walletId: string;
+      currencyCode: string;
+      amount: Decimal | string | number;
+      transactionId?: string | null;
+      reference: string;
+    },
+    tx?: any,
+  ) {
     return this.mutateHeldFunds({ ...input, operation: 'HOLD', tx });
   }
 
-  releaseHeldFunds(input: { userId: string; walletId: string; currencyCode: string; amount: Decimal | string | number; transactionId?: string | null; reference: string }, tx?: any) {
+  releaseHeldFunds(
+    input: {
+      userId: string;
+      walletId: string;
+      currencyCode: string;
+      amount: Decimal | string | number;
+      transactionId?: string | null;
+      reference: string;
+    },
+    tx?: any,
+  ) {
     return this.mutateHeldFunds({ ...input, operation: 'RELEASE', tx });
   }
 
-  finalizeHeldFunds(input: { userId: string; walletId: string; currencyCode: string; amount: Decimal | string | number; transactionId?: string | null; reference: string }, tx?: any) {
+  finalizeHeldFunds(
+    input: {
+      userId: string;
+      walletId: string;
+      currencyCode: string;
+      amount: Decimal | string | number;
+      transactionId?: string | null;
+      reference: string;
+    },
+    tx?: any,
+  ) {
     return this.mutateHeldFunds({ ...input, operation: 'FINALIZE', tx });
   }
 
