@@ -25,6 +25,11 @@ describe('GiftCardOrdersController', () => {
     expect(prisma.giftCardPurchase.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { userId: 'authenticated-user' } }),
     );
+    const purchaseSelect =
+      prisma.giftCardPurchase.findMany.mock.calls[0][0].select;
+    expect(purchaseSelect).not.toHaveProperty('voucherCiphertext');
+    expect(purchaseSelect).not.toHaveProperty('redeemDetails');
+    expect(purchaseSelect).not.toHaveProperty('providerMetadata');
     expect(prisma.giftCardSale.findMany).toHaveBeenCalledWith(
       expect.objectContaining({ where: { userId: 'authenticated-user' } }),
     );
