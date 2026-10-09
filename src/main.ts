@@ -17,7 +17,6 @@ async function bootstrap() {
       }
     },
   }));
-  app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads/' });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     const defaultOrigins = [
       'http://localhost:3000',
@@ -41,6 +40,7 @@ async function bootstrap() {
       callback(new Error('Origin is not allowed by CORS'));
     },
   });
+  app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads/' });
   await app.listen(Number(process.env.PORT ?? 3000), '0.0.0.0');
 }
 bootstrap();

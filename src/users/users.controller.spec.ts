@@ -80,3 +80,24 @@ describe('UsersController transaction PIN endpoint', () => {
     expect(users.verifyTransactionPin).toHaveBeenCalledWith(userId, '1234');
   });
 });
+
+describe('UsersController profile image upload', () => {
+  it('does not report success when profile image persistence fails', async () => {
+    const failure = new Error('database unavailable');
+    const users = {
+      setProfileImage: jest.fn().mockRejectedValue(failure),
+    };
+    const controller = new UsersController(users as unknown as UsersService);
+
+    await expect(
+      controller.uploadImage(
+        { user: { userId: 'user-1' } },
+        { filename: 'profile.png' },
+      ),
+    ).rejects.toBe(failure);
+    expect(users.setProfileImage).toHaveBeenCalledWith(
+      'user-1',
+      expect.stringMatching(/^\/uploads\/profile\//),
+    );
+  });
+});
