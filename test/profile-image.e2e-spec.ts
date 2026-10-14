@@ -124,4 +124,76 @@ describe('Profile image upload (e2e)', () => {
     expect(image.headers['access-control-allow-origin']).toBe('http://localhost:5173');
     expect(image.body).toEqual(imageBytes);
   });
+
+  it('removes only the authenticated user profile image and returns null after refresh', async () => {
+    await request(app.getHttpServer())
+      .delete('/users/me/image')
+      .expect(401);
+
+    const removal = await request(app.getHttpServer())
+      .delete('/users/me/image')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(removal.body.user.profileImageUrl).toBeNull();
+
+    const persistedUser = await prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { profileImageUrl: true },
+    });
+    expect(persistedUser.profileImageUrl).toBeNull();
+
+    const profile = await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(profile.body.user.profileImageUrl).toBeNull();
+  });
+
+  it('marks editable required fields complete without claiming verification', async () => {
+    const update = await request(app.getHttpServer())
+      .patch('/users/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        username: 'profilecomplete',
+        country: 'Testland',
+        gender: 'Prefer not to say',
+      })
+      .expect(200);
+
+    expect(update.body.user.isProfileComplete).toBe(true);
+    expect(update.body.user.isVerified).toBe(false);
+
+    const profile = await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(profile.body.user.isProfileComplete).toBe(true);
+    expect(profile.body.user.isVerified).toBe(false);
+    expect(profile.body.user.isEmailVerified).toBe(true);
+  });
+
+  it('persists and returns a date-only DOB without shifting its calendar day', async () => {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { bio: 'Existing test bio' },
+    });
+    await request(app.getHttpServer())
+      .patch('/users/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ dateOfBirth: '2001-07-13' })
+      .expect(200);
+
+    const persistedUser = await prisma.user.findUniqueOrThrow({
+      where: { id: userId },
+      select: { dateOfBirth: true, bio: true },
+    });
+    expect(persistedUser.dateOfBirth?.toISOString()).toBe('2001-07-13T00:00:00.000Z');
+    expect(persistedUser.bio).toBe('Existing test bio');
+
+    const profile = await request(app.getHttpServer())
+      .get('/users/me')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(profile.body.user.dateOfBirth).toBe('2001-07-13T00:00:00.000Z');
+  });
 });

@@ -1,6 +1,14 @@
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
-import { PaymentMethod, TransactionStatus, WithdrawalQuoteStatus } from '../generated/prisma';
+import {
+  PaymentMethod,
+  TransactionStatus,
+  WithdrawalQuoteStatus,
+} from '../generated/prisma';
 import { UsersService } from '../users/users.service';
 import { WalletsService } from '../wallets/wallets.service';
 import { WithdrawalService } from './withdrawal.service';
@@ -27,37 +35,83 @@ describe('WithdrawalService', () => {
     usedAt: null,
   };
 
-  const makeService = (overrides?: Partial<{ quote: any; beneficiary: any; wallet: any; balance: any; existingWithdrawal: any }>) => {
+  const makeService = (
+    overrides?: Partial<{
+      quote: any;
+      beneficiary: any;
+      wallet: any;
+      balance: any;
+      existingWithdrawal: any;
+    }>,
+  ) => {
     const prisma = {
-      $transaction: jest.fn(async (callback: (tx: any) => any) => callback(prisma)),
+      $transaction: jest.fn(async (callback: (tx: any) => any) =>
+        callback(prisma),
+      ),
       withdrawal: {
-        findFirst: jest.fn().mockResolvedValue(overrides?.existingWithdrawal ?? null),
-        create: jest.fn().mockImplementation(async ({ data }) => ({ id: 'withdrawal-1', ...data })),
+        findFirst: jest
+          .fn()
+          .mockResolvedValue(overrides?.existingWithdrawal ?? null),
+        create: jest
+          .fn()
+          .mockImplementation(async ({ data }) => ({
+            id: 'withdrawal-1',
+            ...data,
+          })),
       },
       withdrawalQuote: {
         findFirst: jest.fn().mockResolvedValue(overrides?.quote ?? baseQuote),
         updateMany: jest.fn().mockResolvedValue({ count: 1 }),
       },
       beneficiary: {
-        findFirst: jest.fn().mockResolvedValue(overrides?.beneficiary ?? {
-          id: 'beneficiary-1',
-          userId: 'user-1',
-          country: 'Nigeria',
-          countryCode: 'NG',
-          currencyCode: 'NGN',
-          paymentMethod: PaymentMethod.BANK_TRANSFER,
-          isActive: true,
-          verificationStatus: 'VERIFIED',
-        }),
+        findFirst: jest.fn().mockResolvedValue(
+          overrides?.beneficiary ?? {
+            id: 'beneficiary-1',
+            userId: 'user-1',
+            country: 'Nigeria',
+            countryCode: 'NG',
+            currencyCode: 'NGN',
+            paymentMethod: PaymentMethod.BANK_TRANSFER,
+            isActive: true,
+            verificationStatus: 'VERIFIED',
+          },
+        ),
       },
-      wallet: { findFirst: jest.fn().mockResolvedValue(overrides?.wallet ?? { id: 'wallet-1', userId: 'user-1' }) },
-      walletBalance: { findUnique: jest.fn().mockResolvedValue(overrides?.balance ?? { id: 'balance-1', availableBalance: new Decimal('1000.00'), pendingBalance: new Decimal('0.00') }) },
-      transaction: { create: jest.fn().mockImplementation(async ({ data }) => ({ id: 'tx-1', ...data })) },
+      wallet: {
+        findFirst: jest
+          .fn()
+          .mockResolvedValue(
+            overrides?.wallet ?? { id: 'wallet-1', userId: 'user-1' },
+          ),
+      },
+      walletBalance: {
+        findUnique: jest
+          .fn()
+          .mockResolvedValue(
+            overrides?.balance ?? {
+              id: 'balance-1',
+              availableBalance: new Decimal('1000.00'),
+              pendingBalance: new Decimal('0.00'),
+            },
+          ),
+      },
+      transaction: {
+        create: jest
+          .fn()
+          .mockImplementation(async ({ data }) => ({ id: 'tx-1', ...data })),
+      },
     } as any;
 
-    const users = { verifyTransactionPin: jest.fn().mockResolvedValue(true) } as unknown as UsersService;
+    const users = {
+      verifyTransactionPin: jest.fn().mockResolvedValue(true),
+    } as unknown as UsersService;
     const wallets = {
-      holdFunds: jest.fn().mockResolvedValue({ alreadyProcessed: false, ledgerEntryId: 'ledger-1' }),
+      holdFunds: jest
+        .fn()
+        .mockResolvedValue({
+          alreadyProcessed: false,
+          ledgerEntryId: 'ledger-1',
+        }),
     } as unknown as WalletsService;
 
     const service = new WithdrawalService(prisma, wallets, users);
@@ -76,18 +130,44 @@ describe('WithdrawalService', () => {
 
     expect(users.verifyTransactionPin).toHaveBeenCalledWith('user-1', '1234');
     expect(prisma.withdrawalQuote.updateMany).toHaveBeenCalled();
-    expect(wallets.holdFunds).toHaveBeenCalledWith(expect.objectContaining({
-      userId: 'user-1',
-      walletId: 'wallet-1',
-      currencyCode: 'USD',
-      amount: expect.anything(),
-      transactionId: expect.any(String),
-      reference: expect.stringContaining('withdrawal:'),
-    }), prisma);
+    expect(wallets.holdFunds).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'user-1',
+        walletId: 'wallet-1',
+        currencyCode: 'USD',
+        amount: expect.anything(),
+        transactionId: expect.any(String),
+        reference: expect.stringContaining('withdrawal:'),
+      }),
+      prisma,
+    );
     expect(result.reference).toMatch(/^WD-/);
     expect(result.reference).toMatch(/_PMCKDU_1$/);
     expect(result.status).toBe(TransactionStatus.PENDING);
     expect(result.quoteId).toBe('quote-1');
+  });
+
+  it('does not treat restricted referral credits as withdrawable cash', async () => {
+    const { service, wallets, prisma } = makeService({
+      balance: {
+        id: 'balance-1',
+        availableBalance: new Decimal('0.00'),
+        pendingBalance: new Decimal('0.00'),
+        referralCreditAvailable: new Decimal('1000.00'),
+        referralCreditPending: new Decimal('0.00'),
+      },
+    });
+
+    await expect(
+      service.createWithdrawal('user-1', {
+        quoteId: 'quote-1',
+        beneficiaryId: 'beneficiary-1',
+        idempotencyKey: 'wd-referral-only',
+        pin: '1234',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(wallets.holdFunds).not.toHaveBeenCalled();
+    expect(prisma.withdrawal.create).not.toHaveBeenCalled();
   });
 
   it('returns receipt details only for the authenticated withdrawal owner', async () => {
@@ -110,8 +190,17 @@ describe('WithdrawalService', () => {
       paymentMethod: PaymentMethod.BANK_TRANSFER,
       createdAt,
       updatedAt: createdAt,
-      transaction: { id: 'transaction-2', reference: 'TX-EXACT-2', status: TransactionStatus.PENDING },
-      beneficiary: { institutionName: 'Customer Bank', accountLast4: '1234', country: 'Nigeria', countryCode: 'NG' },
+      transaction: {
+        id: 'transaction-2',
+        reference: 'TX-EXACT-2',
+        status: TransactionStatus.PENDING,
+      },
+      beneficiary: {
+        institutionName: 'Customer Bank',
+        accountLast4: '1234',
+        country: 'Nigeria',
+        countryCode: 'NG',
+      },
     });
 
     const result = await service.getWithdrawal('user-1', 'withdrawal-2');
@@ -135,14 +224,23 @@ describe('WithdrawalService', () => {
     const { service, prisma } = makeService();
     prisma.withdrawal.findFirst.mockResolvedValue(null);
 
-    await expect(service.getWithdrawal('user-2', 'withdrawal-2')).rejects.toBeInstanceOf(NotFoundException);
+    await expect(
+      service.getWithdrawal('user-2', 'withdrawal-2'),
+    ).rejects.toBeInstanceOf(NotFoundException);
     expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith({
       where: { id: 'withdrawal-2', userId: 'user-2' },
       include: { transaction: true, beneficiary: true },
     });
   });
 
-  it.each(['PENDING', 'PROCESSING', 'SUCCESSFUL', 'FAILED', 'CANCELLED', 'REJECTED'])(
+  it.each([
+    'PENDING',
+    'PROCESSING',
+    'SUCCESSFUL',
+    'FAILED',
+    'CANCELLED',
+    'REJECTED',
+  ])(
     'returns receipt details when the withdrawal status is %s',
     async (status) => {
       const { service, prisma } = makeService();
@@ -166,30 +264,39 @@ describe('WithdrawalService', () => {
         beneficiary: null,
       });
 
-      await expect(service.getWithdrawal('user-1', 'withdrawal-status-test'))
-        .resolves.toMatchObject({
-          id: 'withdrawal-status-test',
-          status,
-          reference: 'WD-STATUS-TEST',
-          sourceAmount: '25',
-        });
-      expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith(expect.objectContaining({
-        where: { id: 'withdrawal-status-test', userId: 'user-1' },
-      }));
+      await expect(
+        service.getWithdrawal('user-1', 'withdrawal-status-test'),
+      ).resolves.toMatchObject({
+        id: 'withdrawal-status-test',
+        status,
+        reference: 'WD-STATUS-TEST',
+        sourceAmount: '25',
+      });
+      expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: 'withdrawal-status-test', userId: 'user-1' },
+        }),
+      );
     },
   );
 
   it('rejects an expired quote before creating a withdrawal', async () => {
     const { service } = makeService({
-      quote: { ...baseQuote, status: WithdrawalQuoteStatus.EXPIRED, expiresAt: new Date(Date.now() - 1000) },
+      quote: {
+        ...baseQuote,
+        status: WithdrawalQuoteStatus.EXPIRED,
+        expiresAt: new Date(Date.now() - 1000),
+      },
     });
 
-    await expect(service.createWithdrawal('user-1', {
-      quoteId: 'quote-1',
-      beneficiaryId: 'beneficiary-1',
-      idempotencyKey: 'wd-req-2',
-      pin: '1234',
-    })).rejects.toBeInstanceOf(BadRequestException);
+    await expect(
+      service.createWithdrawal('user-1', {
+        quoteId: 'quote-1',
+        beneficiaryId: 'beneficiary-1',
+        idempotencyKey: 'wd-req-2',
+        pin: '1234',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('rejects duplicate idempotent withdrawals and returns the original record', async () => {
@@ -234,11 +341,13 @@ describe('WithdrawalService', () => {
     const { service, prisma } = makeService();
     prisma.withdrawalQuote.updateMany.mockResolvedValue({ count: 0 });
 
-    await expect(service.createWithdrawal('user-1', {
-      quoteId: 'quote-1',
-      beneficiaryId: 'beneficiary-1',
-      idempotencyKey: 'wd-req-4',
-      pin: '1234',
-    })).rejects.toBeInstanceOf(ConflictException);
+    await expect(
+      service.createWithdrawal('user-1', {
+        quoteId: 'quote-1',
+        beneficiaryId: 'beneficiary-1',
+        idempotencyKey: 'wd-req-4',
+        pin: '1234',
+      }),
+    ).rejects.toBeInstanceOf(ConflictException);
   });
 });

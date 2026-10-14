@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   NotFoundException,
+  Optional,
   RequestTimeoutException,
   ServiceUnavailableException,
 } from '@nestjs/common';
@@ -19,6 +20,7 @@ import { BuyGiftCardBaseRateService } from './buy-gift-card-base-rate.service';
 import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
 import { EmailService } from '../email/email.service';
+import { ReferralsService } from '../referrals/referrals.service';
 import {
   BUY_GIFT_CARD_PROVIDER,
   BuyGiftCardCatalogFilters,
@@ -40,6 +42,7 @@ export class BuyGiftCardService {
     private readonly baseRates?: BuyGiftCardBaseRateService,
     private readonly exchangeRates?: ExchangeRatesService,
     private readonly email?: EmailService,
+    @Optional() private readonly referrals?: ReferralsService,
   ) {}
 
   async getCatalog(filters: BuyGiftCardCatalogFilters) {
@@ -92,6 +95,7 @@ export class BuyGiftCardService {
       currencyCode?: string;
       deliveryEmail?: string;
       idempotencyKey?: string;
+      useReferralCredit?: boolean;
     },
   ) {
     const idempotencyKey = input.idempotencyKey ?? `nc-buy-${randomUUID()}`;
@@ -134,6 +138,19 @@ export class BuyGiftCardService {
       user.email;
     const wallet = await this.wallets.getOrCreateWallet(userId);
     await this.wallets.ensureBalance(wallet.id, pricing.currencyCode);
+    let referralCreditAmount = new Decimal(0);
+    if (input.useReferralCredit) {
+      const usdBalance = await (this.prisma as any).walletBalance.findUnique({
+        where: {
+          walletId_currencyCode: { walletId: wallet.id, currencyCode: 'USD' },
+        },
+      });
+      referralCreditAmount = Decimal.min(
+        new Decimal(usdBalance?.referralCreditAvailable?.toString() ?? '0'),
+        pricing.customerPrice,
+      ).toDecimalPlaces(2);
+    }
+    const cashAmount = pricing.customerPrice.minus(referralCreditAmount);
     const reference = `NC-BUY-${randomUUID()}`;
     const transactionId = randomUUID();
     let purchase;
@@ -156,24 +173,36 @@ export class BuyGiftCardService {
             metadata: { giftCardPurchaseReference: reference },
           },
         });
-        await this.wallets.holdFunds(
-          {
+        if (cashAmount.gt(0)) {
+          await this.wallets.holdFunds(
+            {
+              userId,
+              walletId: wallet.id,
+              currencyCode: pricing.currencyCode,
+              amount: cashAmount,
+              transactionId: transaction.id,
+              reference,
+            },
+            tx,
+          );
+        }
+        if (referralCreditAmount.gt(0)) {
+          await this.wallets.holdReferralCredit({
             userId,
             walletId: wallet.id,
-            currencyCode: pricing.currencyCode,
-            amount: pricing.customerPrice,
+            amountUsd: referralCreditAmount,
             transactionId: transaction.id,
             reference,
-          },
-          tx,
-        );
+            tx,
+          });
+        }
         return tx.giftCardPurchase.create({
           data: {
             reference,
             idempotencyKey,
-            userId,
-            walletId: wallet.id,
-            transactionId: transaction.id,
+            user: { connect: { id: userId } },
+            wallet: { connect: { id: wallet.id } },
+            transaction: { connect: { id: transaction.id } },
             provider: PaymentProvider.TREMENDOUS,
             providerProductId: product.providerProductId,
             brandNameSnapshot: product.brandName,
@@ -185,11 +214,16 @@ export class BuyGiftCardService {
             amount: new Decimal(String(input.amount)),
             providerAmount: pricing.providerAmount,
             fee: pricing.fee,
-            baseBuyRatePercent: pricing.baseBuyRatePercent,
+            baseBuyRatePercent:
+              pricing.baseBuyRatePercent ?? new Decimal('0'),
             buyAdjustmentPercent: pricing.buyAdjustmentPercent,
             buyAdjustmentAmount: pricing.buyAdjustmentAmount,
-            customerRatePercent: pricing.customerRatePercent,
+            customerRatePercent:
+              pricing.customerRatePercent ?? new Decimal('0'),
             customerPrice: pricing.customerPrice,
+            giftCardValueUsd: pricing.providerAmount,
+            referralCreditAmount,
+            referralCreditUsdAmount: referralCreditAmount,
             status: GiftCardPurchaseStatus.PROCESSING,
             providerMetadata: this.sanitizeForStorage(product.providerMetadata),
             metadata: {
@@ -570,17 +604,33 @@ export class BuyGiftCardService {
 
   private async failPurchase(purchase: any, message: string) {
     const updated = await (this.prisma as any).$transaction(async (tx: any) => {
-      await this.wallets.releaseHeldFunds(
-        {
+      const cashAmount = new Decimal(purchase.customerPrice.toString()).minus(
+        new Decimal(purchase.referralCreditAmount?.toString() ?? '0'),
+      );
+      if (cashAmount.gt(0))
+        await this.wallets.releaseHeldFunds(
+          {
+            userId: purchase.userId,
+            walletId: purchase.walletId,
+            currencyCode: purchase.currencyCode,
+            amount: cashAmount,
+            transactionId: purchase.transactionId,
+            reference: purchase.reference,
+          },
+          tx,
+        );
+      if (
+        new Decimal(purchase.referralCreditUsdAmount?.toString() ?? '0').gt(0)
+      ) {
+        await this.wallets.releaseReferralCredit({
           userId: purchase.userId,
           walletId: purchase.walletId,
-          currencyCode: purchase.currencyCode,
-          amount: purchase.customerPrice,
+          amountUsd: purchase.referralCreditUsdAmount,
           transactionId: purchase.transactionId,
           reference: purchase.reference,
-        },
-        tx,
-      );
+          tx,
+        });
+      }
       await tx.transaction.update({
         where: { id: purchase.transactionId },
         data: { status: 'FAILED', provider: PaymentProvider.TREMENDOUS },
@@ -640,18 +690,34 @@ export class BuyGiftCardService {
     finalize: boolean,
   ) {
     const updated = await (this.prisma as any).$transaction(async (tx: any) => {
-      if (finalize)
+      const cashAmount = new Decimal(purchase.customerPrice.toString()).minus(
+        new Decimal(purchase.referralCreditAmount?.toString() ?? '0'),
+      );
+      if (finalize && cashAmount.gt(0))
         await this.wallets.finalizeHeldFunds(
           {
             userId: purchase.userId,
             walletId: purchase.walletId,
             currencyCode: purchase.currencyCode,
-            amount: purchase.customerPrice,
+            amount: cashAmount,
             transactionId: purchase.transactionId,
             reference: purchase.reference,
           },
           tx,
         );
+      if (
+        finalize &&
+        new Decimal(purchase.referralCreditUsdAmount?.toString() ?? '0').gt(0)
+      ) {
+        await this.wallets.finalizeReferralCredit({
+          userId: purchase.userId,
+          walletId: purchase.walletId,
+          amountUsd: purchase.referralCreditUsdAmount,
+          transactionId: purchase.transactionId,
+          reference: purchase.reference,
+          tx,
+        });
+      }
       await tx.transaction.update({
         where: { id: purchase.transactionId },
         data: {
@@ -663,7 +729,7 @@ export class BuyGiftCardService {
           provider: PaymentProvider.TREMENDOUS,
         },
       });
-      return tx.giftCardPurchase.update({
+      const updatedPurchase = await tx.giftCardPurchase.update({
         where: { id: purchase.id },
         data: {
           status,
@@ -685,6 +751,10 @@ export class BuyGiftCardService {
             status === GiftCardPurchaseStatus.SUCCESSFUL ? new Date() : null,
         },
       });
+      if (status === GiftCardPurchaseStatus.SUCCESSFUL) {
+        await this.referrals?.recordSuccessfulPurchase(tx, updatedPurchase);
+      }
+      return updatedPurchase;
     });
     if (status === GiftCardPurchaseStatus.SUCCESSFUL)
       await this.sendPurchaseSuccessEmailOnce(updated);

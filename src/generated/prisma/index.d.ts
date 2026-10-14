@@ -69,6 +69,21 @@ export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
  */
 export type LedgerEntry = $Result.DefaultSelection<Prisma.$LedgerEntryPayload>
 /**
+ * Model ReferralAttribution
+ * 
+ */
+export type ReferralAttribution = $Result.DefaultSelection<Prisma.$ReferralAttributionPayload>
+/**
+ * Model ReferralReward
+ * 
+ */
+export type ReferralReward = $Result.DefaultSelection<Prisma.$ReferralRewardPayload>
+/**
+ * Model ReferralAuditEvent
+ * 
+ */
+export type ReferralAuditEvent = $Result.DefaultSelection<Prisma.$ReferralAuditEventPayload>
+/**
  * Model Withdrawal
  * 
  */
@@ -247,10 +262,34 @@ export const LedgerEntryType: {
   FEE: 'FEE',
   REFUND: 'REFUND',
   REVERSAL: 'REVERSAL',
-  ADJUSTMENT: 'ADJUSTMENT'
+  ADJUSTMENT: 'ADJUSTMENT',
+  REFERRAL_CREDIT: 'REFERRAL_CREDIT',
+  REFERRAL_DEBIT: 'REFERRAL_DEBIT'
 };
 
 export type LedgerEntryType = (typeof LedgerEntryType)[keyof typeof LedgerEntryType]
+
+
+export const ReferralStatus: {
+  REGISTERED: 'REGISTERED',
+  DEPOSIT_QUALIFIED: 'DEPOSIT_QUALIFIED',
+  QUALIFIED: 'QUALIFIED',
+  HELD: 'HELD',
+  REJECTED: 'REJECTED'
+};
+
+export type ReferralStatus = (typeof ReferralStatus)[keyof typeof ReferralStatus]
+
+
+export const ReferralRewardStatus: {
+  PENDING: 'PENDING',
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  REJECTED: 'REJECTED',
+  REVERSED: 'REVERSED'
+};
+
+export type ReferralRewardStatus = (typeof ReferralRewardStatus)[keyof typeof ReferralRewardStatus]
 
 
 export const WithdrawalQuoteStatus: {
@@ -383,6 +422,14 @@ export const PaymentMethod: typeof $Enums.PaymentMethod
 export type LedgerEntryType = $Enums.LedgerEntryType
 
 export const LedgerEntryType: typeof $Enums.LedgerEntryType
+
+export type ReferralStatus = $Enums.ReferralStatus
+
+export const ReferralStatus: typeof $Enums.ReferralStatus
+
+export type ReferralRewardStatus = $Enums.ReferralRewardStatus
+
+export const ReferralRewardStatus: typeof $Enums.ReferralRewardStatus
 
 export type WithdrawalQuoteStatus = $Enums.WithdrawalQuoteStatus
 
@@ -654,6 +701,36 @@ export class PrismaClient<
     * ```
     */
   get ledgerEntry(): Prisma.LedgerEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.referralAttribution`: Exposes CRUD operations for the **ReferralAttribution** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReferralAttributions
+    * const referralAttributions = await prisma.referralAttribution.findMany()
+    * ```
+    */
+  get referralAttribution(): Prisma.ReferralAttributionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.referralReward`: Exposes CRUD operations for the **ReferralReward** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReferralRewards
+    * const referralRewards = await prisma.referralReward.findMany()
+    * ```
+    */
+  get referralReward(): Prisma.ReferralRewardDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.referralAuditEvent`: Exposes CRUD operations for the **ReferralAuditEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReferralAuditEvents
+    * const referralAuditEvents = await prisma.referralAuditEvent.findMany()
+    * ```
+    */
+  get referralAuditEvent(): Prisma.ReferralAuditEventDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.withdrawal`: Exposes CRUD operations for the **Withdrawal** model.
@@ -1252,6 +1329,9 @@ export namespace Prisma {
     Deposit: 'Deposit',
     Transaction: 'Transaction',
     LedgerEntry: 'LedgerEntry',
+    ReferralAttribution: 'ReferralAttribution',
+    ReferralReward: 'ReferralReward',
+    ReferralAuditEvent: 'ReferralAuditEvent',
     Withdrawal: 'Withdrawal',
     WithdrawalQuote: 'WithdrawalQuote',
     Beneficiary: 'Beneficiary',
@@ -1281,7 +1361,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "transactionPinResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "transactionPinResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "referralAttribution" | "referralReward" | "referralAuditEvent" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2096,6 +2176,228 @@ export namespace Prisma {
           count: {
             args: Prisma.LedgerEntryCountArgs<ExtArgs>
             result: $Utils.Optional<LedgerEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReferralAttribution: {
+        payload: Prisma.$ReferralAttributionPayload<ExtArgs>
+        fields: Prisma.ReferralAttributionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReferralAttributionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReferralAttributionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          findFirst: {
+            args: Prisma.ReferralAttributionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReferralAttributionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          findMany: {
+            args: Prisma.ReferralAttributionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>[]
+          }
+          create: {
+            args: Prisma.ReferralAttributionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          createMany: {
+            args: Prisma.ReferralAttributionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReferralAttributionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>[]
+          }
+          delete: {
+            args: Prisma.ReferralAttributionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          update: {
+            args: Prisma.ReferralAttributionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReferralAttributionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReferralAttributionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReferralAttributionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReferralAttributionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAttributionPayload>
+          }
+          aggregate: {
+            args: Prisma.ReferralAttributionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReferralAttribution>
+          }
+          groupBy: {
+            args: Prisma.ReferralAttributionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReferralAttributionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReferralAttributionCountArgs<ExtArgs>
+            result: $Utils.Optional<ReferralAttributionCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReferralReward: {
+        payload: Prisma.$ReferralRewardPayload<ExtArgs>
+        fields: Prisma.ReferralRewardFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReferralRewardFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReferralRewardFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          findFirst: {
+            args: Prisma.ReferralRewardFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReferralRewardFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          findMany: {
+            args: Prisma.ReferralRewardFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>[]
+          }
+          create: {
+            args: Prisma.ReferralRewardCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          createMany: {
+            args: Prisma.ReferralRewardCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReferralRewardCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>[]
+          }
+          delete: {
+            args: Prisma.ReferralRewardDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          update: {
+            args: Prisma.ReferralRewardUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReferralRewardDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReferralRewardUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReferralRewardUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReferralRewardUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralRewardPayload>
+          }
+          aggregate: {
+            args: Prisma.ReferralRewardAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReferralReward>
+          }
+          groupBy: {
+            args: Prisma.ReferralRewardGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReferralRewardGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReferralRewardCountArgs<ExtArgs>
+            result: $Utils.Optional<ReferralRewardCountAggregateOutputType> | number
+          }
+        }
+      }
+      ReferralAuditEvent: {
+        payload: Prisma.$ReferralAuditEventPayload<ExtArgs>
+        fields: Prisma.ReferralAuditEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReferralAuditEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReferralAuditEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          findFirst: {
+            args: Prisma.ReferralAuditEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReferralAuditEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          findMany: {
+            args: Prisma.ReferralAuditEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>[]
+          }
+          create: {
+            args: Prisma.ReferralAuditEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          createMany: {
+            args: Prisma.ReferralAuditEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReferralAuditEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>[]
+          }
+          delete: {
+            args: Prisma.ReferralAuditEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          update: {
+            args: Prisma.ReferralAuditEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReferralAuditEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReferralAuditEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReferralAuditEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReferralAuditEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReferralAuditEventPayload>
+          }
+          aggregate: {
+            args: Prisma.ReferralAuditEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReferralAuditEvent>
+          }
+          groupBy: {
+            args: Prisma.ReferralAuditEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReferralAuditEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReferralAuditEventCountArgs<ExtArgs>
+            result: $Utils.Optional<ReferralAuditEventCountAggregateOutputType> | number
           }
         }
       }
@@ -3269,6 +3571,9 @@ export namespace Prisma {
     deposit?: DepositOmit
     transaction?: TransactionOmit
     ledgerEntry?: LedgerEntryOmit
+    referralAttribution?: ReferralAttributionOmit
+    referralReward?: ReferralRewardOmit
+    referralAuditEvent?: ReferralAuditEventOmit
     withdrawal?: WithdrawalOmit
     withdrawalQuote?: WithdrawalQuoteOmit
     beneficiary?: BeneficiaryOmit
@@ -3373,6 +3678,9 @@ export namespace Prisma {
     beneficiaries: number
     giftCardSales: number
     giftCardPurchases: number
+    referralsMade: number
+    referralRewards: number
+    referralAuditActions: number
     adminGiftCardSandboxTests: number
     supportTickets: number
     assignedSupportTickets: number
@@ -3392,6 +3700,9 @@ export namespace Prisma {
     beneficiaries?: boolean | UserCountOutputTypeCountBeneficiariesArgs
     giftCardSales?: boolean | UserCountOutputTypeCountGiftCardSalesArgs
     giftCardPurchases?: boolean | UserCountOutputTypeCountGiftCardPurchasesArgs
+    referralsMade?: boolean | UserCountOutputTypeCountReferralsMadeArgs
+    referralRewards?: boolean | UserCountOutputTypeCountReferralRewardsArgs
+    referralAuditActions?: boolean | UserCountOutputTypeCountReferralAuditActionsArgs
     adminGiftCardSandboxTests?: boolean | UserCountOutputTypeCountAdminGiftCardSandboxTestsArgs
     supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
     assignedSupportTickets?: boolean | UserCountOutputTypeCountAssignedSupportTicketsArgs
@@ -3479,6 +3790,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountGiftCardPurchasesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GiftCardPurchaseWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReferralsMadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralAttributionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReferralRewardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralRewardWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReferralAuditActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralAuditEventWhereInput
   }
 
   /**
@@ -3735,6 +4067,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type ReferralAttributionCountOutputType
+   */
+
+  export type ReferralAttributionCountOutputType = {
+    auditEvents: number
+  }
+
+  export type ReferralAttributionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    auditEvents?: boolean | ReferralAttributionCountOutputTypeCountAuditEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ReferralAttributionCountOutputType without action
+   */
+  export type ReferralAttributionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttributionCountOutputType
+     */
+    select?: ReferralAttributionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ReferralAttributionCountOutputType without action
+   */
+  export type ReferralAttributionCountOutputTypeCountAuditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralAuditEventWhereInput
+  }
+
+
+  /**
    * Count Type WithdrawalCountOutputType
    */
 
@@ -3943,6 +4306,7 @@ export namespace Prisma {
     isVerified: boolean | null
     isActive: boolean | null
     role: $Enums.UserRole | null
+    referralCode: string | null
     transactionPinHash: string | null
     transactionPinFailedAttempts: number | null
     transactionPinLockedUntil: Date | null
@@ -3971,6 +4335,7 @@ export namespace Prisma {
     isVerified: boolean | null
     isActive: boolean | null
     role: $Enums.UserRole | null
+    referralCode: string | null
     transactionPinHash: string | null
     transactionPinFailedAttempts: number | null
     transactionPinLockedUntil: Date | null
@@ -3999,6 +4364,7 @@ export namespace Prisma {
     isVerified: number
     isActive: number
     role: number
+    referralCode: number
     transactionPinHash: number
     transactionPinFailedAttempts: number
     transactionPinLockedUntil: number
@@ -4037,6 +4403,7 @@ export namespace Prisma {
     isVerified?: true
     isActive?: true
     role?: true
+    referralCode?: true
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
@@ -4065,6 +4432,7 @@ export namespace Prisma {
     isVerified?: true
     isActive?: true
     role?: true
+    referralCode?: true
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
@@ -4093,6 +4461,7 @@ export namespace Prisma {
     isVerified?: true
     isActive?: true
     role?: true
+    referralCode?: true
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
@@ -4208,6 +4577,7 @@ export namespace Prisma {
     isVerified: boolean
     isActive: boolean
     role: $Enums.UserRole
+    referralCode: string
     transactionPinHash: string | null
     transactionPinFailedAttempts: number
     transactionPinLockedUntil: Date | null
@@ -4255,6 +4625,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: boolean
+    referralCode?: boolean
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
@@ -4272,6 +4643,10 @@ export namespace Prisma {
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
     giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
+    referralsMade?: boolean | User$referralsMadeArgs<ExtArgs>
+    referralAttribution?: boolean | User$referralAttributionArgs<ExtArgs>
+    referralRewards?: boolean | User$referralRewardsArgs<ExtArgs>
+    referralAuditActions?: boolean | User$referralAuditActionsArgs<ExtArgs>
     adminGiftCardSandboxTests?: boolean | User$adminGiftCardSandboxTestsArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
@@ -4302,6 +4677,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: boolean
+    referralCode?: boolean
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
@@ -4330,6 +4706,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: boolean
+    referralCode?: boolean
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
@@ -4358,6 +4735,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: boolean
+    referralCode?: boolean
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
@@ -4365,7 +4743,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "referralCode" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
     transactionPinResets?: boolean | User$transactionPinResetsArgs<ExtArgs>
@@ -4379,6 +4757,10 @@ export namespace Prisma {
     beneficiaries?: boolean | User$beneficiariesArgs<ExtArgs>
     giftCardSales?: boolean | User$giftCardSalesArgs<ExtArgs>
     giftCardPurchases?: boolean | User$giftCardPurchasesArgs<ExtArgs>
+    referralsMade?: boolean | User$referralsMadeArgs<ExtArgs>
+    referralAttribution?: boolean | User$referralAttributionArgs<ExtArgs>
+    referralRewards?: boolean | User$referralRewardsArgs<ExtArgs>
+    referralAuditActions?: boolean | User$referralAuditActionsArgs<ExtArgs>
     adminGiftCardSandboxTests?: boolean | User$adminGiftCardSandboxTestsArgs<ExtArgs>
     supportTickets?: boolean | User$supportTicketsArgs<ExtArgs>
     assignedSupportTickets?: boolean | User$assignedSupportTicketsArgs<ExtArgs>
@@ -4405,6 +4787,10 @@ export namespace Prisma {
       beneficiaries: Prisma.$BeneficiaryPayload<ExtArgs>[]
       giftCardSales: Prisma.$GiftCardSalePayload<ExtArgs>[]
       giftCardPurchases: Prisma.$GiftCardPurchasePayload<ExtArgs>[]
+      referralsMade: Prisma.$ReferralAttributionPayload<ExtArgs>[]
+      referralAttribution: Prisma.$ReferralAttributionPayload<ExtArgs> | null
+      referralRewards: Prisma.$ReferralRewardPayload<ExtArgs>[]
+      referralAuditActions: Prisma.$ReferralAuditEventPayload<ExtArgs>[]
       adminGiftCardSandboxTests: Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>[]
       supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       assignedSupportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
@@ -4433,6 +4819,7 @@ export namespace Prisma {
       isVerified: boolean
       isActive: boolean
       role: $Enums.UserRole
+      referralCode: string
       transactionPinHash: string | null
       transactionPinFailedAttempts: number
       transactionPinLockedUntil: Date | null
@@ -4844,6 +5231,10 @@ export namespace Prisma {
     beneficiaries<T extends User$beneficiariesArgs<ExtArgs> = {}>(args?: Subset<T, User$beneficiariesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BeneficiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardSales<T extends User$giftCardSalesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardSalesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardSalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     giftCardPurchases<T extends User$giftCardPurchasesArgs<ExtArgs> = {}>(args?: Subset<T, User$giftCardPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referralsMade<T extends User$referralsMadeArgs<ExtArgs> = {}>(args?: Subset<T, User$referralsMadeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referralAttribution<T extends User$referralAttributionArgs<ExtArgs> = {}>(args?: Subset<T, User$referralAttributionArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    referralRewards<T extends User$referralRewardsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralRewardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    referralAuditActions<T extends User$referralAuditActionsArgs<ExtArgs> = {}>(args?: Subset<T, User$referralAuditActionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     adminGiftCardSandboxTests<T extends User$adminGiftCardSandboxTestsArgs<ExtArgs> = {}>(args?: Subset<T, User$adminGiftCardSandboxTestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AdminGiftCardSandboxTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     supportTickets<T extends User$supportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedSupportTickets<T extends User$assignedSupportTicketsArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedSupportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4899,6 +5290,7 @@ export namespace Prisma {
     readonly isVerified: FieldRef<"User", 'Boolean'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly referralCode: FieldRef<"User", 'String'>
     readonly transactionPinHash: FieldRef<"User", 'String'>
     readonly transactionPinFailedAttempts: FieldRef<"User", 'Int'>
     readonly transactionPinLockedUntil: FieldRef<"User", 'DateTime'>
@@ -5575,6 +5967,97 @@ export namespace Prisma {
   }
 
   /**
+   * User.referralsMade
+   */
+  export type User$referralsMadeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    where?: ReferralAttributionWhereInput
+    orderBy?: ReferralAttributionOrderByWithRelationInput | ReferralAttributionOrderByWithRelationInput[]
+    cursor?: ReferralAttributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReferralAttributionScalarFieldEnum | ReferralAttributionScalarFieldEnum[]
+  }
+
+  /**
+   * User.referralAttribution
+   */
+  export type User$referralAttributionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    where?: ReferralAttributionWhereInput
+  }
+
+  /**
+   * User.referralRewards
+   */
+  export type User$referralRewardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    where?: ReferralRewardWhereInput
+    orderBy?: ReferralRewardOrderByWithRelationInput | ReferralRewardOrderByWithRelationInput[]
+    cursor?: ReferralRewardWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReferralRewardScalarFieldEnum | ReferralRewardScalarFieldEnum[]
+  }
+
+  /**
+   * User.referralAuditActions
+   */
+  export type User$referralAuditActionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    where?: ReferralAuditEventWhereInput
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    cursor?: ReferralAuditEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReferralAuditEventScalarFieldEnum | ReferralAuditEventScalarFieldEnum[]
+  }
+
+  /**
    * User.adminGiftCardSandboxTests
    */
   export type User$adminGiftCardSandboxTestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5767,6 +6250,7 @@ export namespace Prisma {
     country: string | null
     countryCode: string | null
     gender: string | null
+    referralCode: string | null
     otpHash: string | null
     otpExpiresAt: Date | null
     otpAttempts: number | null
@@ -5786,6 +6270,7 @@ export namespace Prisma {
     country: string | null
     countryCode: string | null
     gender: string | null
+    referralCode: string | null
     otpHash: string | null
     otpExpiresAt: Date | null
     otpAttempts: number | null
@@ -5805,6 +6290,7 @@ export namespace Prisma {
     country: number
     countryCode: number
     gender: number
+    referralCode: number
     otpHash: number
     otpExpiresAt: number
     otpAttempts: number
@@ -5834,6 +6320,7 @@ export namespace Prisma {
     country?: true
     countryCode?: true
     gender?: true
+    referralCode?: true
     otpHash?: true
     otpExpiresAt?: true
     otpAttempts?: true
@@ -5853,6 +6340,7 @@ export namespace Prisma {
     country?: true
     countryCode?: true
     gender?: true
+    referralCode?: true
     otpHash?: true
     otpExpiresAt?: true
     otpAttempts?: true
@@ -5872,6 +6360,7 @@ export namespace Prisma {
     country?: true
     countryCode?: true
     gender?: true
+    referralCode?: true
     otpHash?: true
     otpExpiresAt?: true
     otpAttempts?: true
@@ -5978,6 +6467,7 @@ export namespace Prisma {
     country: string | null
     countryCode: string | null
     gender: string | null
+    referralCode: string | null
     otpHash: string
     otpExpiresAt: Date
     otpAttempts: number
@@ -6016,6 +6506,7 @@ export namespace Prisma {
     country?: boolean
     countryCode?: boolean
     gender?: boolean
+    referralCode?: boolean
     otpHash?: boolean
     otpExpiresAt?: boolean
     otpAttempts?: boolean
@@ -6036,6 +6527,7 @@ export namespace Prisma {
     country?: boolean
     countryCode?: boolean
     gender?: boolean
+    referralCode?: boolean
     otpHash?: boolean
     otpExpiresAt?: boolean
     otpAttempts?: boolean
@@ -6056,6 +6548,7 @@ export namespace Prisma {
     country?: boolean
     countryCode?: boolean
     gender?: boolean
+    referralCode?: boolean
     otpHash?: boolean
     otpExpiresAt?: boolean
     otpAttempts?: boolean
@@ -6076,6 +6569,7 @@ export namespace Prisma {
     country?: boolean
     countryCode?: boolean
     gender?: boolean
+    referralCode?: boolean
     otpHash?: boolean
     otpExpiresAt?: boolean
     otpAttempts?: boolean
@@ -6085,7 +6579,7 @@ export namespace Prisma {
     existingUserId?: boolean
   }
 
-  export type PendingRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "phone" | "country" | "countryCode" | "gender" | "otpHash" | "otpExpiresAt" | "otpAttempts" | "lastOtpSentAt" | "createdAt" | "updatedAt" | "existingUserId", ExtArgs["result"]["pendingRegistration"]>
+  export type PendingRegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "phone" | "country" | "countryCode" | "gender" | "referralCode" | "otpHash" | "otpExpiresAt" | "otpAttempts" | "lastOtpSentAt" | "createdAt" | "updatedAt" | "existingUserId", ExtArgs["result"]["pendingRegistration"]>
   export type PendingRegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     existingUser?: boolean | PendingRegistration$existingUserArgs<ExtArgs>
   }
@@ -6111,6 +6605,7 @@ export namespace Prisma {
       country: string | null
       countryCode: string | null
       gender: string | null
+      referralCode: string | null
       otpHash: string
       otpExpiresAt: Date
       otpAttempts: number
@@ -6551,6 +7046,7 @@ export namespace Prisma {
     readonly country: FieldRef<"PendingRegistration", 'String'>
     readonly countryCode: FieldRef<"PendingRegistration", 'String'>
     readonly gender: FieldRef<"PendingRegistration", 'String'>
+    readonly referralCode: FieldRef<"PendingRegistration", 'String'>
     readonly otpHash: FieldRef<"PendingRegistration", 'String'>
     readonly otpExpiresAt: FieldRef<"PendingRegistration", 'DateTime'>
     readonly otpAttempts: FieldRef<"PendingRegistration", 'Int'>
@@ -12956,11 +13452,15 @@ export namespace Prisma {
   export type WalletBalanceAvgAggregateOutputType = {
     availableBalance: Decimal | null
     pendingBalance: Decimal | null
+    referralCreditAvailable: Decimal | null
+    referralCreditPending: Decimal | null
   }
 
   export type WalletBalanceSumAggregateOutputType = {
     availableBalance: Decimal | null
     pendingBalance: Decimal | null
+    referralCreditAvailable: Decimal | null
+    referralCreditPending: Decimal | null
   }
 
   export type WalletBalanceMinAggregateOutputType = {
@@ -12969,6 +13469,8 @@ export namespace Prisma {
     currencyCode: string | null
     availableBalance: Decimal | null
     pendingBalance: Decimal | null
+    referralCreditAvailable: Decimal | null
+    referralCreditPending: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12979,6 +13481,8 @@ export namespace Prisma {
     currencyCode: string | null
     availableBalance: Decimal | null
     pendingBalance: Decimal | null
+    referralCreditAvailable: Decimal | null
+    referralCreditPending: Decimal | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12989,6 +13493,8 @@ export namespace Prisma {
     currencyCode: number
     availableBalance: number
     pendingBalance: number
+    referralCreditAvailable: number
+    referralCreditPending: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12998,11 +13504,15 @@ export namespace Prisma {
   export type WalletBalanceAvgAggregateInputType = {
     availableBalance?: true
     pendingBalance?: true
+    referralCreditAvailable?: true
+    referralCreditPending?: true
   }
 
   export type WalletBalanceSumAggregateInputType = {
     availableBalance?: true
     pendingBalance?: true
+    referralCreditAvailable?: true
+    referralCreditPending?: true
   }
 
   export type WalletBalanceMinAggregateInputType = {
@@ -13011,6 +13521,8 @@ export namespace Prisma {
     currencyCode?: true
     availableBalance?: true
     pendingBalance?: true
+    referralCreditAvailable?: true
+    referralCreditPending?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13021,6 +13533,8 @@ export namespace Prisma {
     currencyCode?: true
     availableBalance?: true
     pendingBalance?: true
+    referralCreditAvailable?: true
+    referralCreditPending?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -13031,6 +13545,8 @@ export namespace Prisma {
     currencyCode?: true
     availableBalance?: true
     pendingBalance?: true
+    referralCreditAvailable?: true
+    referralCreditPending?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -13128,6 +13644,8 @@ export namespace Prisma {
     currencyCode: string
     availableBalance: Decimal
     pendingBalance: Decimal
+    referralCreditAvailable: Decimal
+    referralCreditPending: Decimal
     createdAt: Date
     updatedAt: Date
     _count: WalletBalanceCountAggregateOutputType | null
@@ -13157,6 +13675,8 @@ export namespace Prisma {
     currencyCode?: boolean
     availableBalance?: boolean
     pendingBalance?: boolean
+    referralCreditAvailable?: boolean
+    referralCreditPending?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -13169,6 +13689,8 @@ export namespace Prisma {
     currencyCode?: boolean
     availableBalance?: boolean
     pendingBalance?: boolean
+    referralCreditAvailable?: boolean
+    referralCreditPending?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -13181,6 +13703,8 @@ export namespace Prisma {
     currencyCode?: boolean
     availableBalance?: boolean
     pendingBalance?: boolean
+    referralCreditAvailable?: boolean
+    referralCreditPending?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -13193,11 +13717,13 @@ export namespace Prisma {
     currencyCode?: boolean
     availableBalance?: boolean
     pendingBalance?: boolean
+    referralCreditAvailable?: boolean
+    referralCreditPending?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WalletBalanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "availableBalance" | "pendingBalance" | "createdAt" | "updatedAt", ExtArgs["result"]["walletBalance"]>
+  export type WalletBalanceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "availableBalance" | "pendingBalance" | "referralCreditAvailable" | "referralCreditPending" | "createdAt" | "updatedAt", ExtArgs["result"]["walletBalance"]>
   export type WalletBalanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
@@ -13223,6 +13749,8 @@ export namespace Prisma {
       currencyCode: string
       availableBalance: Prisma.Decimal
       pendingBalance: Prisma.Decimal
+      referralCreditAvailable: Prisma.Decimal
+      referralCreditPending: Prisma.Decimal
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["walletBalance"]>
@@ -13655,6 +14183,8 @@ export namespace Prisma {
     readonly currencyCode: FieldRef<"WalletBalance", 'String'>
     readonly availableBalance: FieldRef<"WalletBalance", 'Decimal'>
     readonly pendingBalance: FieldRef<"WalletBalance", 'Decimal'>
+    readonly referralCreditAvailable: FieldRef<"WalletBalance", 'Decimal'>
+    readonly referralCreditPending: FieldRef<"WalletBalance", 'Decimal'>
     readonly createdAt: FieldRef<"WalletBalance", 'DateTime'>
     readonly updatedAt: FieldRef<"WalletBalance", 'DateTime'>
   }
@@ -14406,6 +14936,7 @@ export namespace Prisma {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
     transaction?: boolean | Deposit$transactionArgs<ExtArgs>
+    referralDeposit?: boolean | Deposit$referralDepositArgs<ExtArgs>
   }, ExtArgs["result"]["deposit"]>
 
   export type DepositSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14491,6 +15022,7 @@ export namespace Prisma {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
     transaction?: boolean | Deposit$transactionArgs<ExtArgs>
+    referralDeposit?: boolean | Deposit$referralDepositArgs<ExtArgs>
   }
   export type DepositIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -14512,6 +15044,7 @@ export namespace Prisma {
       wallet: Prisma.$WalletPayload<ExtArgs>
       currency: Prisma.$CurrencyPayload<ExtArgs>
       transaction: Prisma.$TransactionPayload<ExtArgs> | null
+      referralDeposit: Prisma.$ReferralAttributionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14932,6 +15465,7 @@ export namespace Prisma {
     wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     currency<T extends CurrencyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CurrencyDefaultArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     transaction<T extends Deposit$transactionArgs<ExtArgs> = {}>(args?: Subset<T, Deposit$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    referralDeposit<T extends Deposit$referralDepositArgs<ExtArgs> = {}>(args?: Subset<T, Deposit$referralDepositArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15398,6 +15932,25 @@ export namespace Prisma {
      */
     include?: TransactionInclude<ExtArgs> | null
     where?: TransactionWhereInput
+  }
+
+  /**
+   * Deposit.referralDeposit
+   */
+  export type Deposit$referralDepositArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    where?: ReferralAttributionWhereInput
   }
 
   /**
@@ -16832,6 +17385,10 @@ export namespace Prisma {
     balanceAfter: Decimal | null
     pendingBalanceBefore: Decimal | null
     pendingBalanceAfter: Decimal | null
+    referralBalanceBefore: Decimal | null
+    referralBalanceAfter: Decimal | null
+    referralPendingBefore: Decimal | null
+    referralPendingAfter: Decimal | null
   }
 
   export type LedgerEntrySumAggregateOutputType = {
@@ -16840,6 +17397,10 @@ export namespace Prisma {
     balanceAfter: Decimal | null
     pendingBalanceBefore: Decimal | null
     pendingBalanceAfter: Decimal | null
+    referralBalanceBefore: Decimal | null
+    referralBalanceAfter: Decimal | null
+    referralPendingBefore: Decimal | null
+    referralPendingAfter: Decimal | null
   }
 
   export type LedgerEntryMinAggregateOutputType = {
@@ -16853,6 +17414,10 @@ export namespace Prisma {
     balanceAfter: Decimal | null
     pendingBalanceBefore: Decimal | null
     pendingBalanceAfter: Decimal | null
+    referralBalanceBefore: Decimal | null
+    referralBalanceAfter: Decimal | null
+    referralPendingBefore: Decimal | null
+    referralPendingAfter: Decimal | null
     operationKey: string | null
     reference: string | null
     reason: string | null
@@ -16870,6 +17435,10 @@ export namespace Prisma {
     balanceAfter: Decimal | null
     pendingBalanceBefore: Decimal | null
     pendingBalanceAfter: Decimal | null
+    referralBalanceBefore: Decimal | null
+    referralBalanceAfter: Decimal | null
+    referralPendingBefore: Decimal | null
+    referralPendingAfter: Decimal | null
     operationKey: string | null
     reference: string | null
     reason: string | null
@@ -16887,6 +17456,10 @@ export namespace Prisma {
     balanceAfter: number
     pendingBalanceBefore: number
     pendingBalanceAfter: number
+    referralBalanceBefore: number
+    referralBalanceAfter: number
+    referralPendingBefore: number
+    referralPendingAfter: number
     operationKey: number
     reference: number
     reason: number
@@ -16901,6 +17474,10 @@ export namespace Prisma {
     balanceAfter?: true
     pendingBalanceBefore?: true
     pendingBalanceAfter?: true
+    referralBalanceBefore?: true
+    referralBalanceAfter?: true
+    referralPendingBefore?: true
+    referralPendingAfter?: true
   }
 
   export type LedgerEntrySumAggregateInputType = {
@@ -16909,6 +17486,10 @@ export namespace Prisma {
     balanceAfter?: true
     pendingBalanceBefore?: true
     pendingBalanceAfter?: true
+    referralBalanceBefore?: true
+    referralBalanceAfter?: true
+    referralPendingBefore?: true
+    referralPendingAfter?: true
   }
 
   export type LedgerEntryMinAggregateInputType = {
@@ -16922,6 +17503,10 @@ export namespace Prisma {
     balanceAfter?: true
     pendingBalanceBefore?: true
     pendingBalanceAfter?: true
+    referralBalanceBefore?: true
+    referralBalanceAfter?: true
+    referralPendingBefore?: true
+    referralPendingAfter?: true
     operationKey?: true
     reference?: true
     reason?: true
@@ -16939,6 +17524,10 @@ export namespace Prisma {
     balanceAfter?: true
     pendingBalanceBefore?: true
     pendingBalanceAfter?: true
+    referralBalanceBefore?: true
+    referralBalanceAfter?: true
+    referralPendingBefore?: true
+    referralPendingAfter?: true
     operationKey?: true
     reference?: true
     reason?: true
@@ -16956,6 +17545,10 @@ export namespace Prisma {
     balanceAfter?: true
     pendingBalanceBefore?: true
     pendingBalanceAfter?: true
+    referralBalanceBefore?: true
+    referralBalanceAfter?: true
+    referralPendingBefore?: true
+    referralPendingAfter?: true
     operationKey?: true
     reference?: true
     reason?: true
@@ -17060,6 +17653,10 @@ export namespace Prisma {
     balanceAfter: Decimal
     pendingBalanceBefore: Decimal | null
     pendingBalanceAfter: Decimal | null
+    referralBalanceBefore: Decimal | null
+    referralBalanceAfter: Decimal | null
+    referralPendingBefore: Decimal | null
+    referralPendingAfter: Decimal | null
     operationKey: string | null
     reference: string | null
     reason: string | null
@@ -17096,6 +17693,10 @@ export namespace Prisma {
     balanceAfter?: boolean
     pendingBalanceBefore?: boolean
     pendingBalanceAfter?: boolean
+    referralBalanceBefore?: boolean
+    referralBalanceAfter?: boolean
+    referralPendingBefore?: boolean
+    referralPendingAfter?: boolean
     operationKey?: boolean
     reference?: boolean
     reason?: boolean
@@ -17116,6 +17717,10 @@ export namespace Prisma {
     balanceAfter?: boolean
     pendingBalanceBefore?: boolean
     pendingBalanceAfter?: boolean
+    referralBalanceBefore?: boolean
+    referralBalanceAfter?: boolean
+    referralPendingBefore?: boolean
+    referralPendingAfter?: boolean
     operationKey?: boolean
     reference?: boolean
     reason?: boolean
@@ -17136,6 +17741,10 @@ export namespace Prisma {
     balanceAfter?: boolean
     pendingBalanceBefore?: boolean
     pendingBalanceAfter?: boolean
+    referralBalanceBefore?: boolean
+    referralBalanceAfter?: boolean
+    referralPendingBefore?: boolean
+    referralPendingAfter?: boolean
     operationKey?: boolean
     reference?: boolean
     reason?: boolean
@@ -17156,13 +17765,17 @@ export namespace Prisma {
     balanceAfter?: boolean
     pendingBalanceBefore?: boolean
     pendingBalanceAfter?: boolean
+    referralBalanceBefore?: boolean
+    referralBalanceAfter?: boolean
+    referralPendingBefore?: boolean
+    referralPendingAfter?: boolean
     operationKey?: boolean
     reference?: boolean
     reason?: boolean
     createdAt?: boolean
   }
 
-  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "transactionId" | "type" | "amount" | "balanceBefore" | "balanceAfter" | "pendingBalanceBefore" | "pendingBalanceAfter" | "operationKey" | "reference" | "reason" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
+  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "currencyCode" | "transactionId" | "type" | "amount" | "balanceBefore" | "balanceAfter" | "pendingBalanceBefore" | "pendingBalanceAfter" | "referralBalanceBefore" | "referralBalanceAfter" | "referralPendingBefore" | "referralPendingAfter" | "operationKey" | "reference" | "reason" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
   export type LedgerEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     currency?: boolean | CurrencyDefaultArgs<ExtArgs>
@@ -17197,6 +17810,10 @@ export namespace Prisma {
       balanceAfter: Prisma.Decimal
       pendingBalanceBefore: Prisma.Decimal | null
       pendingBalanceAfter: Prisma.Decimal | null
+      referralBalanceBefore: Prisma.Decimal | null
+      referralBalanceAfter: Prisma.Decimal | null
+      referralPendingBefore: Prisma.Decimal | null
+      referralPendingAfter: Prisma.Decimal | null
       operationKey: string | null
       reference: string | null
       reason: string | null
@@ -17637,6 +18254,10 @@ export namespace Prisma {
     readonly balanceAfter: FieldRef<"LedgerEntry", 'Decimal'>
     readonly pendingBalanceBefore: FieldRef<"LedgerEntry", 'Decimal'>
     readonly pendingBalanceAfter: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly referralBalanceBefore: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly referralBalanceAfter: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly referralPendingBefore: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly referralPendingAfter: FieldRef<"LedgerEntry", 'Decimal'>
     readonly operationKey: FieldRef<"LedgerEntry", 'String'>
     readonly reference: FieldRef<"LedgerEntry", 'String'>
     readonly reason: FieldRef<"LedgerEntry", 'String'>
@@ -18076,6 +18697,3576 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LedgerEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReferralAttribution
+   */
+
+  export type AggregateReferralAttribution = {
+    _count: ReferralAttributionCountAggregateOutputType | null
+    _avg: ReferralAttributionAvgAggregateOutputType | null
+    _sum: ReferralAttributionSumAggregateOutputType | null
+    _min: ReferralAttributionMinAggregateOutputType | null
+    _max: ReferralAttributionMaxAggregateOutputType | null
+  }
+
+  export type ReferralAttributionAvgAggregateOutputType = {
+    firstDepositAmountUsd: Decimal | null
+  }
+
+  export type ReferralAttributionSumAggregateOutputType = {
+    firstDepositAmountUsd: Decimal | null
+  }
+
+  export type ReferralAttributionMinAggregateOutputType = {
+    id: string | null
+    referrerId: string | null
+    referredUserId: string | null
+    referralCode: string | null
+    status: $Enums.ReferralStatus | null
+    firstDepositId: string | null
+    firstDepositAmountUsd: Decimal | null
+    qualifyingPurchaseId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralAttributionMaxAggregateOutputType = {
+    id: string | null
+    referrerId: string | null
+    referredUserId: string | null
+    referralCode: string | null
+    status: $Enums.ReferralStatus | null
+    firstDepositId: string | null
+    firstDepositAmountUsd: Decimal | null
+    qualifyingPurchaseId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralAttributionCountAggregateOutputType = {
+    id: number
+    referrerId: number
+    referredUserId: number
+    referralCode: number
+    status: number
+    firstDepositId: number
+    firstDepositAmountUsd: number
+    qualifyingPurchaseId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReferralAttributionAvgAggregateInputType = {
+    firstDepositAmountUsd?: true
+  }
+
+  export type ReferralAttributionSumAggregateInputType = {
+    firstDepositAmountUsd?: true
+  }
+
+  export type ReferralAttributionMinAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    referralCode?: true
+    status?: true
+    firstDepositId?: true
+    firstDepositAmountUsd?: true
+    qualifyingPurchaseId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralAttributionMaxAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    referralCode?: true
+    status?: true
+    firstDepositId?: true
+    firstDepositAmountUsd?: true
+    qualifyingPurchaseId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralAttributionCountAggregateInputType = {
+    id?: true
+    referrerId?: true
+    referredUserId?: true
+    referralCode?: true
+    status?: true
+    firstDepositId?: true
+    firstDepositAmountUsd?: true
+    qualifyingPurchaseId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReferralAttributionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralAttribution to aggregate.
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAttributions to fetch.
+     */
+    orderBy?: ReferralAttributionOrderByWithRelationInput | ReferralAttributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReferralAttributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAttributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAttributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReferralAttributions
+    **/
+    _count?: true | ReferralAttributionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReferralAttributionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReferralAttributionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReferralAttributionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReferralAttributionMaxAggregateInputType
+  }
+
+  export type GetReferralAttributionAggregateType<T extends ReferralAttributionAggregateArgs> = {
+        [P in keyof T & keyof AggregateReferralAttribution]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReferralAttribution[P]>
+      : GetScalarType<T[P], AggregateReferralAttribution[P]>
+  }
+
+
+
+
+  export type ReferralAttributionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralAttributionWhereInput
+    orderBy?: ReferralAttributionOrderByWithAggregationInput | ReferralAttributionOrderByWithAggregationInput[]
+    by: ReferralAttributionScalarFieldEnum[] | ReferralAttributionScalarFieldEnum
+    having?: ReferralAttributionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReferralAttributionCountAggregateInputType | true
+    _avg?: ReferralAttributionAvgAggregateInputType
+    _sum?: ReferralAttributionSumAggregateInputType
+    _min?: ReferralAttributionMinAggregateInputType
+    _max?: ReferralAttributionMaxAggregateInputType
+  }
+
+  export type ReferralAttributionGroupByOutputType = {
+    id: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status: $Enums.ReferralStatus
+    firstDepositId: string | null
+    firstDepositAmountUsd: Decimal | null
+    qualifyingPurchaseId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ReferralAttributionCountAggregateOutputType | null
+    _avg: ReferralAttributionAvgAggregateOutputType | null
+    _sum: ReferralAttributionSumAggregateOutputType | null
+    _min: ReferralAttributionMinAggregateOutputType | null
+    _max: ReferralAttributionMaxAggregateOutputType | null
+  }
+
+  type GetReferralAttributionGroupByPayload<T extends ReferralAttributionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReferralAttributionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReferralAttributionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReferralAttributionGroupByOutputType[P]>
+            : GetScalarType<T[P], ReferralAttributionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReferralAttributionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    referralCode?: boolean
+    status?: boolean
+    firstDepositId?: boolean
+    firstDepositAmountUsd?: boolean
+    qualifyingPurchaseId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+    reward?: boolean | ReferralAttribution$rewardArgs<ExtArgs>
+    auditEvents?: boolean | ReferralAttribution$auditEventsArgs<ExtArgs>
+    _count?: boolean | ReferralAttributionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAttribution"]>
+
+  export type ReferralAttributionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    referralCode?: boolean
+    status?: boolean
+    firstDepositId?: boolean
+    firstDepositAmountUsd?: boolean
+    qualifyingPurchaseId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAttribution"]>
+
+  export type ReferralAttributionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    referralCode?: boolean
+    status?: boolean
+    firstDepositId?: boolean
+    firstDepositAmountUsd?: boolean
+    qualifyingPurchaseId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAttribution"]>
+
+  export type ReferralAttributionSelectScalar = {
+    id?: boolean
+    referrerId?: boolean
+    referredUserId?: boolean
+    referralCode?: boolean
+    status?: boolean
+    firstDepositId?: boolean
+    firstDepositAmountUsd?: boolean
+    qualifyingPurchaseId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReferralAttributionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "referrerId" | "referredUserId" | "referralCode" | "status" | "firstDepositId" | "firstDepositAmountUsd" | "qualifyingPurchaseId" | "createdAt" | "updatedAt", ExtArgs["result"]["referralAttribution"]>
+  export type ReferralAttributionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+    reward?: boolean | ReferralAttribution$rewardArgs<ExtArgs>
+    auditEvents?: boolean | ReferralAttribution$auditEventsArgs<ExtArgs>
+    _count?: boolean | ReferralAttributionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ReferralAttributionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+  }
+  export type ReferralAttributionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+    referredUser?: boolean | UserDefaultArgs<ExtArgs>
+    firstDeposit?: boolean | ReferralAttribution$firstDepositArgs<ExtArgs>
+    qualifyingPurchase?: boolean | ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>
+  }
+
+  export type $ReferralAttributionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReferralAttribution"
+    objects: {
+      referrer: Prisma.$UserPayload<ExtArgs>
+      referredUser: Prisma.$UserPayload<ExtArgs>
+      firstDeposit: Prisma.$DepositPayload<ExtArgs> | null
+      qualifyingPurchase: Prisma.$GiftCardPurchasePayload<ExtArgs> | null
+      reward: Prisma.$ReferralRewardPayload<ExtArgs> | null
+      auditEvents: Prisma.$ReferralAuditEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      referrerId: string
+      referredUserId: string
+      referralCode: string
+      status: $Enums.ReferralStatus
+      firstDepositId: string | null
+      firstDepositAmountUsd: Prisma.Decimal | null
+      qualifyingPurchaseId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["referralAttribution"]>
+    composites: {}
+  }
+
+  type ReferralAttributionGetPayload<S extends boolean | null | undefined | ReferralAttributionDefaultArgs> = $Result.GetResult<Prisma.$ReferralAttributionPayload, S>
+
+  type ReferralAttributionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReferralAttributionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReferralAttributionCountAggregateInputType | true
+    }
+
+  export interface ReferralAttributionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReferralAttribution'], meta: { name: 'ReferralAttribution' } }
+    /**
+     * Find zero or one ReferralAttribution that matches the filter.
+     * @param {ReferralAttributionFindUniqueArgs} args - Arguments to find a ReferralAttribution
+     * @example
+     * // Get one ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReferralAttributionFindUniqueArgs>(args: SelectSubset<T, ReferralAttributionFindUniqueArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReferralAttribution that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReferralAttributionFindUniqueOrThrowArgs} args - Arguments to find a ReferralAttribution
+     * @example
+     * // Get one ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReferralAttributionFindUniqueOrThrowArgs>(args: SelectSubset<T, ReferralAttributionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralAttribution that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionFindFirstArgs} args - Arguments to find a ReferralAttribution
+     * @example
+     * // Get one ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReferralAttributionFindFirstArgs>(args?: SelectSubset<T, ReferralAttributionFindFirstArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralAttribution that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionFindFirstOrThrowArgs} args - Arguments to find a ReferralAttribution
+     * @example
+     * // Get one ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReferralAttributionFindFirstOrThrowArgs>(args?: SelectSubset<T, ReferralAttributionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReferralAttributions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReferralAttributions
+     * const referralAttributions = await prisma.referralAttribution.findMany()
+     * 
+     * // Get first 10 ReferralAttributions
+     * const referralAttributions = await prisma.referralAttribution.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const referralAttributionWithIdOnly = await prisma.referralAttribution.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReferralAttributionFindManyArgs>(args?: SelectSubset<T, ReferralAttributionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReferralAttribution.
+     * @param {ReferralAttributionCreateArgs} args - Arguments to create a ReferralAttribution.
+     * @example
+     * // Create one ReferralAttribution
+     * const ReferralAttribution = await prisma.referralAttribution.create({
+     *   data: {
+     *     // ... data to create a ReferralAttribution
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReferralAttributionCreateArgs>(args: SelectSubset<T, ReferralAttributionCreateArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReferralAttributions.
+     * @param {ReferralAttributionCreateManyArgs} args - Arguments to create many ReferralAttributions.
+     * @example
+     * // Create many ReferralAttributions
+     * const referralAttribution = await prisma.referralAttribution.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReferralAttributionCreateManyArgs>(args?: SelectSubset<T, ReferralAttributionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReferralAttributions and returns the data saved in the database.
+     * @param {ReferralAttributionCreateManyAndReturnArgs} args - Arguments to create many ReferralAttributions.
+     * @example
+     * // Create many ReferralAttributions
+     * const referralAttribution = await prisma.referralAttribution.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReferralAttributions and only return the `id`
+     * const referralAttributionWithIdOnly = await prisma.referralAttribution.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReferralAttributionCreateManyAndReturnArgs>(args?: SelectSubset<T, ReferralAttributionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReferralAttribution.
+     * @param {ReferralAttributionDeleteArgs} args - Arguments to delete one ReferralAttribution.
+     * @example
+     * // Delete one ReferralAttribution
+     * const ReferralAttribution = await prisma.referralAttribution.delete({
+     *   where: {
+     *     // ... filter to delete one ReferralAttribution
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReferralAttributionDeleteArgs>(args: SelectSubset<T, ReferralAttributionDeleteArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReferralAttribution.
+     * @param {ReferralAttributionUpdateArgs} args - Arguments to update one ReferralAttribution.
+     * @example
+     * // Update one ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReferralAttributionUpdateArgs>(args: SelectSubset<T, ReferralAttributionUpdateArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReferralAttributions.
+     * @param {ReferralAttributionDeleteManyArgs} args - Arguments to filter ReferralAttributions to delete.
+     * @example
+     * // Delete a few ReferralAttributions
+     * const { count } = await prisma.referralAttribution.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReferralAttributionDeleteManyArgs>(args?: SelectSubset<T, ReferralAttributionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralAttributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReferralAttributions
+     * const referralAttribution = await prisma.referralAttribution.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReferralAttributionUpdateManyArgs>(args: SelectSubset<T, ReferralAttributionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralAttributions and returns the data updated in the database.
+     * @param {ReferralAttributionUpdateManyAndReturnArgs} args - Arguments to update many ReferralAttributions.
+     * @example
+     * // Update many ReferralAttributions
+     * const referralAttribution = await prisma.referralAttribution.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReferralAttributions and only return the `id`
+     * const referralAttributionWithIdOnly = await prisma.referralAttribution.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReferralAttributionUpdateManyAndReturnArgs>(args: SelectSubset<T, ReferralAttributionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReferralAttribution.
+     * @param {ReferralAttributionUpsertArgs} args - Arguments to update or create a ReferralAttribution.
+     * @example
+     * // Update or create a ReferralAttribution
+     * const referralAttribution = await prisma.referralAttribution.upsert({
+     *   create: {
+     *     // ... data to create a ReferralAttribution
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReferralAttribution we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReferralAttributionUpsertArgs>(args: SelectSubset<T, ReferralAttributionUpsertArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReferralAttributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionCountArgs} args - Arguments to filter ReferralAttributions to count.
+     * @example
+     * // Count the number of ReferralAttributions
+     * const count = await prisma.referralAttribution.count({
+     *   where: {
+     *     // ... the filter for the ReferralAttributions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReferralAttributionCountArgs>(
+      args?: Subset<T, ReferralAttributionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReferralAttributionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReferralAttribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReferralAttributionAggregateArgs>(args: Subset<T, ReferralAttributionAggregateArgs>): Prisma.PrismaPromise<GetReferralAttributionAggregateType<T>>
+
+    /**
+     * Group by ReferralAttribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAttributionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReferralAttributionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReferralAttributionGroupByArgs['orderBy'] }
+        : { orderBy?: ReferralAttributionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReferralAttributionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReferralAttributionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReferralAttribution model
+   */
+  readonly fields: ReferralAttributionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReferralAttribution.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReferralAttributionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    referrer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    referredUser<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    firstDeposit<T extends ReferralAttribution$firstDepositArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttribution$firstDepositArgs<ExtArgs>>): Prisma__DepositClient<$Result.GetResult<Prisma.$DepositPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    qualifyingPurchase<T extends ReferralAttribution$qualifyingPurchaseArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttribution$qualifyingPurchaseArgs<ExtArgs>>): Prisma__GiftCardPurchaseClient<$Result.GetResult<Prisma.$GiftCardPurchasePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    reward<T extends ReferralAttribution$rewardArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttribution$rewardArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    auditEvents<T extends ReferralAttribution$auditEventsArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttribution$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReferralAttribution model
+   */
+  interface ReferralAttributionFieldRefs {
+    readonly id: FieldRef<"ReferralAttribution", 'String'>
+    readonly referrerId: FieldRef<"ReferralAttribution", 'String'>
+    readonly referredUserId: FieldRef<"ReferralAttribution", 'String'>
+    readonly referralCode: FieldRef<"ReferralAttribution", 'String'>
+    readonly status: FieldRef<"ReferralAttribution", 'ReferralStatus'>
+    readonly firstDepositId: FieldRef<"ReferralAttribution", 'String'>
+    readonly firstDepositAmountUsd: FieldRef<"ReferralAttribution", 'Decimal'>
+    readonly qualifyingPurchaseId: FieldRef<"ReferralAttribution", 'String'>
+    readonly createdAt: FieldRef<"ReferralAttribution", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReferralAttribution", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReferralAttribution findUnique
+   */
+  export type ReferralAttributionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAttribution to fetch.
+     */
+    where: ReferralAttributionWhereUniqueInput
+  }
+
+  /**
+   * ReferralAttribution findUniqueOrThrow
+   */
+  export type ReferralAttributionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAttribution to fetch.
+     */
+    where: ReferralAttributionWhereUniqueInput
+  }
+
+  /**
+   * ReferralAttribution findFirst
+   */
+  export type ReferralAttributionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAttribution to fetch.
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAttributions to fetch.
+     */
+    orderBy?: ReferralAttributionOrderByWithRelationInput | ReferralAttributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralAttributions.
+     */
+    cursor?: ReferralAttributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAttributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAttributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAttributions.
+     */
+    distinct?: ReferralAttributionScalarFieldEnum | ReferralAttributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAttribution findFirstOrThrow
+   */
+  export type ReferralAttributionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAttribution to fetch.
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAttributions to fetch.
+     */
+    orderBy?: ReferralAttributionOrderByWithRelationInput | ReferralAttributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralAttributions.
+     */
+    cursor?: ReferralAttributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAttributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAttributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAttributions.
+     */
+    distinct?: ReferralAttributionScalarFieldEnum | ReferralAttributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAttribution findMany
+   */
+  export type ReferralAttributionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAttributions to fetch.
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAttributions to fetch.
+     */
+    orderBy?: ReferralAttributionOrderByWithRelationInput | ReferralAttributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReferralAttributions.
+     */
+    cursor?: ReferralAttributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAttributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAttributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAttributions.
+     */
+    distinct?: ReferralAttributionScalarFieldEnum | ReferralAttributionScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAttribution create
+   */
+  export type ReferralAttributionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReferralAttribution.
+     */
+    data: XOR<ReferralAttributionCreateInput, ReferralAttributionUncheckedCreateInput>
+  }
+
+  /**
+   * ReferralAttribution createMany
+   */
+  export type ReferralAttributionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReferralAttributions.
+     */
+    data: ReferralAttributionCreateManyInput | ReferralAttributionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReferralAttribution createManyAndReturn
+   */
+  export type ReferralAttributionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReferralAttributions.
+     */
+    data: ReferralAttributionCreateManyInput | ReferralAttributionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralAttribution update
+   */
+  export type ReferralAttributionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReferralAttribution.
+     */
+    data: XOR<ReferralAttributionUpdateInput, ReferralAttributionUncheckedUpdateInput>
+    /**
+     * Choose, which ReferralAttribution to update.
+     */
+    where: ReferralAttributionWhereUniqueInput
+  }
+
+  /**
+   * ReferralAttribution updateMany
+   */
+  export type ReferralAttributionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReferralAttributions.
+     */
+    data: XOR<ReferralAttributionUpdateManyMutationInput, ReferralAttributionUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralAttributions to update
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * Limit how many ReferralAttributions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralAttribution updateManyAndReturn
+   */
+  export type ReferralAttributionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * The data used to update ReferralAttributions.
+     */
+    data: XOR<ReferralAttributionUpdateManyMutationInput, ReferralAttributionUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralAttributions to update
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * Limit how many ReferralAttributions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralAttribution upsert
+   */
+  export type ReferralAttributionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReferralAttribution to update in case it exists.
+     */
+    where: ReferralAttributionWhereUniqueInput
+    /**
+     * In case the ReferralAttribution found by the `where` argument doesn't exist, create a new ReferralAttribution with this data.
+     */
+    create: XOR<ReferralAttributionCreateInput, ReferralAttributionUncheckedCreateInput>
+    /**
+     * In case the ReferralAttribution was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReferralAttributionUpdateInput, ReferralAttributionUncheckedUpdateInput>
+  }
+
+  /**
+   * ReferralAttribution delete
+   */
+  export type ReferralAttributionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    /**
+     * Filter which ReferralAttribution to delete.
+     */
+    where: ReferralAttributionWhereUniqueInput
+  }
+
+  /**
+   * ReferralAttribution deleteMany
+   */
+  export type ReferralAttributionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralAttributions to delete
+     */
+    where?: ReferralAttributionWhereInput
+    /**
+     * Limit how many ReferralAttributions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralAttribution.firstDeposit
+   */
+  export type ReferralAttribution$firstDepositArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Deposit
+     */
+    select?: DepositSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Deposit
+     */
+    omit?: DepositOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepositInclude<ExtArgs> | null
+    where?: DepositWhereInput
+  }
+
+  /**
+   * ReferralAttribution.qualifyingPurchase
+   */
+  export type ReferralAttribution$qualifyingPurchaseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GiftCardPurchase
+     */
+    select?: GiftCardPurchaseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GiftCardPurchase
+     */
+    omit?: GiftCardPurchaseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GiftCardPurchaseInclude<ExtArgs> | null
+    where?: GiftCardPurchaseWhereInput
+  }
+
+  /**
+   * ReferralAttribution.reward
+   */
+  export type ReferralAttribution$rewardArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    where?: ReferralRewardWhereInput
+  }
+
+  /**
+   * ReferralAttribution.auditEvents
+   */
+  export type ReferralAttribution$auditEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    where?: ReferralAuditEventWhereInput
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    cursor?: ReferralAuditEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReferralAuditEventScalarFieldEnum | ReferralAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAttribution without action
+   */
+  export type ReferralAttributionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReferralReward
+   */
+
+  export type AggregateReferralReward = {
+    _count: ReferralRewardCountAggregateOutputType | null
+    _avg: ReferralRewardAvgAggregateOutputType | null
+    _sum: ReferralRewardSumAggregateOutputType | null
+    _min: ReferralRewardMinAggregateOutputType | null
+    _max: ReferralRewardMaxAggregateOutputType | null
+  }
+
+  export type ReferralRewardAvgAggregateOutputType = {
+    amountUsd: Decimal | null
+  }
+
+  export type ReferralRewardSumAggregateOutputType = {
+    amountUsd: Decimal | null
+  }
+
+  export type ReferralRewardMinAggregateOutputType = {
+    id: string | null
+    referralId: string | null
+    referrerId: string | null
+    amountUsd: Decimal | null
+    status: $Enums.ReferralRewardStatus | null
+    creditedAt: Date | null
+    reviewReason: string | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralRewardMaxAggregateOutputType = {
+    id: string | null
+    referralId: string | null
+    referrerId: string | null
+    amountUsd: Decimal | null
+    status: $Enums.ReferralRewardStatus | null
+    creditedAt: Date | null
+    reviewReason: string | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ReferralRewardCountAggregateOutputType = {
+    id: number
+    referralId: number
+    referrerId: number
+    amountUsd: number
+    status: number
+    creditedAt: number
+    reviewReason: number
+    reviewedById: number
+    reviewedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReferralRewardAvgAggregateInputType = {
+    amountUsd?: true
+  }
+
+  export type ReferralRewardSumAggregateInputType = {
+    amountUsd?: true
+  }
+
+  export type ReferralRewardMinAggregateInputType = {
+    id?: true
+    referralId?: true
+    referrerId?: true
+    amountUsd?: true
+    status?: true
+    creditedAt?: true
+    reviewReason?: true
+    reviewedById?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralRewardMaxAggregateInputType = {
+    id?: true
+    referralId?: true
+    referrerId?: true
+    amountUsd?: true
+    status?: true
+    creditedAt?: true
+    reviewReason?: true
+    reviewedById?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ReferralRewardCountAggregateInputType = {
+    id?: true
+    referralId?: true
+    referrerId?: true
+    amountUsd?: true
+    status?: true
+    creditedAt?: true
+    reviewReason?: true
+    reviewedById?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReferralRewardAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralReward to aggregate.
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralRewards to fetch.
+     */
+    orderBy?: ReferralRewardOrderByWithRelationInput | ReferralRewardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReferralRewardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralRewards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralRewards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReferralRewards
+    **/
+    _count?: true | ReferralRewardCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReferralRewardAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReferralRewardSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReferralRewardMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReferralRewardMaxAggregateInputType
+  }
+
+  export type GetReferralRewardAggregateType<T extends ReferralRewardAggregateArgs> = {
+        [P in keyof T & keyof AggregateReferralReward]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReferralReward[P]>
+      : GetScalarType<T[P], AggregateReferralReward[P]>
+  }
+
+
+
+
+  export type ReferralRewardGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralRewardWhereInput
+    orderBy?: ReferralRewardOrderByWithAggregationInput | ReferralRewardOrderByWithAggregationInput[]
+    by: ReferralRewardScalarFieldEnum[] | ReferralRewardScalarFieldEnum
+    having?: ReferralRewardScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReferralRewardCountAggregateInputType | true
+    _avg?: ReferralRewardAvgAggregateInputType
+    _sum?: ReferralRewardSumAggregateInputType
+    _min?: ReferralRewardMinAggregateInputType
+    _max?: ReferralRewardMaxAggregateInputType
+  }
+
+  export type ReferralRewardGroupByOutputType = {
+    id: string
+    referralId: string
+    referrerId: string
+    amountUsd: Decimal
+    status: $Enums.ReferralRewardStatus
+    creditedAt: Date | null
+    reviewReason: string | null
+    reviewedById: string | null
+    reviewedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ReferralRewardCountAggregateOutputType | null
+    _avg: ReferralRewardAvgAggregateOutputType | null
+    _sum: ReferralRewardSumAggregateOutputType | null
+    _min: ReferralRewardMinAggregateOutputType | null
+    _max: ReferralRewardMaxAggregateOutputType | null
+  }
+
+  type GetReferralRewardGroupByPayload<T extends ReferralRewardGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReferralRewardGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReferralRewardGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReferralRewardGroupByOutputType[P]>
+            : GetScalarType<T[P], ReferralRewardGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReferralRewardSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    referrerId?: boolean
+    amountUsd?: boolean
+    status?: boolean
+    creditedAt?: boolean
+    reviewReason?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralReward"]>
+
+  export type ReferralRewardSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    referrerId?: boolean
+    amountUsd?: boolean
+    status?: boolean
+    creditedAt?: boolean
+    reviewReason?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralReward"]>
+
+  export type ReferralRewardSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    referrerId?: boolean
+    amountUsd?: boolean
+    status?: boolean
+    creditedAt?: boolean
+    reviewReason?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralReward"]>
+
+  export type ReferralRewardSelectScalar = {
+    id?: boolean
+    referralId?: boolean
+    referrerId?: boolean
+    amountUsd?: boolean
+    status?: boolean
+    creditedAt?: boolean
+    reviewReason?: boolean
+    reviewedById?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReferralRewardOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "referralId" | "referrerId" | "amountUsd" | "status" | "creditedAt" | "reviewReason" | "reviewedById" | "reviewedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["referralReward"]>
+  export type ReferralRewardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReferralRewardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReferralRewardIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    referrer?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ReferralRewardPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReferralReward"
+    objects: {
+      referral: Prisma.$ReferralAttributionPayload<ExtArgs>
+      referrer: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      referralId: string
+      referrerId: string
+      amountUsd: Prisma.Decimal
+      status: $Enums.ReferralRewardStatus
+      creditedAt: Date | null
+      reviewReason: string | null
+      reviewedById: string | null
+      reviewedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["referralReward"]>
+    composites: {}
+  }
+
+  type ReferralRewardGetPayload<S extends boolean | null | undefined | ReferralRewardDefaultArgs> = $Result.GetResult<Prisma.$ReferralRewardPayload, S>
+
+  type ReferralRewardCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReferralRewardFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReferralRewardCountAggregateInputType | true
+    }
+
+  export interface ReferralRewardDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReferralReward'], meta: { name: 'ReferralReward' } }
+    /**
+     * Find zero or one ReferralReward that matches the filter.
+     * @param {ReferralRewardFindUniqueArgs} args - Arguments to find a ReferralReward
+     * @example
+     * // Get one ReferralReward
+     * const referralReward = await prisma.referralReward.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReferralRewardFindUniqueArgs>(args: SelectSubset<T, ReferralRewardFindUniqueArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReferralReward that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReferralRewardFindUniqueOrThrowArgs} args - Arguments to find a ReferralReward
+     * @example
+     * // Get one ReferralReward
+     * const referralReward = await prisma.referralReward.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReferralRewardFindUniqueOrThrowArgs>(args: SelectSubset<T, ReferralRewardFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralReward that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardFindFirstArgs} args - Arguments to find a ReferralReward
+     * @example
+     * // Get one ReferralReward
+     * const referralReward = await prisma.referralReward.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReferralRewardFindFirstArgs>(args?: SelectSubset<T, ReferralRewardFindFirstArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralReward that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardFindFirstOrThrowArgs} args - Arguments to find a ReferralReward
+     * @example
+     * // Get one ReferralReward
+     * const referralReward = await prisma.referralReward.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReferralRewardFindFirstOrThrowArgs>(args?: SelectSubset<T, ReferralRewardFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReferralRewards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReferralRewards
+     * const referralRewards = await prisma.referralReward.findMany()
+     * 
+     * // Get first 10 ReferralRewards
+     * const referralRewards = await prisma.referralReward.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const referralRewardWithIdOnly = await prisma.referralReward.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReferralRewardFindManyArgs>(args?: SelectSubset<T, ReferralRewardFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReferralReward.
+     * @param {ReferralRewardCreateArgs} args - Arguments to create a ReferralReward.
+     * @example
+     * // Create one ReferralReward
+     * const ReferralReward = await prisma.referralReward.create({
+     *   data: {
+     *     // ... data to create a ReferralReward
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReferralRewardCreateArgs>(args: SelectSubset<T, ReferralRewardCreateArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReferralRewards.
+     * @param {ReferralRewardCreateManyArgs} args - Arguments to create many ReferralRewards.
+     * @example
+     * // Create many ReferralRewards
+     * const referralReward = await prisma.referralReward.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReferralRewardCreateManyArgs>(args?: SelectSubset<T, ReferralRewardCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReferralRewards and returns the data saved in the database.
+     * @param {ReferralRewardCreateManyAndReturnArgs} args - Arguments to create many ReferralRewards.
+     * @example
+     * // Create many ReferralRewards
+     * const referralReward = await prisma.referralReward.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReferralRewards and only return the `id`
+     * const referralRewardWithIdOnly = await prisma.referralReward.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReferralRewardCreateManyAndReturnArgs>(args?: SelectSubset<T, ReferralRewardCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReferralReward.
+     * @param {ReferralRewardDeleteArgs} args - Arguments to delete one ReferralReward.
+     * @example
+     * // Delete one ReferralReward
+     * const ReferralReward = await prisma.referralReward.delete({
+     *   where: {
+     *     // ... filter to delete one ReferralReward
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReferralRewardDeleteArgs>(args: SelectSubset<T, ReferralRewardDeleteArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReferralReward.
+     * @param {ReferralRewardUpdateArgs} args - Arguments to update one ReferralReward.
+     * @example
+     * // Update one ReferralReward
+     * const referralReward = await prisma.referralReward.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReferralRewardUpdateArgs>(args: SelectSubset<T, ReferralRewardUpdateArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReferralRewards.
+     * @param {ReferralRewardDeleteManyArgs} args - Arguments to filter ReferralRewards to delete.
+     * @example
+     * // Delete a few ReferralRewards
+     * const { count } = await prisma.referralReward.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReferralRewardDeleteManyArgs>(args?: SelectSubset<T, ReferralRewardDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralRewards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReferralRewards
+     * const referralReward = await prisma.referralReward.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReferralRewardUpdateManyArgs>(args: SelectSubset<T, ReferralRewardUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralRewards and returns the data updated in the database.
+     * @param {ReferralRewardUpdateManyAndReturnArgs} args - Arguments to update many ReferralRewards.
+     * @example
+     * // Update many ReferralRewards
+     * const referralReward = await prisma.referralReward.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReferralRewards and only return the `id`
+     * const referralRewardWithIdOnly = await prisma.referralReward.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReferralRewardUpdateManyAndReturnArgs>(args: SelectSubset<T, ReferralRewardUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReferralReward.
+     * @param {ReferralRewardUpsertArgs} args - Arguments to update or create a ReferralReward.
+     * @example
+     * // Update or create a ReferralReward
+     * const referralReward = await prisma.referralReward.upsert({
+     *   create: {
+     *     // ... data to create a ReferralReward
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReferralReward we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReferralRewardUpsertArgs>(args: SelectSubset<T, ReferralRewardUpsertArgs<ExtArgs>>): Prisma__ReferralRewardClient<$Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReferralRewards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardCountArgs} args - Arguments to filter ReferralRewards to count.
+     * @example
+     * // Count the number of ReferralRewards
+     * const count = await prisma.referralReward.count({
+     *   where: {
+     *     // ... the filter for the ReferralRewards we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReferralRewardCountArgs>(
+      args?: Subset<T, ReferralRewardCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReferralRewardCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReferralReward.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReferralRewardAggregateArgs>(args: Subset<T, ReferralRewardAggregateArgs>): Prisma.PrismaPromise<GetReferralRewardAggregateType<T>>
+
+    /**
+     * Group by ReferralReward.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralRewardGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReferralRewardGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReferralRewardGroupByArgs['orderBy'] }
+        : { orderBy?: ReferralRewardGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReferralRewardGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReferralRewardGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReferralReward model
+   */
+  readonly fields: ReferralRewardFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReferralReward.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReferralRewardClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    referral<T extends ReferralAttributionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttributionDefaultArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    referrer<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReferralReward model
+   */
+  interface ReferralRewardFieldRefs {
+    readonly id: FieldRef<"ReferralReward", 'String'>
+    readonly referralId: FieldRef<"ReferralReward", 'String'>
+    readonly referrerId: FieldRef<"ReferralReward", 'String'>
+    readonly amountUsd: FieldRef<"ReferralReward", 'Decimal'>
+    readonly status: FieldRef<"ReferralReward", 'ReferralRewardStatus'>
+    readonly creditedAt: FieldRef<"ReferralReward", 'DateTime'>
+    readonly reviewReason: FieldRef<"ReferralReward", 'String'>
+    readonly reviewedById: FieldRef<"ReferralReward", 'String'>
+    readonly reviewedAt: FieldRef<"ReferralReward", 'DateTime'>
+    readonly createdAt: FieldRef<"ReferralReward", 'DateTime'>
+    readonly updatedAt: FieldRef<"ReferralReward", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReferralReward findUnique
+   */
+  export type ReferralRewardFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralReward to fetch.
+     */
+    where: ReferralRewardWhereUniqueInput
+  }
+
+  /**
+   * ReferralReward findUniqueOrThrow
+   */
+  export type ReferralRewardFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralReward to fetch.
+     */
+    where: ReferralRewardWhereUniqueInput
+  }
+
+  /**
+   * ReferralReward findFirst
+   */
+  export type ReferralRewardFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralReward to fetch.
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralRewards to fetch.
+     */
+    orderBy?: ReferralRewardOrderByWithRelationInput | ReferralRewardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralRewards.
+     */
+    cursor?: ReferralRewardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralRewards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralRewards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralRewards.
+     */
+    distinct?: ReferralRewardScalarFieldEnum | ReferralRewardScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralReward findFirstOrThrow
+   */
+  export type ReferralRewardFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralReward to fetch.
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralRewards to fetch.
+     */
+    orderBy?: ReferralRewardOrderByWithRelationInput | ReferralRewardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralRewards.
+     */
+    cursor?: ReferralRewardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralRewards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralRewards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralRewards.
+     */
+    distinct?: ReferralRewardScalarFieldEnum | ReferralRewardScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralReward findMany
+   */
+  export type ReferralRewardFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralRewards to fetch.
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralRewards to fetch.
+     */
+    orderBy?: ReferralRewardOrderByWithRelationInput | ReferralRewardOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReferralRewards.
+     */
+    cursor?: ReferralRewardWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralRewards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralRewards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralRewards.
+     */
+    distinct?: ReferralRewardScalarFieldEnum | ReferralRewardScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralReward create
+   */
+  export type ReferralRewardCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReferralReward.
+     */
+    data: XOR<ReferralRewardCreateInput, ReferralRewardUncheckedCreateInput>
+  }
+
+  /**
+   * ReferralReward createMany
+   */
+  export type ReferralRewardCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReferralRewards.
+     */
+    data: ReferralRewardCreateManyInput | ReferralRewardCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReferralReward createManyAndReturn
+   */
+  export type ReferralRewardCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReferralRewards.
+     */
+    data: ReferralRewardCreateManyInput | ReferralRewardCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralReward update
+   */
+  export type ReferralRewardUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReferralReward.
+     */
+    data: XOR<ReferralRewardUpdateInput, ReferralRewardUncheckedUpdateInput>
+    /**
+     * Choose, which ReferralReward to update.
+     */
+    where: ReferralRewardWhereUniqueInput
+  }
+
+  /**
+   * ReferralReward updateMany
+   */
+  export type ReferralRewardUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReferralRewards.
+     */
+    data: XOR<ReferralRewardUpdateManyMutationInput, ReferralRewardUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralRewards to update
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * Limit how many ReferralRewards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralReward updateManyAndReturn
+   */
+  export type ReferralRewardUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * The data used to update ReferralRewards.
+     */
+    data: XOR<ReferralRewardUpdateManyMutationInput, ReferralRewardUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralRewards to update
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * Limit how many ReferralRewards to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralReward upsert
+   */
+  export type ReferralRewardUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReferralReward to update in case it exists.
+     */
+    where: ReferralRewardWhereUniqueInput
+    /**
+     * In case the ReferralReward found by the `where` argument doesn't exist, create a new ReferralReward with this data.
+     */
+    create: XOR<ReferralRewardCreateInput, ReferralRewardUncheckedCreateInput>
+    /**
+     * In case the ReferralReward was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReferralRewardUpdateInput, ReferralRewardUncheckedUpdateInput>
+  }
+
+  /**
+   * ReferralReward delete
+   */
+  export type ReferralRewardDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+    /**
+     * Filter which ReferralReward to delete.
+     */
+    where: ReferralRewardWhereUniqueInput
+  }
+
+  /**
+   * ReferralReward deleteMany
+   */
+  export type ReferralRewardDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralRewards to delete
+     */
+    where?: ReferralRewardWhereInput
+    /**
+     * Limit how many ReferralRewards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralReward without action
+   */
+  export type ReferralRewardDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralReward
+     */
+    select?: ReferralRewardSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralReward
+     */
+    omit?: ReferralRewardOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralRewardInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ReferralAuditEvent
+   */
+
+  export type AggregateReferralAuditEvent = {
+    _count: ReferralAuditEventCountAggregateOutputType | null
+    _min: ReferralAuditEventMinAggregateOutputType | null
+    _max: ReferralAuditEventMaxAggregateOutputType | null
+  }
+
+  export type ReferralAuditEventMinAggregateOutputType = {
+    id: string | null
+    referralId: string | null
+    adminUserId: string | null
+    action: string | null
+    reason: string | null
+    previousStatus: string | null
+    newStatus: string | null
+    createdAt: Date | null
+  }
+
+  export type ReferralAuditEventMaxAggregateOutputType = {
+    id: string | null
+    referralId: string | null
+    adminUserId: string | null
+    action: string | null
+    reason: string | null
+    previousStatus: string | null
+    newStatus: string | null
+    createdAt: Date | null
+  }
+
+  export type ReferralAuditEventCountAggregateOutputType = {
+    id: number
+    referralId: number
+    adminUserId: number
+    action: number
+    reason: number
+    previousStatus: number
+    newStatus: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ReferralAuditEventMinAggregateInputType = {
+    id?: true
+    referralId?: true
+    adminUserId?: true
+    action?: true
+    reason?: true
+    previousStatus?: true
+    newStatus?: true
+    createdAt?: true
+  }
+
+  export type ReferralAuditEventMaxAggregateInputType = {
+    id?: true
+    referralId?: true
+    adminUserId?: true
+    action?: true
+    reason?: true
+    previousStatus?: true
+    newStatus?: true
+    createdAt?: true
+  }
+
+  export type ReferralAuditEventCountAggregateInputType = {
+    id?: true
+    referralId?: true
+    adminUserId?: true
+    action?: true
+    reason?: true
+    previousStatus?: true
+    newStatus?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ReferralAuditEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralAuditEvent to aggregate.
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAuditEvents to fetch.
+     */
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReferralAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReferralAuditEvents
+    **/
+    _count?: true | ReferralAuditEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReferralAuditEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReferralAuditEventMaxAggregateInputType
+  }
+
+  export type GetReferralAuditEventAggregateType<T extends ReferralAuditEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateReferralAuditEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReferralAuditEvent[P]>
+      : GetScalarType<T[P], AggregateReferralAuditEvent[P]>
+  }
+
+
+
+
+  export type ReferralAuditEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReferralAuditEventWhereInput
+    orderBy?: ReferralAuditEventOrderByWithAggregationInput | ReferralAuditEventOrderByWithAggregationInput[]
+    by: ReferralAuditEventScalarFieldEnum[] | ReferralAuditEventScalarFieldEnum
+    having?: ReferralAuditEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReferralAuditEventCountAggregateInputType | true
+    _min?: ReferralAuditEventMinAggregateInputType
+    _max?: ReferralAuditEventMaxAggregateInputType
+  }
+
+  export type ReferralAuditEventGroupByOutputType = {
+    id: string
+    referralId: string
+    adminUserId: string
+    action: string
+    reason: string
+    previousStatus: string | null
+    newStatus: string | null
+    createdAt: Date
+    _count: ReferralAuditEventCountAggregateOutputType | null
+    _min: ReferralAuditEventMinAggregateOutputType | null
+    _max: ReferralAuditEventMaxAggregateOutputType | null
+  }
+
+  type GetReferralAuditEventGroupByPayload<T extends ReferralAuditEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReferralAuditEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReferralAuditEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReferralAuditEventGroupByOutputType[P]>
+            : GetScalarType<T[P], ReferralAuditEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReferralAuditEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    adminUserId?: boolean
+    action?: boolean
+    reason?: boolean
+    previousStatus?: boolean
+    newStatus?: boolean
+    createdAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAuditEvent"]>
+
+  export type ReferralAuditEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    adminUserId?: boolean
+    action?: boolean
+    reason?: boolean
+    previousStatus?: boolean
+    newStatus?: boolean
+    createdAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAuditEvent"]>
+
+  export type ReferralAuditEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    referralId?: boolean
+    adminUserId?: boolean
+    action?: boolean
+    reason?: boolean
+    previousStatus?: boolean
+    newStatus?: boolean
+    createdAt?: boolean
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["referralAuditEvent"]>
+
+  export type ReferralAuditEventSelectScalar = {
+    id?: boolean
+    referralId?: boolean
+    adminUserId?: boolean
+    action?: boolean
+    reason?: boolean
+    previousStatus?: boolean
+    newStatus?: boolean
+    createdAt?: boolean
+  }
+
+  export type ReferralAuditEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "referralId" | "adminUserId" | "action" | "reason" | "previousStatus" | "newStatus" | "createdAt", ExtArgs["result"]["referralAuditEvent"]>
+  export type ReferralAuditEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReferralAuditEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ReferralAuditEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    referral?: boolean | ReferralAttributionDefaultArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ReferralAuditEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReferralAuditEvent"
+    objects: {
+      referral: Prisma.$ReferralAttributionPayload<ExtArgs>
+      admin: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      referralId: string
+      adminUserId: string
+      action: string
+      reason: string
+      previousStatus: string | null
+      newStatus: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["referralAuditEvent"]>
+    composites: {}
+  }
+
+  type ReferralAuditEventGetPayload<S extends boolean | null | undefined | ReferralAuditEventDefaultArgs> = $Result.GetResult<Prisma.$ReferralAuditEventPayload, S>
+
+  type ReferralAuditEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReferralAuditEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReferralAuditEventCountAggregateInputType | true
+    }
+
+  export interface ReferralAuditEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReferralAuditEvent'], meta: { name: 'ReferralAuditEvent' } }
+    /**
+     * Find zero or one ReferralAuditEvent that matches the filter.
+     * @param {ReferralAuditEventFindUniqueArgs} args - Arguments to find a ReferralAuditEvent
+     * @example
+     * // Get one ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReferralAuditEventFindUniqueArgs>(args: SelectSubset<T, ReferralAuditEventFindUniqueArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReferralAuditEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReferralAuditEventFindUniqueOrThrowArgs} args - Arguments to find a ReferralAuditEvent
+     * @example
+     * // Get one ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReferralAuditEventFindUniqueOrThrowArgs>(args: SelectSubset<T, ReferralAuditEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralAuditEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventFindFirstArgs} args - Arguments to find a ReferralAuditEvent
+     * @example
+     * // Get one ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReferralAuditEventFindFirstArgs>(args?: SelectSubset<T, ReferralAuditEventFindFirstArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReferralAuditEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventFindFirstOrThrowArgs} args - Arguments to find a ReferralAuditEvent
+     * @example
+     * // Get one ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReferralAuditEventFindFirstOrThrowArgs>(args?: SelectSubset<T, ReferralAuditEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReferralAuditEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReferralAuditEvents
+     * const referralAuditEvents = await prisma.referralAuditEvent.findMany()
+     * 
+     * // Get first 10 ReferralAuditEvents
+     * const referralAuditEvents = await prisma.referralAuditEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const referralAuditEventWithIdOnly = await prisma.referralAuditEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReferralAuditEventFindManyArgs>(args?: SelectSubset<T, ReferralAuditEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReferralAuditEvent.
+     * @param {ReferralAuditEventCreateArgs} args - Arguments to create a ReferralAuditEvent.
+     * @example
+     * // Create one ReferralAuditEvent
+     * const ReferralAuditEvent = await prisma.referralAuditEvent.create({
+     *   data: {
+     *     // ... data to create a ReferralAuditEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReferralAuditEventCreateArgs>(args: SelectSubset<T, ReferralAuditEventCreateArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReferralAuditEvents.
+     * @param {ReferralAuditEventCreateManyArgs} args - Arguments to create many ReferralAuditEvents.
+     * @example
+     * // Create many ReferralAuditEvents
+     * const referralAuditEvent = await prisma.referralAuditEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReferralAuditEventCreateManyArgs>(args?: SelectSubset<T, ReferralAuditEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReferralAuditEvents and returns the data saved in the database.
+     * @param {ReferralAuditEventCreateManyAndReturnArgs} args - Arguments to create many ReferralAuditEvents.
+     * @example
+     * // Create many ReferralAuditEvents
+     * const referralAuditEvent = await prisma.referralAuditEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReferralAuditEvents and only return the `id`
+     * const referralAuditEventWithIdOnly = await prisma.referralAuditEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReferralAuditEventCreateManyAndReturnArgs>(args?: SelectSubset<T, ReferralAuditEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReferralAuditEvent.
+     * @param {ReferralAuditEventDeleteArgs} args - Arguments to delete one ReferralAuditEvent.
+     * @example
+     * // Delete one ReferralAuditEvent
+     * const ReferralAuditEvent = await prisma.referralAuditEvent.delete({
+     *   where: {
+     *     // ... filter to delete one ReferralAuditEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReferralAuditEventDeleteArgs>(args: SelectSubset<T, ReferralAuditEventDeleteArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReferralAuditEvent.
+     * @param {ReferralAuditEventUpdateArgs} args - Arguments to update one ReferralAuditEvent.
+     * @example
+     * // Update one ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReferralAuditEventUpdateArgs>(args: SelectSubset<T, ReferralAuditEventUpdateArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReferralAuditEvents.
+     * @param {ReferralAuditEventDeleteManyArgs} args - Arguments to filter ReferralAuditEvents to delete.
+     * @example
+     * // Delete a few ReferralAuditEvents
+     * const { count } = await prisma.referralAuditEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReferralAuditEventDeleteManyArgs>(args?: SelectSubset<T, ReferralAuditEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralAuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReferralAuditEvents
+     * const referralAuditEvent = await prisma.referralAuditEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReferralAuditEventUpdateManyArgs>(args: SelectSubset<T, ReferralAuditEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReferralAuditEvents and returns the data updated in the database.
+     * @param {ReferralAuditEventUpdateManyAndReturnArgs} args - Arguments to update many ReferralAuditEvents.
+     * @example
+     * // Update many ReferralAuditEvents
+     * const referralAuditEvent = await prisma.referralAuditEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReferralAuditEvents and only return the `id`
+     * const referralAuditEventWithIdOnly = await prisma.referralAuditEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReferralAuditEventUpdateManyAndReturnArgs>(args: SelectSubset<T, ReferralAuditEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReferralAuditEvent.
+     * @param {ReferralAuditEventUpsertArgs} args - Arguments to update or create a ReferralAuditEvent.
+     * @example
+     * // Update or create a ReferralAuditEvent
+     * const referralAuditEvent = await prisma.referralAuditEvent.upsert({
+     *   create: {
+     *     // ... data to create a ReferralAuditEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReferralAuditEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReferralAuditEventUpsertArgs>(args: SelectSubset<T, ReferralAuditEventUpsertArgs<ExtArgs>>): Prisma__ReferralAuditEventClient<$Result.GetResult<Prisma.$ReferralAuditEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReferralAuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventCountArgs} args - Arguments to filter ReferralAuditEvents to count.
+     * @example
+     * // Count the number of ReferralAuditEvents
+     * const count = await prisma.referralAuditEvent.count({
+     *   where: {
+     *     // ... the filter for the ReferralAuditEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReferralAuditEventCountArgs>(
+      args?: Subset<T, ReferralAuditEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReferralAuditEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReferralAuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReferralAuditEventAggregateArgs>(args: Subset<T, ReferralAuditEventAggregateArgs>): Prisma.PrismaPromise<GetReferralAuditEventAggregateType<T>>
+
+    /**
+     * Group by ReferralAuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReferralAuditEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReferralAuditEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReferralAuditEventGroupByArgs['orderBy'] }
+        : { orderBy?: ReferralAuditEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReferralAuditEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReferralAuditEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReferralAuditEvent model
+   */
+  readonly fields: ReferralAuditEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReferralAuditEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReferralAuditEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    referral<T extends ReferralAttributionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ReferralAttributionDefaultArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    admin<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReferralAuditEvent model
+   */
+  interface ReferralAuditEventFieldRefs {
+    readonly id: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly referralId: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly adminUserId: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly action: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly reason: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly previousStatus: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly newStatus: FieldRef<"ReferralAuditEvent", 'String'>
+    readonly createdAt: FieldRef<"ReferralAuditEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReferralAuditEvent findUnique
+   */
+  export type ReferralAuditEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAuditEvent to fetch.
+     */
+    where: ReferralAuditEventWhereUniqueInput
+  }
+
+  /**
+   * ReferralAuditEvent findUniqueOrThrow
+   */
+  export type ReferralAuditEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAuditEvent to fetch.
+     */
+    where: ReferralAuditEventWhereUniqueInput
+  }
+
+  /**
+   * ReferralAuditEvent findFirst
+   */
+  export type ReferralAuditEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAuditEvent to fetch.
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAuditEvents to fetch.
+     */
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralAuditEvents.
+     */
+    cursor?: ReferralAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAuditEvents.
+     */
+    distinct?: ReferralAuditEventScalarFieldEnum | ReferralAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAuditEvent findFirstOrThrow
+   */
+  export type ReferralAuditEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAuditEvent to fetch.
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAuditEvents to fetch.
+     */
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReferralAuditEvents.
+     */
+    cursor?: ReferralAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAuditEvents.
+     */
+    distinct?: ReferralAuditEventScalarFieldEnum | ReferralAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAuditEvent findMany
+   */
+  export type ReferralAuditEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter, which ReferralAuditEvents to fetch.
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReferralAuditEvents to fetch.
+     */
+    orderBy?: ReferralAuditEventOrderByWithRelationInput | ReferralAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReferralAuditEvents.
+     */
+    cursor?: ReferralAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReferralAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReferralAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReferralAuditEvents.
+     */
+    distinct?: ReferralAuditEventScalarFieldEnum | ReferralAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * ReferralAuditEvent create
+   */
+  export type ReferralAuditEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReferralAuditEvent.
+     */
+    data: XOR<ReferralAuditEventCreateInput, ReferralAuditEventUncheckedCreateInput>
+  }
+
+  /**
+   * ReferralAuditEvent createMany
+   */
+  export type ReferralAuditEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReferralAuditEvents.
+     */
+    data: ReferralAuditEventCreateManyInput | ReferralAuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ReferralAuditEvent createManyAndReturn
+   */
+  export type ReferralAuditEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReferralAuditEvents.
+     */
+    data: ReferralAuditEventCreateManyInput | ReferralAuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralAuditEvent update
+   */
+  export type ReferralAuditEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReferralAuditEvent.
+     */
+    data: XOR<ReferralAuditEventUpdateInput, ReferralAuditEventUncheckedUpdateInput>
+    /**
+     * Choose, which ReferralAuditEvent to update.
+     */
+    where: ReferralAuditEventWhereUniqueInput
+  }
+
+  /**
+   * ReferralAuditEvent updateMany
+   */
+  export type ReferralAuditEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReferralAuditEvents.
+     */
+    data: XOR<ReferralAuditEventUpdateManyMutationInput, ReferralAuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralAuditEvents to update
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * Limit how many ReferralAuditEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralAuditEvent updateManyAndReturn
+   */
+  export type ReferralAuditEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to update ReferralAuditEvents.
+     */
+    data: XOR<ReferralAuditEventUpdateManyMutationInput, ReferralAuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ReferralAuditEvents to update
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * Limit how many ReferralAuditEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReferralAuditEvent upsert
+   */
+  export type ReferralAuditEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReferralAuditEvent to update in case it exists.
+     */
+    where: ReferralAuditEventWhereUniqueInput
+    /**
+     * In case the ReferralAuditEvent found by the `where` argument doesn't exist, create a new ReferralAuditEvent with this data.
+     */
+    create: XOR<ReferralAuditEventCreateInput, ReferralAuditEventUncheckedCreateInput>
+    /**
+     * In case the ReferralAuditEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReferralAuditEventUpdateInput, ReferralAuditEventUncheckedUpdateInput>
+  }
+
+  /**
+   * ReferralAuditEvent delete
+   */
+  export type ReferralAuditEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
+    /**
+     * Filter which ReferralAuditEvent to delete.
+     */
+    where: ReferralAuditEventWhereUniqueInput
+  }
+
+  /**
+   * ReferralAuditEvent deleteMany
+   */
+  export type ReferralAuditEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReferralAuditEvents to delete
+     */
+    where?: ReferralAuditEventWhereInput
+    /**
+     * Limit how many ReferralAuditEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReferralAuditEvent without action
+   */
+  export type ReferralAuditEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAuditEvent
+     */
+    select?: ReferralAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAuditEvent
+     */
+    omit?: ReferralAuditEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAuditEventInclude<ExtArgs> | null
   }
 
 
@@ -29568,6 +33759,7 @@ export namespace Prisma {
   export type GiftCardPurchaseAvgAggregateOutputType = {
     quantity: number | null
     amount: Decimal | null
+    giftCardValueUsd: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
     baseBuyRatePercent: Decimal | null
@@ -29575,11 +33767,14 @@ export namespace Prisma {
     buyAdjustmentAmount: Decimal | null
     customerRatePercent: Decimal | null
     customerPrice: Decimal | null
+    referralCreditAmount: Decimal | null
+    referralCreditUsdAmount: Decimal | null
   }
 
   export type GiftCardPurchaseSumAggregateOutputType = {
     quantity: number | null
     amount: Decimal | null
+    giftCardValueUsd: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
     baseBuyRatePercent: Decimal | null
@@ -29587,6 +33782,8 @@ export namespace Prisma {
     buyAdjustmentAmount: Decimal | null
     customerRatePercent: Decimal | null
     customerPrice: Decimal | null
+    referralCreditAmount: Decimal | null
+    referralCreditUsdAmount: Decimal | null
   }
 
   export type GiftCardPurchaseMinAggregateOutputType = {
@@ -29607,6 +33804,7 @@ export namespace Prisma {
     denominationType: string | null
     quantity: number | null
     amount: Decimal | null
+    giftCardValueUsd: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
     baseBuyRatePercent: Decimal | null
@@ -29614,6 +33812,8 @@ export namespace Prisma {
     buyAdjustmentAmount: Decimal | null
     customerRatePercent: Decimal | null
     customerPrice: Decimal | null
+    referralCreditAmount: Decimal | null
+    referralCreditUsdAmount: Decimal | null
     status: $Enums.GiftCardPurchaseStatus | null
     providerStatus: string | null
     providerMessage: string | null
@@ -29643,6 +33843,7 @@ export namespace Prisma {
     denominationType: string | null
     quantity: number | null
     amount: Decimal | null
+    giftCardValueUsd: Decimal | null
     providerAmount: Decimal | null
     fee: Decimal | null
     baseBuyRatePercent: Decimal | null
@@ -29650,6 +33851,8 @@ export namespace Prisma {
     buyAdjustmentAmount: Decimal | null
     customerRatePercent: Decimal | null
     customerPrice: Decimal | null
+    referralCreditAmount: Decimal | null
+    referralCreditUsdAmount: Decimal | null
     status: $Enums.GiftCardPurchaseStatus | null
     providerStatus: string | null
     providerMessage: string | null
@@ -29679,6 +33882,7 @@ export namespace Prisma {
     denominationType: number
     quantity: number
     amount: number
+    giftCardValueUsd: number
     providerAmount: number
     fee: number
     baseBuyRatePercent: number
@@ -29686,6 +33890,8 @@ export namespace Prisma {
     buyAdjustmentAmount: number
     customerRatePercent: number
     customerPrice: number
+    referralCreditAmount: number
+    referralCreditUsdAmount: number
     status: number
     providerStatus: number
     providerMessage: number
@@ -29705,6 +33911,7 @@ export namespace Prisma {
   export type GiftCardPurchaseAvgAggregateInputType = {
     quantity?: true
     amount?: true
+    giftCardValueUsd?: true
     providerAmount?: true
     fee?: true
     baseBuyRatePercent?: true
@@ -29712,11 +33919,14 @@ export namespace Prisma {
     buyAdjustmentAmount?: true
     customerRatePercent?: true
     customerPrice?: true
+    referralCreditAmount?: true
+    referralCreditUsdAmount?: true
   }
 
   export type GiftCardPurchaseSumAggregateInputType = {
     quantity?: true
     amount?: true
+    giftCardValueUsd?: true
     providerAmount?: true
     fee?: true
     baseBuyRatePercent?: true
@@ -29724,6 +33934,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: true
     customerRatePercent?: true
     customerPrice?: true
+    referralCreditAmount?: true
+    referralCreditUsdAmount?: true
   }
 
   export type GiftCardPurchaseMinAggregateInputType = {
@@ -29744,6 +33956,7 @@ export namespace Prisma {
     denominationType?: true
     quantity?: true
     amount?: true
+    giftCardValueUsd?: true
     providerAmount?: true
     fee?: true
     baseBuyRatePercent?: true
@@ -29751,6 +33964,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: true
     customerRatePercent?: true
     customerPrice?: true
+    referralCreditAmount?: true
+    referralCreditUsdAmount?: true
     status?: true
     providerStatus?: true
     providerMessage?: true
@@ -29780,6 +33995,7 @@ export namespace Prisma {
     denominationType?: true
     quantity?: true
     amount?: true
+    giftCardValueUsd?: true
     providerAmount?: true
     fee?: true
     baseBuyRatePercent?: true
@@ -29787,6 +34003,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: true
     customerRatePercent?: true
     customerPrice?: true
+    referralCreditAmount?: true
+    referralCreditUsdAmount?: true
     status?: true
     providerStatus?: true
     providerMessage?: true
@@ -29816,6 +34034,7 @@ export namespace Prisma {
     denominationType?: true
     quantity?: true
     amount?: true
+    giftCardValueUsd?: true
     providerAmount?: true
     fee?: true
     baseBuyRatePercent?: true
@@ -29823,6 +34042,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: true
     customerRatePercent?: true
     customerPrice?: true
+    referralCreditAmount?: true
+    referralCreditUsdAmount?: true
     status?: true
     providerStatus?: true
     providerMessage?: true
@@ -29942,6 +34163,7 @@ export namespace Prisma {
     denominationType: string | null
     quantity: number
     amount: Decimal
+    giftCardValueUsd: Decimal
     providerAmount: Decimal | null
     fee: Decimal
     baseBuyRatePercent: Decimal
@@ -29949,6 +34171,8 @@ export namespace Prisma {
     buyAdjustmentAmount: Decimal
     customerRatePercent: Decimal
     customerPrice: Decimal
+    referralCreditAmount: Decimal
+    referralCreditUsdAmount: Decimal
     status: $Enums.GiftCardPurchaseStatus
     providerStatus: string | null
     providerMessage: string | null
@@ -30000,6 +34224,7 @@ export namespace Prisma {
     denominationType?: boolean
     quantity?: boolean
     amount?: boolean
+    giftCardValueUsd?: boolean
     providerAmount?: boolean
     fee?: boolean
     baseBuyRatePercent?: boolean
@@ -30007,6 +34232,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: boolean
     customerRatePercent?: boolean
     customerPrice?: boolean
+    referralCreditAmount?: boolean
+    referralCreditUsdAmount?: boolean
     status?: boolean
     providerStatus?: boolean
     providerMessage?: boolean
@@ -30022,6 +34249,7 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+    referralQualification?: boolean | GiftCardPurchase$referralQualificationArgs<ExtArgs>
   }, ExtArgs["result"]["giftCardPurchase"]>
 
   export type GiftCardPurchaseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -30042,6 +34270,7 @@ export namespace Prisma {
     denominationType?: boolean
     quantity?: boolean
     amount?: boolean
+    giftCardValueUsd?: boolean
     providerAmount?: boolean
     fee?: boolean
     baseBuyRatePercent?: boolean
@@ -30049,6 +34278,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: boolean
     customerRatePercent?: boolean
     customerPrice?: boolean
+    referralCreditAmount?: boolean
+    referralCreditUsdAmount?: boolean
     status?: boolean
     providerStatus?: boolean
     providerMessage?: boolean
@@ -30084,6 +34315,7 @@ export namespace Prisma {
     denominationType?: boolean
     quantity?: boolean
     amount?: boolean
+    giftCardValueUsd?: boolean
     providerAmount?: boolean
     fee?: boolean
     baseBuyRatePercent?: boolean
@@ -30091,6 +34323,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: boolean
     customerRatePercent?: boolean
     customerPrice?: boolean
+    referralCreditAmount?: boolean
+    referralCreditUsdAmount?: boolean
     status?: boolean
     providerStatus?: boolean
     providerMessage?: boolean
@@ -30126,6 +34360,7 @@ export namespace Prisma {
     denominationType?: boolean
     quantity?: boolean
     amount?: boolean
+    giftCardValueUsd?: boolean
     providerAmount?: boolean
     fee?: boolean
     baseBuyRatePercent?: boolean
@@ -30133,6 +34368,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: boolean
     customerRatePercent?: boolean
     customerPrice?: boolean
+    referralCreditAmount?: boolean
+    referralCreditUsdAmount?: boolean
     status?: boolean
     providerStatus?: boolean
     providerMessage?: boolean
@@ -30147,11 +34384,12 @@ export namespace Prisma {
     completedAt?: boolean
   }
 
-  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "providerAmount" | "fee" | "baseBuyRatePercent" | "buyAdjustmentPercent" | "buyAdjustmentAmount" | "customerRatePercent" | "customerPrice" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "successEmailAttemptedAt" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
+  export type GiftCardPurchaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reference" | "idempotencyKey" | "userId" | "walletId" | "transactionId" | "provider" | "providerProductId" | "providerReference" | "redeemId" | "brandNameSnapshot" | "productNameSnapshot" | "countryCode" | "currencyCode" | "denominationType" | "quantity" | "amount" | "giftCardValueUsd" | "providerAmount" | "fee" | "baseBuyRatePercent" | "buyAdjustmentPercent" | "buyAdjustmentAmount" | "customerRatePercent" | "customerPrice" | "referralCreditAmount" | "referralCreditUsdAmount" | "status" | "providerStatus" | "providerMessage" | "voucherCiphertext" | "redeemDetails" | "providerMetadata" | "errorMessage" | "metadata" | "successEmailAttemptedAt" | "createdAt" | "updatedAt" | "completedAt", ExtArgs["result"]["giftCardPurchase"]>
   export type GiftCardPurchaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
     transaction?: boolean | GiftCardPurchase$transactionArgs<ExtArgs>
+    referralQualification?: boolean | GiftCardPurchase$referralQualificationArgs<ExtArgs>
   }
   export type GiftCardPurchaseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -30170,6 +34408,7 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
       wallet: Prisma.$WalletPayload<ExtArgs>
       transaction: Prisma.$TransactionPayload<ExtArgs> | null
+      referralQualification: Prisma.$ReferralAttributionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -30189,6 +34428,7 @@ export namespace Prisma {
       denominationType: string | null
       quantity: number
       amount: Prisma.Decimal
+      giftCardValueUsd: Prisma.Decimal
       providerAmount: Prisma.Decimal | null
       fee: Prisma.Decimal
       baseBuyRatePercent: Prisma.Decimal
@@ -30196,6 +34436,8 @@ export namespace Prisma {
       buyAdjustmentAmount: Prisma.Decimal
       customerRatePercent: Prisma.Decimal
       customerPrice: Prisma.Decimal
+      referralCreditAmount: Prisma.Decimal
+      referralCreditUsdAmount: Prisma.Decimal
       status: $Enums.GiftCardPurchaseStatus
       providerStatus: string | null
       providerMessage: string | null
@@ -30605,6 +34847,7 @@ export namespace Prisma {
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     wallet<T extends WalletDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WalletDefaultArgs<ExtArgs>>): Prisma__WalletClient<$Result.GetResult<Prisma.$WalletPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     transaction<T extends GiftCardPurchase$transactionArgs<ExtArgs> = {}>(args?: Subset<T, GiftCardPurchase$transactionArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    referralQualification<T extends GiftCardPurchase$referralQualificationArgs<ExtArgs> = {}>(args?: Subset<T, GiftCardPurchase$referralQualificationArgs<ExtArgs>>): Prisma__ReferralAttributionClient<$Result.GetResult<Prisma.$ReferralAttributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30651,6 +34894,7 @@ export namespace Prisma {
     readonly denominationType: FieldRef<"GiftCardPurchase", 'String'>
     readonly quantity: FieldRef<"GiftCardPurchase", 'Int'>
     readonly amount: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly giftCardValueUsd: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly providerAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly fee: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly baseBuyRatePercent: FieldRef<"GiftCardPurchase", 'Decimal'>
@@ -30658,6 +34902,8 @@ export namespace Prisma {
     readonly buyAdjustmentAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly customerRatePercent: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly customerPrice: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly referralCreditAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
+    readonly referralCreditUsdAmount: FieldRef<"GiftCardPurchase", 'Decimal'>
     readonly status: FieldRef<"GiftCardPurchase", 'GiftCardPurchaseStatus'>
     readonly providerStatus: FieldRef<"GiftCardPurchase", 'String'>
     readonly providerMessage: FieldRef<"GiftCardPurchase", 'String'>
@@ -31087,6 +35333,25 @@ export namespace Prisma {
      */
     include?: TransactionInclude<ExtArgs> | null
     where?: TransactionWhereInput
+  }
+
+  /**
+   * GiftCardPurchase.referralQualification
+   */
+  export type GiftCardPurchase$referralQualificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReferralAttribution
+     */
+    select?: ReferralAttributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReferralAttribution
+     */
+    omit?: ReferralAttributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReferralAttributionInclude<ExtArgs> | null
+    where?: ReferralAttributionWhereInput
   }
 
   /**
@@ -36078,6 +40343,7 @@ export namespace Prisma {
     isVerified: 'isVerified',
     isActive: 'isActive',
     role: 'role',
+    referralCode: 'referralCode',
     transactionPinHash: 'transactionPinHash',
     transactionPinFailedAttempts: 'transactionPinFailedAttempts',
     transactionPinLockedUntil: 'transactionPinLockedUntil',
@@ -36098,6 +40364,7 @@ export namespace Prisma {
     country: 'country',
     countryCode: 'countryCode',
     gender: 'gender',
+    referralCode: 'referralCode',
     otpHash: 'otpHash',
     otpExpiresAt: 'otpExpiresAt',
     otpAttempts: 'otpAttempts',
@@ -36183,6 +40450,8 @@ export namespace Prisma {
     currencyCode: 'currencyCode',
     availableBalance: 'availableBalance',
     pendingBalance: 'pendingBalance',
+    referralCreditAvailable: 'referralCreditAvailable',
+    referralCreditPending: 'referralCreditPending',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -36250,6 +40519,10 @@ export namespace Prisma {
     balanceAfter: 'balanceAfter',
     pendingBalanceBefore: 'pendingBalanceBefore',
     pendingBalanceAfter: 'pendingBalanceAfter',
+    referralBalanceBefore: 'referralBalanceBefore',
+    referralBalanceAfter: 'referralBalanceAfter',
+    referralPendingBefore: 'referralPendingBefore',
+    referralPendingAfter: 'referralPendingAfter',
     operationKey: 'operationKey',
     reference: 'reference',
     reason: 'reason',
@@ -36257,6 +40530,53 @@ export namespace Prisma {
   };
 
   export type LedgerEntryScalarFieldEnum = (typeof LedgerEntryScalarFieldEnum)[keyof typeof LedgerEntryScalarFieldEnum]
+
+
+  export const ReferralAttributionScalarFieldEnum: {
+    id: 'id',
+    referrerId: 'referrerId',
+    referredUserId: 'referredUserId',
+    referralCode: 'referralCode',
+    status: 'status',
+    firstDepositId: 'firstDepositId',
+    firstDepositAmountUsd: 'firstDepositAmountUsd',
+    qualifyingPurchaseId: 'qualifyingPurchaseId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReferralAttributionScalarFieldEnum = (typeof ReferralAttributionScalarFieldEnum)[keyof typeof ReferralAttributionScalarFieldEnum]
+
+
+  export const ReferralRewardScalarFieldEnum: {
+    id: 'id',
+    referralId: 'referralId',
+    referrerId: 'referrerId',
+    amountUsd: 'amountUsd',
+    status: 'status',
+    creditedAt: 'creditedAt',
+    reviewReason: 'reviewReason',
+    reviewedById: 'reviewedById',
+    reviewedAt: 'reviewedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReferralRewardScalarFieldEnum = (typeof ReferralRewardScalarFieldEnum)[keyof typeof ReferralRewardScalarFieldEnum]
+
+
+  export const ReferralAuditEventScalarFieldEnum: {
+    id: 'id',
+    referralId: 'referralId',
+    adminUserId: 'adminUserId',
+    action: 'action',
+    reason: 'reason',
+    previousStatus: 'previousStatus',
+    newStatus: 'newStatus',
+    createdAt: 'createdAt'
+  };
+
+  export type ReferralAuditEventScalarFieldEnum = (typeof ReferralAuditEventScalarFieldEnum)[keyof typeof ReferralAuditEventScalarFieldEnum]
 
 
   export const WithdrawalScalarFieldEnum: {
@@ -36492,6 +40812,7 @@ export namespace Prisma {
     denominationType: 'denominationType',
     quantity: 'quantity',
     amount: 'amount',
+    giftCardValueUsd: 'giftCardValueUsd',
     providerAmount: 'providerAmount',
     fee: 'fee',
     baseBuyRatePercent: 'baseBuyRatePercent',
@@ -36499,6 +40820,8 @@ export namespace Prisma {
     buyAdjustmentAmount: 'buyAdjustmentAmount',
     customerRatePercent: 'customerRatePercent',
     customerPrice: 'customerPrice',
+    referralCreditAmount: 'referralCreditAmount',
+    referralCreditUsdAmount: 'referralCreditUsdAmount',
     status: 'status',
     providerStatus: 'providerStatus',
     providerMessage: 'providerMessage',
@@ -36817,6 +41140,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ReferralStatus'
+   */
+  export type EnumReferralStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReferralStatus[]'
+   */
+  export type ListEnumReferralStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReferralRewardStatus'
+   */
+  export type EnumReferralRewardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralRewardStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ReferralRewardStatus[]'
+   */
+  export type ListEnumReferralRewardStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReferralRewardStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'WithdrawalQuoteStatus'
    */
   export type EnumWithdrawalQuoteStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithdrawalQuoteStatus'>
@@ -37011,6 +41362,7 @@ export namespace Prisma {
     isVerified?: BoolFilter<"User"> | boolean
     isActive?: BoolFilter<"User"> | boolean
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    referralCode?: StringFilter<"User"> | string
     transactionPinHash?: StringNullableFilter<"User"> | string | null
     transactionPinFailedAttempts?: IntFilter<"User"> | number
     transactionPinLockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -37028,6 +41380,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
     giftCardPurchases?: GiftCardPurchaseListRelationFilter
+    referralsMade?: ReferralAttributionListRelationFilter
+    referralAttribution?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
+    referralRewards?: ReferralRewardListRelationFilter
+    referralAuditActions?: ReferralAuditEventListRelationFilter
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
@@ -37057,6 +41413,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     isActive?: SortOrder
     role?: SortOrder
+    referralCode?: SortOrder
     transactionPinHash?: SortOrderInput | SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrderInput | SortOrder
@@ -37074,6 +41431,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryOrderByRelationAggregateInput
     giftCardSales?: GiftCardSaleOrderByRelationAggregateInput
     giftCardPurchases?: GiftCardPurchaseOrderByRelationAggregateInput
+    referralsMade?: ReferralAttributionOrderByRelationAggregateInput
+    referralAttribution?: ReferralAttributionOrderByWithRelationInput
+    referralRewards?: ReferralRewardOrderByRelationAggregateInput
+    referralAuditActions?: ReferralAuditEventOrderByRelationAggregateInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestOrderByRelationAggregateInput
     supportTickets?: SupportTicketOrderByRelationAggregateInput
     assignedSupportTickets?: SupportTicketOrderByRelationAggregateInput
@@ -37087,6 +41448,7 @@ export namespace Prisma {
     email?: string
     username?: string
     phone?: string
+    referralCode?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -37123,13 +41485,17 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryListRelationFilter
     giftCardSales?: GiftCardSaleListRelationFilter
     giftCardPurchases?: GiftCardPurchaseListRelationFilter
+    referralsMade?: ReferralAttributionListRelationFilter
+    referralAttribution?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
+    referralRewards?: ReferralRewardListRelationFilter
+    referralAuditActions?: ReferralAuditEventListRelationFilter
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestListRelationFilter
     supportTickets?: SupportTicketListRelationFilter
     assignedSupportTickets?: SupportTicketListRelationFilter
     supportMessages?: SupportMessageListRelationFilter
     uploadedSupportAttachments?: SupportAttachmentListRelationFilter
     uploadedAdminAttachments?: SupportAttachmentListRelationFilter
-  }, "id" | "email" | "username" | "phone">
+  }, "id" | "email" | "username" | "phone" | "referralCode">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -37152,6 +41518,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     isActive?: SortOrder
     role?: SortOrder
+    referralCode?: SortOrder
     transactionPinHash?: SortOrderInput | SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrderInput | SortOrder
@@ -37188,6 +41555,7 @@ export namespace Prisma {
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    referralCode?: StringWithAggregatesFilter<"User"> | string
     transactionPinHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     transactionPinFailedAttempts?: IntWithAggregatesFilter<"User"> | number
     transactionPinLockedUntil?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -37208,6 +41576,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"PendingRegistration"> | string | null
     countryCode?: StringNullableFilter<"PendingRegistration"> | string | null
     gender?: StringNullableFilter<"PendingRegistration"> | string | null
+    referralCode?: StringNullableFilter<"PendingRegistration"> | string | null
     otpHash?: StringFilter<"PendingRegistration"> | string
     otpExpiresAt?: DateTimeFilter<"PendingRegistration"> | Date | string
     otpAttempts?: IntFilter<"PendingRegistration"> | number
@@ -37228,6 +41597,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     countryCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
+    referralCode?: SortOrderInput | SortOrder
     otpHash?: SortOrder
     otpExpiresAt?: SortOrder
     otpAttempts?: SortOrder
@@ -37252,6 +41622,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"PendingRegistration"> | string | null
     countryCode?: StringNullableFilter<"PendingRegistration"> | string | null
     gender?: StringNullableFilter<"PendingRegistration"> | string | null
+    referralCode?: StringNullableFilter<"PendingRegistration"> | string | null
     otpHash?: StringFilter<"PendingRegistration"> | string
     otpExpiresAt?: DateTimeFilter<"PendingRegistration"> | Date | string
     otpAttempts?: IntFilter<"PendingRegistration"> | number
@@ -37271,6 +41642,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     countryCode?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
+    referralCode?: SortOrderInput | SortOrder
     otpHash?: SortOrder
     otpExpiresAt?: SortOrder
     otpAttempts?: SortOrder
@@ -37298,6 +41670,7 @@ export namespace Prisma {
     country?: StringNullableWithAggregatesFilter<"PendingRegistration"> | string | null
     countryCode?: StringNullableWithAggregatesFilter<"PendingRegistration"> | string | null
     gender?: StringNullableWithAggregatesFilter<"PendingRegistration"> | string | null
+    referralCode?: StringNullableWithAggregatesFilter<"PendingRegistration"> | string | null
     otpHash?: StringWithAggregatesFilter<"PendingRegistration"> | string
     otpExpiresAt?: DateTimeWithAggregatesFilter<"PendingRegistration"> | Date | string
     otpAttempts?: IntWithAggregatesFilter<"PendingRegistration"> | number
@@ -37697,6 +42070,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"WalletBalance"> | string
     availableBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WalletBalance"> | Date | string
     updatedAt?: DateTimeFilter<"WalletBalance"> | Date | string
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
@@ -37709,6 +42084,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     wallet?: WalletOrderByWithRelationInput
@@ -37725,6 +42102,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"WalletBalance"> | string
     availableBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WalletBalance"> | Date | string
     updatedAt?: DateTimeFilter<"WalletBalance"> | Date | string
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
@@ -37737,6 +42116,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WalletBalanceCountOrderByAggregateInput
@@ -37755,6 +42136,8 @@ export namespace Prisma {
     currencyCode?: StringWithAggregatesFilter<"WalletBalance"> | string
     availableBalance?: DecimalWithAggregatesFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalWithAggregatesFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalWithAggregatesFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalWithAggregatesFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeWithAggregatesFilter<"WalletBalance"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WalletBalance"> | Date | string
   }
@@ -37787,6 +42170,7 @@ export namespace Prisma {
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+    referralDeposit?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
   }
 
   export type DepositOrderByWithRelationInput = {
@@ -37814,6 +42198,7 @@ export namespace Prisma {
     wallet?: WalletOrderByWithRelationInput
     currency?: CurrencyOrderByWithRelationInput
     transaction?: TransactionOrderByWithRelationInput
+    referralDeposit?: ReferralAttributionOrderByWithRelationInput
   }
 
   export type DepositWhereUniqueInput = Prisma.AtLeast<{
@@ -37845,6 +42230,7 @@ export namespace Prisma {
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     currency?: XOR<CurrencyScalarRelationFilter, CurrencyWhereInput>
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+    referralDeposit?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
   }, "id" | "transactionId" | "userId_idempotencyKey">
 
   export type DepositOrderByWithAggregationInput = {
@@ -38053,6 +42439,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     operationKey?: StringNullableFilter<"LedgerEntry"> | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
@@ -38073,6 +42463,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrderInput | SortOrder
     pendingBalanceAfter?: SortOrderInput | SortOrder
+    referralBalanceBefore?: SortOrderInput | SortOrder
+    referralBalanceAfter?: SortOrderInput | SortOrder
+    referralPendingBefore?: SortOrderInput | SortOrder
+    referralPendingAfter?: SortOrderInput | SortOrder
     operationKey?: SortOrderInput | SortOrder
     reference?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
@@ -38097,6 +42491,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
@@ -38116,6 +42514,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrderInput | SortOrder
     pendingBalanceAfter?: SortOrderInput | SortOrder
+    referralBalanceBefore?: SortOrderInput | SortOrder
+    referralBalanceAfter?: SortOrderInput | SortOrder
+    referralPendingBefore?: SortOrderInput | SortOrder
+    referralPendingAfter?: SortOrderInput | SortOrder
     operationKey?: SortOrderInput | SortOrder
     reference?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
@@ -38141,10 +42543,274 @@ export namespace Prisma {
     balanceAfter?: DecimalWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     operationKey?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     reference?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     reason?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"LedgerEntry"> | Date | string
+  }
+
+  export type ReferralAttributionWhereInput = {
+    AND?: ReferralAttributionWhereInput | ReferralAttributionWhereInput[]
+    OR?: ReferralAttributionWhereInput[]
+    NOT?: ReferralAttributionWhereInput | ReferralAttributionWhereInput[]
+    id?: StringFilter<"ReferralAttribution"> | string
+    referrerId?: StringFilter<"ReferralAttribution"> | string
+    referredUserId?: StringFilter<"ReferralAttribution"> | string
+    referralCode?: StringFilter<"ReferralAttribution"> | string
+    status?: EnumReferralStatusFilter<"ReferralAttribution"> | $Enums.ReferralStatus
+    firstDepositId?: StringNullableFilter<"ReferralAttribution"> | string | null
+    firstDepositAmountUsd?: DecimalNullableFilter<"ReferralAttribution"> | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: StringNullableFilter<"ReferralAttribution"> | string | null
+    createdAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    referredUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    firstDeposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
+    qualifyingPurchase?: XOR<GiftCardPurchaseNullableScalarRelationFilter, GiftCardPurchaseWhereInput> | null
+    reward?: XOR<ReferralRewardNullableScalarRelationFilter, ReferralRewardWhereInput> | null
+    auditEvents?: ReferralAuditEventListRelationFilter
+  }
+
+  export type ReferralAttributionOrderByWithRelationInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    referralCode?: SortOrder
+    status?: SortOrder
+    firstDepositId?: SortOrderInput | SortOrder
+    firstDepositAmountUsd?: SortOrderInput | SortOrder
+    qualifyingPurchaseId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    referrer?: UserOrderByWithRelationInput
+    referredUser?: UserOrderByWithRelationInput
+    firstDeposit?: DepositOrderByWithRelationInput
+    qualifyingPurchase?: GiftCardPurchaseOrderByWithRelationInput
+    reward?: ReferralRewardOrderByWithRelationInput
+    auditEvents?: ReferralAuditEventOrderByRelationAggregateInput
+  }
+
+  export type ReferralAttributionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    referredUserId?: string
+    firstDepositId?: string
+    qualifyingPurchaseId?: string
+    AND?: ReferralAttributionWhereInput | ReferralAttributionWhereInput[]
+    OR?: ReferralAttributionWhereInput[]
+    NOT?: ReferralAttributionWhereInput | ReferralAttributionWhereInput[]
+    referrerId?: StringFilter<"ReferralAttribution"> | string
+    referralCode?: StringFilter<"ReferralAttribution"> | string
+    status?: EnumReferralStatusFilter<"ReferralAttribution"> | $Enums.ReferralStatus
+    firstDepositAmountUsd?: DecimalNullableFilter<"ReferralAttribution"> | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+    referredUser?: XOR<UserScalarRelationFilter, UserWhereInput>
+    firstDeposit?: XOR<DepositNullableScalarRelationFilter, DepositWhereInput> | null
+    qualifyingPurchase?: XOR<GiftCardPurchaseNullableScalarRelationFilter, GiftCardPurchaseWhereInput> | null
+    reward?: XOR<ReferralRewardNullableScalarRelationFilter, ReferralRewardWhereInput> | null
+    auditEvents?: ReferralAuditEventListRelationFilter
+  }, "id" | "referredUserId" | "firstDepositId" | "qualifyingPurchaseId">
+
+  export type ReferralAttributionOrderByWithAggregationInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    referralCode?: SortOrder
+    status?: SortOrder
+    firstDepositId?: SortOrderInput | SortOrder
+    firstDepositAmountUsd?: SortOrderInput | SortOrder
+    qualifyingPurchaseId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReferralAttributionCountOrderByAggregateInput
+    _avg?: ReferralAttributionAvgOrderByAggregateInput
+    _max?: ReferralAttributionMaxOrderByAggregateInput
+    _min?: ReferralAttributionMinOrderByAggregateInput
+    _sum?: ReferralAttributionSumOrderByAggregateInput
+  }
+
+  export type ReferralAttributionScalarWhereWithAggregatesInput = {
+    AND?: ReferralAttributionScalarWhereWithAggregatesInput | ReferralAttributionScalarWhereWithAggregatesInput[]
+    OR?: ReferralAttributionScalarWhereWithAggregatesInput[]
+    NOT?: ReferralAttributionScalarWhereWithAggregatesInput | ReferralAttributionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReferralAttribution"> | string
+    referrerId?: StringWithAggregatesFilter<"ReferralAttribution"> | string
+    referredUserId?: StringWithAggregatesFilter<"ReferralAttribution"> | string
+    referralCode?: StringWithAggregatesFilter<"ReferralAttribution"> | string
+    status?: EnumReferralStatusWithAggregatesFilter<"ReferralAttribution"> | $Enums.ReferralStatus
+    firstDepositId?: StringNullableWithAggregatesFilter<"ReferralAttribution"> | string | null
+    firstDepositAmountUsd?: DecimalNullableWithAggregatesFilter<"ReferralAttribution"> | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: StringNullableWithAggregatesFilter<"ReferralAttribution"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ReferralAttribution"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReferralAttribution"> | Date | string
+  }
+
+  export type ReferralRewardWhereInput = {
+    AND?: ReferralRewardWhereInput | ReferralRewardWhereInput[]
+    OR?: ReferralRewardWhereInput[]
+    NOT?: ReferralRewardWhereInput | ReferralRewardWhereInput[]
+    id?: StringFilter<"ReferralReward"> | string
+    referralId?: StringFilter<"ReferralReward"> | string
+    referrerId?: StringFilter<"ReferralReward"> | string
+    amountUsd?: DecimalFilter<"ReferralReward"> | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFilter<"ReferralReward"> | $Enums.ReferralRewardStatus
+    creditedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    reviewReason?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedById?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    createdAt?: DateTimeFilter<"ReferralReward"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralReward"> | Date | string
+    referral?: XOR<ReferralAttributionScalarRelationFilter, ReferralAttributionWhereInput>
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ReferralRewardOrderByWithRelationInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    referrerId?: SortOrder
+    amountUsd?: SortOrder
+    status?: SortOrder
+    creditedAt?: SortOrderInput | SortOrder
+    reviewReason?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    referral?: ReferralAttributionOrderByWithRelationInput
+    referrer?: UserOrderByWithRelationInput
+  }
+
+  export type ReferralRewardWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    referralId?: string
+    AND?: ReferralRewardWhereInput | ReferralRewardWhereInput[]
+    OR?: ReferralRewardWhereInput[]
+    NOT?: ReferralRewardWhereInput | ReferralRewardWhereInput[]
+    referrerId?: StringFilter<"ReferralReward"> | string
+    amountUsd?: DecimalFilter<"ReferralReward"> | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFilter<"ReferralReward"> | $Enums.ReferralRewardStatus
+    creditedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    reviewReason?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedById?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    createdAt?: DateTimeFilter<"ReferralReward"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralReward"> | Date | string
+    referral?: XOR<ReferralAttributionScalarRelationFilter, ReferralAttributionWhereInput>
+    referrer?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "referralId">
+
+  export type ReferralRewardOrderByWithAggregationInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    referrerId?: SortOrder
+    amountUsd?: SortOrder
+    status?: SortOrder
+    creditedAt?: SortOrderInput | SortOrder
+    reviewReason?: SortOrderInput | SortOrder
+    reviewedById?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReferralRewardCountOrderByAggregateInput
+    _avg?: ReferralRewardAvgOrderByAggregateInput
+    _max?: ReferralRewardMaxOrderByAggregateInput
+    _min?: ReferralRewardMinOrderByAggregateInput
+    _sum?: ReferralRewardSumOrderByAggregateInput
+  }
+
+  export type ReferralRewardScalarWhereWithAggregatesInput = {
+    AND?: ReferralRewardScalarWhereWithAggregatesInput | ReferralRewardScalarWhereWithAggregatesInput[]
+    OR?: ReferralRewardScalarWhereWithAggregatesInput[]
+    NOT?: ReferralRewardScalarWhereWithAggregatesInput | ReferralRewardScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReferralReward"> | string
+    referralId?: StringWithAggregatesFilter<"ReferralReward"> | string
+    referrerId?: StringWithAggregatesFilter<"ReferralReward"> | string
+    amountUsd?: DecimalWithAggregatesFilter<"ReferralReward"> | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusWithAggregatesFilter<"ReferralReward"> | $Enums.ReferralRewardStatus
+    creditedAt?: DateTimeNullableWithAggregatesFilter<"ReferralReward"> | Date | string | null
+    reviewReason?: StringNullableWithAggregatesFilter<"ReferralReward"> | string | null
+    reviewedById?: StringNullableWithAggregatesFilter<"ReferralReward"> | string | null
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"ReferralReward"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ReferralReward"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ReferralReward"> | Date | string
+  }
+
+  export type ReferralAuditEventWhereInput = {
+    AND?: ReferralAuditEventWhereInput | ReferralAuditEventWhereInput[]
+    OR?: ReferralAuditEventWhereInput[]
+    NOT?: ReferralAuditEventWhereInput | ReferralAuditEventWhereInput[]
+    id?: StringFilter<"ReferralAuditEvent"> | string
+    referralId?: StringFilter<"ReferralAuditEvent"> | string
+    adminUserId?: StringFilter<"ReferralAuditEvent"> | string
+    action?: StringFilter<"ReferralAuditEvent"> | string
+    reason?: StringFilter<"ReferralAuditEvent"> | string
+    previousStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    newStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"ReferralAuditEvent"> | Date | string
+    referral?: XOR<ReferralAttributionScalarRelationFilter, ReferralAttributionWhereInput>
+    admin?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ReferralAuditEventOrderByWithRelationInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    adminUserId?: SortOrder
+    action?: SortOrder
+    reason?: SortOrder
+    previousStatus?: SortOrderInput | SortOrder
+    newStatus?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    referral?: ReferralAttributionOrderByWithRelationInput
+    admin?: UserOrderByWithRelationInput
+  }
+
+  export type ReferralAuditEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReferralAuditEventWhereInput | ReferralAuditEventWhereInput[]
+    OR?: ReferralAuditEventWhereInput[]
+    NOT?: ReferralAuditEventWhereInput | ReferralAuditEventWhereInput[]
+    referralId?: StringFilter<"ReferralAuditEvent"> | string
+    adminUserId?: StringFilter<"ReferralAuditEvent"> | string
+    action?: StringFilter<"ReferralAuditEvent"> | string
+    reason?: StringFilter<"ReferralAuditEvent"> | string
+    previousStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    newStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"ReferralAuditEvent"> | Date | string
+    referral?: XOR<ReferralAttributionScalarRelationFilter, ReferralAttributionWhereInput>
+    admin?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ReferralAuditEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    adminUserId?: SortOrder
+    action?: SortOrder
+    reason?: SortOrder
+    previousStatus?: SortOrderInput | SortOrder
+    newStatus?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ReferralAuditEventCountOrderByAggregateInput
+    _max?: ReferralAuditEventMaxOrderByAggregateInput
+    _min?: ReferralAuditEventMinOrderByAggregateInput
+  }
+
+  export type ReferralAuditEventScalarWhereWithAggregatesInput = {
+    AND?: ReferralAuditEventScalarWhereWithAggregatesInput | ReferralAuditEventScalarWhereWithAggregatesInput[]
+    OR?: ReferralAuditEventScalarWhereWithAggregatesInput[]
+    NOT?: ReferralAuditEventScalarWhereWithAggregatesInput | ReferralAuditEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReferralAuditEvent"> | string
+    referralId?: StringWithAggregatesFilter<"ReferralAuditEvent"> | string
+    adminUserId?: StringWithAggregatesFilter<"ReferralAuditEvent"> | string
+    action?: StringWithAggregatesFilter<"ReferralAuditEvent"> | string
+    reason?: StringWithAggregatesFilter<"ReferralAuditEvent"> | string
+    previousStatus?: StringNullableWithAggregatesFilter<"ReferralAuditEvent"> | string | null
+    newStatus?: StringNullableWithAggregatesFilter<"ReferralAuditEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ReferralAuditEvent"> | Date | string
   }
 
   export type WithdrawalWhereInput = {
@@ -39300,6 +43966,7 @@ export namespace Prisma {
     denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
     quantity?: IntFilter<"GiftCardPurchase"> | number
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
@@ -39307,6 +43974,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
     providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -39322,6 +43991,7 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+    referralQualification?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
   }
 
   export type GiftCardPurchaseOrderByWithRelationInput = {
@@ -39342,6 +44012,7 @@ export namespace Prisma {
     denominationType?: SortOrderInput | SortOrder
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrderInput | SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -39349,6 +44020,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrderInput | SortOrder
     providerMessage?: SortOrderInput | SortOrder
@@ -39364,6 +44037,7 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
     wallet?: WalletOrderByWithRelationInput
     transaction?: TransactionOrderByWithRelationInput
+    referralQualification?: ReferralAttributionOrderByWithRelationInput
   }
 
   export type GiftCardPurchaseWhereUniqueInput = Prisma.AtLeast<{
@@ -39388,6 +44062,7 @@ export namespace Prisma {
     denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
     quantity?: IntFilter<"GiftCardPurchase"> | number
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
@@ -39395,6 +44070,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
     providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -39410,6 +44087,7 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     wallet?: XOR<WalletScalarRelationFilter, WalletWhereInput>
     transaction?: XOR<TransactionNullableScalarRelationFilter, TransactionWhereInput> | null
+    referralQualification?: XOR<ReferralAttributionNullableScalarRelationFilter, ReferralAttributionWhereInput> | null
   }, "id" | "reference" | "idempotencyKey" | "transactionId" | "provider_providerReference">
 
   export type GiftCardPurchaseOrderByWithAggregationInput = {
@@ -39430,6 +44108,7 @@ export namespace Prisma {
     denominationType?: SortOrderInput | SortOrder
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrderInput | SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -39437,6 +44116,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrderInput | SortOrder
     providerMessage?: SortOrderInput | SortOrder
@@ -39477,6 +44158,7 @@ export namespace Prisma {
     denominationType?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
     quantity?: IntWithAggregatesFilter<"GiftCardPurchase"> | number
     amount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
@@ -39484,6 +44166,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalWithAggregatesFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusWithAggregatesFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
     providerMessage?: StringNullableWithAggregatesFilter<"GiftCardPurchase"> | string | null
@@ -39936,6 +44620,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -39953,6 +44638,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -39982,6 +44671,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -39999,6 +44689,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -40028,6 +44722,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40045,6 +44740,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -40074,6 +44773,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40091,6 +44791,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -40120,6 +44824,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -40148,6 +44853,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40176,6 +44882,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -40193,6 +44900,7 @@ export namespace Prisma {
     country?: string | null
     countryCode?: string | null
     gender?: string | null
+    referralCode?: string | null
     otpHash: string
     otpExpiresAt: Date | string
     otpAttempts?: number
@@ -40212,6 +44920,7 @@ export namespace Prisma {
     country?: string | null
     countryCode?: string | null
     gender?: string | null
+    referralCode?: string | null
     otpHash: string
     otpExpiresAt: Date | string
     otpAttempts?: number
@@ -40231,6 +44940,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -40250,6 +44960,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -40269,6 +44980,7 @@ export namespace Prisma {
     country?: string | null
     countryCode?: string | null
     gender?: string | null
+    referralCode?: string | null
     otpHash: string
     otpExpiresAt: Date | string
     otpAttempts?: number
@@ -40288,6 +45000,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -40306,6 +45019,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -40739,6 +45453,8 @@ export namespace Prisma {
     id?: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
     wallet: WalletCreateNestedOneWithoutBalancesInput
@@ -40751,6 +45467,8 @@ export namespace Prisma {
     currencyCode: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40759,6 +45477,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wallet?: WalletUpdateOneRequiredWithoutBalancesNestedInput
@@ -40771,6 +45491,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40781,6 +45503,8 @@ export namespace Prisma {
     currencyCode: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -40789,6 +45513,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40799,6 +45525,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -40824,6 +45552,7 @@ export namespace Prisma {
     wallet: WalletCreateNestedOneWithoutDepositsInput
     currency: CurrencyCreateNestedOneWithoutDepositsInput
     transaction?: TransactionCreateNestedOneWithoutDepositInput
+    referralDeposit?: ReferralAttributionCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUncheckedCreateInput = {
@@ -40847,6 +45576,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: string | null
+    referralDeposit?: ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUpdateInput = {
@@ -40870,6 +45600,7 @@ export namespace Prisma {
     wallet?: WalletUpdateOneRequiredWithoutDepositsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutDepositsNestedInput
     transaction?: TransactionUpdateOneWithoutDepositNestedInput
+    referralDeposit?: ReferralAttributionUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateInput = {
@@ -40893,6 +45624,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    referralDeposit?: ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositCreateManyInput = {
@@ -41125,6 +45857,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -41145,6 +45881,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -41159,6 +45899,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41179,6 +45923,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41196,6 +45944,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -41210,6 +45962,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -41227,9 +45983,279 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAttributionCreateInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionCreateManyInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralAttributionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAttributionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralRewardCreateInput = {
+    id?: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referral: ReferralAttributionCreateNestedOneWithoutRewardInput
+    referrer: UserCreateNestedOneWithoutReferralRewardsInput
+  }
+
+  export type ReferralRewardUncheckedCreateInput = {
+    id?: string
+    referralId: string
+    referrerId: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralRewardUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralAttributionUpdateOneRequiredWithoutRewardNestedInput
+    referrer?: UserUpdateOneRequiredWithoutReferralRewardsNestedInput
+  }
+
+  export type ReferralRewardUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralRewardCreateManyInput = {
+    id?: string
+    referralId: string
+    referrerId: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralRewardUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralRewardUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventCreateInput = {
+    id?: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+    referral: ReferralAttributionCreateNestedOneWithoutAuditEventsInput
+    admin: UserCreateNestedOneWithoutReferralAuditActionsInput
+  }
+
+  export type ReferralAuditEventUncheckedCreateInput = {
+    id?: string
+    referralId: string
+    adminUserId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReferralAuditEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralAttributionUpdateOneRequiredWithoutAuditEventsNestedInput
+    admin?: UserUpdateOneRequiredWithoutReferralAuditActionsNestedInput
+  }
+
+  export type ReferralAuditEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventCreateManyInput = {
+    id?: string
+    referralId: string
+    adminUserId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReferralAuditEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -42564,6 +47590,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -42571,6 +47598,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -42586,6 +47615,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutGiftCardPurchasesInput
     wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
     transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+    referralQualification?: ReferralAttributionCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseUncheckedCreateInput = {
@@ -42606,6 +47636,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -42613,6 +47644,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -42625,6 +47658,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
+    referralQualification?: ReferralAttributionUncheckedCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseUpdateInput = {
@@ -42642,6 +47676,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -42649,6 +47684,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42664,6 +47701,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
     wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
     transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+    referralQualification?: ReferralAttributionUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateInput = {
@@ -42684,6 +47722,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -42691,6 +47730,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42703,6 +47744,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referralQualification?: ReferralAttributionUncheckedUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseCreateManyInput = {
@@ -42723,6 +47765,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -42730,6 +47773,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -42759,6 +47804,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -42766,6 +47812,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -42798,6 +47846,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -42805,6 +47854,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43433,6 +48484,29 @@ export namespace Prisma {
     none?: GiftCardPurchaseWhereInput
   }
 
+  export type ReferralAttributionListRelationFilter = {
+    every?: ReferralAttributionWhereInput
+    some?: ReferralAttributionWhereInput
+    none?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionNullableScalarRelationFilter = {
+    is?: ReferralAttributionWhereInput | null
+    isNot?: ReferralAttributionWhereInput | null
+  }
+
+  export type ReferralRewardListRelationFilter = {
+    every?: ReferralRewardWhereInput
+    some?: ReferralRewardWhereInput
+    none?: ReferralRewardWhereInput
+  }
+
+  export type ReferralAuditEventListRelationFilter = {
+    every?: ReferralAuditEventWhereInput
+    some?: ReferralAuditEventWhereInput
+    none?: ReferralAuditEventWhereInput
+  }
+
   export type AdminGiftCardSandboxTestListRelationFilter = {
     every?: AdminGiftCardSandboxTestWhereInput
     some?: AdminGiftCardSandboxTestWhereInput
@@ -43502,6 +48576,18 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type ReferralAttributionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReferralRewardOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReferralAuditEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AdminGiftCardSandboxTestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -43539,6 +48625,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     isActive?: SortOrder
     role?: SortOrder
+    referralCode?: SortOrder
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
@@ -43571,6 +48658,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     isActive?: SortOrder
     role?: SortOrder
+    referralCode?: SortOrder
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
@@ -43599,6 +48687,7 @@ export namespace Prisma {
     isVerified?: SortOrder
     isActive?: SortOrder
     role?: SortOrder
+    referralCode?: SortOrder
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
@@ -43723,6 +48812,7 @@ export namespace Prisma {
     country?: SortOrder
     countryCode?: SortOrder
     gender?: SortOrder
+    referralCode?: SortOrder
     otpHash?: SortOrder
     otpExpiresAt?: SortOrder
     otpAttempts?: SortOrder
@@ -43746,6 +48836,7 @@ export namespace Prisma {
     country?: SortOrder
     countryCode?: SortOrder
     gender?: SortOrder
+    referralCode?: SortOrder
     otpHash?: SortOrder
     otpExpiresAt?: SortOrder
     otpAttempts?: SortOrder
@@ -43765,6 +48856,7 @@ export namespace Prisma {
     country?: SortOrder
     countryCode?: SortOrder
     gender?: SortOrder
+    referralCode?: SortOrder
     otpHash?: SortOrder
     otpExpiresAt?: SortOrder
     otpAttempts?: SortOrder
@@ -44007,6 +49099,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44014,6 +49108,8 @@ export namespace Prisma {
   export type WalletBalanceAvgOrderByAggregateInput = {
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
   }
 
   export type WalletBalanceMaxOrderByAggregateInput = {
@@ -44022,6 +49118,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44032,6 +49130,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -44039,6 +49139,8 @@ export namespace Prisma {
   export type WalletBalanceSumOrderByAggregateInput = {
     availableBalance?: SortOrder
     pendingBalance?: SortOrder
+    referralCreditAvailable?: SortOrder
+    referralCreditPending?: SortOrder
   }
 
   export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
@@ -44434,6 +49536,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrder
     pendingBalanceAfter?: SortOrder
+    referralBalanceBefore?: SortOrder
+    referralBalanceAfter?: SortOrder
+    referralPendingBefore?: SortOrder
+    referralPendingAfter?: SortOrder
     operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
@@ -44446,6 +49552,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrder
     pendingBalanceAfter?: SortOrder
+    referralBalanceBefore?: SortOrder
+    referralBalanceAfter?: SortOrder
+    referralPendingBefore?: SortOrder
+    referralPendingAfter?: SortOrder
   }
 
   export type LedgerEntryMaxOrderByAggregateInput = {
@@ -44459,6 +49569,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrder
     pendingBalanceAfter?: SortOrder
+    referralBalanceBefore?: SortOrder
+    referralBalanceAfter?: SortOrder
+    referralPendingBefore?: SortOrder
+    referralPendingAfter?: SortOrder
     operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
@@ -44476,6 +49590,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrder
     pendingBalanceAfter?: SortOrder
+    referralBalanceBefore?: SortOrder
+    referralBalanceAfter?: SortOrder
+    referralPendingBefore?: SortOrder
+    referralPendingAfter?: SortOrder
     operationKey?: SortOrder
     reference?: SortOrder
     reason?: SortOrder
@@ -44488,6 +49606,10 @@ export namespace Prisma {
     balanceAfter?: SortOrder
     pendingBalanceBefore?: SortOrder
     pendingBalanceAfter?: SortOrder
+    referralBalanceBefore?: SortOrder
+    referralBalanceAfter?: SortOrder
+    referralPendingBefore?: SortOrder
+    referralPendingAfter?: SortOrder
   }
 
   export type EnumLedgerEntryTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -44498,6 +49620,180 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
     _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
+  }
+
+  export type EnumReferralStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusFilter<$PrismaModel> | $Enums.ReferralStatus
+  }
+
+  export type ReferralRewardNullableScalarRelationFilter = {
+    is?: ReferralRewardWhereInput | null
+    isNot?: ReferralRewardWhereInput | null
+  }
+
+  export type ReferralAttributionCountOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    referralCode?: SortOrder
+    status?: SortOrder
+    firstDepositId?: SortOrder
+    firstDepositAmountUsd?: SortOrder
+    qualifyingPurchaseId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralAttributionAvgOrderByAggregateInput = {
+    firstDepositAmountUsd?: SortOrder
+  }
+
+  export type ReferralAttributionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    referralCode?: SortOrder
+    status?: SortOrder
+    firstDepositId?: SortOrder
+    firstDepositAmountUsd?: SortOrder
+    qualifyingPurchaseId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralAttributionMinOrderByAggregateInput = {
+    id?: SortOrder
+    referrerId?: SortOrder
+    referredUserId?: SortOrder
+    referralCode?: SortOrder
+    status?: SortOrder
+    firstDepositId?: SortOrder
+    firstDepositAmountUsd?: SortOrder
+    qualifyingPurchaseId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralAttributionSumOrderByAggregateInput = {
+    firstDepositAmountUsd?: SortOrder
+  }
+
+  export type EnumReferralStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralStatusFilter<$PrismaModel>
+  }
+
+  export type EnumReferralRewardStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralRewardStatus | EnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralRewardStatusFilter<$PrismaModel> | $Enums.ReferralRewardStatus
+  }
+
+  export type ReferralAttributionScalarRelationFilter = {
+    is?: ReferralAttributionWhereInput
+    isNot?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralRewardCountOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    referrerId?: SortOrder
+    amountUsd?: SortOrder
+    status?: SortOrder
+    creditedAt?: SortOrder
+    reviewReason?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralRewardAvgOrderByAggregateInput = {
+    amountUsd?: SortOrder
+  }
+
+  export type ReferralRewardMaxOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    referrerId?: SortOrder
+    amountUsd?: SortOrder
+    status?: SortOrder
+    creditedAt?: SortOrder
+    reviewReason?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralRewardMinOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    referrerId?: SortOrder
+    amountUsd?: SortOrder
+    status?: SortOrder
+    creditedAt?: SortOrder
+    reviewReason?: SortOrder
+    reviewedById?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReferralRewardSumOrderByAggregateInput = {
+    amountUsd?: SortOrder
+  }
+
+  export type EnumReferralRewardStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralRewardStatus | EnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralRewardStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralRewardStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralRewardStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralRewardStatusFilter<$PrismaModel>
+  }
+
+  export type ReferralAuditEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    adminUserId?: SortOrder
+    action?: SortOrder
+    reason?: SortOrder
+    previousStatus?: SortOrder
+    newStatus?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReferralAuditEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    adminUserId?: SortOrder
+    action?: SortOrder
+    reason?: SortOrder
+    previousStatus?: SortOrder
+    newStatus?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ReferralAuditEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    referralId?: SortOrder
+    adminUserId?: SortOrder
+    action?: SortOrder
+    reason?: SortOrder
+    previousStatus?: SortOrder
+    newStatus?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EnumPaymentMethodFilter<$PrismaModel = never> = {
@@ -45380,6 +50676,7 @@ export namespace Prisma {
     denominationType?: SortOrder
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -45387,6 +50684,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
     providerMessage?: SortOrder
@@ -45404,6 +50703,7 @@ export namespace Prisma {
   export type GiftCardPurchaseAvgOrderByAggregateInput = {
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -45411,6 +50711,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
   }
 
   export type GiftCardPurchaseMaxOrderByAggregateInput = {
@@ -45431,6 +50733,7 @@ export namespace Prisma {
     denominationType?: SortOrder
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -45438,6 +50741,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
     providerMessage?: SortOrder
@@ -45467,6 +50772,7 @@ export namespace Prisma {
     denominationType?: SortOrder
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -45474,6 +50780,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
     status?: SortOrder
     providerStatus?: SortOrder
     providerMessage?: SortOrder
@@ -45488,6 +50796,7 @@ export namespace Prisma {
   export type GiftCardPurchaseSumOrderByAggregateInput = {
     quantity?: SortOrder
     amount?: SortOrder
+    giftCardValueUsd?: SortOrder
     providerAmount?: SortOrder
     fee?: SortOrder
     baseBuyRatePercent?: SortOrder
@@ -45495,6 +50804,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: SortOrder
     customerRatePercent?: SortOrder
     customerPrice?: SortOrder
+    referralCreditAmount?: SortOrder
+    referralCreditUsdAmount?: SortOrder
   }
 
   export type EnumGiftCardPurchaseStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -45897,6 +51208,33 @@ export namespace Prisma {
     connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
   }
 
+  export type ReferralAttributionCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput> | ReferralAttributionCreateWithoutReferrerInput[] | ReferralAttributionUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferrerInput | ReferralAttributionCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralAttributionCreateManyReferrerInputEnvelope
+    connect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+  }
+
+  export type ReferralAttributionCreateNestedOneWithoutReferredUserInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferredUserInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type ReferralRewardCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput> | ReferralRewardCreateWithoutReferrerInput[] | ReferralRewardUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferrerInput | ReferralRewardCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralRewardCreateManyReferrerInputEnvelope
+    connect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+  }
+
+  export type ReferralAuditEventCreateNestedManyWithoutAdminInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput> | ReferralAuditEventCreateWithoutAdminInput[] | ReferralAuditEventUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutAdminInput | ReferralAuditEventCreateOrConnectWithoutAdminInput[]
+    createMany?: ReferralAuditEventCreateManyAdminInputEnvelope
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+  }
+
   export type AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput = {
     create?: XOR<AdminGiftCardSandboxTestCreateWithoutAdminUserInput, AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput> | AdminGiftCardSandboxTestCreateWithoutAdminUserInput[] | AdminGiftCardSandboxTestUncheckedCreateWithoutAdminUserInput[]
     connectOrCreate?: AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput | AdminGiftCardSandboxTestCreateOrConnectWithoutAdminUserInput[]
@@ -46019,6 +51357,33 @@ export namespace Prisma {
     connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutUserInput | GiftCardPurchaseCreateOrConnectWithoutUserInput[]
     createMany?: GiftCardPurchaseCreateManyUserInputEnvelope
     connect?: GiftCardPurchaseWhereUniqueInput | GiftCardPurchaseWhereUniqueInput[]
+  }
+
+  export type ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput> | ReferralAttributionCreateWithoutReferrerInput[] | ReferralAttributionUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferrerInput | ReferralAttributionCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralAttributionCreateManyReferrerInputEnvelope
+    connect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+  }
+
+  export type ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferredUserInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput> | ReferralRewardCreateWithoutReferrerInput[] | ReferralRewardUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferrerInput | ReferralRewardCreateOrConnectWithoutReferrerInput[]
+    createMany?: ReferralRewardCreateManyReferrerInputEnvelope
+    connect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+  }
+
+  export type ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput> | ReferralAuditEventCreateWithoutAdminInput[] | ReferralAuditEventUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutAdminInput | ReferralAuditEventCreateOrConnectWithoutAdminInput[]
+    createMany?: ReferralAuditEventCreateManyAdminInputEnvelope
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
   }
 
   export type AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput = {
@@ -46253,6 +51618,58 @@ export namespace Prisma {
     update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
+  export type ReferralAttributionUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput> | ReferralAttributionCreateWithoutReferrerInput[] | ReferralAttributionUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferrerInput | ReferralAttributionCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralAttributionUpsertWithWhereUniqueWithoutReferrerInput | ReferralAttributionUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralAttributionCreateManyReferrerInputEnvelope
+    set?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    disconnect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    delete?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    connect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    update?: ReferralAttributionUpdateWithWhereUniqueWithoutReferrerInput | ReferralAttributionUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralAttributionUpdateManyWithWhereWithoutReferrerInput | ReferralAttributionUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralAttributionScalarWhereInput | ReferralAttributionScalarWhereInput[]
+  }
+
+  export type ReferralAttributionUpdateOneWithoutReferredUserNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferredUserInput
+    upsert?: ReferralAttributionUpsertWithoutReferredUserInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutReferredUserInput, ReferralAttributionUpdateWithoutReferredUserInput>, ReferralAttributionUncheckedUpdateWithoutReferredUserInput>
+  }
+
+  export type ReferralRewardUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput> | ReferralRewardCreateWithoutReferrerInput[] | ReferralRewardUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferrerInput | ReferralRewardCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralRewardUpsertWithWhereUniqueWithoutReferrerInput | ReferralRewardUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralRewardCreateManyReferrerInputEnvelope
+    set?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    disconnect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    delete?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    connect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    update?: ReferralRewardUpdateWithWhereUniqueWithoutReferrerInput | ReferralRewardUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralRewardUpdateManyWithWhereWithoutReferrerInput | ReferralRewardUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralRewardScalarWhereInput | ReferralRewardScalarWhereInput[]
+  }
+
+  export type ReferralAuditEventUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput> | ReferralAuditEventCreateWithoutAdminInput[] | ReferralAuditEventUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutAdminInput | ReferralAuditEventCreateOrConnectWithoutAdminInput[]
+    upsert?: ReferralAuditEventUpsertWithWhereUniqueWithoutAdminInput | ReferralAuditEventUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: ReferralAuditEventCreateManyAdminInputEnvelope
+    set?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    disconnect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    delete?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    update?: ReferralAuditEventUpdateWithWhereUniqueWithoutAdminInput | ReferralAuditEventUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: ReferralAuditEventUpdateManyWithWhereWithoutAdminInput | ReferralAuditEventUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
   }
 
   export type AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput = {
@@ -46497,6 +51914,58 @@ export namespace Prisma {
     update?: GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput | GiftCardPurchaseUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GiftCardPurchaseUpdateManyWithWhereWithoutUserInput | GiftCardPurchaseUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GiftCardPurchaseScalarWhereInput | GiftCardPurchaseScalarWhereInput[]
+  }
+
+  export type ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput> | ReferralAttributionCreateWithoutReferrerInput[] | ReferralAttributionUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferrerInput | ReferralAttributionCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralAttributionUpsertWithWhereUniqueWithoutReferrerInput | ReferralAttributionUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralAttributionCreateManyReferrerInputEnvelope
+    set?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    disconnect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    delete?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    connect?: ReferralAttributionWhereUniqueInput | ReferralAttributionWhereUniqueInput[]
+    update?: ReferralAttributionUpdateWithWhereUniqueWithoutReferrerInput | ReferralAttributionUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralAttributionUpdateManyWithWhereWithoutReferrerInput | ReferralAttributionUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralAttributionScalarWhereInput | ReferralAttributionScalarWhereInput[]
+  }
+
+  export type ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutReferredUserInput
+    upsert?: ReferralAttributionUpsertWithoutReferredUserInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutReferredUserInput, ReferralAttributionUpdateWithoutReferredUserInput>, ReferralAttributionUncheckedUpdateWithoutReferredUserInput>
+  }
+
+  export type ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput> | ReferralRewardCreateWithoutReferrerInput[] | ReferralRewardUncheckedCreateWithoutReferrerInput[]
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferrerInput | ReferralRewardCreateOrConnectWithoutReferrerInput[]
+    upsert?: ReferralRewardUpsertWithWhereUniqueWithoutReferrerInput | ReferralRewardUpsertWithWhereUniqueWithoutReferrerInput[]
+    createMany?: ReferralRewardCreateManyReferrerInputEnvelope
+    set?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    disconnect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    delete?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    connect?: ReferralRewardWhereUniqueInput | ReferralRewardWhereUniqueInput[]
+    update?: ReferralRewardUpdateWithWhereUniqueWithoutReferrerInput | ReferralRewardUpdateWithWhereUniqueWithoutReferrerInput[]
+    updateMany?: ReferralRewardUpdateManyWithWhereWithoutReferrerInput | ReferralRewardUpdateManyWithWhereWithoutReferrerInput[]
+    deleteMany?: ReferralRewardScalarWhereInput | ReferralRewardScalarWhereInput[]
+  }
+
+  export type ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput> | ReferralAuditEventCreateWithoutAdminInput[] | ReferralAuditEventUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutAdminInput | ReferralAuditEventCreateOrConnectWithoutAdminInput[]
+    upsert?: ReferralAuditEventUpsertWithWhereUniqueWithoutAdminInput | ReferralAuditEventUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: ReferralAuditEventCreateManyAdminInputEnvelope
+    set?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    disconnect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    delete?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    update?: ReferralAuditEventUpdateWithWhereUniqueWithoutAdminInput | ReferralAuditEventUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: ReferralAuditEventUpdateManyWithWhereWithoutAdminInput | ReferralAuditEventUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
   }
 
   export type AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput = {
@@ -47345,6 +52814,18 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput
   }
 
+  export type ReferralAttributionCreateNestedOneWithoutFirstDepositInput = {
+    create?: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutFirstDepositInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput = {
+    create?: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutFirstDepositInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
   export type NullableDecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string | null
     increment?: Decimal | DecimalJsLike | number | string
@@ -47397,6 +52878,26 @@ export namespace Prisma {
     delete?: TransactionWhereInput | boolean
     connect?: TransactionWhereUniqueInput
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutDepositInput, TransactionUpdateWithoutDepositInput>, TransactionUncheckedUpdateWithoutDepositInput>
+  }
+
+  export type ReferralAttributionUpdateOneWithoutFirstDepositNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutFirstDepositInput
+    upsert?: ReferralAttributionUpsertWithoutFirstDepositInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutFirstDepositInput, ReferralAttributionUpdateWithoutFirstDepositInput>, ReferralAttributionUncheckedUpdateWithoutFirstDepositInput>
+  }
+
+  export type ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutFirstDepositInput
+    upsert?: ReferralAttributionUpsertWithoutFirstDepositInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutFirstDepositInput, ReferralAttributionUpdateWithoutFirstDepositInput>, ReferralAttributionUncheckedUpdateWithoutFirstDepositInput>
   }
 
   export type UserCreateNestedOneWithoutTransactionsInput = {
@@ -47669,6 +53170,204 @@ export namespace Prisma {
     delete?: TransactionWhereInput | boolean
     connect?: TransactionWhereUniqueInput
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutLedgerEntriesInput, TransactionUpdateWithoutLedgerEntriesInput>, TransactionUncheckedUpdateWithoutLedgerEntriesInput>
+  }
+
+  export type UserCreateNestedOneWithoutReferralsMadeInput = {
+    create?: XOR<UserCreateWithoutReferralsMadeInput, UserUncheckedCreateWithoutReferralsMadeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralsMadeInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReferralAttributionInput = {
+    create?: XOR<UserCreateWithoutReferralAttributionInput, UserUncheckedCreateWithoutReferralAttributionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralAttributionInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type DepositCreateNestedOneWithoutReferralDepositInput = {
+    create?: XOR<DepositCreateWithoutReferralDepositInput, DepositUncheckedCreateWithoutReferralDepositInput>
+    connectOrCreate?: DepositCreateOrConnectWithoutReferralDepositInput
+    connect?: DepositWhereUniqueInput
+  }
+
+  export type GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedCreateWithoutReferralQualificationInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutReferralQualificationInput
+    connect?: GiftCardPurchaseWhereUniqueInput
+  }
+
+  export type ReferralRewardCreateNestedOneWithoutReferralInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferralInput
+    connect?: ReferralRewardWhereUniqueInput
+  }
+
+  export type ReferralAuditEventCreateNestedManyWithoutReferralInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput> | ReferralAuditEventCreateWithoutReferralInput[] | ReferralAuditEventUncheckedCreateWithoutReferralInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutReferralInput | ReferralAuditEventCreateOrConnectWithoutReferralInput[]
+    createMany?: ReferralAuditEventCreateManyReferralInputEnvelope
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+  }
+
+  export type ReferralRewardUncheckedCreateNestedOneWithoutReferralInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferralInput
+    connect?: ReferralRewardWhereUniqueInput
+  }
+
+  export type ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput> | ReferralAuditEventCreateWithoutReferralInput[] | ReferralAuditEventUncheckedCreateWithoutReferralInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutReferralInput | ReferralAuditEventCreateOrConnectWithoutReferralInput[]
+    createMany?: ReferralAuditEventCreateManyReferralInputEnvelope
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+  }
+
+  export type EnumReferralStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReferralStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralsMadeNestedInput = {
+    create?: XOR<UserCreateWithoutReferralsMadeInput, UserUncheckedCreateWithoutReferralsMadeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralsMadeInput
+    upsert?: UserUpsertWithoutReferralsMadeInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralsMadeInput, UserUpdateWithoutReferralsMadeInput>, UserUncheckedUpdateWithoutReferralsMadeInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralAttributionNestedInput = {
+    create?: XOR<UserCreateWithoutReferralAttributionInput, UserUncheckedCreateWithoutReferralAttributionInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralAttributionInput
+    upsert?: UserUpsertWithoutReferralAttributionInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralAttributionInput, UserUpdateWithoutReferralAttributionInput>, UserUncheckedUpdateWithoutReferralAttributionInput>
+  }
+
+  export type DepositUpdateOneWithoutReferralDepositNestedInput = {
+    create?: XOR<DepositCreateWithoutReferralDepositInput, DepositUncheckedCreateWithoutReferralDepositInput>
+    connectOrCreate?: DepositCreateOrConnectWithoutReferralDepositInput
+    upsert?: DepositUpsertWithoutReferralDepositInput
+    disconnect?: DepositWhereInput | boolean
+    delete?: DepositWhereInput | boolean
+    connect?: DepositWhereUniqueInput
+    update?: XOR<XOR<DepositUpdateToOneWithWhereWithoutReferralDepositInput, DepositUpdateWithoutReferralDepositInput>, DepositUncheckedUpdateWithoutReferralDepositInput>
+  }
+
+  export type GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput = {
+    create?: XOR<GiftCardPurchaseCreateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedCreateWithoutReferralQualificationInput>
+    connectOrCreate?: GiftCardPurchaseCreateOrConnectWithoutReferralQualificationInput
+    upsert?: GiftCardPurchaseUpsertWithoutReferralQualificationInput
+    disconnect?: GiftCardPurchaseWhereInput | boolean
+    delete?: GiftCardPurchaseWhereInput | boolean
+    connect?: GiftCardPurchaseWhereUniqueInput
+    update?: XOR<XOR<GiftCardPurchaseUpdateToOneWithWhereWithoutReferralQualificationInput, GiftCardPurchaseUpdateWithoutReferralQualificationInput>, GiftCardPurchaseUncheckedUpdateWithoutReferralQualificationInput>
+  }
+
+  export type ReferralRewardUpdateOneWithoutReferralNestedInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferralInput
+    upsert?: ReferralRewardUpsertWithoutReferralInput
+    disconnect?: ReferralRewardWhereInput | boolean
+    delete?: ReferralRewardWhereInput | boolean
+    connect?: ReferralRewardWhereUniqueInput
+    update?: XOR<XOR<ReferralRewardUpdateToOneWithWhereWithoutReferralInput, ReferralRewardUpdateWithoutReferralInput>, ReferralRewardUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventUpdateManyWithoutReferralNestedInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput> | ReferralAuditEventCreateWithoutReferralInput[] | ReferralAuditEventUncheckedCreateWithoutReferralInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutReferralInput | ReferralAuditEventCreateOrConnectWithoutReferralInput[]
+    upsert?: ReferralAuditEventUpsertWithWhereUniqueWithoutReferralInput | ReferralAuditEventUpsertWithWhereUniqueWithoutReferralInput[]
+    createMany?: ReferralAuditEventCreateManyReferralInputEnvelope
+    set?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    disconnect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    delete?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    update?: ReferralAuditEventUpdateWithWhereUniqueWithoutReferralInput | ReferralAuditEventUpdateWithWhereUniqueWithoutReferralInput[]
+    updateMany?: ReferralAuditEventUpdateManyWithWhereWithoutReferralInput | ReferralAuditEventUpdateManyWithWhereWithoutReferralInput[]
+    deleteMany?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
+  }
+
+  export type ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput = {
+    create?: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+    connectOrCreate?: ReferralRewardCreateOrConnectWithoutReferralInput
+    upsert?: ReferralRewardUpsertWithoutReferralInput
+    disconnect?: ReferralRewardWhereInput | boolean
+    delete?: ReferralRewardWhereInput | boolean
+    connect?: ReferralRewardWhereUniqueInput
+    update?: XOR<XOR<ReferralRewardUpdateToOneWithWhereWithoutReferralInput, ReferralRewardUpdateWithoutReferralInput>, ReferralRewardUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput = {
+    create?: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput> | ReferralAuditEventCreateWithoutReferralInput[] | ReferralAuditEventUncheckedCreateWithoutReferralInput[]
+    connectOrCreate?: ReferralAuditEventCreateOrConnectWithoutReferralInput | ReferralAuditEventCreateOrConnectWithoutReferralInput[]
+    upsert?: ReferralAuditEventUpsertWithWhereUniqueWithoutReferralInput | ReferralAuditEventUpsertWithWhereUniqueWithoutReferralInput[]
+    createMany?: ReferralAuditEventCreateManyReferralInputEnvelope
+    set?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    disconnect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    delete?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    connect?: ReferralAuditEventWhereUniqueInput | ReferralAuditEventWhereUniqueInput[]
+    update?: ReferralAuditEventUpdateWithWhereUniqueWithoutReferralInput | ReferralAuditEventUpdateWithWhereUniqueWithoutReferralInput[]
+    updateMany?: ReferralAuditEventUpdateManyWithWhereWithoutReferralInput | ReferralAuditEventUpdateManyWithWhereWithoutReferralInput[]
+    deleteMany?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
+  }
+
+  export type ReferralAttributionCreateNestedOneWithoutRewardInput = {
+    create?: XOR<ReferralAttributionCreateWithoutRewardInput, ReferralAttributionUncheckedCreateWithoutRewardInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutRewardInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReferralRewardsInput = {
+    create?: XOR<UserCreateWithoutReferralRewardsInput, UserUncheckedCreateWithoutReferralRewardsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralRewardsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumReferralRewardStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ReferralRewardStatus
+  }
+
+  export type ReferralAttributionUpdateOneRequiredWithoutRewardNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutRewardInput, ReferralAttributionUncheckedCreateWithoutRewardInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutRewardInput
+    upsert?: ReferralAttributionUpsertWithoutRewardInput
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutRewardInput, ReferralAttributionUpdateWithoutRewardInput>, ReferralAttributionUncheckedUpdateWithoutRewardInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralRewardsNestedInput = {
+    create?: XOR<UserCreateWithoutReferralRewardsInput, UserUncheckedCreateWithoutReferralRewardsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralRewardsInput
+    upsert?: UserUpsertWithoutReferralRewardsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralRewardsInput, UserUpdateWithoutReferralRewardsInput>, UserUncheckedUpdateWithoutReferralRewardsInput>
+  }
+
+  export type ReferralAttributionCreateNestedOneWithoutAuditEventsInput = {
+    create?: XOR<ReferralAttributionCreateWithoutAuditEventsInput, ReferralAttributionUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutAuditEventsInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReferralAuditActionsInput = {
+    create?: XOR<UserCreateWithoutReferralAuditActionsInput, UserUncheckedCreateWithoutReferralAuditActionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralAuditActionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ReferralAttributionUpdateOneRequiredWithoutAuditEventsNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutAuditEventsInput, ReferralAttributionUncheckedCreateWithoutAuditEventsInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutAuditEventsInput
+    upsert?: ReferralAttributionUpsertWithoutAuditEventsInput
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutAuditEventsInput, ReferralAttributionUpdateWithoutAuditEventsInput>, ReferralAttributionUncheckedUpdateWithoutAuditEventsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutReferralAuditActionsNestedInput = {
+    create?: XOR<UserCreateWithoutReferralAuditActionsInput, UserUncheckedCreateWithoutReferralAuditActionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReferralAuditActionsInput
+    upsert?: UserUpsertWithoutReferralAuditActionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReferralAuditActionsInput, UserUpdateWithoutReferralAuditActionsInput>, UserUncheckedUpdateWithoutReferralAuditActionsInput>
   }
 
   export type UserCreateNestedOneWithoutWithdrawalsInput = {
@@ -48113,6 +53812,18 @@ export namespace Prisma {
     connect?: TransactionWhereUniqueInput
   }
 
+  export type ReferralAttributionCreateNestedOneWithoutQualifyingPurchaseInput = {
+    create?: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutQualifyingPurchaseInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
+  export type ReferralAttributionUncheckedCreateNestedOneWithoutQualifyingPurchaseInput = {
+    create?: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutQualifyingPurchaseInput
+    connect?: ReferralAttributionWhereUniqueInput
+  }
+
   export type EnumGiftCardPurchaseStatusFieldUpdateOperationsInput = {
     set?: $Enums.GiftCardPurchaseStatus
   }
@@ -48141,6 +53852,26 @@ export namespace Prisma {
     delete?: TransactionWhereInput | boolean
     connect?: TransactionWhereUniqueInput
     update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutGiftCardPurchaseInput, TransactionUpdateWithoutGiftCardPurchaseInput>, TransactionUncheckedUpdateWithoutGiftCardPurchaseInput>
+  }
+
+  export type ReferralAttributionUpdateOneWithoutQualifyingPurchaseNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutQualifyingPurchaseInput
+    upsert?: ReferralAttributionUpsertWithoutQualifyingPurchaseInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutQualifyingPurchaseInput, ReferralAttributionUpdateWithoutQualifyingPurchaseInput>, ReferralAttributionUncheckedUpdateWithoutQualifyingPurchaseInput>
+  }
+
+  export type ReferralAttributionUncheckedUpdateOneWithoutQualifyingPurchaseNestedInput = {
+    create?: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+    connectOrCreate?: ReferralAttributionCreateOrConnectWithoutQualifyingPurchaseInput
+    upsert?: ReferralAttributionUpsertWithoutQualifyingPurchaseInput
+    disconnect?: ReferralAttributionWhereInput | boolean
+    delete?: ReferralAttributionWhereInput | boolean
+    connect?: ReferralAttributionWhereUniqueInput
+    update?: XOR<XOR<ReferralAttributionUpdateToOneWithWhereWithoutQualifyingPurchaseInput, ReferralAttributionUpdateWithoutQualifyingPurchaseInput>, ReferralAttributionUncheckedUpdateWithoutQualifyingPurchaseInput>
   }
 
   export type UserCreateNestedOneWithoutAdminGiftCardSandboxTestsInput = {
@@ -48754,6 +54485,40 @@ export namespace Prisma {
     _max?: NestedEnumLedgerEntryTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumReferralStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusFilter<$PrismaModel> | $Enums.ReferralStatus
+  }
+
+  export type NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralStatus | EnumReferralStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralStatus[] | ListEnumReferralStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumReferralRewardStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralRewardStatus | EnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralRewardStatusFilter<$PrismaModel> | $Enums.ReferralRewardStatus
+  }
+
+  export type NestedEnumReferralRewardStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReferralRewardStatus | EnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReferralRewardStatus[] | ListEnumReferralRewardStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumReferralRewardStatusWithAggregatesFilter<$PrismaModel> | $Enums.ReferralRewardStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumReferralRewardStatusFilter<$PrismaModel>
+    _max?: NestedEnumReferralRewardStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
     equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
     in?: $Enums.PaymentMethod[] | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
@@ -49030,6 +54795,7 @@ export namespace Prisma {
     country?: string | null
     countryCode?: string | null
     gender?: string | null
+    referralCode?: string | null
     otpHash: string
     otpExpiresAt: Date | string
     otpAttempts?: number
@@ -49048,6 +54814,7 @@ export namespace Prisma {
     country?: string | null
     countryCode?: string | null
     gender?: string | null
+    referralCode?: string | null
     otpHash: string
     otpExpiresAt: Date | string
     otpAttempts?: number
@@ -49136,6 +54903,7 @@ export namespace Prisma {
     wallet: WalletCreateNestedOneWithoutDepositsInput
     currency: CurrencyCreateNestedOneWithoutDepositsInput
     transaction?: TransactionCreateNestedOneWithoutDepositInput
+    referralDeposit?: ReferralAttributionCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUncheckedCreateWithoutUserInput = {
@@ -49158,6 +54926,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: string | null
+    referralDeposit?: ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositCreateOrConnectWithoutUserInput = {
@@ -49501,6 +55270,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -49508,6 +55278,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -49522,6 +55294,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
     transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+    referralQualification?: ReferralAttributionCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseUncheckedCreateWithoutUserInput = {
@@ -49541,6 +55314,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -49548,6 +55322,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -49560,6 +55336,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
+    referralQualification?: ReferralAttributionUncheckedCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseCreateOrConnectWithoutUserInput = {
@@ -49569,6 +55346,143 @@ export namespace Prisma {
 
   export type GiftCardPurchaseCreateManyUserInputEnvelope = {
     data: GiftCardPurchaseCreateManyUserInput | GiftCardPurchaseCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReferralAttributionCreateWithoutReferrerInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutReferrerInput = {
+    id?: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutReferrerInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralAttributionCreateManyReferrerInputEnvelope = {
+    data: ReferralAttributionCreateManyReferrerInput | ReferralAttributionCreateManyReferrerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReferralAttributionCreateWithoutReferredUserInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutReferredUserInput = {
+    id?: string
+    referrerId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutReferredUserInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+  }
+
+  export type ReferralRewardCreateWithoutReferrerInput = {
+    id?: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referral: ReferralAttributionCreateNestedOneWithoutRewardInput
+  }
+
+  export type ReferralRewardUncheckedCreateWithoutReferrerInput = {
+    id?: string
+    referralId: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralRewardCreateOrConnectWithoutReferrerInput = {
+    where: ReferralRewardWhereUniqueInput
+    create: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralRewardCreateManyReferrerInputEnvelope = {
+    data: ReferralRewardCreateManyReferrerInput | ReferralRewardCreateManyReferrerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReferralAuditEventCreateWithoutAdminInput = {
+    id?: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+    referral: ReferralAttributionCreateNestedOneWithoutAuditEventsInput
+  }
+
+  export type ReferralAuditEventUncheckedCreateWithoutAdminInput = {
+    id?: string
+    referralId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReferralAuditEventCreateOrConnectWithoutAdminInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    create: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput>
+  }
+
+  export type ReferralAuditEventCreateManyAdminInputEnvelope = {
+    data: ReferralAuditEventCreateManyAdminInput | ReferralAuditEventCreateManyAdminInput[]
     skipDuplicates?: boolean
   }
 
@@ -49902,6 +55816,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -49920,6 +55835,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     countryCode?: NullableStringFieldUpdateOperationsInput | string | null
     gender?: NullableStringFieldUpdateOperationsInput | string | null
+    referralCode?: NullableStringFieldUpdateOperationsInput | string | null
     otpHash?: StringFieldUpdateOperationsInput | string
     otpExpiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
     otpAttempts?: IntFieldUpdateOperationsInput | number
@@ -50294,6 +56210,7 @@ export namespace Prisma {
     denominationType?: StringNullableFilter<"GiftCardPurchase"> | string | null
     quantity?: IntFilter<"GiftCardPurchase"> | number
     amount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     providerAmount?: DecimalNullableFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
@@ -50301,6 +56218,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFilter<"GiftCardPurchase"> | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFilter<"GiftCardPurchase"> | $Enums.GiftCardPurchaseStatus
     providerStatus?: StringNullableFilter<"GiftCardPurchase"> | string | null
     providerMessage?: StringNullableFilter<"GiftCardPurchase"> | string | null
@@ -50313,6 +56232,140 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     updatedAt?: DateTimeFilter<"GiftCardPurchase"> | Date | string
     completedAt?: DateTimeNullableFilter<"GiftCardPurchase"> | Date | string | null
+  }
+
+  export type ReferralAttributionUpsertWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralAttributionWhereUniqueInput
+    update: XOR<ReferralAttributionUpdateWithoutReferrerInput, ReferralAttributionUncheckedUpdateWithoutReferrerInput>
+    create: XOR<ReferralAttributionCreateWithoutReferrerInput, ReferralAttributionUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralAttributionUpdateWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralAttributionWhereUniqueInput
+    data: XOR<ReferralAttributionUpdateWithoutReferrerInput, ReferralAttributionUncheckedUpdateWithoutReferrerInput>
+  }
+
+  export type ReferralAttributionUpdateManyWithWhereWithoutReferrerInput = {
+    where: ReferralAttributionScalarWhereInput
+    data: XOR<ReferralAttributionUpdateManyMutationInput, ReferralAttributionUncheckedUpdateManyWithoutReferrerInput>
+  }
+
+  export type ReferralAttributionScalarWhereInput = {
+    AND?: ReferralAttributionScalarWhereInput | ReferralAttributionScalarWhereInput[]
+    OR?: ReferralAttributionScalarWhereInput[]
+    NOT?: ReferralAttributionScalarWhereInput | ReferralAttributionScalarWhereInput[]
+    id?: StringFilter<"ReferralAttribution"> | string
+    referrerId?: StringFilter<"ReferralAttribution"> | string
+    referredUserId?: StringFilter<"ReferralAttribution"> | string
+    referralCode?: StringFilter<"ReferralAttribution"> | string
+    status?: EnumReferralStatusFilter<"ReferralAttribution"> | $Enums.ReferralStatus
+    firstDepositId?: StringNullableFilter<"ReferralAttribution"> | string | null
+    firstDepositAmountUsd?: DecimalNullableFilter<"ReferralAttribution"> | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: StringNullableFilter<"ReferralAttribution"> | string | null
+    createdAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralAttribution"> | Date | string
+  }
+
+  export type ReferralAttributionUpsertWithoutReferredUserInput = {
+    update: XOR<ReferralAttributionUpdateWithoutReferredUserInput, ReferralAttributionUncheckedUpdateWithoutReferredUserInput>
+    create: XOR<ReferralAttributionCreateWithoutReferredUserInput, ReferralAttributionUncheckedCreateWithoutReferredUserInput>
+    where?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionUpdateToOneWithWhereWithoutReferredUserInput = {
+    where?: ReferralAttributionWhereInput
+    data: XOR<ReferralAttributionUpdateWithoutReferredUserInput, ReferralAttributionUncheckedUpdateWithoutReferredUserInput>
+  }
+
+  export type ReferralAttributionUpdateWithoutReferredUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutReferredUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralRewardUpsertWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralRewardWhereUniqueInput
+    update: XOR<ReferralRewardUpdateWithoutReferrerInput, ReferralRewardUncheckedUpdateWithoutReferrerInput>
+    create: XOR<ReferralRewardCreateWithoutReferrerInput, ReferralRewardUncheckedCreateWithoutReferrerInput>
+  }
+
+  export type ReferralRewardUpdateWithWhereUniqueWithoutReferrerInput = {
+    where: ReferralRewardWhereUniqueInput
+    data: XOR<ReferralRewardUpdateWithoutReferrerInput, ReferralRewardUncheckedUpdateWithoutReferrerInput>
+  }
+
+  export type ReferralRewardUpdateManyWithWhereWithoutReferrerInput = {
+    where: ReferralRewardScalarWhereInput
+    data: XOR<ReferralRewardUpdateManyMutationInput, ReferralRewardUncheckedUpdateManyWithoutReferrerInput>
+  }
+
+  export type ReferralRewardScalarWhereInput = {
+    AND?: ReferralRewardScalarWhereInput | ReferralRewardScalarWhereInput[]
+    OR?: ReferralRewardScalarWhereInput[]
+    NOT?: ReferralRewardScalarWhereInput | ReferralRewardScalarWhereInput[]
+    id?: StringFilter<"ReferralReward"> | string
+    referralId?: StringFilter<"ReferralReward"> | string
+    referrerId?: StringFilter<"ReferralReward"> | string
+    amountUsd?: DecimalFilter<"ReferralReward"> | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFilter<"ReferralReward"> | $Enums.ReferralRewardStatus
+    creditedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    reviewReason?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedById?: StringNullableFilter<"ReferralReward"> | string | null
+    reviewedAt?: DateTimeNullableFilter<"ReferralReward"> | Date | string | null
+    createdAt?: DateTimeFilter<"ReferralReward"> | Date | string
+    updatedAt?: DateTimeFilter<"ReferralReward"> | Date | string
+  }
+
+  export type ReferralAuditEventUpsertWithWhereUniqueWithoutAdminInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    update: XOR<ReferralAuditEventUpdateWithoutAdminInput, ReferralAuditEventUncheckedUpdateWithoutAdminInput>
+    create: XOR<ReferralAuditEventCreateWithoutAdminInput, ReferralAuditEventUncheckedCreateWithoutAdminInput>
+  }
+
+  export type ReferralAuditEventUpdateWithWhereUniqueWithoutAdminInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    data: XOR<ReferralAuditEventUpdateWithoutAdminInput, ReferralAuditEventUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type ReferralAuditEventUpdateManyWithWhereWithoutAdminInput = {
+    where: ReferralAuditEventScalarWhereInput
+    data: XOR<ReferralAuditEventUpdateManyMutationInput, ReferralAuditEventUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type ReferralAuditEventScalarWhereInput = {
+    AND?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
+    OR?: ReferralAuditEventScalarWhereInput[]
+    NOT?: ReferralAuditEventScalarWhereInput | ReferralAuditEventScalarWhereInput[]
+    id?: StringFilter<"ReferralAuditEvent"> | string
+    referralId?: StringFilter<"ReferralAuditEvent"> | string
+    adminUserId?: StringFilter<"ReferralAuditEvent"> | string
+    action?: StringFilter<"ReferralAuditEvent"> | string
+    reason?: StringFilter<"ReferralAuditEvent"> | string
+    previousStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    newStatus?: StringNullableFilter<"ReferralAuditEvent"> | string | null
+    createdAt?: DateTimeFilter<"ReferralAuditEvent"> | Date | string
   }
 
   export type AdminGiftCardSandboxTestUpsertWithWhereUniqueWithoutAdminUserInput = {
@@ -50511,6 +56564,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50527,6 +56581,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -50556,6 +56614,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50572,6 +56631,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -50617,6 +56680,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50633,6 +56697,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -50662,6 +56730,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50678,6 +56747,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -50707,6 +56780,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50723,6 +56797,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -50752,6 +56830,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50768,6 +56847,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -50813,6 +56896,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50829,6 +56913,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -50858,6 +56946,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50874,6 +56963,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -50903,6 +56996,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50919,6 +57013,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -50948,6 +57046,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -50964,6 +57063,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -51009,6 +57112,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51025,6 +57129,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -51054,6 +57162,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51070,6 +57179,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -51099,6 +57212,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -51115,6 +57229,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -51144,6 +57262,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -51160,6 +57279,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -51205,6 +57328,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51221,6 +57345,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -51250,6 +57378,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51266,6 +57395,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -51295,6 +57428,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -51311,6 +57445,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -51340,6 +57478,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -51356,6 +57495,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -51373,6 +57516,8 @@ export namespace Prisma {
     id?: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
     currency: CurrencyCreateNestedOneWithoutBalancesInput
@@ -51383,6 +57528,8 @@ export namespace Prisma {
     currencyCode: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51417,6 +57564,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutDepositsInput
     currency: CurrencyCreateNestedOneWithoutDepositsInput
     transaction?: TransactionCreateNestedOneWithoutDepositInput
+    referralDeposit?: ReferralAttributionCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUncheckedCreateWithoutWalletInput = {
@@ -51439,6 +57587,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: string | null
+    referralDeposit?: ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositCreateOrConnectWithoutWalletInput = {
@@ -51517,6 +57666,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -51535,6 +57688,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -51638,6 +57795,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -51645,6 +57803,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -51659,6 +57819,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     user: UserCreateNestedOneWithoutGiftCardPurchasesInput
     transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+    referralQualification?: ReferralAttributionCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseUncheckedCreateWithoutWalletInput = {
@@ -51678,6 +57839,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -51685,6 +57847,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -51697,6 +57861,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
+    referralQualification?: ReferralAttributionUncheckedCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseCreateOrConnectWithoutWalletInput = {
@@ -51741,6 +57906,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51757,6 +57923,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -51786,6 +57956,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -51802,6 +57973,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -51835,6 +58010,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"WalletBalance"> | string
     availableBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFilter<"WalletBalance"> | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFilter<"WalletBalance"> | Date | string
     updatedAt?: DateTimeFilter<"WalletBalance"> | Date | string
   }
@@ -51901,6 +58078,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
     operationKey?: StringNullableFilter<"LedgerEntry"> | string | null
     reference?: StringNullableFilter<"LedgerEntry"> | string | null
     reason?: StringNullableFilter<"LedgerEntry"> | string | null
@@ -51943,6 +58124,8 @@ export namespace Prisma {
     id?: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
     wallet: WalletCreateNestedOneWithoutBalancesInput
@@ -51953,6 +58136,8 @@ export namespace Prisma {
     walletId: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -51987,6 +58172,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutDepositsInput
     wallet: WalletCreateNestedOneWithoutDepositsInput
     transaction?: TransactionCreateNestedOneWithoutDepositInput
+    referralDeposit?: ReferralAttributionCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUncheckedCreateWithoutCurrencyInput = {
@@ -52009,6 +58195,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionId?: string | null
+    referralDeposit?: ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositCreateOrConnectWithoutCurrencyInput = {
@@ -52087,6 +58274,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -52105,6 +58296,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -52762,6 +58957,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -52778,6 +58974,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -52807,6 +59007,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -52823,6 +59024,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -52965,6 +59170,39 @@ export namespace Prisma {
     create: XOR<TransactionCreateWithoutDepositInput, TransactionUncheckedCreateWithoutDepositInput>
   }
 
+  export type ReferralAttributionCreateWithoutFirstDepositInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutFirstDepositInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutFirstDepositInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+  }
+
   export type UserUpsertWithoutDepositsInput = {
     update: XOR<UserUpdateWithoutDepositsInput, UserUncheckedUpdateWithoutDepositsInput>
     create: XOR<UserCreateWithoutDepositsInput, UserUncheckedCreateWithoutDepositsInput>
@@ -52997,6 +59235,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53013,6 +59252,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -53042,6 +59285,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53058,6 +59302,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -53213,6 +59461,45 @@ export namespace Prisma {
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
+  export type ReferralAttributionUpsertWithoutFirstDepositInput = {
+    update: XOR<ReferralAttributionUpdateWithoutFirstDepositInput, ReferralAttributionUncheckedUpdateWithoutFirstDepositInput>
+    create: XOR<ReferralAttributionCreateWithoutFirstDepositInput, ReferralAttributionUncheckedCreateWithoutFirstDepositInput>
+    where?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionUpdateToOneWithWhereWithoutFirstDepositInput = {
+    where?: ReferralAttributionWhereInput
+    data: XOR<ReferralAttributionUpdateWithoutFirstDepositInput, ReferralAttributionUncheckedUpdateWithoutFirstDepositInput>
+  }
+
+  export type ReferralAttributionUpdateWithoutFirstDepositInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutFirstDepositInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
   export type UserCreateWithoutTransactionsInput = {
     id?: string
     email: string
@@ -53234,6 +59521,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -53250,6 +59538,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -53279,6 +59571,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -53295,6 +59588,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -53404,6 +59701,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutDepositsInput
     wallet: WalletCreateNestedOneWithoutDepositsInput
     currency: CurrencyCreateNestedOneWithoutDepositsInput
+    referralDeposit?: ReferralAttributionCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositUncheckedCreateWithoutTransactionInput = {
@@ -53426,6 +59724,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
+    referralDeposit?: ReferralAttributionUncheckedCreateNestedOneWithoutFirstDepositInput
   }
 
   export type DepositCreateOrConnectWithoutTransactionInput = {
@@ -53584,6 +59883,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -53591,6 +59891,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -53605,6 +59907,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     user: UserCreateNestedOneWithoutGiftCardPurchasesInput
     wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
+    referralQualification?: ReferralAttributionCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseUncheckedCreateWithoutTransactionInput = {
@@ -53624,6 +59927,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -53631,6 +59935,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -53643,6 +59949,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
+    referralQualification?: ReferralAttributionUncheckedCreateNestedOneWithoutQualifyingPurchaseInput
   }
 
   export type GiftCardPurchaseCreateOrConnectWithoutTransactionInput = {
@@ -53658,6 +59965,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -53676,6 +59987,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -53724,6 +60039,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53740,6 +60056,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -53769,6 +60089,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -53785,6 +60106,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -53912,6 +60237,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     wallet?: WalletUpdateOneRequiredWithoutDepositsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutDepositsNestedInput
+    referralDeposit?: ReferralAttributionUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateWithoutTransactionInput = {
@@ -53934,6 +60260,7 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referralDeposit?: ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type WithdrawalUpsertWithoutTransactionInput = {
@@ -54110,6 +60437,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54117,6 +60445,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54131,6 +60461,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
     wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    referralQualification?: ReferralAttributionUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateWithoutTransactionInput = {
@@ -54150,6 +60481,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -54157,6 +60489,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -54169,6 +60503,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referralQualification?: ReferralAttributionUncheckedUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type LedgerEntryUpsertWithWhereUniqueWithoutTransactionInput = {
@@ -54463,6 +60798,1420 @@ export namespace Prisma {
     giftCardPurchase?: GiftCardPurchaseUncheckedUpdateOneWithoutTransactionNestedInput
   }
 
+  export type UserCreateWithoutReferralsMadeInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralsMadeInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralsMadeInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralsMadeInput, UserUncheckedCreateWithoutReferralsMadeInput>
+  }
+
+  export type UserCreateWithoutReferralAttributionInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralAttributionInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralAttributionInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralAttributionInput, UserUncheckedCreateWithoutReferralAttributionInput>
+  }
+
+  export type DepositCreateWithoutReferralDepositInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate?: Decimal | DecimalJsLike | number | string | null
+    provider?: $Enums.PaymentProvider
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    country?: string | null
+    countryCode?: string | null
+    status?: $Enums.DepositStatus
+    idempotencyKey?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutDepositsInput
+    wallet: WalletCreateNestedOneWithoutDepositsInput
+    currency: CurrencyCreateNestedOneWithoutDepositsInput
+    transaction?: TransactionCreateNestedOneWithoutDepositInput
+  }
+
+  export type DepositUncheckedCreateWithoutReferralDepositInput = {
+    id?: string
+    userId: string
+    walletId: string
+    currencyCode: string
+    amount: Decimal | DecimalJsLike | number | string
+    fee?: Decimal | DecimalJsLike | number | string
+    netAmount: Decimal | DecimalJsLike | number | string
+    exchangeRate?: Decimal | DecimalJsLike | number | string | null
+    provider?: $Enums.PaymentProvider
+    providerTransactionId?: string | null
+    providerReference?: string | null
+    paymentMethod?: $Enums.PaymentMethod | null
+    country?: string | null
+    countryCode?: string | null
+    status?: $Enums.DepositStatus
+    idempotencyKey?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactionId?: string | null
+  }
+
+  export type DepositCreateOrConnectWithoutReferralDepositInput = {
+    where: DepositWhereUniqueInput
+    create: XOR<DepositCreateWithoutReferralDepositInput, DepositUncheckedCreateWithoutReferralDepositInput>
+  }
+
+  export type GiftCardPurchaseCreateWithoutReferralQualificationInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutGiftCardPurchasesInput
+    wallet: WalletCreateNestedOneWithoutGiftCardPurchasesInput
+    transaction?: TransactionCreateNestedOneWithoutGiftCardPurchaseInput
+  }
+
+  export type GiftCardPurchaseUncheckedCreateWithoutReferralQualificationInput = {
+    id?: string
+    reference: string
+    idempotencyKey: string
+    userId: string
+    walletId: string
+    transactionId?: string | null
+    provider?: $Enums.PaymentProvider
+    providerProductId: string
+    providerReference?: string | null
+    redeemId?: string | null
+    brandNameSnapshot?: string | null
+    productNameSnapshot?: string | null
+    countryCode: string
+    currencyCode: string
+    denominationType?: string | null
+    quantity?: number
+    amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
+    providerAmount?: Decimal | DecimalJsLike | number | string | null
+    fee?: Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
+    customerRatePercent?: Decimal | DecimalJsLike | number | string
+    customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
+    status?: $Enums.GiftCardPurchaseStatus
+    providerStatus?: string | null
+    providerMessage?: string | null
+    voucherCiphertext?: string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completedAt?: Date | string | null
+  }
+
+  export type GiftCardPurchaseCreateOrConnectWithoutReferralQualificationInput = {
+    where: GiftCardPurchaseWhereUniqueInput
+    create: XOR<GiftCardPurchaseCreateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedCreateWithoutReferralQualificationInput>
+  }
+
+  export type ReferralRewardCreateWithoutReferralInput = {
+    id?: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralRewardsInput
+  }
+
+  export type ReferralRewardUncheckedCreateWithoutReferralInput = {
+    id?: string
+    referrerId: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralRewardCreateOrConnectWithoutReferralInput = {
+    where: ReferralRewardWhereUniqueInput
+    create: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventCreateWithoutReferralInput = {
+    id?: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+    admin: UserCreateNestedOneWithoutReferralAuditActionsInput
+  }
+
+  export type ReferralAuditEventUncheckedCreateWithoutReferralInput = {
+    id?: string
+    adminUserId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReferralAuditEventCreateOrConnectWithoutReferralInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    create: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventCreateManyReferralInputEnvelope = {
+    data: ReferralAuditEventCreateManyReferralInput | ReferralAuditEventCreateManyReferralInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutReferralsMadeInput = {
+    update: XOR<UserUpdateWithoutReferralsMadeInput, UserUncheckedUpdateWithoutReferralsMadeInput>
+    create: XOR<UserCreateWithoutReferralsMadeInput, UserUncheckedCreateWithoutReferralsMadeInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralsMadeInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralsMadeInput, UserUncheckedUpdateWithoutReferralsMadeInput>
+  }
+
+  export type UserUpdateWithoutReferralsMadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralsMadeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUpsertWithoutReferralAttributionInput = {
+    update: XOR<UserUpdateWithoutReferralAttributionInput, UserUncheckedUpdateWithoutReferralAttributionInput>
+    create: XOR<UserCreateWithoutReferralAttributionInput, UserUncheckedCreateWithoutReferralAttributionInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralAttributionInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralAttributionInput, UserUncheckedUpdateWithoutReferralAttributionInput>
+  }
+
+  export type UserUpdateWithoutReferralAttributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralAttributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type DepositUpsertWithoutReferralDepositInput = {
+    update: XOR<DepositUpdateWithoutReferralDepositInput, DepositUncheckedUpdateWithoutReferralDepositInput>
+    create: XOR<DepositCreateWithoutReferralDepositInput, DepositUncheckedCreateWithoutReferralDepositInput>
+    where?: DepositWhereInput
+  }
+
+  export type DepositUpdateToOneWithWhereWithoutReferralDepositInput = {
+    where?: DepositWhereInput
+    data: XOR<DepositUpdateWithoutReferralDepositInput, DepositUncheckedUpdateWithoutReferralDepositInput>
+  }
+
+  export type DepositUpdateWithoutReferralDepositInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDepositStatusFieldUpdateOperationsInput | $Enums.DepositStatus
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutDepositsNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutDepositsNestedInput
+    currency?: CurrencyUpdateOneRequiredWithoutDepositsNestedInput
+    transaction?: TransactionUpdateOneWithoutDepositNestedInput
+  }
+
+  export type DepositUncheckedUpdateWithoutReferralDepositInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    paymentMethod?: NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumDepositStatusFieldUpdateOperationsInput | $Enums.DepositStatus
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type GiftCardPurchaseUpsertWithoutReferralQualificationInput = {
+    update: XOR<GiftCardPurchaseUpdateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedUpdateWithoutReferralQualificationInput>
+    create: XOR<GiftCardPurchaseCreateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedCreateWithoutReferralQualificationInput>
+    where?: GiftCardPurchaseWhereInput
+  }
+
+  export type GiftCardPurchaseUpdateToOneWithWhereWithoutReferralQualificationInput = {
+    where?: GiftCardPurchaseWhereInput
+    data: XOR<GiftCardPurchaseUpdateWithoutReferralQualificationInput, GiftCardPurchaseUncheckedUpdateWithoutReferralQualificationInput>
+  }
+
+  export type GiftCardPurchaseUpdateWithoutReferralQualificationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
+    transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+  }
+
+  export type GiftCardPurchaseUncheckedUpdateWithoutReferralQualificationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
+    providerProductId?: StringFieldUpdateOperationsInput | string
+    providerReference?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemId?: NullableStringFieldUpdateOperationsInput | string | null
+    brandNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    productNameSnapshot?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: StringFieldUpdateOperationsInput | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    denominationType?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: IntFieldUpdateOperationsInput | number
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentPercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
+    providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    voucherCiphertext?: NullableStringFieldUpdateOperationsInput | string | null
+    redeemDetails?: NullableJsonNullValueInput | InputJsonValue
+    providerMetadata?: NullableJsonNullValueInput | InputJsonValue
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    successEmailAttemptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReferralRewardUpsertWithoutReferralInput = {
+    update: XOR<ReferralRewardUpdateWithoutReferralInput, ReferralRewardUncheckedUpdateWithoutReferralInput>
+    create: XOR<ReferralRewardCreateWithoutReferralInput, ReferralRewardUncheckedCreateWithoutReferralInput>
+    where?: ReferralRewardWhereInput
+  }
+
+  export type ReferralRewardUpdateToOneWithWhereWithoutReferralInput = {
+    where?: ReferralRewardWhereInput
+    data: XOR<ReferralRewardUpdateWithoutReferralInput, ReferralRewardUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type ReferralRewardUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralRewardsNestedInput
+  }
+
+  export type ReferralRewardUncheckedUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventUpsertWithWhereUniqueWithoutReferralInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    update: XOR<ReferralAuditEventUpdateWithoutReferralInput, ReferralAuditEventUncheckedUpdateWithoutReferralInput>
+    create: XOR<ReferralAuditEventCreateWithoutReferralInput, ReferralAuditEventUncheckedCreateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventUpdateWithWhereUniqueWithoutReferralInput = {
+    where: ReferralAuditEventWhereUniqueInput
+    data: XOR<ReferralAuditEventUpdateWithoutReferralInput, ReferralAuditEventUncheckedUpdateWithoutReferralInput>
+  }
+
+  export type ReferralAuditEventUpdateManyWithWhereWithoutReferralInput = {
+    where: ReferralAuditEventScalarWhereInput
+    data: XOR<ReferralAuditEventUpdateManyMutationInput, ReferralAuditEventUncheckedUpdateManyWithoutReferralInput>
+  }
+
+  export type ReferralAttributionCreateWithoutRewardInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutRewardInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutRewardInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutRewardInput, ReferralAttributionUncheckedCreateWithoutRewardInput>
+  }
+
+  export type UserCreateWithoutReferralRewardsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralRewardsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralRewardsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralRewardsInput, UserUncheckedCreateWithoutReferralRewardsInput>
+  }
+
+  export type ReferralAttributionUpsertWithoutRewardInput = {
+    update: XOR<ReferralAttributionUpdateWithoutRewardInput, ReferralAttributionUncheckedUpdateWithoutRewardInput>
+    create: XOR<ReferralAttributionCreateWithoutRewardInput, ReferralAttributionUncheckedCreateWithoutRewardInput>
+    where?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionUpdateToOneWithWhereWithoutRewardInput = {
+    where?: ReferralAttributionWhereInput
+    data: XOR<ReferralAttributionUpdateWithoutRewardInput, ReferralAttributionUncheckedUpdateWithoutRewardInput>
+  }
+
+  export type ReferralAttributionUpdateWithoutRewardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutRewardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
+  export type UserUpsertWithoutReferralRewardsInput = {
+    update: XOR<UserUpdateWithoutReferralRewardsInput, UserUncheckedUpdateWithoutReferralRewardsInput>
+    create: XOR<UserCreateWithoutReferralRewardsInput, UserUncheckedCreateWithoutReferralRewardsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralRewardsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralRewardsInput, UserUncheckedUpdateWithoutReferralRewardsInput>
+  }
+
+  export type UserUpdateWithoutReferralRewardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralRewardsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type ReferralAttributionCreateWithoutAuditEventsInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    qualifyingPurchase?: GiftCardPurchaseCreateNestedOneWithoutReferralQualificationInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutAuditEventsInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutAuditEventsInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutAuditEventsInput, ReferralAttributionUncheckedCreateWithoutAuditEventsInput>
+  }
+
+  export type UserCreateWithoutReferralAuditActionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionCreateNestedManyWithoutUserInput
+    wallet?: WalletCreateNestedOneWithoutUserInput
+    deposits?: DepositCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserUncheckedCreateWithoutReferralAuditActionsInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    firstName: string
+    lastName: string
+    username?: string | null
+    displayName?: string | null
+    phone?: string | null
+    country?: string | null
+    countryCode?: string | null
+    gender?: string | null
+    dateOfBirth?: Date | string | null
+    bio?: string | null
+    address?: string | null
+    profileImageUrl?: string | null
+    isEmailVerified?: boolean
+    isProfileComplete?: boolean
+    isVerified?: boolean
+    isActive?: boolean
+    role?: $Enums.UserRole
+    referralCode: string
+    transactionPinHash?: string | null
+    transactionPinFailedAttempts?: number
+    transactionPinLockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
+    pendingVerification?: PendingRegistrationUncheckedCreateNestedOneWithoutExistingUserInput
+    refreshSessions?: RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+    wallet?: WalletUncheckedCreateNestedOneWithoutUserInput
+    deposits?: DepositUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalUncheckedCreateNestedManyWithoutUserInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
+    beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
+    giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
+    supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
+    supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByUserInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedCreateNestedManyWithoutUploadedByAdminInput
+  }
+
+  export type UserCreateOrConnectWithoutReferralAuditActionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReferralAuditActionsInput, UserUncheckedCreateWithoutReferralAuditActionsInput>
+  }
+
+  export type ReferralAttributionUpsertWithoutAuditEventsInput = {
+    update: XOR<ReferralAttributionUpdateWithoutAuditEventsInput, ReferralAttributionUncheckedUpdateWithoutAuditEventsInput>
+    create: XOR<ReferralAttributionCreateWithoutAuditEventsInput, ReferralAttributionUncheckedCreateWithoutAuditEventsInput>
+    where?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionUpdateToOneWithWhereWithoutAuditEventsInput = {
+    where?: ReferralAttributionWhereInput
+    data: XOR<ReferralAttributionUpdateWithoutAuditEventsInput, ReferralAttributionUncheckedUpdateWithoutAuditEventsInput>
+  }
+
+  export type ReferralAttributionUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutAuditEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+  }
+
+  export type UserUpsertWithoutReferralAuditActionsInput = {
+    update: XOR<UserUpdateWithoutReferralAuditActionsInput, UserUncheckedUpdateWithoutReferralAuditActionsInput>
+    create: XOR<UserCreateWithoutReferralAuditActionsInput, UserUncheckedCreateWithoutReferralAuditActionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReferralAuditActionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReferralAuditActionsInput, UserUncheckedUpdateWithoutReferralAuditActionsInput>
+  }
+
+  export type UserUpdateWithoutReferralAuditActionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUpdateManyWithoutUserNestedInput
+    wallet?: WalletUpdateOneWithoutUserNestedInput
+    deposits?: DepositUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReferralAuditActionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    countryCode?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
+    isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
+    transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
+    transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
+    transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
+    pendingVerification?: PendingRegistrationUncheckedUpdateOneWithoutExistingUserNestedInput
+    refreshSessions?: RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+    wallet?: WalletUncheckedUpdateOneWithoutUserNestedInput
+    deposits?: DepositUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalUncheckedUpdateManyWithoutUserNestedInput
+    withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
+    beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
+    giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
+    supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
+    supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+    uploadedSupportAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByUserNestedInput
+    uploadedAdminAttachments?: SupportAttachmentUncheckedUpdateManyWithoutUploadedByAdminNestedInput
+  }
+
   export type UserCreateWithoutWithdrawalsInput = {
     id?: string
     email: string
@@ -54484,6 +62233,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -54500,6 +62250,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -54529,6 +62283,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -54545,6 +62300,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -54946,6 +62705,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -54962,6 +62722,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -54991,6 +62755,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55007,6 +62772,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -55419,6 +63188,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -55435,6 +63205,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -55464,6 +63238,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -55480,6 +63255,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -55691,6 +63470,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55707,6 +63487,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -55736,6 +63520,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -55752,6 +63537,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -55903,6 +63692,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -55919,6 +63709,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -55948,6 +63742,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -55964,6 +63759,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -56128,6 +63927,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56144,6 +63944,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -56173,6 +63977,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56189,6 +63994,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -56567,6 +64376,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -56583,6 +64393,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -56612,6 +64426,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -56628,6 +64443,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -56726,6 +64545,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56742,6 +64562,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -56771,6 +64595,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56787,6 +64612,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -56875,6 +64704,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -56891,6 +64721,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -56920,6 +64754,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -56936,6 +64771,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedCreateNestedManyWithoutUserInput
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -57031,6 +64870,39 @@ export namespace Prisma {
     create: XOR<TransactionCreateWithoutGiftCardPurchaseInput, TransactionUncheckedCreateWithoutGiftCardPurchaseInput>
   }
 
+  export type ReferralAttributionCreateWithoutQualifyingPurchaseInput = {
+    id?: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    referrer: UserCreateNestedOneWithoutReferralsMadeInput
+    referredUser: UserCreateNestedOneWithoutReferralAttributionInput
+    firstDeposit?: DepositCreateNestedOneWithoutReferralDepositInput
+    reward?: ReferralRewardCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput = {
+    id?: string
+    referrerId: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reward?: ReferralRewardUncheckedCreateNestedOneWithoutReferralInput
+    auditEvents?: ReferralAuditEventUncheckedCreateNestedManyWithoutReferralInput
+  }
+
+  export type ReferralAttributionCreateOrConnectWithoutQualifyingPurchaseInput = {
+    where: ReferralAttributionWhereUniqueInput
+    create: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+  }
+
   export type UserUpsertWithoutGiftCardPurchasesInput = {
     update: XOR<UserUpdateWithoutGiftCardPurchasesInput, UserUncheckedUpdateWithoutGiftCardPurchasesInput>
     create: XOR<UserCreateWithoutGiftCardPurchasesInput, UserUncheckedCreateWithoutGiftCardPurchasesInput>
@@ -57063,6 +64935,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57079,6 +64952,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -57108,6 +64985,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57124,6 +65002,10 @@ export namespace Prisma {
     withdrawalQuotes?: WithdrawalQuoteUncheckedUpdateManyWithoutUserNestedInput
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -57226,6 +65108,45 @@ export namespace Prisma {
     ledgerEntries?: LedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
+  export type ReferralAttributionUpsertWithoutQualifyingPurchaseInput = {
+    update: XOR<ReferralAttributionUpdateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedUpdateWithoutQualifyingPurchaseInput>
+    create: XOR<ReferralAttributionCreateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedCreateWithoutQualifyingPurchaseInput>
+    where?: ReferralAttributionWhereInput
+  }
+
+  export type ReferralAttributionUpdateToOneWithWhereWithoutQualifyingPurchaseInput = {
+    where?: ReferralAttributionWhereInput
+    data: XOR<ReferralAttributionUpdateWithoutQualifyingPurchaseInput, ReferralAttributionUncheckedUpdateWithoutQualifyingPurchaseInput>
+  }
+
+  export type ReferralAttributionUpdateWithoutQualifyingPurchaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrer?: UserUpdateOneRequiredWithoutReferralsMadeNestedInput
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutQualifyingPurchaseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referrerId?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
   export type UserCreateWithoutAdminGiftCardSandboxTestsInput = {
     id?: string
     email: string
@@ -57247,6 +65168,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57264,6 +65186,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -57292,6 +65218,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57309,6 +65236,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -57353,6 +65284,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57370,6 +65302,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -57398,6 +65334,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57415,6 +65352,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -57443,6 +65384,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57460,6 +65402,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -57488,6 +65434,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57505,6 +65452,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -57538,6 +65489,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57555,6 +65507,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageCreateNestedManyWithoutUserInput
@@ -57583,6 +65539,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57600,6 +65557,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     supportMessages?: SupportMessageUncheckedCreateNestedManyWithoutUserInput
@@ -57678,6 +65639,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57695,6 +65657,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -57723,6 +65689,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57740,6 +65707,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -57779,6 +65750,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57796,6 +65768,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUpdateManyWithoutUserNestedInput
@@ -57824,6 +65800,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -57841,6 +65818,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     supportMessages?: SupportMessageUncheckedUpdateManyWithoutUserNestedInput
@@ -57922,6 +65903,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57939,6 +65921,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -57967,6 +65953,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -57984,6 +65971,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -58107,6 +66098,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58124,6 +66116,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -58152,6 +66148,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58169,6 +66166,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -58242,6 +66243,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -58259,6 +66261,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -58287,6 +66293,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -58304,6 +66311,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -58337,6 +66348,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -58354,6 +66366,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketCreateNestedManyWithoutAssignedToInput
@@ -58382,6 +66398,7 @@ export namespace Prisma {
     isVerified?: boolean
     isActive?: boolean
     role?: $Enums.UserRole
+    referralCode: string
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
@@ -58399,6 +66416,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedCreateNestedManyWithoutUserInput
     giftCardSales?: GiftCardSaleUncheckedCreateNestedManyWithoutUserInput
     giftCardPurchases?: GiftCardPurchaseUncheckedCreateNestedManyWithoutUserInput
+    referralsMade?: ReferralAttributionUncheckedCreateNestedManyWithoutReferrerInput
+    referralAttribution?: ReferralAttributionUncheckedCreateNestedOneWithoutReferredUserInput
+    referralRewards?: ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+    referralAuditActions?: ReferralAuditEventUncheckedCreateNestedManyWithoutAdminInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedCreateNestedManyWithoutAdminUserInput
     supportTickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     assignedSupportTickets?: SupportTicketUncheckedCreateNestedManyWithoutAssignedToInput
@@ -58478,6 +66499,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58495,6 +66517,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -58523,6 +66549,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58540,6 +66567,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -58579,6 +66610,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58596,6 +66628,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUpdateManyWithoutAssignedToNestedInput
@@ -58624,6 +66660,7 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    referralCode?: StringFieldUpdateOperationsInput | string
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -58641,6 +66678,10 @@ export namespace Prisma {
     beneficiaries?: BeneficiaryUncheckedUpdateManyWithoutUserNestedInput
     giftCardSales?: GiftCardSaleUncheckedUpdateManyWithoutUserNestedInput
     giftCardPurchases?: GiftCardPurchaseUncheckedUpdateManyWithoutUserNestedInput
+    referralsMade?: ReferralAttributionUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAttribution?: ReferralAttributionUncheckedUpdateOneWithoutReferredUserNestedInput
+    referralRewards?: ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+    referralAuditActions?: ReferralAuditEventUncheckedUpdateManyWithoutAdminNestedInput
     adminGiftCardSandboxTests?: AdminGiftCardSandboxTestUncheckedUpdateManyWithoutAdminUserNestedInput
     supportTickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     assignedSupportTickets?: SupportTicketUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -58840,6 +66881,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -58847,6 +66889,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -58859,6 +66903,41 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     completedAt?: Date | string | null
+  }
+
+  export type ReferralAttributionCreateManyReferrerInput = {
+    id?: string
+    referredUserId: string
+    referralCode: string
+    status?: $Enums.ReferralStatus
+    firstDepositId?: string | null
+    firstDepositAmountUsd?: Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralRewardCreateManyReferrerInput = {
+    id?: string
+    referralId: string
+    amountUsd: Decimal | DecimalJsLike | number | string
+    status?: $Enums.ReferralRewardStatus
+    creditedAt?: Date | string | null
+    reviewReason?: string | null
+    reviewedById?: string | null
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReferralAuditEventCreateManyAdminInput = {
+    id?: string
+    referralId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
   }
 
   export type AdminGiftCardSandboxTestCreateManyAdminUserInput = {
@@ -59059,6 +67138,7 @@ export namespace Prisma {
     wallet?: WalletUpdateOneRequiredWithoutDepositsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutDepositsNestedInput
     transaction?: TransactionUpdateOneWithoutDepositNestedInput
+    referralDeposit?: ReferralAttributionUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateWithoutUserInput = {
@@ -59081,6 +67161,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    referralDeposit?: ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateManyWithoutUserInput = {
@@ -59510,6 +67591,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -59517,6 +67599,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59531,6 +67615,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     wallet?: WalletUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
     transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+    referralQualification?: ReferralAttributionUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateWithoutUserInput = {
@@ -59550,6 +67635,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -59557,6 +67643,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59569,6 +67657,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referralQualification?: ReferralAttributionUncheckedUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateManyWithoutUserInput = {
@@ -59588,6 +67677,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -59595,6 +67685,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -59607,6 +67699,115 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReferralAttributionUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referredUser?: UserUpdateOneRequiredWithoutReferralAttributionNestedInput
+    firstDeposit?: DepositUpdateOneWithoutReferralDepositNestedInput
+    qualifyingPurchase?: GiftCardPurchaseUpdateOneWithoutReferralQualificationNestedInput
+    reward?: ReferralRewardUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reward?: ReferralRewardUncheckedUpdateOneWithoutReferralNestedInput
+    auditEvents?: ReferralAuditEventUncheckedUpdateManyWithoutReferralNestedInput
+  }
+
+  export type ReferralAttributionUncheckedUpdateManyWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referredUserId?: StringFieldUpdateOperationsInput | string
+    referralCode?: StringFieldUpdateOperationsInput | string
+    status?: EnumReferralStatusFieldUpdateOperationsInput | $Enums.ReferralStatus
+    firstDepositId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstDepositAmountUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    qualifyingPurchaseId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralRewardUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralAttributionUpdateOneRequiredWithoutRewardNestedInput
+  }
+
+  export type ReferralRewardUncheckedUpdateWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralRewardUncheckedUpdateManyWithoutReferrerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    amountUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: EnumReferralRewardStatusFieldUpdateOperationsInput | $Enums.ReferralRewardStatus
+    creditedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    reviewReason?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedById?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    referral?: ReferralAttributionUpdateOneRequiredWithoutAuditEventsNestedInput
+  }
+
+  export type ReferralAuditEventUncheckedUpdateWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventUncheckedUpdateManyWithoutAdminInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    referralId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AdminGiftCardSandboxTestUpdateWithoutAdminUserInput = {
@@ -59893,6 +68094,8 @@ export namespace Prisma {
     currencyCode: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -59948,6 +68151,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -60000,6 +68207,7 @@ export namespace Prisma {
     denominationType?: string | null
     quantity?: number
     amount: Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: Decimal | DecimalJsLike | number | string
     providerAmount?: Decimal | DecimalJsLike | number | string | null
     fee?: Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: Decimal | DecimalJsLike | number | string
@@ -60007,6 +68215,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: Decimal | DecimalJsLike | number | string
     customerRatePercent?: Decimal | DecimalJsLike | number | string
     customerPrice: Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: Decimal | DecimalJsLike | number | string
     status?: $Enums.GiftCardPurchaseStatus
     providerStatus?: string | null
     providerMessage?: string | null
@@ -60025,6 +68235,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     currency?: CurrencyUpdateOneRequiredWithoutBalancesNestedInput
@@ -60035,6 +68247,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60044,6 +68258,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60068,6 +68284,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     currency?: CurrencyUpdateOneRequiredWithoutDepositsNestedInput
     transaction?: TransactionUpdateOneWithoutDepositNestedInput
+    referralDeposit?: ReferralAttributionUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateWithoutWalletInput = {
@@ -60090,6 +68307,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    referralDeposit?: ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateManyWithoutWalletInput = {
@@ -60189,6 +68407,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60207,6 +68429,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60223,6 +68449,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60335,6 +68565,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -60342,6 +68573,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60356,6 +68589,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     user?: UserUpdateOneRequiredWithoutGiftCardPurchasesNestedInput
     transaction?: TransactionUpdateOneWithoutGiftCardPurchaseNestedInput
+    referralQualification?: ReferralAttributionUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateWithoutWalletInput = {
@@ -60375,6 +68609,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -60382,6 +68617,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60394,6 +68631,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    referralQualification?: ReferralAttributionUncheckedUpdateOneWithoutQualifyingPurchaseNestedInput
   }
 
   export type GiftCardPurchaseUncheckedUpdateManyWithoutWalletInput = {
@@ -60413,6 +68651,7 @@ export namespace Prisma {
     denominationType?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: IntFieldUpdateOperationsInput | number
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    giftCardValueUsd?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     providerAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     baseBuyRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -60420,6 +68659,8 @@ export namespace Prisma {
     buyAdjustmentAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerRatePercent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     customerPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditUsdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     status?: EnumGiftCardPurchaseStatusFieldUpdateOperationsInput | $Enums.GiftCardPurchaseStatus
     providerStatus?: NullableStringFieldUpdateOperationsInput | string | null
     providerMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60439,6 +68680,8 @@ export namespace Prisma {
     walletId: string
     availableBalance?: Decimal | DecimalJsLike | number | string
     pendingBalance?: Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: Decimal | DecimalJsLike | number | string
+    referralCreditPending?: Decimal | DecimalJsLike | number | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -60494,6 +68737,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -60628,6 +68875,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     wallet?: WalletUpdateOneRequiredWithoutBalancesNestedInput
@@ -60638,6 +68887,8 @@ export namespace Prisma {
     walletId?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60647,6 +68898,8 @@ export namespace Prisma {
     walletId?: StringFieldUpdateOperationsInput | string
     availableBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditAvailable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referralCreditPending?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -60671,6 +68924,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     wallet?: WalletUpdateOneRequiredWithoutDepositsNestedInput
     transaction?: TransactionUpdateOneWithoutDepositNestedInput
+    referralDeposit?: ReferralAttributionUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateWithoutCurrencyInput = {
@@ -60693,6 +68947,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    referralDeposit?: ReferralAttributionUncheckedUpdateOneWithoutFirstDepositNestedInput
   }
 
   export type DepositUncheckedUpdateManyWithoutCurrencyInput = {
@@ -60792,6 +69047,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60810,6 +69069,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60826,6 +69089,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61228,6 +69495,10 @@ export namespace Prisma {
     balanceAfter: Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: Decimal | DecimalJsLike | number | string | null
     operationKey?: string | null
     reference?: string | null
     reason?: string | null
@@ -61242,6 +69513,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61260,6 +69535,10 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
@@ -61276,9 +69555,53 @@ export namespace Prisma {
     balanceAfter?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pendingBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     pendingBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralBalanceAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingBefore?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referralPendingAfter?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     operationKey?: NullableStringFieldUpdateOperationsInput | string | null
     reference?: NullableStringFieldUpdateOperationsInput | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventCreateManyReferralInput = {
+    id?: string
+    adminUserId: string
+    action: string
+    reason: string
+    previousStatus?: string | null
+    newStatus?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReferralAuditEventUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin?: UserUpdateOneRequiredWithoutReferralAuditActionsNestedInput
+  }
+
+  export type ReferralAuditEventUncheckedUpdateWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReferralAuditEventUncheckedUpdateManyWithoutReferralInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    adminUserId?: StringFieldUpdateOperationsInput | string
+    action?: StringFieldUpdateOperationsInput | string
+    reason?: StringFieldUpdateOperationsInput | string
+    previousStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    newStatus?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

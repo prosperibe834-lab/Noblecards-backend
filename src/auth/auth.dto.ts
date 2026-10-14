@@ -1,4 +1,12 @@
-import { IsEmail, IsIn, IsOptional, IsString, Matches, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsIn,
+  IsOptional,
+  IsString,
+  Matches,
+  MinLength,
+  MaxLength,
+} from 'class-validator';
 
 export class RegisterDto {
   @IsEmail() email!: string;
@@ -9,6 +17,12 @@ export class RegisterDto {
   @IsOptional() @IsString() country?: string;
   @IsOptional() @IsString() countryCode?: string;
   @IsOptional() @IsString() gender?: string;
+  @IsOptional()
+  @IsString()
+  @MinLength(6)
+  @MaxLength(20)
+  @Matches(/^[A-Za-z0-9]+$/)
+  referralCode?: string;
 }
 
 export class EmailCodeDto {
@@ -38,5 +52,6 @@ export class RefreshDto {
 }
 
 export class ResendOtpDto extends EmailDto {
-  @IsOptional() @IsIn(['signup', 'password-recovery']) purpose?: 'signup' | 'password-recovery';
+  @IsOptional() @IsIn(['signup', 'password-recovery']) purpose?:
+    'signup' | 'password-recovery';
 }

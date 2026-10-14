@@ -28,6 +28,7 @@ model User {
   isVerified                   Boolean                        @default(false)
   isActive                     Boolean                        @default(true)
   role                         UserRole                       @default(USER)
+  referralCode                 String                         @unique
   transactionPinHash           String?
   transactionPinFailedAttempts Int                            @default(0)
   transactionPinLockedUntil    DateTime?
@@ -45,6 +46,10 @@ model User {
   beneficiaries                Beneficiary[]
   giftCardSales                GiftCardSale[]
   giftCardPurchases            GiftCardPurchase[]
+  referralsMade                ReferralAttribution[]          @relation("ReferralReferrer")
+  referralAttribution          ReferralAttribution?           @relation("ReferralReferredUser")
+  referralRewards              ReferralReward[]
+  referralAuditActions         ReferralAuditEvent[]           @relation("ReferralAuditAdmin")
   adminGiftCardSandboxTests    AdminGiftCardSandboxTest[]
   supportTickets               SupportTicket[]                @relation("UserSupportTickets")
   assignedSupportTickets       SupportTicket[]                @relation("AssignedSupportTickets")
@@ -63,6 +68,7 @@ model PendingRegistration {
   country        String?
   countryCode    String?
   gender         String?
+  referralCode   String?
   otpHash        String
   otpExpiresAt   DateTime
   otpAttempts    Int       @default(0)
@@ -158,45 +164,48 @@ model Currency {
 }
 
 model WalletBalance {
-  id               String   @id @default(uuid())
-  walletId         String
-  currencyCode     String
-  availableBalance Decimal  @default(0.00) @db.Decimal(18, 2)
-  pendingBalance   Decimal  @default(0.00) @db.Decimal(18, 2)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  wallet           Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency         Currency @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  id                      String   @id @default(uuid())
+  walletId                String
+  currencyCode            String
+  availableBalance        Decimal  @default(0.00) @db.Decimal(18, 2)
+  pendingBalance          Decimal  @default(0.00) @db.Decimal(18, 2)
+  referralCreditAvailable Decimal  @default(0.00) @db.Decimal(18, 2)
+  referralCreditPending   Decimal  @default(0.00) @db.Decimal(18, 2)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  wallet                  Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency                Currency @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
 
   @@unique([walletId, currencyCode])
   @@index([walletId, currencyCode])
 }
 
 model Deposit {
-  id                    String          @id @default(uuid())
+  id                    String               @id @default(uuid())
   userId                String
   walletId              String
   currencyCode          String
-  amount                Decimal         @db.Decimal(18, 2)
-  fee                   Decimal         @default(0.00) @db.Decimal(18, 2)
-  netAmount             Decimal         @db.Decimal(18, 2)
-  exchangeRate          Decimal?        @db.Decimal(18, 8)
-  provider              PaymentProvider @default(FLUTTERWAVE)
+  amount                Decimal              @db.Decimal(18, 2)
+  fee                   Decimal              @default(0.00) @db.Decimal(18, 2)
+  netAmount             Decimal              @db.Decimal(18, 2)
+  exchangeRate          Decimal?             @db.Decimal(18, 8)
+  provider              PaymentProvider      @default(FLUTTERWAVE)
   providerTransactionId String?
   providerReference     String?
   paymentMethod         PaymentMethod?
   country               String?
   countryCode           String?
-  status                DepositStatus   @default(PENDING)
+  status                DepositStatus        @default(PENDING)
   idempotencyKey        String?
   metadata              Json?
-  createdAt             DateTime        @default(now())
-  updatedAt             DateTime        @updatedAt
-  transactionId         String?         @unique
-  user                  User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
-  transaction           Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  transactionId         String?              @unique
+  user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wallet                Wallet               @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency             @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transaction           Transaction?         @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  referralDeposit       ReferralAttribution? @relation("ReferralFirstDeposit")
 
   @@unique([userId, idempotencyKey])
   @@index([userId, status, createdAt])
@@ -238,26 +247,87 @@ model Transaction {
 }
 
 model LedgerEntry {
-  id                   String          @id @default(uuid())
-  walletId             String
-  currencyCode         String
-  transactionId        String?
-  type                 LedgerEntryType
-  amount               Decimal         @db.Decimal(18, 2)
-  balanceBefore        Decimal         @db.Decimal(18, 2)
-  balanceAfter         Decimal         @db.Decimal(18, 2)
-  pendingBalanceBefore Decimal?        @db.Decimal(18, 2)
-  pendingBalanceAfter  Decimal?        @db.Decimal(18, 2)
-  operationKey         String?         @unique
-  reference            String?
-  reason               String?
-  createdAt            DateTime        @default(now())
-  wallet               Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  currency             Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
-  transaction          Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  id                    String          @id @default(uuid())
+  walletId              String
+  currencyCode          String
+  transactionId         String?
+  type                  LedgerEntryType
+  amount                Decimal         @db.Decimal(18, 2)
+  balanceBefore         Decimal         @db.Decimal(18, 2)
+  balanceAfter          Decimal         @db.Decimal(18, 2)
+  pendingBalanceBefore  Decimal?        @db.Decimal(18, 2)
+  pendingBalanceAfter   Decimal?        @db.Decimal(18, 2)
+  referralBalanceBefore Decimal?        @db.Decimal(18, 2)
+  referralBalanceAfter  Decimal?        @db.Decimal(18, 2)
+  referralPendingBefore Decimal?        @db.Decimal(18, 2)
+  referralPendingAfter  Decimal?        @db.Decimal(18, 2)
+  operationKey          String?         @unique
+  reference             String?
+  reason                String?
+  createdAt             DateTime        @default(now())
+  wallet                Wallet          @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  currency              Currency        @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  transaction           Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
 
   @@index([walletId, currencyCode, createdAt])
   @@index([transactionId])
+}
+
+model ReferralAttribution {
+  id                    String               @id @default(uuid())
+  referrerId            String
+  referredUserId        String               @unique
+  referralCode          String
+  status                ReferralStatus       @default(REGISTERED)
+  firstDepositId        String?              @unique
+  firstDepositAmountUsd Decimal?             @db.Decimal(18, 2)
+  qualifyingPurchaseId  String?              @unique
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  referrer              User                 @relation("ReferralReferrer", fields: [referrerId], references: [id], onDelete: Restrict)
+  referredUser          User                 @relation("ReferralReferredUser", fields: [referredUserId], references: [id], onDelete: Restrict)
+  firstDeposit          Deposit?             @relation("ReferralFirstDeposit", fields: [firstDepositId], references: [id], onDelete: Restrict)
+  qualifyingPurchase    GiftCardPurchase?    @relation("ReferralQualifyingPurchase", fields: [qualifyingPurchaseId], references: [id], onDelete: Restrict)
+  reward                ReferralReward?
+  auditEvents           ReferralAuditEvent[]
+
+  @@index([referrerId, createdAt])
+  @@index([status, createdAt])
+}
+
+model ReferralReward {
+  id           String               @id @default(uuid())
+  referralId   String               @unique
+  referrerId   String
+  amountUsd    Decimal              @db.Decimal(18, 2)
+  status       ReferralRewardStatus @default(PENDING)
+  creditedAt   DateTime?
+  reviewReason String?
+  reviewedById String?
+  reviewedAt   DateTime?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  referral     ReferralAttribution  @relation(fields: [referralId], references: [id], onDelete: Restrict)
+  referrer     User                 @relation(fields: [referrerId], references: [id], onDelete: Restrict)
+
+  @@index([referrerId, status, createdAt])
+  @@index([status, createdAt])
+}
+
+model ReferralAuditEvent {
+  id             String              @id @default(uuid())
+  referralId     String
+  adminUserId    String
+  action         String
+  reason         String
+  previousStatus String?
+  newStatus      String?
+  createdAt      DateTime            @default(now())
+  referral       ReferralAttribution @relation(fields: [referralId], references: [id], onDelete: Restrict)
+  admin          User                @relation("ReferralAuditAdmin", fields: [adminUserId], references: [id], onDelete: Restrict)
+
+  @@index([referralId, createdAt])
+  @@index([adminUserId, createdAt])
 }
 
 model Withdrawal {
@@ -534,6 +604,7 @@ model GiftCardPurchase {
   denominationType        String?
   quantity                Int                    @default(1)
   amount                  Decimal                @db.Decimal(18, 2)
+  giftCardValueUsd        Decimal                @default(0.00) @db.Decimal(18, 2)
   providerAmount          Decimal?               @db.Decimal(18, 2)
   fee                     Decimal                @default(0.00) @db.Decimal(18, 2)
   baseBuyRatePercent      Decimal                @default(0.00) @db.Decimal(9, 4)
@@ -541,6 +612,8 @@ model GiftCardPurchase {
   buyAdjustmentAmount     Decimal                @default(0.00) @db.Decimal(18, 2)
   customerRatePercent     Decimal                @default(0.00) @db.Decimal(9, 4)
   customerPrice           Decimal                @db.Decimal(18, 2)
+  referralCreditAmount    Decimal                @default(0.00) @db.Decimal(18, 2)
+  referralCreditUsdAmount Decimal                @default(0.00) @db.Decimal(18, 2)
   status                  GiftCardPurchaseStatus @default(PENDING)
   providerStatus          String?
   providerMessage         String?
@@ -556,6 +629,7 @@ model GiftCardPurchase {
   user                    User                   @relation(fields: [userId], references: [id], onDelete: Restrict)
   wallet                  Wallet                 @relation(fields: [walletId], references: [id], onDelete: Restrict)
   transaction             Transaction?           @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  referralQualification   ReferralAttribution?   @relation("ReferralQualifyingPurchase")
 
   @@unique([provider, providerReference])
   @@index([userId, createdAt])
@@ -740,6 +814,24 @@ enum LedgerEntryType {
   REFUND
   REVERSAL
   ADJUSTMENT
+  REFERRAL_CREDIT
+  REFERRAL_DEBIT
+}
+
+enum ReferralStatus {
+  REGISTERED
+  DEPOSIT_QUALIFIED
+  QUALIFIED
+  HELD
+  REJECTED
+}
+
+enum ReferralRewardStatus {
+  PENDING
+  AVAILABLE
+  HELD
+  REJECTED
+  REVERSED
 }
 
 enum WithdrawalQuoteStatus {

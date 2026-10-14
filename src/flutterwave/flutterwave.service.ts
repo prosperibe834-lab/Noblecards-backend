@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  Optional,
+} from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
 import { createCipheriv, createHmac, timingSafeEqual } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -6,6 +12,7 @@ import { WalletsService } from '../wallets/wallets.service';
 import { CurrenciesService } from '../currencies/currencies.service';
 import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
+import { ReferralsService } from '../referrals/referrals.service';
 
 @Injectable()
 export class FlutterwaveService {
@@ -18,6 +25,7 @@ export class FlutterwaveService {
     private readonly currencies: CurrenciesService,
     private readonly transactions: TransactionsService,
     private readonly ledger: LedgerService,
+    @Optional() private readonly referrals?: ReferralsService,
   ) {}
 
   private getSecretKey() {
@@ -29,14 +37,19 @@ export class FlutterwaveService {
   }
 
   private encryptCardPayload(payload: Record<string, unknown>) {
-    const encryptionKey = process.env.FLW_ENCRYPTION_KEY ?? process.env.FLUTTERWAVE_ENCRYPTION_KEY;
+    const encryptionKey =
+      process.env.FLW_ENCRYPTION_KEY ?? process.env.FLUTTERWAVE_ENCRYPTION_KEY;
     if (!encryptionKey) {
-      throw new Error('Flutterwave encryption key is not configured. Set FLW_ENCRYPTION_KEY.');
+      throw new Error(
+        'Flutterwave encryption key is not configured. Set FLW_ENCRYPTION_KEY.',
+      );
     }
 
     const key = Buffer.from(encryptionKey, 'utf8');
     if (key.length !== 24) {
-      throw new Error('Flutterwave encryption key is invalid. FLW_ENCRYPTION_KEY must be exactly 24 bytes.');
+      throw new Error(
+        'Flutterwave encryption key is invalid. FLW_ENCRYPTION_KEY must be exactly 24 bytes.',
+      );
     }
 
     const cipher = createCipheriv('des-ede3', key, null);
@@ -49,33 +62,56 @@ export class FlutterwaveService {
   private classifyFlutterwaveError(message: string, path: string) {
     const normalized = String(message).toLowerCase();
 
-    if (/amount should be between 0 and 3719|amount.*between 0.*3719|3719/i.test(normalized)) {
+    if (
+      /amount should be between 0 and 3719|amount.*between 0.*3719|3719/i.test(
+        normalized,
+      )
+    ) {
       return 'amount_limit';
     }
 
-    if (/merchant is not enabled to accept uk ach transactions|uk ach|account-ach-uk/i.test(normalized)) {
+    if (
+      /merchant is not enabled to accept uk ach transactions|uk ach|account-ach-uk/i.test(
+        normalized,
+      )
+    ) {
       return 'merchant_not_enabled';
     }
 
-    if (/authentication|auth|invalid key|secret key|unauthorized|forbidden|api key/i.test(normalized)) {
+    if (
+      /authentication|auth|invalid key|secret key|unauthorized|forbidden|api key/i.test(
+        normalized,
+      )
+    ) {
       return 'auth_error';
     }
 
-    if (/invalid request|validation|required field|missing|bad request/i.test(normalized) || /status=error/i.test(normalized)) {
+    if (
+      /invalid request|validation|required field|missing|bad request/i.test(
+        normalized,
+      ) ||
+      /status=error/i.test(normalized)
+    ) {
       return 'invalid_request';
     }
 
-    if (/charges\?type=account-ach-uk|\/charges\?type=account-ach-uk/i.test(path)) {
+    if (
+      /charges\?type=account-ach-uk|\/charges\?type=account-ach-uk/i.test(path)
+    ) {
       return 'merchant_not_enabled';
     }
 
     return 'other';
   }
 
-  private async request<T>(path: string, method: 'GET' | 'POST', body?: Record<string, unknown>) {
+  private async request<T>(
+    path: string,
+    method: 'GET' | 'POST',
+    body?: Record<string, unknown>,
+  ) {
     const secretKey = this.getSecretKey();
     const url = `${this.baseUrl}${path}`;
-    
+
     const response = await fetch(url, {
       method,
       headers: {
@@ -88,37 +124,53 @@ export class FlutterwaveService {
 
     const text = await response.text();
     let parsed: any = {};
-    
+
     try {
       parsed = text ? JSON.parse(text) : {};
     } catch (parseError) {
-      this.logger.warn(`[request] Failed to parse response as JSON for ${method} ${path}`);
+      this.logger.warn(
+        `[request] Failed to parse response as JSON for ${method} ${path}`,
+      );
       this.logger.warn(`[request] Response text: ${text.substring(0, 500)}`);
     }
 
     if (!response.ok) {
-      this.logger.error(`[request] FLUTTERWAVE HTTP ${response.status} for ${method} ${path}`);
+      this.logger.error(
+        `[request] FLUTTERWAVE HTTP ${response.status} for ${method} ${path}`,
+      );
       this.logger.error(`[request] Flutterwave endpoint: ${path}`);
-      this.logger.error(`[request] Flutterwave response text: ${text.substring(0, 1000)}`);
+      this.logger.error(
+        `[request] Flutterwave response text: ${text.substring(0, 1000)}`,
+      );
       const message = parsed?.message ?? text ?? 'Flutterwave request failed.';
       const classification = this.classifyFlutterwaveError(message, path);
-      this.logger.error(`[request] Flutterwave classification: ${classification}`);
+      this.logger.error(
+        `[request] Flutterwave classification: ${classification}`,
+      );
       this.logger.error(`[request] Parsed error message: ${message}`);
 
       if (classification === 'amount_limit') {
-        throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+        throw new BadRequestException(
+          'GBP bank transfer amount must be between £0 and £3,719.',
+        );
       }
 
       if (classification === 'merchant_not_enabled') {
-        throw new BadRequestException('GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.');
+        throw new BadRequestException(
+          'GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.',
+        );
       }
 
       if (classification === 'auth_error') {
-        throw new BadRequestException('GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.');
+        throw new BadRequestException(
+          'GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.',
+        );
       }
 
       if (classification === 'invalid_request') {
-        throw new BadRequestException('GBP bank transfer request was invalid. Please check the payment details and try again.');
+        throw new BadRequestException(
+          'GBP bank transfer request was invalid. Please check the payment details and try again.',
+        );
       }
 
       throw new Error(`Flutterwave ${response.status}: ${message}`);
@@ -138,17 +190,27 @@ export class FlutterwaveService {
     countryCode?: string;
   }) {
     this.logger.log(`[createVirtualAccount] Starting virtual account creation`);
-    this.logger.log(`[createVirtualAccount] userId=${input.userId}, amount=${input.amount}, currency=${input.currency}, ref=${input.reference}`);
-    
+    this.logger.log(
+      `[createVirtualAccount] userId=${input.userId}, amount=${input.amount}, currency=${input.currency}, ref=${input.reference}`,
+    );
+
     const secretKey = this.getSecretKey();
 
-    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
     if (!user) {
-      this.logger.error(`[createVirtualAccount] User not found: ${input.userId}`);
-      throw new NotFoundException('User not found for virtual account creation.');
+      this.logger.error(
+        `[createVirtualAccount] User not found: ${input.userId}`,
+      );
+      throw new NotFoundException(
+        'User not found for virtual account creation.',
+      );
     }
 
-    this.logger.log(`[createVirtualAccount] User found: ${user.email}, firstName=${user.firstName}, lastName=${user.lastName}`);
+    this.logger.log(
+      `[createVirtualAccount] User found: ${user.email}, firstName=${user.firstName}, lastName=${user.lastName}`,
+    );
 
     const payload = {
       tx_ref: input.reference,
@@ -169,8 +231,12 @@ export class FlutterwaveService {
       },
     };
 
-    this.logger.log(`[createVirtualAccount] Sending payload to Flutterwave /virtual-account-numbers`);
-    this.logger.log(`[createVirtualAccount] Payload: ${JSON.stringify(payload)}`);
+    this.logger.log(
+      `[createVirtualAccount] Sending payload to Flutterwave /virtual-account-numbers`,
+    );
+    this.logger.log(
+      `[createVirtualAccount] Payload: ${JSON.stringify(payload)}`,
+    );
 
     let response;
     try {
@@ -191,11 +257,17 @@ export class FlutterwaveService {
           meta?: Record<string, any>;
         };
       }>('/virtual-account-numbers', 'POST', payload);
-      this.logger.log(`[createVirtualAccount] Flutterwave raw response: ${JSON.stringify(response)}`);
-      this.logger.log(`[createVirtualAccount] Flutterwave response received successfully`);
+      this.logger.log(
+        `[createVirtualAccount] Flutterwave raw response: ${JSON.stringify(response)}`,
+      );
+      this.logger.log(
+        `[createVirtualAccount] Flutterwave response received successfully`,
+      );
     } catch (error) {
       this.logger.error(`[createVirtualAccount] Flutterwave request failed`);
-      this.logger.error(`[createVirtualAccount] Exception: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `[createVirtualAccount] Exception: ${error instanceof Error ? error.message : String(error)}`,
+      );
       if (error instanceof Error) {
         this.logger.error(`[createVirtualAccount] Stack: ${error.stack}`);
       }
@@ -203,11 +275,18 @@ export class FlutterwaveService {
     }
 
     const accountData = response.data ?? response;
-    const rawAccountName = typeof accountData.account_name === 'string' ? accountData.account_name.trim() : '';
+    const rawAccountName =
+      typeof accountData.account_name === 'string'
+        ? accountData.account_name.trim()
+        : '';
     const normalizedAccountName = rawAccountName || 'Account name unavailable';
 
-    this.logger.log(`[createVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`);
-    this.logger.log(`[createVirtualAccount] Provider transaction ID: ${accountData.id ?? accountData.flw_ref}`);
+    this.logger.log(
+      `[createVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`,
+    );
+    this.logger.log(
+      `[createVirtualAccount] Provider transaction ID: ${accountData.id ?? accountData.flw_ref}`,
+    );
 
     return {
       bankName: accountData.bank_name ?? 'Bank',
@@ -217,7 +296,9 @@ export class FlutterwaveService {
       currency: accountData.currency ?? input.currency,
       expiresAt: accountData.expiry_date ?? null,
       providerReference: accountData.tx_ref ?? input.reference,
-      providerTransactionId: String(accountData.id ?? accountData.flw_ref ?? ''),
+      providerTransactionId: String(
+        accountData.id ?? accountData.flw_ref ?? '',
+      ),
       bankCode: accountData.bank_code ?? null,
       meta: {
         configured: true,
@@ -247,18 +328,30 @@ export class FlutterwaveService {
     const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
 
     if (!publicKey || !secretKey) {
-      this.logger.warn('Flutterwave credentials are not configured. Deposit remains pending until configuration is added.');
+      this.logger.warn(
+        'Flutterwave credentials are not configured. Deposit remains pending until configuration is added.',
+      );
       throw new Error('Flutterwave credentials are not configured.');
     }
 
-    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
     if (!user) {
-      throw new NotFoundException('User not found for deposit payment creation.');
+      throw new NotFoundException(
+        'User not found for deposit payment creation.',
+      );
     }
 
-    this.logger.log(`[createGhsVirtualAccount] Creating virtual account for user ${input.userId} with amount: ${input.amount} ${input.currency}`);
-    this.logger.debug(`[createGhsVirtualAccount] Reference: ${input.reference}`);
-    this.logger.debug(`[createGhsVirtualAccount] Deposit ID: ${input.depositId}`);
+    this.logger.log(
+      `[createGhsVirtualAccount] Creating virtual account for user ${input.userId} with amount: ${input.amount} ${input.currency}`,
+    );
+    this.logger.debug(
+      `[createGhsVirtualAccount] Reference: ${input.reference}`,
+    );
+    this.logger.debug(
+      `[createGhsVirtualAccount] Deposit ID: ${input.depositId}`,
+    );
 
     const payload = {
       tx_ref: input.reference,
@@ -278,7 +371,9 @@ export class FlutterwaveService {
       },
     };
 
-    this.logger.debug(`[createGhsVirtualAccount] Sending payload: ${JSON.stringify(payload)}`);
+    this.logger.debug(
+      `[createGhsVirtualAccount] Sending payload: ${JSON.stringify(payload)}`,
+    );
 
     let response;
     try {
@@ -299,11 +394,17 @@ export class FlutterwaveService {
           meta?: Record<string, any>;
         };
       }>('/virtual-account-numbers', 'POST', payload);
-      this.logger.log(`[createGhsVirtualAccount] Flutterwave raw response: ${JSON.stringify(response)}`);
-      this.logger.log(`[createGhsVirtualAccount] Flutterwave response received successfully`);
+      this.logger.log(
+        `[createGhsVirtualAccount] Flutterwave raw response: ${JSON.stringify(response)}`,
+      );
+      this.logger.log(
+        `[createGhsVirtualAccount] Flutterwave response received successfully`,
+      );
     } catch (error) {
       this.logger.error(`[createGhsVirtualAccount] Flutterwave request failed`);
-      this.logger.error(`[createGhsVirtualAccount] Exception: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `[createGhsVirtualAccount] Exception: ${error instanceof Error ? error.message : String(error)}`,
+      );
       if (error instanceof Error) {
         this.logger.error(`[createGhsVirtualAccount] Stack: ${error.stack}`);
       }
@@ -311,17 +412,30 @@ export class FlutterwaveService {
     }
 
     if (!response?.data) {
-      this.logger.error(`[createGhsVirtualAccount] Invalid Flutterwave response: ${JSON.stringify(response)}`);
-      throw new Error('Invalid response from Flutterwave virtual account endpoint. No data returned.');
+      this.logger.error(
+        `[createGhsVirtualAccount] Invalid Flutterwave response: ${JSON.stringify(response)}`,
+      );
+      throw new Error(
+        'Invalid response from Flutterwave virtual account endpoint. No data returned.',
+      );
     }
 
     const accountData = response.data ?? response;
-    const rawAccountName = typeof accountData.account_name === 'string' ? accountData.account_name.trim() : '';
+    const rawAccountName =
+      typeof accountData.account_name === 'string'
+        ? accountData.account_name.trim()
+        : '';
     const normalizedAccountName = rawAccountName || 'Account name unavailable';
 
-    this.logger.log(`[createGhsVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`);
-    this.logger.log(`[createGhsVirtualAccount] Provider transaction ID: ${accountData.id ?? accountData.flw_ref}`);
-    this.logger.log(`[createGhsVirtualAccount] Full Flutterwave response: ${JSON.stringify(accountData)}`);
+    this.logger.log(
+      `[createGhsVirtualAccount] Virtual account created: accountNumber=${accountData.account_number}, bankName=${accountData.bank_name}, accountName=${normalizedAccountName}`,
+    );
+    this.logger.log(
+      `[createGhsVirtualAccount] Provider transaction ID: ${accountData.id ?? accountData.flw_ref}`,
+    );
+    this.logger.log(
+      `[createGhsVirtualAccount] Full Flutterwave response: ${JSON.stringify(accountData)}`,
+    );
 
     return {
       bankName: accountData.bank_name ?? 'Bank',
@@ -331,7 +445,9 @@ export class FlutterwaveService {
       currency: accountData.currency ?? input.currency,
       expiresAt: accountData.expiry_date ?? null,
       providerReference: accountData.tx_ref ?? input.reference,
-      providerTransactionId: String(accountData.id ?? accountData.flw_ref ?? ''),
+      providerTransactionId: String(
+        accountData.id ?? accountData.flw_ref ?? '',
+      ),
       bankCode: accountData.bank_code ?? null,
       meta: {
         configured: true,
@@ -362,20 +478,28 @@ export class FlutterwaveService {
     const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
 
     if (!publicKey || !secretKey) {
-      this.logger.warn('Flutterwave credentials are not configured. Deposit remains pending until configuration is added.');
+      this.logger.warn(
+        'Flutterwave credentials are not configured. Deposit remains pending until configuration is added.',
+      );
       throw new Error('Flutterwave credentials are not configured.');
     }
 
-    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
     if (!user) {
-      throw new NotFoundException('User not found for deposit payment creation.');
+      throw new NotFoundException(
+        'User not found for deposit payment creation.',
+      );
     }
 
     const payload = {
       tx_ref: input.reference,
       amount: Number(input.amount).toFixed(2),
       currency: input.currency,
-      redirect_url: process.env.FLUTTERWAVE_REDIRECT_URL ?? 'http://localhost:5173/deposit/callback',
+      redirect_url:
+        process.env.FLUTTERWAVE_REDIRECT_URL ??
+        'http://localhost:5173/deposit/callback',
       payment_options: input.paymentMethod,
       meta: {
         deposit_id: input.depositId,
@@ -391,21 +515,27 @@ export class FlutterwaveService {
       customizations: {
         title: 'NobleCards Deposit',
         description: 'Wallet funding deposit',
-        logo: process.env.FLUTTERWAVE_LOGO_URL ?? 'https://example.com/logo.png',
+        logo:
+          process.env.FLUTTERWAVE_LOGO_URL ?? 'https://example.com/logo.png',
       },
     };
 
-    const response = await this.request<{ data: { link?: string; id?: number | string; tx_ref?: string; transaction_id?: number | string } }>(
-      '/payments',
-      'POST',
-      payload,
-    );
+    const response = await this.request<{
+      data: {
+        link?: string;
+        id?: number | string;
+        tx_ref?: string;
+        transaction_id?: number | string;
+      };
+    }>('/payments', 'POST', payload);
 
     const paymentData = response.data ?? response;
     return {
       paymentLink: paymentData.link ?? null,
       providerReference: paymentData.tx_ref ?? input.reference,
-      providerTransactionId: String(paymentData.id ?? paymentData.transaction_id ?? ''),
+      providerTransactionId: String(
+        paymentData.id ?? paymentData.transaction_id ?? '',
+      ),
       meta: {
         configured: true,
         paymentMethod: input.paymentMethod,
@@ -430,8 +560,11 @@ export class FlutterwaveService {
       cardHolderName: string;
     };
   }) {
-    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
-    if (!user) throw new NotFoundException('User not found for card payment creation.');
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
+    if (!user)
+      throw new NotFoundException('User not found for card payment creation.');
 
     const cardPayload = {
       card_number: input.card.cardNumber,
@@ -444,7 +577,9 @@ export class FlutterwaveService {
       amount: Number(input.amount.toFixed(2)),
       currency: input.currency,
       tx_ref: input.reference,
-      fullname: `${user.firstName || ''} ${user.lastName || ''}`.trim() || input.card.cardHolderName,
+      fullname:
+        `${user.firstName || ''} ${user.lastName || ''}`.trim() ||
+        input.card.cardHolderName,
       meta: {
         deposit_id: input.depositId,
         wallet_id: input.walletId,
@@ -466,20 +601,24 @@ export class FlutterwaveService {
         authorization?: { redirect?: string; url?: string };
         meta?: Record<string, any>;
       };
-      meta?: { authorization?: { redirect?: string; url?: string }; authorization_url?: string };
+      meta?: {
+        authorization?: { redirect?: string; url?: string };
+        authorization_url?: string;
+      };
     }>('/charges?type=card', 'POST', { client: encryptedCardPayload });
 
     const chargeData = response.data ?? (response as any);
-    const authorizationUrl = response.meta?.authorization?.redirect
-      ?? response.meta?.authorization?.url
-      ?? response.meta?.authorization_url
-      ?? chargeData.meta?.authorization?.redirect
-      ?? chargeData.meta?.authorization?.url
-      ?? chargeData.meta?.authorization_url
-      ?? chargeData.authorization?.redirect
-      ?? chargeData.authorization?.url
-      ?? chargeData.link
-      ?? null;
+    const authorizationUrl =
+      response.meta?.authorization?.redirect ??
+      response.meta?.authorization?.url ??
+      response.meta?.authorization_url ??
+      chargeData.meta?.authorization?.redirect ??
+      chargeData.meta?.authorization?.url ??
+      chargeData.meta?.authorization_url ??
+      chargeData.authorization?.redirect ??
+      chargeData.authorization?.url ??
+      chargeData.link ??
+      null;
 
     return {
       authorizationUrl,
@@ -508,17 +647,32 @@ export class FlutterwaveService {
   }) {
     const amount = Number(input.amount);
     this.logger.log(`[createGbpBankCharge] Starting GBP bank charge creation`);
-    this.logger.log(`[createGbpBankCharge] userId=${input.userId}, amount=${amount}, currency=${input.currency}, ref=${input.reference}`);
+    this.logger.log(
+      `[createGbpBankCharge] userId=${input.userId}, amount=${amount}, currency=${input.currency}, ref=${input.reference}`,
+    );
 
-    if (input.currency?.toUpperCase() === 'GBP' && (!Number.isFinite(amount) || amount <= 0 || amount > 3719)) {
-      this.logger.warn(`[createGbpBankCharge] GBP amount validation failed. Amount=${amount} is outside allowed range 0-3719.`);
-      throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+    if (
+      input.currency?.toUpperCase() === 'GBP' &&
+      (!Number.isFinite(amount) || amount <= 0 || amount > 3719)
+    ) {
+      this.logger.warn(
+        `[createGbpBankCharge] GBP amount validation failed. Amount=${amount} is outside allowed range 0-3719.`,
+      );
+      throw new BadRequestException(
+        'GBP bank transfer amount must be between £0 and £3,719.',
+      );
     }
 
-    const user = await this.prisma.user.findUnique({ where: { id: input.userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: input.userId },
+    });
     if (!user) {
-      this.logger.error(`[createGbpBankCharge] User not found: ${input.userId}`);
-      throw new NotFoundException('User not found for GBP bank charge creation.');
+      this.logger.error(
+        `[createGbpBankCharge] User not found: ${input.userId}`,
+      );
+      throw new NotFoundException(
+        'User not found for GBP bank charge creation.',
+      );
     }
 
     const payload = {
@@ -527,8 +681,11 @@ export class FlutterwaveService {
       currency: input.currency,
       email: user.email,
       tx_ref: input.reference,
-      fullname: `${user.firstName || 'NobleCards'} ${user.lastName || 'User'}`.trim(),
-      redirect_url: process.env.FLUTTERWAVE_REDIRECT_URL ?? 'http://localhost:5173/deposit/callback',
+      fullname:
+        `${user.firstName || 'NobleCards'} ${user.lastName || 'User'}`.trim(),
+      redirect_url:
+        process.env.FLUTTERWAVE_REDIRECT_URL ??
+        'http://localhost:5173/deposit/callback',
       meta: {
         deposit_id: input.depositId,
         wallet_id: input.walletId,
@@ -537,8 +694,12 @@ export class FlutterwaveService {
       },
     };
 
-    this.logger.log(`[createGbpBankCharge] Sending payload to Flutterwave /charges`);
-    this.logger.log(`[createGbpBankCharge] Payload: ${JSON.stringify(payload)}`);
+    this.logger.log(
+      `[createGbpBankCharge] Sending payload to Flutterwave /charges`,
+    );
+    this.logger.log(
+      `[createGbpBankCharge] Payload: ${JSON.stringify(payload)}`,
+    );
 
     let response;
     try {
@@ -556,40 +717,67 @@ export class FlutterwaveService {
           meta?: Record<string, any>;
         };
       }>('/charges?type=account-ach-uk', 'POST', payload);
-      this.logger.log(`[createGbpBankCharge] Flutterwave raw response: ${JSON.stringify(response)}`);
-      this.logger.log(`[createGbpBankCharge] Flutterwave response received successfully`);
+      this.logger.log(
+        `[createGbpBankCharge] Flutterwave raw response: ${JSON.stringify(response)}`,
+      );
+      this.logger.log(
+        `[createGbpBankCharge] Flutterwave response received successfully`,
+      );
     } catch (error) {
       this.logger.error(`[createGbpBankCharge] Flutterwave request failed`);
-      this.logger.error(`[createGbpBankCharge] Exception: ${error instanceof Error ? error.message : String(error)}`);
+      this.logger.error(
+        `[createGbpBankCharge] Exception: ${error instanceof Error ? error.message : String(error)}`,
+      );
       if (error instanceof Error) {
         this.logger.error(`[createGbpBankCharge] Stack: ${error.stack}`);
       }
 
       if (error instanceof BadRequestException) {
-        const message = error.getResponse && typeof error.getResponse === 'function' ? String(error.getResponse()) : error.message;
-        const classification = this.classifyFlutterwaveError(message, '/charges?type=account-ach-uk');
-        this.logger.error(`[createGbpBankCharge] Flutterwave error classification: ${classification}`);
+        const message =
+          error.getResponse && typeof error.getResponse === 'function'
+            ? String(error.getResponse())
+            : error.message;
+        const classification = this.classifyFlutterwaveError(
+          message,
+          '/charges?type=account-ach-uk',
+        );
+        this.logger.error(
+          `[createGbpBankCharge] Flutterwave error classification: ${classification}`,
+        );
         throw error;
       }
 
       const message = error instanceof Error ? error.message : String(error);
-      const classification = this.classifyFlutterwaveError(message, '/charges?type=account-ach-uk');
-      this.logger.error(`[createGbpBankCharge] Flutterwave error classification: ${classification}`);
+      const classification = this.classifyFlutterwaveError(
+        message,
+        '/charges?type=account-ach-uk',
+      );
+      this.logger.error(
+        `[createGbpBankCharge] Flutterwave error classification: ${classification}`,
+      );
 
       if (classification === 'amount_limit') {
-        throw new BadRequestException('GBP bank transfer amount must be between £0 and £3,719.');
+        throw new BadRequestException(
+          'GBP bank transfer amount must be between £0 and £3,719.',
+        );
       }
 
       if (classification === 'merchant_not_enabled') {
-        throw new BadRequestException('GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.');
+        throw new BadRequestException(
+          'GBP bank transfer is currently unavailable. This payment method has not yet been enabled for this merchant account.',
+        );
       }
 
       if (classification === 'auth_error') {
-        throw new BadRequestException('GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.');
+        throw new BadRequestException(
+          'GBP bank transfer is currently unavailable because Flutterwave authentication is not configured correctly.',
+        );
       }
 
       if (classification === 'invalid_request') {
-        throw new BadRequestException('GBP bank transfer request was invalid. Please check the payment details and try again.');
+        throw new BadRequestException(
+          'GBP bank transfer request was invalid. Please check the payment details and try again.',
+        );
       }
 
       throw error;
@@ -611,32 +799,52 @@ export class FlutterwaveService {
       chargeData?.redirect_url ??
       null;
 
-    this.logger.log(`[GBP DEBUG 1] Raw Flutterwave response: ${JSON.stringify(response)}`);
-    this.logger.log(`[createGbpBankCharge] GBP provider response body keys: ${JSON.stringify(Object.keys(responseBody || {}))}`);
-    this.logger.log(`[createGbpBankCharge] GBP provider meta: ${JSON.stringify(responseBody?.meta ?? null)}`);
-    this.logger.log(`[createGbpBankCharge] GBP bank charge created: id=${chargeData.id}, ref=${chargeData.tx_ref}`);
-    this.logger.log(`[GBP DEBUG 2] Extracted authorization URL: ${authorizationUrl ?? 'NONE'}`);
-    this.logger.log(`[GBP DEBUG 3] createGbpBankCharge return value: ${JSON.stringify({
-      authorizationUrl,
-      providerReference: chargeData.tx_ref ?? input.reference,
-      providerTransactionId: String(chargeData.id ?? chargeData.flw_ref ?? ''),
-      amount: chargeData.amount ?? input.amount,
-      currency: chargeData.currency ?? input.currency,
-      meta: {
-        configured: true,
-        paymentMethod: 'BANK_TRANSFER',
-        reference: input.reference,
-        provider: 'FLUTTERWAVE',
-        chargeType: 'account-ach-uk',
-        providerTransactionId: chargeData.id ?? chargeData.flw_ref,
+    this.logger.log(
+      `[GBP DEBUG 1] Raw Flutterwave response: ${JSON.stringify(response)}`,
+    );
+    this.logger.log(
+      `[createGbpBankCharge] GBP provider response body keys: ${JSON.stringify(Object.keys(responseBody || {}))}`,
+    );
+    this.logger.log(
+      `[createGbpBankCharge] GBP provider meta: ${JSON.stringify(responseBody?.meta ?? null)}`,
+    );
+    this.logger.log(
+      `[createGbpBankCharge] GBP bank charge created: id=${chargeData.id}, ref=${chargeData.tx_ref}`,
+    );
+    this.logger.log(
+      `[GBP DEBUG 2] Extracted authorization URL: ${authorizationUrl ?? 'NONE'}`,
+    );
+    this.logger.log(
+      `[GBP DEBUG 3] createGbpBankCharge return value: ${JSON.stringify({
         authorizationUrl,
-      },
-    })}`);
-    this.logger.log(`[createGbpBankCharge] Authorization URL type: ${typeof authorizationUrl}`);
+        providerReference: chargeData.tx_ref ?? input.reference,
+        providerTransactionId: String(
+          chargeData.id ?? chargeData.flw_ref ?? '',
+        ),
+        amount: chargeData.amount ?? input.amount,
+        currency: chargeData.currency ?? input.currency,
+        meta: {
+          configured: true,
+          paymentMethod: 'BANK_TRANSFER',
+          reference: input.reference,
+          provider: 'FLUTTERWAVE',
+          chargeType: 'account-ach-uk',
+          providerTransactionId: chargeData.id ?? chargeData.flw_ref,
+          authorizationUrl,
+        },
+      })}`,
+    );
+    this.logger.log(
+      `[createGbpBankCharge] Authorization URL type: ${typeof authorizationUrl}`,
+    );
 
     if (!authorizationUrl) {
-      this.logger.warn('[createGbpBankCharge] Flutterwave returned a successful GBP charge without an authorization URL. Logging the raw provider response for inspection.');
-      this.logger.warn(`[createGbpBankCharge] Raw provider response: ${JSON.stringify(response)}`);
+      this.logger.warn(
+        '[createGbpBankCharge] Flutterwave returned a successful GBP charge without an authorization URL. Logging the raw provider response for inspection.',
+      );
+      this.logger.warn(
+        `[createGbpBankCharge] Raw provider response: ${JSON.stringify(response)}`,
+      );
     }
 
     return {
@@ -657,9 +865,14 @@ export class FlutterwaveService {
     };
   }
 
-  async verifyTransaction(providerTransactionIdOrReference: string, providerReference?: string) {
+  async verifyTransaction(
+    providerTransactionIdOrReference: string,
+    providerReference?: string,
+  ) {
     if (!providerTransactionIdOrReference) {
-      throw new BadRequestException('A Flutterwave transaction identifier is required for verification.');
+      throw new BadRequestException(
+        'A Flutterwave transaction identifier is required for verification.',
+      );
     }
 
     const identifier = providerTransactionIdOrReference.trim();
@@ -677,15 +890,21 @@ export class FlutterwaveService {
       status: data?.status ?? 'PENDING',
       verified,
       providerReference: data?.tx_ref ?? providerReference ?? identifier,
-      providerTransactionId: String(data?.id ?? data?.transaction_id ?? identifier),
+      providerTransactionId: String(
+        data?.id ?? data?.transaction_id ?? identifier,
+      ),
       amount: String(data?.amount ?? '0'),
       currency: data?.currency ?? 'USD',
       raw: data,
     };
   }
 
-  async validateWebhookSignature(signature: string | undefined, _payload: string) {
-    const webhookSecretHash = process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH?.trim();
+  async validateWebhookSignature(
+    signature: string | undefined,
+    _payload: string,
+  ) {
+    const webhookSecretHash =
+      process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH?.trim();
     const providedSignature = signature?.trim();
 
     if (!webhookSecretHash || !providedSignature) {
@@ -705,30 +924,48 @@ export class FlutterwaveService {
   async processWebhookEvent(payload: Record<string, any>) {
     const event = payload?.event ?? 'unknown';
     const data = payload?.data ?? payload;
-    const providerTransactionId = data?.id ?? data?.transaction_id ?? data?.flw_ref ?? null;
+    const providerTransactionId =
+      data?.id ?? data?.transaction_id ?? data?.flw_ref ?? null;
     const providerReference = data?.tx_ref ?? data?.reference ?? null;
 
     this.logger.log(`Flutterwave webhook event received: ${event}`);
 
     if (!providerTransactionId && !providerReference) {
-      this.logger.warn('Flutterwave webhook event had no transaction identifier.');
-      return { ok: false, processed: false, message: 'Flutterwave event had no transaction identifier.' };
+      this.logger.warn(
+        'Flutterwave webhook event had no transaction identifier.',
+      );
+      return {
+        ok: false,
+        processed: false,
+        message: 'Flutterwave event had no transaction identifier.',
+      };
     }
 
     const prisma = this.prisma as any;
     const deposit = await prisma.deposit.findFirst({
       where: {
         OR: [
-          ...(providerTransactionId ? [{ providerTransactionId: String(providerTransactionId) }] : []),
-          ...(providerReference ? [{ providerReference: String(providerReference) }] : []),
+          ...(providerTransactionId
+            ? [{ providerTransactionId: String(providerTransactionId) }]
+            : []),
+          ...(providerReference
+            ? [{ providerReference: String(providerReference) }]
+            : []),
         ],
       },
       include: { transaction: true },
     });
 
     if (!deposit) {
-      this.logger.warn('Flutterwave webhook received for a transaction without a matching deposit record.');
-      return { ok: false, processed: false, message: 'No matching NobleCards deposit was found for this Flutterwave event.' };
+      this.logger.warn(
+        'Flutterwave webhook received for a transaction without a matching deposit record.',
+      );
+      return {
+        ok: false,
+        processed: false,
+        message:
+          'No matching NobleCards deposit was found for this Flutterwave event.',
+      };
     }
 
     const verification = await this.verifyTransaction(
@@ -736,35 +973,74 @@ export class FlutterwaveService {
       String(providerReference ?? providerTransactionId ?? ''),
     );
 
-    this.logger.log(`Flutterwave transaction verification result for deposit ${deposit.id}: ${verification.status} / verified=${verification.verified}`);
+    this.logger.log(
+      `Flutterwave transaction verification result for deposit ${deposit.id}: ${verification.status} / verified=${verification.verified}`,
+    );
 
     if (!verification.verified) {
-      this.logger.warn(`Flutterwave verification did not succeed for deposit ${deposit.id}.`);
-      return { ok: true, processed: false, status: 'PENDING', depositId: deposit.id, providerReference: verification.providerReference };
+      this.logger.warn(
+        `Flutterwave verification did not succeed for deposit ${deposit.id}.`,
+      );
+      return {
+        ok: true,
+        processed: false,
+        status: 'PENDING',
+        depositId: deposit.id,
+        providerReference: verification.providerReference,
+      };
     }
 
-    if (verification.amount && Number(verification.amount) !== Number(deposit.amount.toString())) {
-      this.logger.warn(`Flutterwave amount mismatch for deposit ${deposit.id}.`);
-      return { ok: false, processed: false, message: 'Amount mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
+    if (
+      verification.amount &&
+      Number(verification.amount) !== Number(deposit.amount.toString())
+    ) {
+      this.logger.warn(
+        `Flutterwave amount mismatch for deposit ${deposit.id}.`,
+      );
+      return {
+        ok: false,
+        processed: false,
+        message: 'Amount mismatch between Flutterwave and NobleCards deposit.',
+        depositId: deposit.id,
+      };
     }
 
-    if (verification.currency && verification.currency.toUpperCase() !== deposit.currencyCode) {
-      this.logger.warn(`Flutterwave currency mismatch for deposit ${deposit.id}.`);
-      return { ok: false, processed: false, message: 'Currency mismatch between Flutterwave and NobleCards deposit.', depositId: deposit.id };
+    if (
+      verification.currency &&
+      verification.currency.toUpperCase() !== deposit.currencyCode
+    ) {
+      this.logger.warn(
+        `Flutterwave currency mismatch for deposit ${deposit.id}.`,
+      );
+      return {
+        ok: false,
+        processed: false,
+        message:
+          'Currency mismatch between Flutterwave and NobleCards deposit.',
+        depositId: deposit.id,
+      };
     }
 
     const result = await this.verifyAndCreditDeposit({
       provider: 'FLUTTERWAVE',
-      providerTransactionId: String(providerTransactionId ?? verification.providerTransactionId),
-      providerReference: String(providerReference ?? verification.providerReference),
+      providerTransactionId: String(
+        providerTransactionId ?? verification.providerTransactionId,
+      ),
+      providerReference: String(
+        providerReference ?? verification.providerReference,
+      ),
       amount: verification.amount,
       currency: verification.currency,
     });
 
     if (result.alreadyProcessed) {
-      this.logger.log(`Flutterwave deposit ${deposit.id} was already processed; duplicate webhook ignored.`);
+      this.logger.log(
+        `Flutterwave deposit ${deposit.id} was already processed; duplicate webhook ignored.`,
+      );
     } else {
-      this.logger.log(`Flutterwave deposit ${deposit.id} was successfully credited to the wallet.`);
+      this.logger.log(
+        `Flutterwave deposit ${deposit.id} was successfully credited to the wallet.`,
+      );
     }
 
     return {
@@ -787,17 +1063,35 @@ export class FlutterwaveService {
     const deposit = await prisma.deposit.findFirst({
       where: {
         provider: input.provider,
-        ...(input.providerTransactionId ? { providerTransactionId: input.providerTransactionId } : {}),
-        ...(input.providerReference ? { providerReference: input.providerReference } : {}),
+        ...(input.providerTransactionId
+          ? { providerTransactionId: input.providerTransactionId }
+          : {}),
+        ...(input.providerReference
+          ? { providerReference: input.providerReference }
+          : {}),
       },
       include: { transaction: true, wallet: true, user: true },
     });
 
     if (!deposit) {
-      throw new NotFoundException('Matching deposit not found for provider transaction.');
+      throw new NotFoundException(
+        'Matching deposit not found for provider transaction.',
+      );
     }
 
-    if (deposit.status === 'SUCCESSFUL' || deposit.transaction?.status === 'SUCCESSFUL') {
+    if (
+      !new Decimal(deposit.amount.toString()).gt(0) ||
+      !new Decimal(deposit.netAmount.toString()).gt(0)
+    ) {
+      throw new BadRequestException(
+        'Deposit amount and wallet-credit amount must be greater than zero.',
+      );
+    }
+
+    if (
+      deposit.status === 'SUCCESSFUL' ||
+      deposit.transaction?.status === 'SUCCESSFUL'
+    ) {
       return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
     }
 
@@ -807,7 +1101,10 @@ export class FlutterwaveService {
     });
 
     if (reserved.count === 0) {
-      const current = await prisma.deposit.findUnique({ where: { id: deposit.id }, select: { status: true } });
+      const current = await prisma.deposit.findUnique({
+        where: { id: deposit.id },
+        select: { status: true },
+      });
       if (current?.status === 'SUCCESSFUL') {
         return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
       }
@@ -815,7 +1112,8 @@ export class FlutterwaveService {
         id: deposit.id,
         status: current?.status ?? deposit.status,
         alreadyProcessed: true,
-        message: 'Deposit is already being processed or has already been credited.',
+        message:
+          'Deposit is already being processed or has already been credited.',
       };
     }
 
@@ -830,7 +1128,7 @@ export class FlutterwaveService {
         data: {
           status: 'FAILED',
           metadata: {
-            ...(deposit.metadata as Record<string, unknown> ?? {}),
+            ...((deposit.metadata as Record<string, unknown>) ?? {}),
             flutterwave: {
               verifiedAt: new Date().toISOString(),
               amount: verification.amount,
@@ -840,28 +1138,46 @@ export class FlutterwaveService {
           },
         },
       });
-      return { id: deposit.id, status: 'FAILED', alreadyProcessed: false, message: 'Flutterwave verification returned unsuccessful.' };
+      return {
+        id: deposit.id,
+        status: 'FAILED',
+        alreadyProcessed: false,
+        message: 'Flutterwave verification returned unsuccessful.',
+      };
     }
 
     const expectedAmount = Number(deposit.amount.toString());
-    const actualAmount = Number(verification.amount ?? deposit.amount.toString());
+    const actualAmount = Number(
+      verification.amount ?? deposit.amount.toString(),
+    );
     if (actualAmount !== expectedAmount) {
-      throw new BadRequestException('Amount mismatch. Flutterwave transaction does not match the NobleCards deposit amount.');
+      throw new BadRequestException(
+        'Amount mismatch. Flutterwave transaction does not match the NobleCards deposit amount.',
+      );
     }
 
     const expectedCurrency = deposit.currencyCode.toUpperCase();
-    const actualCurrency = (verification.currency ?? deposit.currencyCode).toUpperCase();
+    const actualCurrency = (
+      verification.currency ?? deposit.currencyCode
+    ).toUpperCase();
     if (actualCurrency !== expectedCurrency) {
-      throw new BadRequestException('Currency mismatch. Flutterwave transaction does not match the NobleCards deposit currency.');
+      throw new BadRequestException(
+        'Currency mismatch. Flutterwave transaction does not match the NobleCards deposit currency.',
+      );
     }
 
-    const currency = await this.currencies.getCurrency(actualCurrency ?? deposit.currencyCode);
+    const currency = await this.currencies.getCurrency('USD');
     const netAmount = Number(deposit.netAmount.toString());
 
     return prisma.$transaction(async (tx: any) => {
-      const currentDeposit = await tx.deposit.findUnique({ where: { id: deposit.id }, include: { transaction: true } });
+      const currentDeposit = await tx.deposit.findUnique({
+        where: { id: deposit.id },
+        include: { transaction: true },
+      });
       if (!currentDeposit) {
-        throw new NotFoundException('Matching deposit not found for provider transaction.');
+        throw new NotFoundException(
+          'Matching deposit not found for provider transaction.',
+        );
       }
 
       if (currentDeposit.status === 'SUCCESSFUL') {
@@ -885,19 +1201,36 @@ export class FlutterwaveService {
           where: { id: currentDeposit.id },
           data: { status: 'SUCCESSFUL' },
         });
-        return { id: currentDeposit.id, status: 'SUCCESSFUL', alreadyProcessed: true, ledgerEntryId: existingLedger.id };
+        await this.referrals?.recordSuccessfulDeposit(tx, currentDeposit);
+        return {
+          id: currentDeposit.id,
+          status: 'SUCCESSFUL',
+          alreadyProcessed: true,
+          ledgerEntryId: existingLedger.id,
+        };
       }
 
       const walletBalance = await tx.walletBalance.findUnique({
-        where: { walletId_currencyCode: { walletId: currentDeposit.walletId, currencyCode: currency.code } },
+        where: {
+          walletId_currencyCode: {
+            walletId: currentDeposit.walletId,
+            currencyCode: currency.code,
+          },
+        },
       });
 
       if (!walletBalance) {
-        throw new NotFoundException('Wallet balance is missing for the credited currency.');
+        throw new NotFoundException(
+          'Wallet balance is missing for the credited currency.',
+        );
       }
 
-      const balanceBefore = new Decimal(walletBalance.availableBalance.toString());
-      const balanceAfter = balanceBefore.plus(new Decimal(netAmount.toFixed(2)));
+      const balanceBefore = new Decimal(
+        walletBalance.availableBalance.toString(),
+      );
+      const balanceAfter = balanceBefore.plus(
+        new Decimal(netAmount.toFixed(2)),
+      );
 
       await tx.walletBalance.update({
         where: { id: walletBalance.id },
@@ -925,7 +1258,10 @@ export class FlutterwaveService {
         data: {
           status: 'SUCCESSFUL',
           providerTransactionId: input.providerTransactionId,
-          providerReference: input.providerReference ?? currentDeposit.transaction?.providerReference ?? null,
+          providerReference:
+            input.providerReference ??
+            currentDeposit.transaction?.providerReference ??
+            null,
           metadata: {
             ...(currentDeposit.transaction?.metadata ?? {}),
             flutterwave: {
@@ -942,9 +1278,10 @@ export class FlutterwaveService {
         data: {
           status: 'SUCCESSFUL',
           providerTransactionId: input.providerTransactionId,
-          providerReference: input.providerReference ?? deposit.providerReference ?? null,
+          providerReference:
+            input.providerReference ?? deposit.providerReference ?? null,
           metadata: {
-            ...(deposit.metadata as Record<string, unknown> ?? {}),
+            ...((deposit.metadata as Record<string, unknown>) ?? {}),
             flutterwave: {
               verifiedAt: new Date().toISOString(),
               amount: verification.amount,
@@ -954,7 +1291,17 @@ export class FlutterwaveService {
         },
       });
 
-      return { id: currentDeposit.id, status: 'SUCCESSFUL', alreadyProcessed: false, ledgerEntryId: ledgerEntry.id };
+      await this.referrals?.recordSuccessfulDeposit(tx, {
+        ...currentDeposit,
+        status: 'SUCCESSFUL',
+      });
+
+      return {
+        id: currentDeposit.id,
+        status: 'SUCCESSFUL',
+        alreadyProcessed: false,
+        ledgerEntryId: ledgerEntry.id,
+      };
     });
   }
 }

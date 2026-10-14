@@ -141,6 +141,7 @@ exports.Prisma.UserScalarFieldEnum = {
   isVerified: 'isVerified',
   isActive: 'isActive',
   role: 'role',
+  referralCode: 'referralCode',
   transactionPinHash: 'transactionPinHash',
   transactionPinFailedAttempts: 'transactionPinFailedAttempts',
   transactionPinLockedUntil: 'transactionPinLockedUntil',
@@ -158,6 +159,7 @@ exports.Prisma.PendingRegistrationScalarFieldEnum = {
   country: 'country',
   countryCode: 'countryCode',
   gender: 'gender',
+  referralCode: 'referralCode',
   otpHash: 'otpHash',
   otpExpiresAt: 'otpExpiresAt',
   otpAttempts: 'otpAttempts',
@@ -225,6 +227,8 @@ exports.Prisma.WalletBalanceScalarFieldEnum = {
   currencyCode: 'currencyCode',
   availableBalance: 'availableBalance',
   pendingBalance: 'pendingBalance',
+  referralCreditAvailable: 'referralCreditAvailable',
+  referralCreditPending: 'referralCreditPending',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -283,9 +287,51 @@ exports.Prisma.LedgerEntryScalarFieldEnum = {
   balanceAfter: 'balanceAfter',
   pendingBalanceBefore: 'pendingBalanceBefore',
   pendingBalanceAfter: 'pendingBalanceAfter',
+  referralBalanceBefore: 'referralBalanceBefore',
+  referralBalanceAfter: 'referralBalanceAfter',
+  referralPendingBefore: 'referralPendingBefore',
+  referralPendingAfter: 'referralPendingAfter',
   operationKey: 'operationKey',
   reference: 'reference',
   reason: 'reason',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ReferralAttributionScalarFieldEnum = {
+  id: 'id',
+  referrerId: 'referrerId',
+  referredUserId: 'referredUserId',
+  referralCode: 'referralCode',
+  status: 'status',
+  firstDepositId: 'firstDepositId',
+  firstDepositAmountUsd: 'firstDepositAmountUsd',
+  qualifyingPurchaseId: 'qualifyingPurchaseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReferralRewardScalarFieldEnum = {
+  id: 'id',
+  referralId: 'referralId',
+  referrerId: 'referrerId',
+  amountUsd: 'amountUsd',
+  status: 'status',
+  creditedAt: 'creditedAt',
+  reviewReason: 'reviewReason',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReferralAuditEventScalarFieldEnum = {
+  id: 'id',
+  referralId: 'referralId',
+  adminUserId: 'adminUserId',
+  action: 'action',
+  reason: 'reason',
+  previousStatus: 'previousStatus',
+  newStatus: 'newStatus',
   createdAt: 'createdAt'
 };
 
@@ -495,6 +541,7 @@ exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   denominationType: 'denominationType',
   quantity: 'quantity',
   amount: 'amount',
+  giftCardValueUsd: 'giftCardValueUsd',
   providerAmount: 'providerAmount',
   fee: 'fee',
   baseBuyRatePercent: 'baseBuyRatePercent',
@@ -502,6 +549,8 @@ exports.Prisma.GiftCardPurchaseScalarFieldEnum = {
   buyAdjustmentAmount: 'buyAdjustmentAmount',
   customerRatePercent: 'customerRatePercent',
   customerPrice: 'customerPrice',
+  referralCreditAmount: 'referralCreditAmount',
+  referralCreditUsdAmount: 'referralCreditUsdAmount',
   status: 'status',
   providerStatus: 'providerStatus',
   providerMessage: 'providerMessage',
@@ -678,7 +727,25 @@ exports.LedgerEntryType = exports.$Enums.LedgerEntryType = {
   FEE: 'FEE',
   REFUND: 'REFUND',
   REVERSAL: 'REVERSAL',
-  ADJUSTMENT: 'ADJUSTMENT'
+  ADJUSTMENT: 'ADJUSTMENT',
+  REFERRAL_CREDIT: 'REFERRAL_CREDIT',
+  REFERRAL_DEBIT: 'REFERRAL_DEBIT'
+};
+
+exports.ReferralStatus = exports.$Enums.ReferralStatus = {
+  REGISTERED: 'REGISTERED',
+  DEPOSIT_QUALIFIED: 'DEPOSIT_QUALIFIED',
+  QUALIFIED: 'QUALIFIED',
+  HELD: 'HELD',
+  REJECTED: 'REJECTED'
+};
+
+exports.ReferralRewardStatus = exports.$Enums.ReferralRewardStatus = {
+  PENDING: 'PENDING',
+  AVAILABLE: 'AVAILABLE',
+  HELD: 'HELD',
+  REJECTED: 'REJECTED',
+  REVERSED: 'REVERSED'
 };
 
 exports.WithdrawalQuoteStatus = exports.$Enums.WithdrawalQuoteStatus = {
@@ -774,6 +841,9 @@ exports.Prisma.ModelName = {
   Deposit: 'Deposit',
   Transaction: 'Transaction',
   LedgerEntry: 'LedgerEntry',
+  ReferralAttribution: 'ReferralAttribution',
+  ReferralReward: 'ReferralReward',
+  ReferralAuditEvent: 'ReferralAuditEvent',
   Withdrawal: 'Withdrawal',
   WithdrawalQuote: 'WithdrawalQuote',
   Beneficiary: 'Beneficiary',

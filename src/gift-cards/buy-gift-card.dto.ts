@@ -1,5 +1,18 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsEmail, IsIn, IsInt, IsNumber, IsOptional, IsString, Length, Matches, Max, MaxLength, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsIn,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class BuyGiftCardCatalogQueryDto {
   @IsOptional()
@@ -61,6 +74,10 @@ export class BuyGiftCardPurchaseDto {
   @IsString()
   @Matches(/^[A-Za-z0-9._:-]{1,128}$/)
   idempotencyKey?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  useReferralCredit?: boolean;
 }
 
 export class BuyGiftCardQuoteDto {

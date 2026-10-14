@@ -33,7 +33,11 @@ async function bootstrap() {
   ]));
   app.enableCors({
     origin: (origin, callback) => {
-      if (!origin || configuredOrigins.includes(origin) || /^https?:\/\/(localhost|10\.0\.2\.2):\d+$/.test(origin)) {
+      if (
+        !origin ||
+        configuredOrigins.includes(origin) ||
+        /^https?:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2):\d+$/.test(origin)
+      ) {
         callback(null, true);
         return;
       }

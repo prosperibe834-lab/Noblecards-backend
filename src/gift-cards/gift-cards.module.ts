@@ -18,9 +18,16 @@ import { BeneficiaryEncryptionService } from '../security/beneficiary-encryption
 import { AdminGiftCardSandboxService } from './admin-gift-card-sandbox.service';
 import { ExchangeRatesModule } from '../exchange-rates/exchange-rates.module';
 import { EmailModule } from '../email/email.module';
+import { ReferralsModule } from '../referrals/referrals.module';
 
 @Module({
-  imports: [AuthModule, WalletsModule, ExchangeRatesModule, EmailModule],
+  imports: [
+    AuthModule,
+    WalletsModule,
+    ExchangeRatesModule,
+    EmailModule,
+    ReferralsModule,
+  ],
   controllers: [GiftCardsController, AdminGiftCardsController],
   providers: [
     GiftCardsService,

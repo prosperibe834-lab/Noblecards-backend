@@ -1,20 +1,64 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
 import { PrismaService } from '../prisma/prisma.service';
 
-type PaymentMethod = 'BANK_TRANSFER' | 'CARD' | 'USSD' | 'MOBILE_MONEY' | 'WALLET_TRANSFER' | 'APPLE_PAY' | 'GOOGLE_PAY' | 'WISE' | 'OTHER';
+type PaymentMethod =
+  | 'BANK_TRANSFER'
+  | 'CARD'
+  | 'USSD'
+  | 'MOBILE_MONEY'
+  | 'WALLET_TRANSFER'
+  | 'APPLE_PAY'
+  | 'GOOGLE_PAY'
+  | 'WISE'
+  | 'OTHER';
 type PaymentProvider = 'FLUTTERWAVE' | 'MANUAL' | 'INTERNAL';
-type DepositStatus = 'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'CANCELLED' | 'REFUNDED' | 'REVERSED' | 'EXPIRED' | 'UNDER_REVIEW';
-type LedgerEntryType = 'CREDIT' | 'DEBIT' | 'HOLD' | 'RELEASE' | 'FEE' | 'REFUND' | 'REVERSAL' | 'ADJUSTMENT';
-type TransactionStatus = 'PENDING' | 'PROCESSING' | 'SUCCESSFUL' | 'FAILED' | 'CANCELLED' | 'REFUNDED' | 'REVERSED' | 'EXPIRED' | 'UNDER_REVIEW';
+type DepositStatus =
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'SUCCESSFUL'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'REFUNDED'
+  | 'REVERSED'
+  | 'EXPIRED'
+  | 'UNDER_REVIEW';
+type LedgerEntryType =
+  | 'CREDIT'
+  | 'DEBIT'
+  | 'HOLD'
+  | 'RELEASE'
+  | 'FEE'
+  | 'REFUND'
+  | 'REVERSAL'
+  | 'ADJUSTMENT';
+type TransactionStatus =
+  | 'PENDING'
+  | 'PROCESSING'
+  | 'SUCCESSFUL'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'REFUNDED'
+  | 'REVERSED'
+  | 'EXPIRED'
+  | 'UNDER_REVIEW';
 import { WalletsService } from '../wallets/wallets.service';
 import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { FlutterwaveService } from '../flutterwave/flutterwave.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
-import { CreateCardDepositDto, CreateDepositDto, DepositPaymentMethodOption, DepositProviderOption } from './deposits.dto';
+import {
+  CreateCardDepositDto,
+  CreateDepositDto,
+  DepositPaymentMethodOption,
+  DepositProviderOption,
+} from './deposits.dto';
 
 @Injectable()
 export class DepositsService {
@@ -29,15 +73,23 @@ export class DepositsService {
   ) {}
 
   private getFeeConfig() {
-    const providerPercent = Number(this.config.get<number | string>('DEPOSIT_PROVIDER_FEE_PERCENT', 2));
-    const noblePercent = Number(this.config.get<number | string>('DEPOSIT_NOBLECARDS_FEE_PERCENT', 1));
+    const providerPercent = Number(
+      this.config.get<number | string>('DEPOSIT_PROVIDER_FEE_PERCENT', 2),
+    );
+    const noblePercent = Number(
+      this.config.get<number | string>('DEPOSIT_NOBLECARDS_FEE_PERCENT', 1),
+    );
 
     if (!Number.isFinite(providerPercent) || providerPercent < 0) {
-      throw new BadRequestException('DEPOSIT_PROVIDER_FEE_PERCENT must be a valid non-negative number.');
+      throw new BadRequestException(
+        'DEPOSIT_PROVIDER_FEE_PERCENT must be a valid non-negative number.',
+      );
     }
 
     if (!Number.isFinite(noblePercent) || noblePercent < 0) {
-      throw new BadRequestException('DEPOSIT_NOBLECARDS_FEE_PERCENT must be a valid non-negative number.');
+      throw new BadRequestException(
+        'DEPOSIT_NOBLECARDS_FEE_PERCENT must be a valid non-negative number.',
+      );
     }
 
     return {
@@ -46,14 +98,25 @@ export class DepositsService {
     };
   }
 
-  private calculateDepositFees(amount: Decimal, exchangeRate: Decimal = new Decimal(1)) {
+  private calculateDepositFees(
+    amount: Decimal,
+    exchangeRate: Decimal = new Decimal(1),
+  ) {
     const { providerPercent, noblePercent } = this.getFeeConfig();
-    const totalFeePercent = new Decimal(providerPercent).plus(new Decimal(noblePercent));
-    const feeMultiplier = new Decimal(1).plus(totalFeePercent.div(new Decimal(100)));
+    const totalFeePercent = new Decimal(providerPercent).plus(
+      new Decimal(noblePercent),
+    );
+    const feeMultiplier = new Decimal(1).plus(
+      totalFeePercent.div(new Decimal(100)),
+    );
     const effectiveExchangeRate = exchangeRate.mul(feeMultiplier);
     const baseLocalAmount = amount.mul(exchangeRate);
-    const providerFee = baseLocalAmount.mul(new Decimal(providerPercent)).div(new Decimal(100));
-    const nobleCardsFee = baseLocalAmount.mul(new Decimal(noblePercent)).div(new Decimal(100));
+    const providerFee = baseLocalAmount
+      .mul(new Decimal(providerPercent))
+      .div(new Decimal(100));
+    const nobleCardsFee = baseLocalAmount
+      .mul(new Decimal(noblePercent))
+      .div(new Decimal(100));
     const totalFees = providerFee.plus(nobleCardsFee);
     const customerPayableAmount = baseLocalAmount.plus(totalFees);
 
@@ -73,7 +136,10 @@ export class DepositsService {
     };
   }
 
-  private assertSupportedFlutterwaveCurrency(currencyCode: string, provider: PaymentProvider) {
+  private assertSupportedFlutterwaveCurrency(
+    currencyCode: string,
+    provider: PaymentProvider,
+  ) {
     if (provider !== 'FLUTTERWAVE') {
       return;
     }
@@ -90,26 +156,38 @@ export class DepositsService {
   async createDeposit(userId: string, dto: CreateDepositDto) {
     const logger = new (require('@nestjs/common').Logger)('DepositsService');
     logger.log('[createDeposit] Processing deposit request');
-    logger.log(`[createDeposit] userId=${userId}, currency=${dto.currency}, amount=${dto.amount}`);
-    
+    logger.log(
+      `[createDeposit] userId=${userId}, currency=${dto.currency}, amount=${dto.amount}`,
+    );
+
     // Get currency directly from Prisma instead of using CurrenciesService
     const prismaClient = this.prisma as any;
     const currency = await prismaClient.currency.findUnique({
       where: { code: dto.currency.toUpperCase() },
     });
-    
-    if (!currency) throw new NotFoundException(`Currency ${dto.currency.toUpperCase()} was not found.`);
+
+    if (!currency)
+      throw new NotFoundException(
+        `Currency ${dto.currency.toUpperCase()} was not found.`,
+      );
     if (!currency.enabled || !currency.depositEnabled) {
-      throw new BadRequestException(`Deposits are disabled for ${dto.currency}.`);
+      throw new BadRequestException(
+        `Deposits are disabled for ${dto.currency}.`,
+      );
     }
     if (!Number.isFinite(dto.amount) || dto.amount <= 0) {
-      throw new BadRequestException('Deposit amount must be greater than zero.');
+      throw new BadRequestException(
+        'Deposit amount must be greater than zero.',
+      );
     }
 
-    const provider = (dto.provider ?? DepositProviderOption.FLUTTERWAVE) as PaymentProvider;
+    const provider = (dto.provider ??
+      DepositProviderOption.FLUTTERWAVE) as PaymentProvider;
     this.assertSupportedFlutterwaveCurrency(currency.code, provider);
 
-    const normalizedKey = dto.idempotencyKey ?? `${userId}:${currency.code}:${dto.amount}:${Date.now()}`;
+    const normalizedKey =
+      dto.idempotencyKey ??
+      `${userId}:${currency.code}:${dto.amount}:${Date.now()}`;
     const existing = await prismaClient.deposit.findFirst({
       where: { userId, idempotencyKey: normalizedKey },
       include: { transaction: true },
@@ -120,8 +198,12 @@ export class DepositsService {
         providerFee: existing.fee ? existing.fee.toString() : '0.00',
         nobleCardsFee: '0.00',
         totalFees: existing.fee ? existing.fee.toString() : '0.00',
-        customerPayableAmount: existing.amount ? existing.amount.toString() : '0.00',
-        walletCreditAmount: existing.netAmount ? existing.netAmount.toString() : '0.00',
+        customerPayableAmount: existing.amount
+          ? existing.amount.toString()
+          : '0.00',
+        walletCreditAmount: existing.netAmount
+          ? existing.netAmount.toString()
+          : '0.00',
         walletCreditCurrency: existing.currencyCode,
         exchangeRate: '1',
       };
@@ -144,7 +226,13 @@ export class DepositsService {
         walletCreditAmount: existingFeeBreakdown.walletCreditAmount,
         walletCreditCurrency: existingFeeBreakdown.walletCreditCurrency,
         exchangeRate: existingFeeBreakdown.exchangeRate,
-        transaction: existing.transaction ? { id: existing.transaction.id, status: existing.transaction.status, reference: existing.transaction.reference } : null,
+        transaction: existing.transaction
+          ? {
+              id: existing.transaction.id,
+              status: existing.transaction.status,
+              reference: existing.transaction.reference,
+            }
+          : null,
       };
     }
 
@@ -153,34 +241,48 @@ export class DepositsService {
     const rateMap = await this.exchangeRates.getRates();
     const targetCurrency = currency.code.toUpperCase();
     const exchangeRateValue = rateMap.rates[targetCurrency];
-    if (!exchangeRateValue || !Number.isFinite(exchangeRateValue) || exchangeRateValue <= 0) {
-      throw new BadRequestException(`No exchange rate is available for ${targetCurrency}.`);
+    if (
+      !exchangeRateValue ||
+      !Number.isFinite(exchangeRateValue) ||
+      exchangeRateValue <= 0
+    ) {
+      throw new BadRequestException(
+        `No exchange rate is available for ${targetCurrency}.`,
+      );
     }
     const exchangeRate = new Decimal(String(exchangeRateValue));
-    const feeBreakdown = this.calculateDepositFees(requestedAmount, exchangeRate);
+    const feeBreakdown = this.calculateDepositFees(
+      requestedAmount,
+      exchangeRate,
+    );
     const paymentAmount = feeBreakdown.customerPayableAmount;
     const fee = feeBreakdown.totalFees;
     const netAmount = requestedAmount;
 
-    const paymentMethod = (dto.paymentMethod ?? DepositPaymentMethodOption.BANK_TRANSFER) as PaymentMethod;
+    const paymentMethod = (dto.paymentMethod ??
+      DepositPaymentMethodOption.BANK_TRANSFER) as PaymentMethod;
 
-    logger.log(`[createDeposit] paymentMethod=${paymentMethod}, provider=${provider}`);
+    logger.log(
+      `[createDeposit] paymentMethod=${paymentMethod}, provider=${provider}`,
+    );
 
-    const transaction = await this.transactions.createPendingDepositTransaction({
-      userId,
-      walletId: wallet.id,
-      currencyCode: currency.code,
-      amount: paymentAmount,
-      netAmount,
-      fee,
-      provider,
-      paymentMethod,
-      metadata: {
-        source: 'deposit-creation',
-        country: dto.country ?? null,
-        countryCode: dto.countryCode ?? null,
+    const transaction = await this.transactions.createPendingDepositTransaction(
+      {
+        userId,
+        walletId: wallet.id,
+        currencyCode: currency.code,
+        amount: paymentAmount,
+        netAmount,
+        fee,
+        provider,
+        paymentMethod,
+        metadata: {
+          source: 'deposit-creation',
+          country: dto.country ?? null,
+          countryCode: dto.countryCode ?? null,
+        },
       },
-    });
+    );
 
     const deposit = await prismaClient.deposit.create({
       data: {
@@ -190,6 +292,7 @@ export class DepositsService {
         amount: paymentAmount,
         fee,
         netAmount,
+        exchangeRate,
         provider,
         paymentMethod,
         country: dto.country ?? null,
@@ -214,7 +317,9 @@ export class DepositsService {
     // Other methods use standard redirect checkout
     let paymentIntent;
     if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'NGN') {
-      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for NGN BANK_TRANSFER`);
+      logger.log(
+        `[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for NGN BANK_TRANSFER`,
+      );
       paymentIntent = await this.flutterwave.createVirtualAccount({
         amount: paymentAmount.toNumber(),
         currency: currency.code,
@@ -226,7 +331,9 @@ export class DepositsService {
         countryCode: dto.countryCode,
       });
     } else if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GHS') {
-      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for GHS BANK_TRANSFER`);
+      logger.log(
+        `[createDeposit] CALLING FLUTTERWAVE CREATE VIRTUAL ACCOUNT for GHS BANK_TRANSFER`,
+      );
       paymentIntent = await this.flutterwave.createGhsVirtualAccount({
         amount: paymentAmount.toNumber(),
         currency: currency.code,
@@ -237,9 +344,13 @@ export class DepositsService {
         country: dto.country,
         countryCode: dto.countryCode,
       });
-      logger.log(`[createDeposit] GHS Virtual Account Response: ${JSON.stringify(paymentIntent)}`);
+      logger.log(
+        `[createDeposit] GHS Virtual Account Response: ${JSON.stringify(paymentIntent)}`,
+      );
     } else if (paymentMethod === 'BANK_TRANSFER' && currency.code === 'GBP') {
-      logger.log(`[createDeposit] CALLING FLUTTERWAVE CREATE GBP BANK CHARGE for GBP BANK_TRANSFER`);
+      logger.log(
+        `[createDeposit] CALLING FLUTTERWAVE CREATE GBP BANK CHARGE for GBP BANK_TRANSFER`,
+      );
       paymentIntent = await this.flutterwave.createGbpBankCharge({
         amount: paymentAmount.toNumber(),
         currency: currency.code,
@@ -270,12 +381,16 @@ export class DepositsService {
         providerReference: paymentIntent.providerReference,
         providerTransactionId: paymentIntent.providerTransactionId,
         metadata: {
-          ...(deposit.metadata as Record<string, unknown> ?? {}),
+          ...((deposit.metadata as Record<string, unknown>) ?? {}),
           flutterwave: paymentIntent.meta,
           providerReference: paymentIntent.providerReference,
           providerTransactionId: paymentIntent.providerTransactionId,
-          ...(paymentIntent.paymentLink && { paymentLink: paymentIntent.paymentLink }),
-          ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
+          ...(paymentIntent.paymentLink && {
+            paymentLink: paymentIntent.paymentLink,
+          }),
+          ...(paymentIntent.authorizationUrl && {
+            authorizationUrl: paymentIntent.authorizationUrl,
+          }),
           ...(paymentIntent.bankName && {
             bankTransfer: {
               bankName: paymentIntent.bankName,
@@ -288,18 +403,25 @@ export class DepositsService {
       },
     });
 
-    logger.log(`[GBP DEBUG 4] DepositsService paymentIntent: ${JSON.stringify({
-      paymentMethod,
-      currency: currency.code,
-      authorizationUrl: paymentIntent.authorizationUrl ?? null,
-      providerReference: paymentIntent.providerReference,
-      providerTransactionId: paymentIntent.providerTransactionId,
-      meta: paymentIntent.meta,
-    })}`);
-    logger.log(`[GBP DEBUG 5] Final authorizationUrl before database/response: ${paymentIntent.authorizationUrl ?? 'NONE'}`);
+    logger.log(
+      `[GBP DEBUG 4] DepositsService paymentIntent: ${JSON.stringify({
+        paymentMethod,
+        currency: currency.code,
+        authorizationUrl: paymentIntent.authorizationUrl ?? null,
+        providerReference: paymentIntent.providerReference,
+        providerTransactionId: paymentIntent.providerTransactionId,
+        meta: paymentIntent.meta,
+      })}`,
+    );
+    logger.log(
+      `[GBP DEBUG 5] Final authorizationUrl before database/response: ${paymentIntent.authorizationUrl ?? 'NONE'}`,
+    );
 
     // For NGN or GHS bank transfer, return account details instead of payment link
-    if (paymentMethod === 'BANK_TRANSFER' && (currency.code === 'NGN' || currency.code === 'GHS')) {
+    if (
+      paymentMethod === 'BANK_TRANSFER' &&
+      (currency.code === 'NGN' || currency.code === 'GHS')
+    ) {
       const bankTransferResponse = {
         id: deposit.id,
         status: deposit.status,
@@ -335,7 +457,9 @@ export class DepositsService {
           status: transaction.status,
         },
       };
-      logger.log(`[createDeposit] ${currency.code} BANK_TRANSFER response to Flutter: ${JSON.stringify(bankTransferResponse)}`);
+      logger.log(
+        `[createDeposit] ${currency.code} BANK_TRANSFER response to Flutter: ${JSON.stringify(bankTransferResponse)}`,
+      );
       return bankTransferResponse;
     }
 
@@ -370,9 +494,15 @@ export class DepositsService {
         },
       };
 
-      logger.log(`[GBP DEBUG 6] Final POST /deposits response: ${JSON.stringify(responsePayload)}`);
-      logger.log(`[createDeposit] GBP API response authorizationUrl=${responsePayload.authorizationUrl ?? 'NONE'}`);
-      logger.log(`[createDeposit] GBP API response authorizationUrl type=${typeof responsePayload.authorizationUrl}`);
+      logger.log(
+        `[GBP DEBUG 6] Final POST /deposits response: ${JSON.stringify(responsePayload)}`,
+      );
+      logger.log(
+        `[createDeposit] GBP API response authorizationUrl=${responsePayload.authorizationUrl ?? 'NONE'}`,
+      );
+      logger.log(
+        `[createDeposit] GBP API response authorizationUrl type=${typeof responsePayload.authorizationUrl}`,
+      );
 
       return responsePayload;
     }
@@ -409,19 +539,31 @@ export class DepositsService {
   async createCardDeposit(userId: string, dto: CreateCardDepositDto) {
     const currencyCode = dto.currency.toUpperCase();
     if (!['NGN', 'GHS', 'GBP'].includes(currencyCode)) {
-      throw new BadRequestException('Card deposits support NGN, GHS, and GBP only.');
+      throw new BadRequestException(
+        'Card deposits support NGN, GHS, and GBP only.',
+      );
     }
-    if (!Number.isFinite(dto.requestedAmount) || dto.requestedAmount <= 0 || !Number.isFinite(dto.amount) || dto.amount <= 0) {
-      throw new BadRequestException('Card deposit amount must be greater than zero.');
+    if (
+      !Number.isFinite(dto.requestedAmount) ||
+      dto.requestedAmount <= 0 ||
+      !Number.isFinite(dto.amount) ||
+      dto.amount <= 0
+    ) {
+      throw new BadRequestException(
+        'Card deposit amount must be greater than zero.',
+      );
     }
 
     const currencies = await this.prisma.$queryRaw<Array<any>>`
       SELECT * FROM "Currency" WHERE "code" = ${currencyCode}
     `;
     const currency = currencies[0];
-    if (!currency) throw new NotFoundException(`Currency ${currencyCode} was not found.`);
+    if (!currency)
+      throw new NotFoundException(`Currency ${currencyCode} was not found.`);
     if (!currency.enabled || !currency.depositEnabled) {
-      throw new BadRequestException(`Deposits are disabled for ${currencyCode}.`);
+      throw new BadRequestException(
+        `Deposits are disabled for ${currencyCode}.`,
+      );
     }
 
     const requestedAmount = new Decimal(dto.requestedAmount.toFixed(2));
@@ -429,16 +571,25 @@ export class DepositsService {
     const rateMap = await this.exchangeRates.getRates();
     const rate = rateMap.rates[currencyCode];
     if (!Number.isFinite(rate) || rate <= 0) {
-      throw new BadRequestException(`No exchange rate is available for ${currencyCode}.`);
+      throw new BadRequestException(
+        `No exchange rate is available for ${currencyCode}.`,
+      );
     }
-    const feeBreakdown = this.calculateDepositFees(requestedAmount, new Decimal(String(rate)));
+    const feeBreakdown = this.calculateDepositFees(
+      requestedAmount,
+      new Decimal(String(rate)),
+    );
     if (!payableAmount.eq(feeBreakdown.customerPayableAmount)) {
-      throw new BadRequestException('Card payable amount does not match the current exchange rate and fee calculation.');
+      throw new BadRequestException(
+        'Card payable amount does not match the current exchange rate and fee calculation.',
+      );
     }
 
     const provider: PaymentProvider = 'FLUTTERWAVE';
     const paymentMethod: PaymentMethod = 'CARD';
-    const idempotencyKey = dto.idempotencyKey ?? `${userId}:${currencyCode}:${dto.requestedAmount}:${Date.now()}`;
+    const idempotencyKey =
+      dto.idempotencyKey ??
+      `${userId}:${currencyCode}:${dto.requestedAmount}:${Date.now()}`;
     const existingRows = await this.prisma.$queryRaw<Array<any>>`
       SELECT d.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
       FROM "Deposit" d
@@ -469,7 +620,10 @@ export class DepositsService {
       RETURNING "id"
     `;
     const wallet = walletRows[0];
-    if (!wallet) throw new NotFoundException('Wallet could not be found for card deposit.');
+    if (!wallet)
+      throw new NotFoundException(
+        'Wallet could not be found for card deposit.',
+      );
 
     const transactionId = randomUUID();
     const transactionReference = `DPT-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`;
@@ -523,7 +677,9 @@ export class DepositsService {
       flutterwave: paymentIntent.meta,
       providerReference: paymentIntent.providerReference,
       providerTransactionId: paymentIntent.providerTransactionId,
-      ...(paymentIntent.authorizationUrl && { authorizationUrl: paymentIntent.authorizationUrl }),
+      ...(paymentIntent.authorizationUrl && {
+        authorizationUrl: paymentIntent.authorizationUrl,
+      }),
     };
     await this.prisma.$executeRaw`
       UPDATE "Deposit"
@@ -555,18 +711,29 @@ export class DepositsService {
       providerReference: paymentIntent.providerReference,
       providerTransactionId: paymentIntent.providerTransactionId,
       walletId: wallet.id,
-      transaction: { id: transactionId, reference: transactionReference, status: 'PENDING' },
+      transaction: {
+        id: transactionId,
+        reference: transactionReference,
+        status: 'PENDING',
+      },
     };
   }
 
-  async listDeposits(userId: string, filters: { status?: string; currency?: string; provider?: string }) {
+  async listDeposits(
+    userId: string,
+    filters: { status?: string; currency?: string; provider?: string },
+  ) {
     const prisma = this.prisma as any;
     const deposits = await prisma.deposit.findMany({
       where: {
         userId,
         ...(filters.status ? { status: filters.status as DepositStatus } : {}),
-        ...(filters.currency ? { currencyCode: filters.currency.toUpperCase() } : {}),
-        ...(filters.provider ? { provider: filters.provider as PaymentProvider } : {}),
+        ...(filters.currency
+          ? { currencyCode: filters.currency.toUpperCase() }
+          : {}),
+        ...(filters.provider
+          ? { provider: filters.provider as PaymentProvider }
+          : {}),
       },
       include: { transaction: true },
       orderBy: { createdAt: 'desc' },
@@ -582,11 +749,49 @@ export class DepositsService {
       netAmount: deposit.netAmount.toString(),
       createdAt: deposit.createdAt,
       updatedAt: deposit.updatedAt,
-      transaction: deposit.transaction ? {
-        id: deposit.transaction.id,
-        status: deposit.transaction.status,
-        reference: deposit.transaction.reference,
-      } : null,
+      transaction: deposit.transaction
+        ? {
+            id: deposit.transaction.id,
+            status: deposit.transaction.status,
+            reference: deposit.transaction.reference,
+          }
+        : null,
+    }));
+  }
+
+  async getAdminDeposits() {
+    const deposits = await (this.prisma as any).deposit.findMany({
+      include: {
+        transaction: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return deposits.map((deposit: any) => ({
+      id: deposit.id,
+      user: deposit.user,
+      status: deposit.status,
+      provider: deposit.provider,
+      currency: deposit.currencyCode,
+      amount: deposit.amount.toString(),
+      fee: deposit.fee.toString(),
+      netAmount: deposit.netAmount.toString(),
+      createdAt: deposit.createdAt,
+      updatedAt: deposit.updatedAt,
+      transaction: deposit.transaction
+        ? {
+            id: deposit.transaction.id,
+            status: deposit.transaction.status,
+            reference: deposit.transaction.reference,
+          }
+        : null,
     }));
   }
 

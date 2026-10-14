@@ -10,6 +10,6 @@ import { AdminUsersGuard } from './admin-users.guard';
   imports: [forwardRef(() => AuthModule), EmailModule],
   providers: [UsersService, AdminUsersGuard],
   controllers: [UsersController, AdminUsersController],
-  exports: [UsersService],
+  exports: [UsersService, AdminUsersGuard],
 })
 export class UsersModule {}

@@ -17,12 +17,33 @@ import { ExchangeRatesModule } from './exchange-rates/exchange-rates.module';
 import { GiftCardOrdersModule } from './gift-cards/gift-card-orders.module';
 import { GiftCardsModule } from './gift-cards/gift-cards.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
+import { ReferralsModule } from './referrals/referrals.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    envFilePath: [resolve(process.cwd(), '.env'), resolve(process.cwd(), 'noble_cards_backend', '.env')],
-  }), PrismaModule, EmailModule, UsersModule, AuthModule, WalletsModule, CurrenciesModule, TransactionsModule, LedgerModule, FlutterwaveModule, ExchangeRatesModule, GiftCardOrdersModule, GiftCardsModule, WithdrawalsModule, DepositsModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        resolve(process.cwd(), '.env'),
+        resolve(process.cwd(), 'noble_cards_backend', '.env'),
+      ],
+    }),
+    PrismaModule,
+    EmailModule,
+    UsersModule,
+    AuthModule,
+    WalletsModule,
+    CurrenciesModule,
+    TransactionsModule,
+    LedgerModule,
+    FlutterwaveModule,
+    ExchangeRatesModule,
+    GiftCardOrdersModule,
+    GiftCardsModule,
+    WithdrawalsModule,
+    DepositsModule,
+    ReferralsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
