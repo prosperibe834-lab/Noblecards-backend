@@ -7,12 +7,29 @@ import { ValidationPipe } from '@nestjs/common';
 import { join } from 'node:path';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.use('/flutterwave/webhook', express.raw({ type: '*/*', limit: '1mb' }));
-  app.use('/withdrawals/webhooks/flutterwave', express.raw({ type: '*/*', limit: '1mb' }));
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bodyParser: false,
+  });
+  const preserveRawBody = (request: any, _response: any, next: () => void) => {
+    request.rawBody = request.body;
+    next();
+  };
+  app.use(
+    '/flutterwave/webhook',
+    express.raw({ type: '*/*', limit: '1mb' }),
+    preserveRawBody,
+  );
+  app.use(
+    '/withdrawals/webhooks/flutterwave',
+    express.raw({ type: '*/*', limit: '1mb' }),
+    preserveRawBody,
+  );
   app.use(express.json({
     verify: (req: any, _res, buffer) => {
-      if (req.originalUrl === '/flutterwave/webhook') {
+      if (
+        req.originalUrl === '/flutterwave/webhook' ||
+        req.originalUrl === '/withdrawals/webhooks/flutterwave'
+      ) {
         req.rawBody = buffer;
       }
     },

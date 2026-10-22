@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes } from 'node:crypto';
+import {
+  createCipheriv,
+  createDecipheriv,
+  createHash,
+  createHmac,
+  randomBytes,
+} from 'node:crypto';
 
 @Injectable()
 export class BeneficiaryEncryptionService {
@@ -48,7 +54,10 @@ export class BeneficiaryEncryptionService {
     const iv = randomBytes(12);
     const cipher = createCipheriv('aes-256-gcm', key, iv);
     const plainText = JSON.stringify(payload);
-    const ciphertext = Buffer.concat([cipher.update(plainText, 'utf8'), cipher.final()]);
+    const ciphertext = Buffer.concat([
+      cipher.update(plainText, 'utf8'),
+      cipher.final(),
+    ]);
     const tag = cipher.getAuthTag();
 
     return `v1:${iv.toString('base64')}:${tag.toString('base64')}:${ciphertext.toString('base64')}`;
@@ -56,7 +65,9 @@ export class BeneficiaryEncryptionService {
 
   decrypt<T>(payload: string): T {
     if (!payload || !payload.startsWith('v1:')) {
-      throw new Error('Beneficiary payload is not in a supported encrypted format.');
+      throw new Error(
+        'Beneficiary payload is not in a supported encrypted format.',
+      );
     }
 
     const parts = payload.split(':');
@@ -90,7 +101,9 @@ export class BeneficiaryEncryptionService {
       try {
         return JSON.parse(plainText) as T;
       } catch {
-        throw new Error('Beneficiary payload could not be decrypted and parsed.');
+        throw new Error(
+          'Beneficiary payload could not be decrypted and parsed.',
+        );
       }
     } catch {
       throw new Error('Beneficiary payload could not be decrypted and parsed.');
@@ -99,7 +112,7 @@ export class BeneficiaryEncryptionService {
 
   buildFingerprint(input: Record<string, unknown>): string {
     const secret = this.getSecret('NOBLECARDS_BENEFICIARY_FINGERPRINT_KEY');
-    const canonical = JSON.stringify({
+    const canonicalValue: Record<string, unknown> = {
       countryCode: String(input.countryCode ?? '').toUpperCase(),
       currencyCode: String(input.currencyCode ?? '').toUpperCase(),
       method: String(input.method ?? ''),
@@ -108,7 +121,15 @@ export class BeneficiaryEncryptionService {
       routingNumber: this.normalizeIdentifier(input.routingNumber),
       sortCode: this.normalizeIdentifier(input.sortCode),
       mobileMoneyNumber: this.normalizeIdentifier(input.mobileMoneyNumber),
-    });
+    };
+    if (
+      input.additionalDetails &&
+      typeof input.additionalDetails === 'object' &&
+      !Array.isArray(input.additionalDetails)
+    ) {
+      canonicalValue.additionalDetails = input.additionalDetails;
+    }
+    const canonical = JSON.stringify(canonicalValue);
 
     return createHmac('sha256', secret).update(canonical).digest('hex');
   }

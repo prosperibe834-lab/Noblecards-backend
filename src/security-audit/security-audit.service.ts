@@ -1,0 +1,615 @@
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import {
+  sanitizeAuditMetadata,
+  SecurityAuditEventInput,
+  writeSecurityAuditEvent,
+} from './security-audit.utils';
+
+type Filters = Record<string, unknown>;
+
+type AuditRow = {
+  id: string;
+  eventType: string;
+  event: string;
+  outcome: string;
+  actorType: string;
+  actorUserId: string | null;
+  targetUserId: string | null;
+  ipAddress: string | null;
+  userAgent: string | null;
+  country: string | null;
+  city: string | null;
+  deviceType: string | null;
+  operatingSystem: string | null;
+  browser: string | null;
+  risk: string | null;
+  description: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: Date;
+  actorName: string | null;
+  actorUsername: string | null;
+  actorEmail: string | null;
+  actorPhone: string | null;
+  targetName: string | null;
+  targetUsername: string | null;
+  targetEmail: string | null;
+  targetPhone: string | null;
+};
+
+type QueryParts = { where: string; values: unknown[] };
+
+const STATUSES = ['Success', 'Failed', 'Blocked', 'Suspicious'];
+const RISKS = ['Low', 'Medium', 'High', 'Critical'];
+const ACTORS = ['User', 'Admin', 'System', 'Unknown', 'API'];
+
+@Injectable()
+export class SecurityAuditService {
+  private readonly logger = new Logger(SecurityAuditService.name);
+
+  constructor(private readonly prisma: PrismaService) {}
+
+  async resolveActorType(
+    userId: string,
+  ): Promise<'ADMIN' | 'USER' | 'UNKNOWN'> {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      });
+      if (user?.role === 'ADMIN') return 'ADMIN';
+      if (user?.role === 'USER') return 'USER';
+      return 'UNKNOWN';
+    } catch (error) {
+      this.logger.error(
+        `Unable to resolve security event actor role: ${
+          error instanceof Error ? error.message : 'unknown database error'
+        }`,
+      );
+      return 'UNKNOWN';
+    }
+  }
+
+  async record(input: SecurityAuditEventInput): Promise<void> {
+    try {
+      await writeSecurityAuditEvent(this.prisma, input);
+    } catch (error) {
+      this.logger.error(
+        `Unable to persist security event "${input.eventType}": ${
+          error instanceof Error ? error.message : 'unknown database error'
+        }`,
+      );
+    }
+  }
+
+  async getFilterOptions() {
+    const [eventTypes, countries, devices] = await Promise.all([
+      this.prisma.$queryRawUnsafe<Array<{ value: string }>>(
+        `SELECT DISTINCT e."eventType" AS value
+         FROM "SecurityAuditEvent" e
+         WHERE NULLIF(BTRIM(e."eventType"), '') IS NOT NULL
+         ORDER BY value`,
+      ),
+      this.prisma.$queryRawUnsafe<Array<{ value: string }>>(
+        `SELECT DISTINCT BTRIM(e."country") AS value
+         FROM "SecurityAuditEvent" e
+         WHERE NULLIF(BTRIM(e."country"), '') IS NOT NULL
+         ORDER BY value`,
+      ),
+      this.prisma.$queryRawUnsafe<Array<{ value: string }>>(
+        `SELECT DISTINCT BTRIM(e."deviceType") AS value
+         FROM "SecurityAuditEvent" e
+         WHERE NULLIF(BTRIM(e."deviceType"), '') IS NOT NULL
+         ORDER BY value`,
+      ),
+    ]);
+    return {
+      eventTypes: eventTypes.map((row) => row.value),
+      countries: countries.map((row) => row.value),
+      devices: devices.map((row) => row.value),
+    };
+  }
+
+  async getLogs(filters: Filters) {
+    const { where, values } = await this.buildWhere(filters);
+    const page = this.integerFilter(filters.page, 1, 1, 1_000_000);
+    const pageSize = this.integerFilter(filters.pageSize, 10, 1, 100);
+    const countRows = await this.prisma.$queryRawUnsafe<
+      Array<{ total: number }>
+    >(
+      `SELECT COUNT(*)::int AS total
+       FROM "SecurityAuditEvent" e
+       LEFT JOIN "User" actor ON actor."id" = e."actorUserId"
+       LEFT JOIN "User" target ON target."id" = e."targetUserId"
+       ${where}`,
+      ...values,
+    );
+    const totalRecords = countRows[0]?.total ?? 0;
+    const totalPages = Math.max(1, Math.ceil(totalRecords / pageSize));
+    const currentPage = Math.min(page, totalPages);
+    const pageValues = [...values, pageSize, (currentPage - 1) * pageSize];
+    const rows = await this.prisma.$queryRawUnsafe<AuditRow[]>(
+      `${this.selectRows()} ${where}
+       ORDER BY e."createdAt" DESC, e."id" DESC
+       LIMIT $${values.length + 1} OFFSET $${values.length + 2}`,
+      ...pageValues,
+    );
+    return {
+      data: rows.map((row) => this.toLog(row)),
+      pagination: { totalRecords, totalPages, currentPage, pageSize },
+    };
+  }
+
+  async getStatistics(filters: Filters) {
+    const { where, values } = await this.buildWhere(filters);
+    const rows = await this.prisma.$queryRawUnsafe<
+      Array<{
+        totalEvents: number;
+        successfulEvents: number;
+        failedEvents: number;
+        suspiciousEvents: number;
+        adminActions: number;
+        userEvents: number;
+        loginAttempts: number;
+        blockedAttempts: number;
+      }>
+    >(
+      `SELECT
+        COUNT(*)::int AS "totalEvents",
+        COUNT(*) FILTER (WHERE UPPER(e."outcome") = 'SUCCESS')::int AS "successfulEvents",
+        COUNT(*) FILTER (WHERE UPPER(e."outcome") = 'FAILED')::int AS "failedEvents",
+        COUNT(*) FILTER (
+          WHERE UPPER(e."outcome") = 'SUSPICIOUS'
+             OR UPPER(COALESCE(e."risk", '')) IN ('HIGH', 'CRITICAL')
+        )::int AS "suspiciousEvents",
+        COUNT(*) FILTER (
+          WHERE UPPER(e."actorType") = 'ADMIN'
+            AND LOWER(e."eventType") = 'admin'
+            AND UPPER(e."outcome") <> 'BLOCKED'
+        )::int AS "adminActions",
+        COUNT(*) FILTER (WHERE UPPER(e."actorType") = 'USER')::int AS "userEvents",
+        COUNT(*) FILTER (WHERE LOWER(e."eventType") = 'login')::int AS "loginAttempts",
+        COUNT(*) FILTER (WHERE UPPER(e."outcome") = 'BLOCKED')::int AS "blockedAttempts"
+       FROM "SecurityAuditEvent" e
+       LEFT JOIN "User" actor ON actor."id" = e."actorUserId"
+       LEFT JOIN "User" target ON target."id" = COALESCE(e."targetUserId", e."actorUserId")
+       ${where}`,
+      ...values,
+    );
+    return (
+      rows[0] ?? {
+        totalEvents: 0,
+        successfulEvents: 0,
+        failedEvents: 0,
+        suspiciousEvents: 0,
+        adminActions: 0,
+        userEvents: 0,
+        loginAttempts: 0,
+        blockedAttempts: 0,
+      }
+    );
+  }
+
+  async getAlerts(filters: Filters) {
+    const { where, values } = await this.buildWhere(filters);
+    const rows = await this.prisma.$queryRawUnsafe<
+      Array<{
+        id: string;
+        ipAddress: string;
+        occurrenceCount: number;
+        createdAt: Date;
+        userId: string | null;
+        userName: string | null;
+        country: string | null;
+        city: string | null;
+      }>
+    >(
+      `SELECT
+        (ARRAY_AGG(e."id" ORDER BY e."createdAt" DESC, e."id" DESC))[1] AS id,
+        e."ipAddress",
+        COUNT(*)::int AS "occurrenceCount",
+        MAX(e."createdAt") AS "createdAt",
+        (ARRAY_AGG(COALESCE(e."targetUserId", e."actorUserId")
+          ORDER BY e."createdAt" DESC, e."id" DESC))[1] AS "userId",
+        (ARRAY_AGG(NULLIF(CONCAT_WS(' ', target."firstName", target."lastName"), '')
+          ORDER BY e."createdAt" DESC, e."id" DESC))[1] AS "userName",
+        (ARRAY_AGG(e."country" ORDER BY e."createdAt" DESC, e."id" DESC))[1] AS country,
+        (ARRAY_AGG(e."city" ORDER BY e."createdAt" DESC, e."id" DESC))[1] AS city
+       FROM "SecurityAuditEvent" e
+       LEFT JOIN "User" actor ON actor."id" = e."actorUserId"
+       LEFT JOIN "User" target ON target."id" = COALESCE(e."targetUserId", e."actorUserId")
+       ${where}
+       ${where ? 'AND' : 'WHERE'} LOWER(e."eventType") = 'login'
+         AND UPPER(e."outcome") = 'FAILED'
+         AND e."ipAddress" IS NOT NULL
+         AND e."createdAt" >= NOW() - INTERVAL '5 minutes'
+       GROUP BY e."ipAddress"
+       HAVING COUNT(*) >= 5
+       ORDER BY MAX(e."createdAt") DESC`,
+      ...values,
+    );
+    return rows.map((row) => ({
+      id: `LOGIN-IP-${row.id}`,
+      type: 'Multiple Failed Logins',
+      risk: 'HIGH',
+      time: this.formatTimestamp(row.createdAt),
+      userId: row.userId ?? 'N/A',
+      userName: row.userName ?? 'Unknown identity',
+      location:
+        [row.city, row.country].filter(Boolean).join(', ') ||
+        'Location unavailable',
+      ipAddress: row.ipAddress,
+      logId: row.id,
+      description: `${row.occurrenceCount} failed login attempts were recorded from this IP within the last 5 minutes.`,
+    }));
+  }
+
+  async getDetails(id: string) {
+    const rows = await this.prisma.$queryRawUnsafe<AuditRow[]>(
+      `${this.selectRows()} WHERE e."id" = $1 LIMIT 1`,
+      id,
+    );
+    if (!rows[0]) throw new NotFoundException('Security event not found.');
+    return this.toLog(rows[0]);
+  }
+
+  async exportCsv(filters: Filters) {
+    const { where, values } = await this.buildWhere(filters);
+    const rows = await this.prisma.$queryRawUnsafe<AuditRow[]>(
+      `${this.selectRows()} ${where}
+       ORDER BY e."createdAt" DESC, e."id" DESC`,
+      ...values,
+    );
+    const fields: Array<keyof ReturnType<SecurityAuditService['toLog']>> = [
+      'id',
+      'timestamp',
+      'event',
+      'eventType',
+      'actor',
+      'userId',
+      'userName',
+      'ipAddress',
+      'country',
+      'city',
+      'deviceType',
+      'os',
+      'browser',
+      'status',
+      'risk',
+      'description',
+    ];
+    const header = fields.map((field) => this.csvCell(field)).join(',');
+    const lines = rows.map((row) => {
+      const log = this.toLog(row);
+      return fields.map((field) => this.csvCell(log[field])).join(',');
+    });
+    return [header, ...lines].join('\r\n');
+  }
+
+  private async buildWhere(filters: Filters): Promise<QueryParts> {
+    const predicates: string[] = [];
+    const values: unknown[] = [];
+    const bind = (value: unknown) => {
+      values.push(value);
+      return `$${values.length}`;
+    };
+    const text = (name: string) => {
+      const value = filters[name];
+      return typeof value === 'string' ? value.trim() : '';
+    };
+    const addExactFilter = (
+      key: string,
+      column: string,
+      allowed?: string[],
+    ) => {
+      const value = text(key);
+      if (!value || value.toUpperCase() === 'ALL') return;
+      if (
+        allowed &&
+        !allowed.some((entry) => entry.toLowerCase() === value.toLowerCase())
+      ) {
+        throw new BadRequestException(`Invalid ${key} filter.`);
+      }
+      predicates.push(`LOWER(${column}) = LOWER(${bind(value)})`);
+    };
+
+    await this.validateStoredFilter(filters, 'eventType', 'eventType');
+    await this.validateStoredFilter(filters, 'country', 'country');
+    await this.validateStoredFilter(filters, 'device', 'deviceType');
+
+    addExactFilter('eventType', `e."eventType"`);
+    addExactFilter('status', `e."outcome"`, STATUSES);
+    addExactFilter('risk', `COALESCE(e."risk", '')`, RISKS);
+    const actor = text('actor');
+    if (actor && actor.toUpperCase() !== 'ALL') {
+      if (
+        !ACTORS.some((entry) => entry.toLowerCase() === actor.toLowerCase())
+      ) {
+        throw new BadRequestException('Invalid actor filter.');
+      }
+      if (actor.toUpperCase() === 'API' || actor.toUpperCase() === 'UNKNOWN') {
+        predicates.push(`UPPER(e."actorType") IN ('UNKNOWN', 'API')`);
+      } else {
+        predicates.push(`UPPER(e."actorType") = ${bind(actor.toUpperCase())}`);
+      }
+    }
+    addExactFilter('country', `COALESCE(e."country", '')`);
+    addExactFilter('device', `COALESCE(e."deviceType", '')`);
+
+    const search = text('search');
+    if (search) {
+      const escaped = search.replace(/[\\%_]/g, '\\$&');
+      const searchValue = bind(`%${escaped}%`);
+      predicates.push(`(
+        e."id" ILIKE ${searchValue}
+        OR e."event" ILIKE ${searchValue}
+        OR e."eventType" ILIKE ${searchValue}
+        OR e."description" ILIKE ${searchValue}
+        OR COALESCE(e."ipAddress", '') ILIKE ${searchValue}
+        OR COALESCE(e."actorUserId", e."targetUserId", '') ILIKE ${searchValue}
+        OR COALESCE(e."metadata"->>'attemptedEmail', '') ILIKE ${searchValue}
+        OR CONCAT_WS(' ', actor."firstName", actor."lastName") ILIKE ${searchValue}
+        OR CONCAT_WS(' ', target."firstName", target."lastName") ILIKE ${searchValue}
+        OR COALESCE(actor.email, '') ILIKE ${searchValue}
+        OR COALESCE(target.email, '') ILIKE ${searchValue}
+      )`);
+    }
+
+    const range = text('dateRange').toUpperCase() || 'ALL';
+    const now = new Date();
+    const today = Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+    );
+    const oneDay = 86_400_000;
+    let start: Date | null = null;
+    let endExclusive: Date | null = null;
+    if (range === 'TODAY') {
+      start = new Date(today);
+      endExclusive = new Date(today + oneDay);
+    } else if (range === 'YESTERDAY') {
+      start = new Date(today - oneDay);
+      endExclusive = new Date(today);
+    } else if (range === 'LAST_7_DAYS') {
+      start = new Date(today - 6 * oneDay);
+      endExclusive = new Date(today + oneDay);
+    } else if (range === 'LAST_30_DAYS') {
+      start = new Date(today - 29 * oneDay);
+      endExclusive = new Date(today + oneDay);
+    } else if (range === 'THIS_MONTH') {
+      start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+      endExclusive = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1),
+      );
+    } else if (range === 'LAST_MONTH') {
+      start = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1),
+      );
+      endExclusive = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1),
+      );
+    } else if (range === 'CUSTOM') {
+      const startText = text('startDate');
+      const endText = text('endDate');
+      if (Boolean(startText) !== Boolean(endText)) {
+        throw new BadRequestException(
+          'Both startDate and endDate are required for a custom range.',
+        );
+      }
+      if (startText && endText) {
+        const startDate = this.validDate(startText, 'startDate');
+        const endDate = this.validDate(endText, 'endDate');
+        if (startDate > endDate) {
+          throw new BadRequestException('startDate must not be after endDate.');
+        }
+        start = new Date(`${startDate}T00:00:00.000Z`);
+        endExclusive = new Date(
+          new Date(`${endDate}T00:00:00.000Z`).getTime() + oneDay,
+        );
+      }
+    } else if (range !== 'ALL') {
+      throw new BadRequestException('Invalid dateRange filter.');
+    }
+    if (start && endExclusive) {
+      predicates.push(
+        `e."createdAt" >= ${bind(start)} AND e."createdAt" < ${bind(endExclusive)}`,
+      );
+    }
+
+    return {
+      where: predicates.length ? `WHERE ${predicates.join(' AND ')}` : '',
+      values,
+    };
+  }
+
+  private async validateStoredFilter(
+    filters: Filters,
+    key: 'eventType' | 'country' | 'device',
+    column: 'eventType' | 'country' | 'deviceType',
+  ) {
+    const value = filters[key];
+    if (
+      typeof value !== 'string' ||
+      !value.trim() ||
+      value.trim().toUpperCase() === 'ALL'
+    ) {
+      return;
+    }
+    const rows = await this.prisma.$queryRawUnsafe<Array<{ matches: boolean }>>(
+      `SELECT EXISTS (
+         SELECT 1 FROM "SecurityAuditEvent" e
+         WHERE LOWER(BTRIM(COALESCE(e."${column}", ''))) = LOWER(BTRIM($1))
+       ) AS matches`,
+      value.trim(),
+    );
+    if (!rows[0]?.matches) {
+      throw new BadRequestException(`Invalid ${key} filter.`);
+    }
+  }
+
+  private selectRows() {
+    return `SELECT
+      e."id", e."eventType", e."event", e."outcome", e."actorType",
+      e."actorUserId", e."targetUserId", e."ipAddress", e."userAgent",
+      e."country", e."city", e."deviceType", e."operatingSystem",
+      e."browser", e."risk", e."description", e."metadata", e."createdAt",
+      NULLIF(CONCAT_WS(' ', actor."firstName", actor."lastName"), '') AS "actorName",
+      actor."username" AS "actorUsername",
+      actor."email" AS "actorEmail",
+      actor."phone" AS "actorPhone",
+      NULLIF(CONCAT_WS(' ', target."firstName", target."lastName"), '') AS "targetName",
+      target."username" AS "targetUsername",
+      target."email" AS "targetEmail",
+      target."phone" AS "targetPhone"
+      FROM "SecurityAuditEvent" e
+      LEFT JOIN "User" actor ON actor."id" = e."actorUserId"
+      LEFT JOIN "User" target ON target."id" = e."targetUserId"`;
+  }
+
+  private toLog(row: AuditRow) {
+    const timestamp = this.formatTimestamp(row.createdAt);
+    const actorType = this.normalizedActorType(row.actorType);
+    const attemptedEmail =
+      typeof row.metadata?.attemptedEmail === 'string'
+        ? row.metadata.attemptedEmail
+        : null;
+    const distinctTarget =
+      row.targetUserId !== null && row.targetUserId !== row.actorUserId;
+    const metadata = sanitizeAuditMetadata(row.metadata);
+    return {
+      id: row.id,
+      timestamp,
+      event: row.event,
+      eventType: row.eventType,
+      actor: this.displayActor(actorType),
+      actorType,
+      actorId: row.actorUserId,
+      actorName: row.actorName,
+      actorUsername: row.actorUsername,
+      actorEmail: row.actorEmail,
+      actorPhone: row.actorPhone,
+      targetUserId: row.targetUserId,
+      targetUserName: row.targetName,
+      targetUsername: row.targetUsername,
+      targetUserEmail: row.targetEmail,
+      targetUserPhone: row.targetPhone,
+      userId: row.actorUserId,
+      userName: row.actorName,
+      username: row.actorUsername,
+      userEmail: row.actorEmail ?? attemptedEmail,
+      userPhone: row.actorPhone,
+      adminId: actorType === 'ADMIN' ? row.actorUserId : null,
+      adminName: actorType === 'ADMIN' ? row.actorName : null,
+      ipAddress: row.ipAddress,
+      country: row.country,
+      city: row.city,
+      isp: null,
+      isVpn: null,
+      isTor: null,
+      deviceType: row.deviceType,
+      os: row.operatingSystem,
+      browser: row.browser,
+      status: this.displayValue(row.outcome),
+      risk: row.risk ? this.displayValue(row.risk) : null,
+      description: row.description,
+      metadata:
+        metadata || row.userAgent || distinctTarget
+          ? {
+              ...(metadata ?? {}),
+              ...(row.userAgent ? { recordedUserAgent: row.userAgent } : {}),
+              ...(distinctTarget
+                ? {
+                    target: {
+                      userId: row.targetUserId,
+                      name: row.targetName,
+                      username: row.targetUsername,
+                      email: row.targetEmail,
+                      phone: row.targetPhone,
+                    },
+                  }
+                : {}),
+            }
+          : null,
+      userAgent: row.userAgent,
+    };
+  }
+
+  private normalizedActorType(value: string) {
+    const actorType = value.toUpperCase();
+    if (
+      actorType === 'USER' ||
+      actorType === 'ADMIN' ||
+      actorType === 'SYSTEM'
+    ) {
+      return actorType;
+    }
+    return 'UNKNOWN';
+  }
+
+  private displayActor(value: string) {
+    const actors: Record<string, string> = {
+      USER: 'User',
+      ADMIN: 'Admin',
+      SYSTEM: 'System',
+      UNKNOWN: 'Unknown',
+      API: 'Unknown',
+    };
+    return actors[value.toUpperCase()] ?? 'Unknown';
+  }
+
+  private displayValue(value: string) {
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  }
+
+  private formatTimestamp(value: Date) {
+    return value
+      .toISOString()
+      .replace('T', ' ')
+      .replace(/\.\d{3}Z$/, ' UTC');
+  }
+
+  private integerFilter(
+    value: unknown,
+    fallback: number,
+    min: number,
+    max: number,
+  ) {
+    if (value === undefined || value === null || value === '') return fallback;
+    const parsed = Number(value);
+    if (!Number.isInteger(parsed) || parsed < min || parsed > max) {
+      throw new BadRequestException('Invalid pagination parameters.');
+    }
+    return parsed;
+  }
+
+  private validDate(value: string, name: string) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      throw new BadRequestException(`${name} must be an ISO calendar date.`);
+    }
+    const parsed = new Date(`${value}T00:00:00.000Z`);
+    if (
+      !Number.isFinite(parsed.getTime()) ||
+      parsed.toISOString().slice(0, 10) !== value
+    ) {
+      throw new BadRequestException(`${name} is not a valid calendar date.`);
+    }
+    return value;
+  }
+
+  private csvCell(value: unknown) {
+    let text =
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
+        ? String(value)
+        : '';
+    if (/^[\s]*[=+\-@]/.test(text)) text = `'${text}`;
+    return `"${text.replace(/"/g, '""')}"`;
+  }
+}

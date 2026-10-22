@@ -40,13 +40,16 @@ export type AccountResolutionResult = {
 
 export interface WithdrawalProvider {
   getBanks(request: SupportedWithdrawalCapability): Promise<ProviderBank[]>;
-  getBranches(request: SupportedWithdrawalCapability & { bankId: string }): Promise<ProviderBranch[]>;
+  getBranches(
+    request: SupportedWithdrawalCapability & { bankId: string },
+  ): Promise<ProviderBranch[]>;
   resolveAccount(request: {
     countryCode: string;
     currencyCode: string;
     method: PaymentMethod;
     institutionCode?: string;
     institutionName?: string;
+    branchCode?: string;
     accountHolderName?: string;
     accountNumber?: string;
     routingNumber?: string;

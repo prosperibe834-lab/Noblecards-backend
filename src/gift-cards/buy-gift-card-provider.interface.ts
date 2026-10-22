@@ -41,6 +41,8 @@ export type BuyGiftCardProviderPurchase = {
   voucherCode: string | null;
   redeemDetails: Record<string, unknown> | null;
   providerAmount: string | null;
+  settlementAmount: string | null;
+  settlementCurrencyCode: string | null;
   providerMetadata: Record<string, unknown>;
 };
 

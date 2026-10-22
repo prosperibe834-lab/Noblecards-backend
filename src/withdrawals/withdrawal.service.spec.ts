@@ -52,12 +52,10 @@ describe('WithdrawalService', () => {
         findFirst: jest
           .fn()
           .mockResolvedValue(overrides?.existingWithdrawal ?? null),
-        create: jest
-          .fn()
-          .mockImplementation(async ({ data }) => ({
-            id: 'withdrawal-1',
-            ...data,
-          })),
+        create: jest.fn().mockImplementation(async ({ data }) => ({
+          id: 'withdrawal-1',
+          ...data,
+        })),
       },
       withdrawalQuote: {
         findFirst: jest.fn().mockResolvedValue(overrides?.quote ?? baseQuote),
@@ -85,15 +83,13 @@ describe('WithdrawalService', () => {
           ),
       },
       walletBalance: {
-        findUnique: jest
-          .fn()
-          .mockResolvedValue(
-            overrides?.balance ?? {
-              id: 'balance-1',
-              availableBalance: new Decimal('1000.00'),
-              pendingBalance: new Decimal('0.00'),
-            },
-          ),
+        findUnique: jest.fn().mockResolvedValue(
+          overrides?.balance ?? {
+            id: 'balance-1',
+            availableBalance: new Decimal('1000.00'),
+            pendingBalance: new Decimal('0.00'),
+          },
+        ),
       },
       transaction: {
         create: jest
@@ -106,12 +102,10 @@ describe('WithdrawalService', () => {
       verifyTransactionPin: jest.fn().mockResolvedValue(true),
     } as unknown as UsersService;
     const wallets = {
-      holdFunds: jest
-        .fn()
-        .mockResolvedValue({
-          alreadyProcessed: false,
-          ledgerEntryId: 'ledger-1',
-        }),
+      holdFunds: jest.fn().mockResolvedValue({
+        alreadyProcessed: false,
+        ledgerEntryId: 'ledger-1',
+      }),
     } as unknown as WalletsService;
 
     const service = new WithdrawalService(prisma, wallets, users);
@@ -147,6 +141,28 @@ describe('WithdrawalService', () => {
     expect(result.quoteId).toBe('quote-1');
   });
 
+  it('rejects an international estimate before creating or holding a withdrawal', async () => {
+    const internationalQuote = {
+      ...baseQuote,
+      countryCode: 'GB',
+      destinationCurrencyCode: 'GBP',
+    };
+    const { service, prisma, wallets } = makeService({
+      quote: internationalQuote,
+    });
+
+    await expect(
+      service.createWithdrawal('user-1', {
+        quoteId: 'quote-1',
+        beneficiaryId: 'beneficiary-1',
+        idempotencyKey: 'international-estimate',
+        pin: '1234',
+      }),
+    ).rejects.toThrow(/PAYOUT_CORRIDOR_UNVERIFIED/);
+    expect(wallets.holdFunds).not.toHaveBeenCalled();
+    expect(prisma.withdrawal.create).not.toHaveBeenCalled();
+  });
+
   it('does not treat restricted referral credits as withdrawable cash', async () => {
     const { service, wallets, prisma } = makeService({
       balance: {
@@ -178,6 +194,12 @@ describe('WithdrawalService', () => {
       reference: 'WD-EXACT-2',
       userId: 'user-1',
       status: TransactionStatus.PENDING,
+      quote: {
+        providerFee: new Decimal('1.50'),
+        nobleCardsFee: new Decimal('1.00'),
+        destinationFee: new Decimal('2250.00'),
+        totalFee: new Decimal('2.50'),
+      },
       sourceCurrencyCode: 'USD',
       sourceAmount: new Decimal('75.25'),
       destinationCurrencyCode: 'NGN',
@@ -207,13 +229,16 @@ describe('WithdrawalService', () => {
 
     expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith({
       where: { id: 'withdrawal-2', userId: 'user-1' },
-      include: { transaction: true, beneficiary: true },
+      include: { transaction: true, beneficiary: true, quote: true },
     });
     expect(result).toMatchObject({
       id: 'withdrawal-2',
       reference: 'WD-EXACT-2',
       sourceAmount: '75.25',
       destinationAmount: '112875',
+      destinationFee: '2250',
+      providerFee: '1.5',
+      nobleCardsFee: '1',
       amountReceived: '110000',
       transaction: { reference: 'TX-EXACT-2' },
       beneficiary: { institutionName: 'Customer Bank', accountLast4: '1234' },
@@ -229,7 +254,7 @@ describe('WithdrawalService', () => {
     ).rejects.toBeInstanceOf(NotFoundException);
     expect(prisma.withdrawal.findFirst).toHaveBeenCalledWith({
       where: { id: 'withdrawal-2', userId: 'user-2' },
-      include: { transaction: true, beneficiary: true },
+      include: { transaction: true, beneficiary: true, quote: true },
     });
   });
 
@@ -252,6 +277,7 @@ describe('WithdrawalService', () => {
         sourceAmount: new Decimal('25.00'),
         destinationCurrencyCode: 'NGN',
         destinationAmount: new Decimal('37500.00'),
+        destinationFee: new Decimal('1500.00'),
         exchangeRate: new Decimal('1500.00'),
         fee: new Decimal('1.00'),
         amountReceived: new Decimal('36500.00'),

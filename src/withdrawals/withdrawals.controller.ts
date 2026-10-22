@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateWithdrawalQuoteDto } from './withdrawals.dto';
 import { WithdrawalQuoteService } from './withdrawal-quote.service';
@@ -9,8 +17,16 @@ export class WithdrawalsController {
   constructor(private readonly quotes: WithdrawalQuoteService) {}
 
   @Post()
-  create(@Req() request: { user: { userId: string } }, @Body() dto: CreateWithdrawalQuoteDto) {
+  create(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: CreateWithdrawalQuoteDto,
+  ) {
     return this.quotes.createQuote(request.user.userId, dto);
+  }
+
+  @Post('preview')
+  preview(@Body() dto: CreateWithdrawalQuoteDto) {
+    return this.quotes.createIndicativePreview(dto);
   }
 
   @Get(':id')

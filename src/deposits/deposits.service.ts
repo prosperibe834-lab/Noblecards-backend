@@ -126,6 +126,9 @@ export class DepositsService {
       baseLocalAmount: baseLocalAmount.toDecimalPlaces(2),
       providerFee: providerFee.toDecimalPlaces(2),
       nobleCardsFee: nobleCardsFee.toDecimalPlaces(2),
+      nobleCardsFeeUsd: exchangeRate.gt(0)
+        ? nobleCardsFee.div(exchangeRate).toDecimalPlaces(8)
+        : new Decimal(0),
       totalFees: totalFees.toDecimalPlaces(2),
       customerPayableAmount: customerPayableAmount.toDecimalPlaces(2),
       exchangeRate: effectiveExchangeRate.toDecimalPlaces(8),
@@ -196,7 +199,8 @@ export class DepositsService {
       logger.log(`[createDeposit] Idempotent deposit found: ${existing.id}`);
       const existingFeeBreakdown = {
         providerFee: existing.fee ? existing.fee.toString() : '0.00',
-        nobleCardsFee: '0.00',
+        nobleCardsFee: existing.nobleCardsFee?.toString() ?? '0.00',
+        nobleCardsFeeUsd: existing.nobleCardsFeeUsd?.toString() ?? '0.00000000',
         totalFees: existing.fee ? existing.fee.toString() : '0.00',
         customerPayableAmount: existing.amount
           ? existing.amount.toString()
@@ -221,6 +225,7 @@ export class DepositsService {
         requestedCurrency: existing.currencyCode,
         providerFee: existingFeeBreakdown.providerFee,
         nobleCardsFee: existingFeeBreakdown.nobleCardsFee,
+        nobleCardsFeeUsd: existingFeeBreakdown.nobleCardsFeeUsd,
         totalFees: existingFeeBreakdown.totalFees,
         customerPayableAmount: existingFeeBreakdown.customerPayableAmount,
         walletCreditAmount: existingFeeBreakdown.walletCreditAmount,
@@ -291,6 +296,8 @@ export class DepositsService {
         currencyCode: currency.code,
         amount: paymentAmount,
         fee,
+        nobleCardsFee: feeBreakdown.nobleCardsFee,
+        nobleCardsFeeUsd: feeBreakdown.nobleCardsFeeUsd,
         netAmount,
         exchangeRate,
         provider,
@@ -434,6 +441,7 @@ export class DepositsService {
         requestedCurrency: feeBreakdown.requestedCurrency,
         providerFee: feeBreakdown.providerFee.toFixed(2),
         nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+        nobleCardsFeeUsd: feeBreakdown.nobleCardsFeeUsd.toFixed(8),
         totalFees: feeBreakdown.totalFees.toFixed(2),
         customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
         walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
@@ -477,6 +485,7 @@ export class DepositsService {
         requestedCurrency: feeBreakdown.requestedCurrency,
         providerFee: feeBreakdown.providerFee.toFixed(2),
         nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+        nobleCardsFeeUsd: feeBreakdown.nobleCardsFeeUsd.toFixed(8),
         totalFees: feeBreakdown.totalFees.toFixed(2),
         customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
         walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
@@ -519,6 +528,7 @@ export class DepositsService {
       requestedCurrency: feeBreakdown.requestedCurrency,
       providerFee: feeBreakdown.providerFee.toFixed(2),
       nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+      nobleCardsFeeUsd: feeBreakdown.nobleCardsFeeUsd.toFixed(8),
       totalFees: feeBreakdown.totalFees.toFixed(2),
       customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
       walletCreditAmount: feeBreakdown.walletCreditAmount.toFixed(2),
@@ -655,12 +665,14 @@ export class DepositsService {
     await this.prisma.$executeRaw`
       INSERT INTO "Deposit" (
         "id", "userId", "walletId", "currencyCode", "amount", "fee", "netAmount", "provider", "paymentMethod",
-        "status", "idempotencyKey", "metadata", "exchangeRate", "transactionId", "createdAt", "updatedAt"
-      ) VALUES (
-        ${depositId}, ${userId}, ${wallet.id}, ${currencyCode}, ${amount.toString()}, ${fee.toString()},
-        ${netAmount.toString()}, ${provider}, ${paymentMethod}, 'PENDING', ${idempotencyKey}, ${JSON.stringify(metadata)},
-        ${feeBreakdown.exchangeRate.toString()}, ${transactionId}, NOW(), NOW()
-      )
+          "status", "idempotencyKey", "metadata", "exchangeRate", "nobleCardsFee", "nobleCardsFeeUsd",
+          "transactionId", "createdAt", "updatedAt"
+        ) VALUES (
+          ${depositId}, ${userId}, ${wallet.id}, ${currencyCode}, ${amount.toString()}, ${fee.toString()},
+          ${netAmount.toString()}, ${provider}, ${paymentMethod}, 'PENDING', ${idempotencyKey}, ${JSON.stringify(metadata)},
+          ${feeBreakdown.exchangeRate.toString()}, ${feeBreakdown.nobleCardsFee.toString()},
+          ${feeBreakdown.nobleCardsFeeUsd.toString()}, ${transactionId}, NOW(), NOW()
+        )
     `;
 
     const paymentIntent = await this.flutterwave.createCardCharge({
@@ -702,6 +714,7 @@ export class DepositsService {
       requestedCurrency: 'USD',
       providerFee: feeBreakdown.providerFee.toFixed(2),
       nobleCardsFee: feeBreakdown.nobleCardsFee.toFixed(2),
+      nobleCardsFeeUsd: feeBreakdown.nobleCardsFeeUsd.toFixed(8),
       totalFees: feeBreakdown.totalFees.toFixed(2),
       customerPayableAmount: feeBreakdown.customerPayableAmount.toFixed(2),
       walletCreditAmount: requestedAmount.toFixed(2),

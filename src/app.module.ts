@@ -18,6 +18,8 @@ import { GiftCardOrdersModule } from './gift-cards/gift-card-orders.module';
 import { GiftCardsModule } from './gift-cards/gift-cards.module';
 import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { ReferralsModule } from './referrals/referrals.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { SecurityAuditModule } from './security-audit/security-audit.module';
 
 @Module({
   imports: [
@@ -43,6 +45,8 @@ import { ReferralsModule } from './referrals/referrals.module';
     WithdrawalsModule,
     DepositsModule,
     ReferralsModule,
+    DashboardModule,
+    SecurityAuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],

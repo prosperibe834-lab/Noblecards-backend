@@ -1,4 +1,5 @@
 import {
+  Logger,
   Injectable,
   UnauthorizedException,
   ConflictException,
@@ -13,6 +14,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
 import { UsersService } from '../users/users.service';
 import {
+  SecurityAuditEventInput,
+  writeSecurityAuditEvent,
+} from '../security-audit/security-audit.utils';
+import {
   EmailCodeDto,
   EmailDto,
   LoginDto,
@@ -23,6 +28,8 @@ import {
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly email: EmailService,
@@ -86,7 +93,10 @@ export class AuthService {
     return { requiresVerification: true, email: pending.email };
   }
 
-  async verifyEmail(dto: EmailCodeDto) {
+  async verifyEmail(
+    dto: EmailCodeDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
     const pending = await this.prisma.pendingRegistration.findUnique({
       where: { email: this.normalizeEmail(dto.email) },
     });
@@ -163,7 +173,18 @@ export class AuthService {
         if (!referralCodeCollision || attempt === 4) throw error;
       }
     }
-    return this.issueSession(await this.users.refreshVerification(user));
+    const refreshedUser = await this.users.refreshVerification(user);
+    await this.recordSecurityEvent({
+      eventType: 'Account',
+      event: 'Email Verification',
+      outcome: 'SUCCESS',
+      actorType: refreshedUser.role === 'ADMIN' ? 'ADMIN' : 'USER',
+      actorUserId: refreshedUser.id,
+      targetUserId: refreshedUser.id,
+      description: 'Account email verification completed.',
+      ...context,
+    });
+    return this.issueSession(refreshedUser);
   }
 
   async resendOtp(dto: ResendOtpDto) {
@@ -210,17 +231,68 @@ export class AuthService {
     return { sent: true };
   }
 
-  async login(dto: LoginDto) {
-    const user = await this.users.findByEmail(this.normalizeEmail(dto.email));
-    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash)))
+  async login(
+    dto: LoginDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    const attemptedEmail = this.normalizeEmail(dto.email);
+    const user = await this.users.findByEmail(attemptedEmail);
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Login Failed',
+        outcome: 'FAILED',
+        actorType: 'UNKNOWN',
+        description: 'Authentication credentials were not verified.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
       throw new UnauthorizedException('Invalid email or password.');
-    if (!user.isEmailVerified)
+    }
+    if (!user.isEmailVerified) {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Login Failed',
+        outcome: 'FAILED',
+        actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+        actorUserId: user.id,
+        targetUserId: user.id,
+        description:
+          'Authentication was rejected because email verification is incomplete.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
       throw new UnauthorizedException(
         'Please verify your email before signing in.',
       );
-    if (!user.isActive)
+    }
+    if (!user.isActive) {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Login Failed',
+        outcome: 'FAILED',
+        actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+        actorUserId: user.id,
+        targetUserId: user.id,
+        description:
+          'Authentication was rejected because the account is inactive.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
       throw new UnauthorizedException('This account is inactive.');
-    return this.issueSession(user);
+    }
+    const session = await this.issueSession(user);
+    await this.recordSecurityEvent({
+      eventType: 'Login',
+      event: 'Successful Login',
+      outcome: 'SUCCESS',
+      actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+      actorUserId: user.id,
+      targetUserId: user.id,
+      description: 'User authenticated successfully.',
+      ...context,
+    });
+    return session;
   }
 
   async changePassword(
@@ -228,6 +300,7 @@ export class AuthService {
     currentSessionId: string,
     currentPassword: string,
     newPassword: string,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
   ) {
     if (newPassword.length < 8) {
       throw new BadRequestException(
@@ -236,6 +309,21 @@ export class AuthService {
     }
     const user = await this.users.findById(userId);
     if (!user || !(await bcrypt.compare(currentPassword, user.passwordHash))) {
+      await this.recordSecurityEvent({
+        eventType: 'Password',
+        event: 'Password Change Failed',
+        outcome: 'FAILED',
+        actorType: user
+          ? user.role === 'ADMIN'
+            ? 'ADMIN'
+            : 'USER'
+          : 'UNKNOWN',
+        actorUserId: user?.id,
+        targetUserId: user?.id,
+        description:
+          'Password change was rejected because the current password was not verified.',
+        ...context,
+      });
       throw new UnauthorizedException('Current password is incorrect.');
     }
     const passwordHash = await bcrypt.hash(newPassword, 12);
@@ -253,6 +341,16 @@ export class AuthService {
         data: { revokedAt: new Date() },
       }),
     ]);
+    await this.recordSecurityEvent({
+      eventType: 'Password',
+      event: 'Password Changed',
+      outcome: 'SUCCESS',
+      actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+      actorUserId: userId,
+      targetUserId: userId,
+      description: 'Account password changed.',
+      ...context,
+    });
     return { updated: true };
   }
 
@@ -275,7 +373,10 @@ export class AuthService {
     return { sent: true };
   }
 
-  async resetPassword(dto: ResetPasswordDto) {
+  async resetPassword(
+    dto: ResetPasswordDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
     const user = await this.users.findByEmail(this.normalizeEmail(dto.email));
     if (!user) throw new BadRequestException('Invalid or expired reset code.');
     const challenge = await this.prisma.passwordResetChallenge.findFirst({
@@ -302,6 +403,16 @@ export class AuthService {
         data: { revokedAt: new Date() },
       }),
     ]);
+    await this.recordSecurityEvent({
+      eventType: 'Password',
+      event: 'Password Reset',
+      outcome: 'SUCCESS',
+      actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+      actorUserId: user.id,
+      targetUserId: user.id,
+      description: 'Account password reset completed.',
+      ...context,
+    });
     return { reset: true };
   }
 
@@ -319,10 +430,35 @@ export class AuthService {
     return this.issueSession(session.user);
   }
 
-  async logout(sessionId: string) {
+  async logout(
+    sessionId: string,
+    userId?: string,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    const user = userId
+      ? await this.prisma.user.findUnique({
+          where: { id: userId },
+          select: { role: true },
+        })
+      : null;
     await this.prisma.refreshSession.updateMany({
       where: { id: sessionId },
       data: { revokedAt: new Date() },
+    });
+    await this.recordSecurityEvent({
+      eventType: 'Logout',
+      event: 'Logout',
+      outcome: 'SUCCESS',
+      actorType:
+        user?.role === 'ADMIN'
+          ? 'ADMIN'
+          : user?.role === 'USER'
+            ? 'USER'
+            : 'UNKNOWN',
+      actorUserId: user ? userId : undefined,
+      targetUserId: user ? userId : undefined,
+      description: 'Authenticated session ended.',
+      ...context,
     });
     return { loggedOut: true };
   }
@@ -352,6 +488,18 @@ export class AuthService {
       sessionId: session.id,
     });
     return { user: this.users.toPublicUser(user), accessToken, refreshToken };
+  }
+
+  private async recordSecurityEvent(input: SecurityAuditEventInput) {
+    try {
+      await writeSecurityAuditEvent(this.prisma, input);
+    } catch (error) {
+      this.logger.error(
+        `Unable to persist security event "${input.eventType}": ${
+          error instanceof Error ? error.message : 'unknown database error'
+        }`,
+      );
+    }
   }
 
   private registrationData(dto: RegisterDto, passwordHash: string) {

@@ -277,7 +277,8 @@ export class GiftCardsService {
     const statuses: Record<string, GiftCardSaleStatus[]> = {
       Pending: [GiftCardSaleStatus.SUBMITTED],
       'Under Review': [GiftCardSaleStatus.UNDER_REVIEW],
-      Successful: [GiftCardSaleStatus.APPROVED, GiftCardSaleStatus.PAID],
+      Approved: [GiftCardSaleStatus.APPROVED],
+      Successful: [GiftCardSaleStatus.PAID],
       Failed: [GiftCardSaleStatus.FAILED],
       Rejected: [GiftCardSaleStatus.REJECTED],
       Cancelled: [GiftCardSaleStatus.CANCELLED],
@@ -312,13 +313,13 @@ export class GiftCardsService {
   }
 
   private adminStatusLabel(status: GiftCardSaleStatus) {
-    return { SUBMITTED: 'Pending', UNDER_REVIEW: 'Under Review', APPROVED: 'Successful', PAID: 'Successful', FAILED: 'Failed', REJECTED: 'Rejected', CANCELLED: 'Cancelled' }[status] ?? status;
+    return { SUBMITTED: 'Pending', UNDER_REVIEW: 'Under Review', APPROVED: 'Approved', PAID: 'Successful', FAILED: 'Failed', REJECTED: 'Rejected', CANCELLED: 'Cancelled' }[status] ?? status;
   }
 
   private getAdminStats(rows: any[]) {
     return {
       totalCards: rows.length,
-      pendingSales: rows.filter((row) => row.status === 'Pending' || row.status === 'Under Review').length,
+      pendingSales: rows.filter((row) => row.status === 'Pending' || row.status === 'Under Review' || row.status === 'Approved').length,
       successfulSales: rows.filter((row) => row.status === 'Successful').length,
       failedSales: rows.filter((row) => row.status === 'Failed' || row.status === 'Rejected').length,
     };

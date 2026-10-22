@@ -1,12 +1,25 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { EmailService } from '../email/email.service';
 import { Optional } from '@nestjs/common';
 import { WalletsService } from '../wallets/wallets.service';
-import { BeneficiaryVerificationStatus, PaymentMethod, TransactionStatus, TransactionType, WithdrawalQuoteStatus } from '../generated/prisma';
+import {
+  BeneficiaryVerificationStatus,
+  PaymentMethod,
+  TransactionStatus,
+  TransactionType,
+  WithdrawalQuoteStatus,
+} from '../generated/prisma';
 import { Prisma } from '../generated/prisma/client';
 
 export type CreateWithdrawalInput = {
@@ -29,6 +42,8 @@ export type WithdrawalResponse = {
   paymentMethod: PaymentMethod;
   destinationAmount: string;
   exchangeRate: string;
+  fee: string;
+  destinationFee: string | null;
   providerFee: string;
   nobleCardsFee: string;
   totalFee: string;
@@ -44,18 +59,41 @@ export class WithdrawalService {
     private readonly wallets: WalletsService,
     private readonly users: UsersService,
     @Optional() private readonly email?: EmailService,
+    @Optional() private readonly config?: ConfigService,
   ) {}
 
+  private get isSandbox(): boolean {
+    return (
+      this.config?.get<string>('FLUTTERWAVE_PAYOUT_ENVIRONMENT')?.toLowerCase() ===
+      'sandbox'
+    );
+  }
+
   private ensureIdempotencyKey(value: string) {
-    if (!value || !value.trim()) throw new BadRequestException('Idempotency key is required.');
-    if (value.length > 128) throw new BadRequestException('Idempotency key is too long.');
+    if (!value || !value.trim())
+      throw new BadRequestException('Idempotency key is required.');
+    if (value.length > 128)
+      throw new BadRequestException('Idempotency key is too long.');
     if (!/^[A-Za-z0-9._:-]+$/.test(value)) {
-      throw new BadRequestException('Idempotency key contains unsupported characters.');
+      throw new BadRequestException(
+        'Idempotency key contains unsupported characters.',
+      );
     }
   }
 
   private generateReference() {
     return `WD-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}_PMCKDU_1`;
+  }
+
+  private getCountryName(countryCode: string) {
+    const names: Record<string, string> = {
+      NG: 'Nigeria',
+      GH: 'Ghana',
+      GB: 'United Kingdom',
+      US: 'United States',
+      CA: 'Canada',
+    };
+    return names[countryCode] ?? countryCode;
   }
 
   private async getQuoteForUser(userId: string, quoteId: string) {
@@ -83,7 +121,11 @@ export class WithdrawalService {
     }
     if (new Date() >= new Date(quote.expiresAt)) {
       await (this.prisma as any).withdrawalQuote.updateMany({
-        where: { id: quote.id, userId: quote.userId, status: WithdrawalQuoteStatus.ACTIVE },
+        where: {
+          id: quote.id,
+          userId: quote.userId,
+          status: WithdrawalQuoteStatus.ACTIVE,
+        },
         data: { status: WithdrawalQuoteStatus.EXPIRED, usedAt: new Date() },
       });
       throw new BadRequestException('Withdrawal quote has expired.');
@@ -97,32 +139,57 @@ export class WithdrawalService {
     if (!beneficiary.isActive) {
       throw new BadRequestException('Beneficiary is inactive.');
     }
-    if (beneficiary.verificationStatus !== BeneficiaryVerificationStatus.VERIFIED) {
-      throw new BadRequestException('Beneficiary must be verified before withdrawal creation.');
+    const isInternationalSandbox =
+      this.isSandbox && ['GB', 'US', 'CA'].includes(quote.countryCode);
+    if (
+      !isInternationalSandbox &&
+      beneficiary.verificationStatus !== BeneficiaryVerificationStatus.VERIFIED
+    ) {
+      throw new BadRequestException(
+        'Beneficiary must be verified before withdrawal creation.',
+      );
     }
     if (beneficiary.countryCode !== quote.countryCode) {
-      throw new BadRequestException('Beneficiary destination does not match the quote country.');
+      throw new BadRequestException(
+        'Beneficiary destination does not match the quote country.',
+      );
     }
     if (beneficiary.currencyCode !== quote.destinationCurrencyCode) {
-      throw new BadRequestException('Beneficiary currency does not match the quote destination currency.');
+      throw new BadRequestException(
+        'Beneficiary currency does not match the quote destination currency.',
+      );
     }
     if (beneficiary.paymentMethod !== quote.paymentMethod) {
-      throw new BadRequestException('Beneficiary payment method does not match the quote payment method.');
+      throw new BadRequestException(
+        'Beneficiary payment method does not match the quote payment method.',
+      );
     }
   }
 
   private async validateWallet(userId: string, walletId: string, quote: any) {
-    const wallet = await (this.prisma as any).wallet.findFirst({ where: { id: walletId, userId } });
+    const wallet = await (this.prisma as any).wallet.findFirst({
+      where: { id: walletId, userId },
+    });
     if (!wallet) throw new NotFoundException('Wallet not found.');
 
     const balance = await (this.prisma as any).walletBalance.findUnique({
-      where: { walletId_currencyCode: { walletId, currencyCode: quote.sourceCurrencyCode } },
+      where: {
+        walletId_currencyCode: {
+          walletId,
+          currencyCode: quote.sourceCurrencyCode,
+        },
+      },
     });
-    if (!balance) throw new NotFoundException(`Wallet balance for ${quote.sourceCurrencyCode} not found.`);
+    if (!balance)
+      throw new NotFoundException(
+        `Wallet balance for ${quote.sourceCurrencyCode} not found.`,
+      );
 
     const sourceAmount = new Decimal(quote.sourceAmount.toString());
     if (new Decimal(balance.availableBalance.toString()).lt(sourceAmount)) {
-      throw new BadRequestException('Insufficient available balance for withdrawal.');
+      throw new BadRequestException(
+        'Insufficient available balance for withdrawal.',
+      );
     }
 
     return { wallet, balance };
@@ -130,16 +197,37 @@ export class WithdrawalService {
 
   private async verifyPin(userId: string, pin: string) {
     if (!/^[0-9]{4}$/.test(pin)) {
-      throw new BadRequestException('Transaction PIN must be a 4-digit number.');
+      throw new BadRequestException(
+        'Transaction PIN must be a 4-digit number.',
+      );
     }
     await this.users.verifyTransactionPin(userId, pin);
   }
 
-  async listWithdrawals(userId: string, filters: { status?: string; currency?: string; country?: string; provider?: string } = {}) {
+  async listWithdrawals(
+    userId: string,
+    filters: {
+      status?: string;
+      currency?: string;
+      country?: string;
+      provider?: string;
+    } = {},
+  ) {
     const withdrawals = await this.prisma.$queryRaw<Array<any>>`
-      SELECT w.*, t.id AS "transactionId", t.status AS "transactionStatus", t.reference AS "transactionReference"
+      SELECT
+        w.*,
+        t.id AS "joinedTransactionId",
+        t.status AS "transactionStatus",
+        t.reference AS "transactionReference",
+        q."providerFee",
+        q."nobleCardsFee",
+        q."destinationFee" AS "quoteDestinationFee",
+        b."institutionName" AS "beneficiaryInstitutionName",
+        b."accountLast4" AS "beneficiaryAccountLast4"
       FROM "Withdrawal" w
       LEFT JOIN "Transaction" t ON w."transactionId" = t.id
+      LEFT JOIN "WithdrawalQuote" q ON w."quoteId" = q.id
+      LEFT JOIN "Beneficiary" b ON w."beneficiaryId" = b.id
       WHERE w."userId" = ${userId}
         ${filters.status ? Prisma.sql`AND w."status" = ${filters.status}` : Prisma.empty}
         ${filters.currency ? Prisma.sql`AND w."destinationCurrencyCode" = ${filters.currency.toUpperCase()}` : Prisma.empty}
@@ -153,30 +241,47 @@ export class WithdrawalService {
       reference: withdrawal.reference,
       status: withdrawal.status,
       sourceCurrency: withdrawal.sourceCurrencyCode,
-      destinationCurrency: withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
+      destinationCurrency:
+        withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
       sourceAmount: withdrawal.sourceAmount?.toString?.() ?? '0',
       destinationAmount: withdrawal.destinationAmount?.toString?.() ?? '0',
+      exchangeRate: withdrawal.exchangeRate?.toString?.() ?? '0',
       fee: withdrawal.fee?.toString?.() ?? '0',
+      destinationFee: withdrawal.quoteDestinationFee?.toString?.() ?? null,
+      providerFee: withdrawal.providerFee?.toString?.() ?? null,
+      nobleCardsFee: withdrawal.nobleCardsFee?.toString?.() ?? null,
       amountReceived: withdrawal.amountReceived?.toString?.() ?? '0',
-      currency: withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
+      currency:
+        withdrawal.destinationCurrencyCode ?? withdrawal.sourceCurrencyCode,
       country: withdrawal.country ?? withdrawal.countryCode ?? '',
       countryCode: withdrawal.countryCode,
       paymentMethod: withdrawal.paymentMethod,
       provider: withdrawal.provider,
+      providerReference: withdrawal.providerReference,
+      providerTransactionId: withdrawal.providerTransactionId,
+      failureReason: withdrawal.failureReason,
       createdAt: withdrawal.createdAt,
       updatedAt: withdrawal.updatedAt,
-      transaction: withdrawal.transactionId ? {
-        id: withdrawal.transactionId,
-        status: withdrawal.transactionStatus,
-        reference: withdrawal.transactionReference,
-      } : null,
+      beneficiary: withdrawal.beneficiaryId
+        ? {
+            institutionName: withdrawal.beneficiaryInstitutionName,
+            accountLast4: withdrawal.beneficiaryAccountLast4,
+          }
+        : null,
+      transaction: withdrawal.joinedTransactionId
+        ? {
+            id: withdrawal.joinedTransactionId,
+            status: withdrawal.transactionStatus,
+            reference: withdrawal.transactionReference,
+          }
+        : null,
     }));
   }
 
   async getWithdrawal(userId: string, id: string) {
     const withdrawal = await (this.prisma as any).withdrawal.findFirst({
       where: { id, userId },
-      include: { transaction: true, beneficiary: true },
+      include: { transaction: true, beneficiary: true, quote: true },
     });
     if (!withdrawal) throw new NotFoundException('Withdrawal not found.');
 
@@ -190,10 +295,18 @@ export class WithdrawalService {
       destinationAmount: withdrawal.destinationAmount.toString(),
       exchangeRate: withdrawal.exchangeRate.toString(),
       fee: withdrawal.fee.toString(),
+      destinationFee: withdrawal.quote?.destinationFee?.toString?.() ?? null,
+      providerFee: withdrawal.quote?.providerFee?.toString?.() ?? null,
+      nobleCardsFee: withdrawal.quote?.nobleCardsFee?.toString?.() ?? null,
+      totalFee:
+        withdrawal.quote?.totalFee?.toString?.() ?? withdrawal.fee.toString(),
       amountReceived: withdrawal.amountReceived.toString(),
       country: withdrawal.country,
       countryCode: withdrawal.countryCode,
       paymentMethod: withdrawal.paymentMethod,
+      provider: withdrawal.provider,
+      providerReference: withdrawal.providerReference,
+      providerTransactionId: withdrawal.providerTransactionId,
       failureReason: withdrawal.failureReason ?? null,
       createdAt: withdrawal.createdAt,
       updatedAt: withdrawal.updatedAt,
@@ -215,13 +328,16 @@ export class WithdrawalService {
     };
   }
 
-  async createWithdrawal(userId: string, input: CreateWithdrawalInput): Promise<WithdrawalResponse> {
+  async createWithdrawal(
+    userId: string,
+    input: CreateWithdrawalInput,
+  ): Promise<WithdrawalResponse> {
     this.ensureIdempotencyKey(input.idempotencyKey);
     await this.verifyPin(userId, input.pin);
 
     const existing = await (this.prisma as any).withdrawal.findFirst({
       where: { userId, idempotencyKey: input.idempotencyKey },
-      include: { transaction: true },
+      include: { transaction: true, quote: true },
     });
     if (existing) {
       return {
@@ -237,9 +353,12 @@ export class WithdrawalService {
         paymentMethod: existing.paymentMethod,
         destinationAmount: existing.destinationAmount.toString(),
         exchangeRate: existing.exchangeRate.toString(),
-        providerFee: existing.fee.toString(),
-        nobleCardsFee: existing.fee.toString(),
-        totalFee: existing.fee.toString(),
+        fee: existing.fee.toString(),
+        providerFee: existing.quote?.providerFee?.toString?.() ?? null,
+        nobleCardsFee: existing.quote?.nobleCardsFee?.toString?.() ?? null,
+        totalFee:
+          existing.quote?.totalFee?.toString?.() ?? existing.fee.toString(),
+        destinationFee: existing.quote?.destinationFee?.toString?.() ?? null,
         recipientAmount: existing.amountReceived.toString(),
         createdAt: existing.createdAt,
         transactionId: existing.transaction?.id ?? null,
@@ -247,12 +366,26 @@ export class WithdrawalService {
     }
 
     const quote = await this.getQuoteForUser(userId, input.quoteId);
+    if (!this.isSandbox && ['GB', 'US', 'CA'].includes(quote.countryCode)) {
+      throw new BadRequestException(
+        'PAYOUT_CORRIDOR_UNVERIFIED: International destinations remain estimate-only; no executable withdrawal quote is available.',
+      );
+    }
+
     await this.validateQuoteUsability(quote);
 
-    const beneficiary = await this.getBeneficiaryForUser(userId, input.beneficiaryId);
+    const beneficiary = await this.getBeneficiaryForUser(
+      userId,
+      input.beneficiaryId,
+    );
     await this.validateBeneficiary(beneficiary, quote);
 
-    const wallet = await this.validateWallet(userId, (await (this.prisma as any).wallet.findFirst({ where: { userId } }))?.id ?? '', quote);
+    const wallet = await this.validateWallet(
+      userId,
+      (await (this.prisma as any).wallet.findFirst({ where: { userId } }))
+        ?.id ?? '',
+      quote,
+    );
     if (!wallet.wallet) throw new NotFoundException('Wallet not found.');
 
     const operationKey = `withdrawal:${input.quoteId}:hold`;
@@ -261,27 +394,50 @@ export class WithdrawalService {
     const transactionId = randomUUID();
 
     const result = await (this.prisma as any).$transaction(async (tx: any) => {
-      const quoteLock = await tx.withdrawalQuote.findFirst({ where: { id: input.quoteId, userId } });
-      if (!quoteLock) throw new NotFoundException('Withdrawal quote not found.');
+      const quoteLock = await tx.withdrawalQuote.findFirst({
+        where: { id: input.quoteId, userId },
+      });
+      if (!quoteLock)
+        throw new NotFoundException('Withdrawal quote not found.');
       await this.validateQuoteUsability(quoteLock);
 
-      const beneficiaryLock = await tx.beneficiary.findFirst({ where: { id: input.beneficiaryId, userId } });
-      if (!beneficiaryLock) throw new NotFoundException('Beneficiary not found.');
+      const beneficiaryLock = await tx.beneficiary.findFirst({
+        where: { id: input.beneficiaryId, userId },
+      });
+      if (!beneficiaryLock)
+        throw new NotFoundException('Beneficiary not found.');
       await this.validateBeneficiary(beneficiaryLock, quoteLock);
 
-      const walletLock = await tx.wallet.findFirst({ where: { id: wallet.wallet.id, userId } });
+      const walletLock = await tx.wallet.findFirst({
+        where: { id: wallet.wallet.id, userId },
+      });
       if (!walletLock) throw new NotFoundException('Wallet not found.');
       const balanceLock = await tx.walletBalance.findUnique({
-        where: { walletId_currencyCode: { walletId: walletLock.id, currencyCode: quoteLock.sourceCurrencyCode } },
+        where: {
+          walletId_currencyCode: {
+            walletId: walletLock.id,
+            currencyCode: quoteLock.sourceCurrencyCode,
+          },
+        },
       });
-      if (!balanceLock) throw new NotFoundException(`Wallet balance for ${quoteLock.sourceCurrencyCode} not found.`);
+      if (!balanceLock)
+        throw new NotFoundException(
+          `Wallet balance for ${quoteLock.sourceCurrencyCode} not found.`,
+        );
 
       const quoteUpdate = await tx.withdrawalQuote.updateMany({
-        where: { id: quoteLock.id, userId, status: WithdrawalQuoteStatus.ACTIVE, expiresAt: { gt: new Date() } },
+        where: {
+          id: quoteLock.id,
+          userId,
+          status: WithdrawalQuoteStatus.ACTIVE,
+          expiresAt: { gt: new Date() },
+        },
         data: { status: WithdrawalQuoteStatus.USED, usedAt: new Date() },
       });
       if (quoteUpdate.count !== 1) {
-        throw new ConflictException('Withdrawal quote has already been used or expired.');
+        throw new ConflictException(
+          'Withdrawal quote has already been used or expired.',
+        );
       }
 
       const transactionRecord = await tx.transaction.create({
@@ -293,7 +449,9 @@ export class WithdrawalService {
           type: TransactionType.WITHDRAWAL,
           amount: quoteLock.sourceAmount,
           fee: quoteLock.totalFee,
-          netAmount: new Decimal(quoteLock.sourceAmount.toString()).minus(new Decimal(quoteLock.totalFee.toString())),
+          netAmount: new Decimal(quoteLock.sourceAmount.toString()).minus(
+            new Decimal(quoteLock.totalFee.toString()),
+          ),
           status: TransactionStatus.PENDING,
           paymentMethod: quoteLock.paymentMethod,
           reference: reference.replace('WD-', 'TX-'),
@@ -305,14 +463,17 @@ export class WithdrawalService {
         },
       });
 
-      const held = await this.wallets.holdFunds({
-        userId,
-        walletId: walletLock.id,
-        currencyCode: quoteLock.sourceCurrencyCode,
-        amount: new Decimal(quoteLock.sourceAmount.toString()),
-        transactionId: transactionRecord.id,
-        reference: operationKey,
-      }, tx);
+      const held = await this.wallets.holdFunds(
+        {
+          userId,
+          walletId: walletLock.id,
+          currencyCode: quoteLock.sourceCurrencyCode,
+          amount: new Decimal(quoteLock.sourceAmount.toString()),
+          transactionId: transactionRecord.id,
+          reference: operationKey,
+        },
+        tx,
+      );
       if (held.alreadyProcessed && held.ledgerEntryId) {
         return { alreadyProcessed: true, ledgerEntryId: held.ledgerEntryId };
       }
@@ -331,7 +492,7 @@ export class WithdrawalService {
           exchangeRate: quoteLock.exchangeRate,
           fee: quoteLock.totalFee,
           amountReceived: quoteLock.amountReceived,
-          country: 'Nigeria',
+          country: this.getCountryName(quoteLock.countryCode),
           countryCode: quoteLock.countryCode,
           paymentMethod: quoteLock.paymentMethod,
           provider: null,
@@ -342,28 +503,43 @@ export class WithdrawalService {
           idempotencyKey: input.idempotencyKey,
           status: TransactionStatus.PENDING,
           failureReason: null,
-          metadata: { quoteId: quoteLock.id, beneficiaryId: beneficiaryLock.id },
+          metadata: {
+            quoteId: quoteLock.id,
+            beneficiaryId: beneficiaryLock.id,
+          },
           createdAt: new Date(),
           updatedAt: new Date(),
         },
       });
 
-      return { withdrawal, transaction: transactionRecord, hold: held };
+      return {
+        withdrawal,
+        transaction: transactionRecord,
+        quote: quoteLock,
+        hold: held,
+      };
     });
 
     if ((result as any)?.alreadyProcessed) {
-      throw new ConflictException('A withdrawal with this idempotency key already exists.');
+      throw new ConflictException(
+        'A withdrawal with this idempotency key already exists.',
+      );
     }
 
     if (this.email && (this.prisma as any).user?.findUnique) {
-      const user = await (this.prisma as any).user.findUnique({ where: { id: userId }, select: { email: true } });
+      const user = await (this.prisma as any).user.findUnique({
+        where: { id: userId },
+        select: { email: true },
+      });
       if (user?.email) {
-        await this.email.sendWithdrawalCreatedEmail(
-          user.email,
-          result.withdrawal.reference,
-          result.withdrawal.amountReceived.toString(),
-          result.withdrawal.destinationCurrencyCode,
-        ).catch(() => undefined);
+        await this.email
+          .sendWithdrawalCreatedEmail(
+            user.email,
+            result.withdrawal.reference,
+            result.withdrawal.amountReceived.toString(),
+            result.withdrawal.destinationCurrencyCode,
+          )
+          .catch(() => undefined);
       }
     }
 
@@ -380,9 +556,11 @@ export class WithdrawalService {
       paymentMethod: result.withdrawal.paymentMethod,
       destinationAmount: result.withdrawal.destinationAmount.toString(),
       exchangeRate: result.withdrawal.exchangeRate.toString(),
-      providerFee: result.withdrawal.fee.toString(),
-      nobleCardsFee: result.withdrawal.fee.toString(),
-      totalFee: result.withdrawal.fee.toString(),
+      fee: result.withdrawal.fee.toString(),
+      providerFee: result.quote.providerFee.toString(),
+      nobleCardsFee: result.quote.nobleCardsFee.toString(),
+      totalFee: result.quote.totalFee.toString(),
+      destinationFee: result.quote.destinationFee.toString(),
       recipientAmount: result.withdrawal.amountReceived.toString(),
       createdAt: result.withdrawal.createdAt,
       transactionId: result.transaction.id,

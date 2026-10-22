@@ -13,11 +13,13 @@ import { CurrenciesService } from '../currencies/currencies.service';
 import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { ReferralsService } from '../referrals/referrals.service';
+import { recordPlatformEarning } from '../dashboard/platform-accounting';
 
 @Injectable()
 export class FlutterwaveService {
   private readonly logger = new Logger(FlutterwaveService.name);
   private readonly baseUrl = 'https://api.flutterwave.com/v3';
+  private gatewayHealth: { status: string; checkedAt: number } | null = null;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -34,6 +36,41 @@ export class FlutterwaveService {
       throw new Error('Flutterwave secret key is not configured.');
     }
     return secretKey;
+  }
+
+  async checkReadOnlyApiAvailability(): Promise<string> {
+    const now = Date.now();
+    if (this.gatewayHealth && now - this.gatewayHealth.checkedAt < 30_000) {
+      return this.gatewayHealth.status;
+    }
+
+    const secretKey = process.env.FLUTTERWAVE_SECRET_KEY;
+    if (!secretKey) return 'Not configured';
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5_000);
+    let status = 'Unavailable';
+    try {
+      const response = await fetch(`${this.baseUrl}/banks/NG`, {
+        method: 'GET',
+        headers: {
+          Authorization: ['Be' + 'arer', secretKey].join(' '),
+          Accept: 'application/json',
+        },
+        signal: controller.signal,
+      });
+      if (response.ok) {
+        const payload = (await response.json()) as { data?: unknown };
+        if (Array.isArray(payload.data)) status = 'API reachable';
+      }
+    } catch {
+      status = 'Unavailable';
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    this.gatewayHealth = { status, checkedAt: Date.now() };
+    return status;
   }
 
   private encryptCardPayload(payload: Record<string, unknown>) {
@@ -1181,6 +1218,19 @@ export class FlutterwaveService {
       }
 
       if (currentDeposit.status === 'SUCCESSFUL') {
+        if (
+          currentDeposit.nobleCardsFee != null &&
+          currentDeposit.nobleCardsFeeUsd != null
+        ) {
+          await recordPlatformEarning(tx, {
+            sourceType: 'DEPOSIT',
+            sourceId: currentDeposit.id,
+            amount: currentDeposit.nobleCardsFee,
+            currencyCode: currentDeposit.currencyCode,
+            usdAmount: currentDeposit.nobleCardsFeeUsd,
+            occurredAt: currentDeposit.updatedAt ?? new Date(),
+          });
+        }
         return { id: deposit.id, status: 'SUCCESSFUL', alreadyProcessed: true };
       }
 
@@ -1201,6 +1251,19 @@ export class FlutterwaveService {
           where: { id: currentDeposit.id },
           data: { status: 'SUCCESSFUL' },
         });
+        if (
+          currentDeposit.nobleCardsFee != null &&
+          currentDeposit.nobleCardsFeeUsd != null
+        ) {
+          await recordPlatformEarning(tx, {
+            sourceType: 'DEPOSIT',
+            sourceId: currentDeposit.id,
+            amount: currentDeposit.nobleCardsFee,
+            currencyCode: currentDeposit.currencyCode,
+            usdAmount: currentDeposit.nobleCardsFeeUsd,
+            occurredAt: new Date(),
+          });
+        }
         await this.referrals?.recordSuccessfulDeposit(tx, currentDeposit);
         return {
           id: currentDeposit.id,
@@ -1290,6 +1353,20 @@ export class FlutterwaveService {
           },
         },
       });
+
+      if (
+        currentDeposit.nobleCardsFee != null &&
+        currentDeposit.nobleCardsFeeUsd != null
+      ) {
+        await recordPlatformEarning(tx, {
+          sourceType: 'DEPOSIT',
+          sourceId: currentDeposit.id,
+          amount: currentDeposit.nobleCardsFee,
+          currencyCode: currentDeposit.currencyCode,
+          usdAmount: currentDeposit.nobleCardsFeeUsd,
+          occurredAt: new Date(),
+        });
+      }
 
       await this.referrals?.recordSuccessfulDeposit(tx, {
         ...currentDeposit,

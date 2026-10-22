@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { createHmac } from 'node:crypto';
+import { Decimal } from '@prisma/client-runtime-utils';
 import { DepositsService } from './deposits.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { WalletsService } from '../wallets/wallets.service';
@@ -11,12 +12,45 @@ import { FlutterwaveService } from '../flutterwave/flutterwave.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
 
 describe('FlutterwaveService webhook validation', () => {
+  it('converts the NobleCards deposit fee to USD using the transaction-time FX rate', () => {
+    const service = new DepositsService(
+      {} as any,
+      {} as any,
+      {} as any,
+      {} as any,
+      {} as any,
+      {} as any,
+      {
+        get: jest.fn((key: string, fallback?: number) =>
+          key === 'DEPOSIT_NOBLECARDS_FEE_PERCENT' ? 1 : fallback,
+        ),
+      } as any,
+    );
+    const feeBreakdown = (service as any).calculateDepositFees(
+      new Decimal('100'),
+      new Decimal('1500'),
+    );
+
+    expect(feeBreakdown.nobleCardsFee.toFixed(2)).toBe('1500.00');
+    expect(feeBreakdown.nobleCardsFeeUsd.toFixed(8)).toBe('1.00000000');
+  });
+
   it('includes the configured provider and NobleCards fee breakdown in the deposit response', async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DepositsService,
-        { provide: PrismaService, useValue: {
-            currency: { findUnique: jest.fn().mockResolvedValue({ code: 'USD', enabled: true, depositEnabled: true }), },
+        {
+          provide: PrismaService,
+          useValue: {
+            currency: {
+              findUnique: jest
+                .fn()
+                .mockResolvedValue({
+                  code: 'USD',
+                  enabled: true,
+                  depositEnabled: true,
+                }),
+            },
             deposit: {
               findFirst: jest.fn().mockResolvedValue(null),
               create: jest.fn().mockResolvedValue({
@@ -31,24 +65,84 @@ describe('FlutterwaveService webhook validation', () => {
                 provider: 'FLUTTERWAVE',
                 paymentMethod: 'CARD',
                 metadata: {},
-                transaction: { id: 'tx-fee-1', status: 'PENDING', reference: 'DPT-FEE-1' },
+                transaction: {
+                  id: 'tx-fee-1',
+                  status: 'PENDING',
+                  reference: 'DPT-FEE-1',
+                },
               }),
               update: jest.fn().mockResolvedValue({}),
             },
-          } },
-        { provide: WalletsService, useValue: { getOrCreateWallet: jest.fn().mockResolvedValue({ id: 'wallet-1' }) } },
-        { provide: CurrenciesService, useValue: { getCurrency: jest.fn().mockResolvedValue({ code: 'USD', enabled: true, depositEnabled: true }) } },
-        { provide: TransactionsService, useValue: { createPendingDepositTransaction: jest.fn().mockResolvedValue({ id: 'tx-fee-1', reference: 'DPT-FEE-1', status: 'PENDING' }) } },
+          },
+        },
+        {
+          provide: WalletsService,
+          useValue: {
+            getOrCreateWallet: jest.fn().mockResolvedValue({ id: 'wallet-1' }),
+          },
+        },
+        {
+          provide: CurrenciesService,
+          useValue: {
+            getCurrency: jest
+              .fn()
+              .mockResolvedValue({
+                code: 'USD',
+                enabled: true,
+                depositEnabled: true,
+              }),
+          },
+        },
+        {
+          provide: TransactionsService,
+          useValue: {
+            createPendingDepositTransaction: jest
+              .fn()
+              .mockResolvedValue({
+                id: 'tx-fee-1',
+                reference: 'DPT-FEE-1',
+                status: 'PENDING',
+              }),
+          },
+        },
         { provide: LedgerService, useValue: {} },
-        { provide: FlutterwaveService, useValue: { createPayment: jest.fn().mockResolvedValue({ paymentLink: 'https://checkout.example.com/pay', providerReference: 'FLW-FEE-1', providerTransactionId: 'fee-123', meta: { configured: true } }) } },
-        { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
-        { provide: ConfigService, useValue: { get: jest.fn((key: string, fallback?: any) => {
-          const overrides: Record<string, string | number> = {
-            DEPOSIT_PROVIDER_FEE_PERCENT: 2,
-            DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
-          };
-          return overrides[key] ?? fallback;
-        }) } },
+        {
+          provide: FlutterwaveService,
+          useValue: {
+            createPayment: jest
+              .fn()
+              .mockResolvedValue({
+                paymentLink: 'https://checkout.example.com/pay',
+                providerReference: 'FLW-FEE-1',
+                providerTransactionId: 'fee-123',
+                meta: { configured: true },
+              }),
+          },
+        },
+        {
+          provide: ExchangeRatesService,
+          useValue: {
+            getRates: jest
+              .fn()
+              .mockResolvedValue({
+                base: 'USD',
+                rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                updatedAt: '2026-01-01T00:00:00.000Z',
+              }),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string, fallback?: any) => {
+              const overrides: Record<string, string | number> = {
+                DEPOSIT_PROVIDER_FEE_PERCENT: 2,
+                DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
+              };
+              return overrides[key] ?? fallback;
+            }),
+          },
+        },
       ],
     }).compile();
 
@@ -63,54 +157,100 @@ describe('FlutterwaveService webhook validation', () => {
 
     expect(result.providerFee).toBe('2.00');
     expect(result.nobleCardsFee).toBe('1.00');
+    expect(result.nobleCardsFeeUsd).toBe('1.00000000');
     expect(result.totalFees).toBe('3.00');
     expect(result.customerPayableAmount).toBe('103.00');
     expect(result.walletCreditAmount).toBe('100.00');
     expect(result.walletCreditCurrency).toBe('USD');
     expect(result.exchangeRate).toBe('1.03');
+    const depositCreate = (module.get(PrismaService) as any).deposit.create;
+    const persistedFeeBreakdown = depositCreate.mock.calls[0][0].data;
+    expect(persistedFeeBreakdown.nobleCardsFee.toFixed(2)).toBe('1.00');
+    expect(persistedFeeBreakdown.nobleCardsFeeUsd.toFixed(8)).toBe(
+      '1.00000000',
+    );
   });
 
   it('rejects currencies that are not supported by the configured Flutterwave account', async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         DepositsService,
-        { provide: PrismaService, useValue: {
-            currency: { findUnique: jest.fn().mockImplementation(({ where }: any) => ({
-              code: where.code,
-              enabled: true,
-              depositEnabled: true,
-            })) },
+        {
+          provide: PrismaService,
+          useValue: {
+            currency: {
+              findUnique: jest.fn().mockImplementation(({ where }: any) => ({
+                code: where.code,
+                enabled: true,
+                depositEnabled: true,
+              })),
+            },
             deposit: {
               findFirst: jest.fn().mockResolvedValue(null),
               create: jest.fn(),
               update: jest.fn(),
             },
-          } },
-        { provide: WalletsService, useValue: { getOrCreateWallet: jest.fn().mockResolvedValue({ id: 'wallet-1' }) } },
+          },
+        },
+        {
+          provide: WalletsService,
+          useValue: {
+            getOrCreateWallet: jest.fn().mockResolvedValue({ id: 'wallet-1' }),
+          },
+        },
         { provide: CurrenciesService, useValue: { getCurrency: jest.fn() } },
-        { provide: TransactionsService, useValue: { createPendingDepositTransaction: jest.fn() } },
+        {
+          provide: TransactionsService,
+          useValue: { createPendingDepositTransaction: jest.fn() },
+        },
         { provide: LedgerService, useValue: {} },
-        { provide: FlutterwaveService, useValue: { createPayment: jest.fn(), createVirtualAccount: jest.fn(), createGhsVirtualAccount: jest.fn(), createGbpBankCharge: jest.fn() } },
-        { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, GHS: 12.5 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
-        { provide: ConfigService, useValue: { get: jest.fn((key: string, fallback?: any) => {
-          const overrides: Record<string, string | number> = {
-            DEPOSIT_PROVIDER_FEE_PERCENT: 2,
-            DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
-          };
-          return overrides[key] ?? fallback;
-        }) } },
+        {
+          provide: FlutterwaveService,
+          useValue: {
+            createPayment: jest.fn(),
+            createVirtualAccount: jest.fn(),
+            createGhsVirtualAccount: jest.fn(),
+            createGbpBankCharge: jest.fn(),
+          },
+        },
+        {
+          provide: ExchangeRatesService,
+          useValue: {
+            getRates: jest
+              .fn()
+              .mockResolvedValue({
+                base: 'USD',
+                rates: { USD: 1, NGN: 1500, GBP: 0.79, GHS: 12.5 },
+                updatedAt: '2026-01-01T00:00:00.000Z',
+              }),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn((key: string, fallback?: any) => {
+              const overrides: Record<string, string | number> = {
+                DEPOSIT_PROVIDER_FEE_PERCENT: 2,
+                DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
+              };
+              return overrides[key] ?? fallback;
+            }),
+          },
+        },
       ],
     }).compile();
 
     const service = module.get<DepositsService>(DepositsService);
 
-    await expect(service.createDeposit('user-1', {
-      amount: 100,
-      currency: 'EUR',
-      paymentMethod: 'BANK_TRANSFER',
-      provider: 'FLUTTERWAVE',
-      idempotencyKey: 'unsupported-eur-1',
-    })).rejects.toThrow(/supported.*Flutterwave/i);
+    await expect(
+      service.createDeposit('user-1', {
+        amount: 100,
+        currency: 'EUR',
+        paymentMethod: 'BANK_TRANSFER',
+        provider: 'FLUTTERWAVE',
+        idempotencyKey: 'unsupported-eur-1',
+      }),
+    ).rejects.toThrow(/supported.*Flutterwave/i);
   });
   it('uses the dedicated webhook secret hash for signature validation', async () => {
     const originalWebhookSecret = process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH;
@@ -128,15 +268,31 @@ describe('FlutterwaveService webhook validation', () => {
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
           { provide: LedgerService, useValue: {} },
-          { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
+          {
+            provide: ExchangeRatesService,
+            useValue: {
+              getRates: jest
+                .fn()
+                .mockResolvedValue({
+                  base: 'USD',
+                  rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                  updatedAt: '2026-01-01T00:00:00.000Z',
+                }),
+            },
+          },
         ],
       }).compile();
 
       const service = module.get<FlutterwaveService>(FlutterwaveService);
-      const payload = JSON.stringify({ event: 'charge.completed', data: { tx_ref: 'ref-1' } });
+      const payload = JSON.stringify({
+        event: 'charge.completed',
+        data: { tx_ref: 'ref-1' },
+      });
       const signature = 'webhook-secret-hash';
 
-      await expect(service.validateWebhookSignature(signature, payload)).resolves.toBe(true);
+      await expect(
+        service.validateWebhookSignature(signature, payload),
+      ).resolves.toBe(true);
     } finally {
       if (originalWebhookSecret === undefined) {
         delete process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH;
@@ -160,35 +316,55 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
           { provide: LedgerService, useValue: {} },
-          { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
+          {
+            provide: ExchangeRatesService,
+            useValue: {
+              getRates: jest
+                .fn()
+                .mockResolvedValue({
+                  base: 'USD',
+                  rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                  updatedAt: '2026-01-01T00:00:00.000Z',
+                }),
+            },
+          },
         ],
       }).compile();
 
       const service = module.get<FlutterwaveService>(FlutterwaveService);
-      const requestSpy = jest.spyOn(service as any, 'request').mockResolvedValue({
-        status: 'success',
-        data: {
-          id: 123,
-          tx_ref: 'DPT-123',
-          account_number: '1234567890',
-          account_name: 'Alice Jones',
-          bank_name: 'GTB',
-          expiry_date: '2026-01-02T00:00:00.000Z',
-          amount: 2500,
-          currency: 'NGN',
-        },
-      });
+      const requestSpy = jest
+        .spyOn(service as any, 'request')
+        .mockResolvedValue({
+          status: 'success',
+          data: {
+            id: 123,
+            tx_ref: 'DPT-123',
+            account_number: '1234567890',
+            account_name: 'Alice Jones',
+            bank_name: 'GTB',
+            expiry_date: '2026-01-02T00:00:00.000Z',
+            amount: 2500,
+            currency: 'NGN',
+          },
+        });
 
       await service.createVirtualAccount({
         amount: 2500,
@@ -199,17 +375,21 @@ describe('FlutterwaveService webhook validation', () => {
         depositId: 'deposit-1',
       });
 
-      expect(requestSpy).toHaveBeenCalledWith('/virtual-account-numbers', 'POST', expect.objectContaining({
-        tx_ref: 'DPT-123',
-        amount: 2500,
-        currency: 'NGN',
-        customer: expect.objectContaining({
-          email: 'alice@example.com',
-          firstname: 'Alice',
-          lastname: 'Jones',
-          phonenumber: '08012345678',
+      expect(requestSpy).toHaveBeenCalledWith(
+        '/virtual-account-numbers',
+        'POST',
+        expect.objectContaining({
+          tx_ref: 'DPT-123',
+          amount: 2500,
+          currency: 'NGN',
+          customer: expect.objectContaining({
+            email: 'alice@example.com',
+            firstname: 'Alice',
+            lastname: 'Jones',
+            phonenumber: '08012345678',
+          }),
         }),
-      }));
+      );
     } finally {
       if (originalSecretKey === undefined) {
         delete process.env.FLUTTERWAVE_SECRET_KEY;
@@ -227,18 +407,36 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
           { provide: LedgerService, useValue: {} },
-          { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
+          {
+            provide: ExchangeRatesService,
+            useValue: {
+              getRates: jest
+                .fn()
+                .mockResolvedValue({
+                  base: 'USD',
+                  rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                  updatedAt: '2026-01-01T00:00:00.000Z',
+                }),
+            },
+          },
         ],
       }).compile();
 
@@ -284,32 +482,58 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
           { provide: LedgerService, useValue: {} },
-          { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
+          {
+            provide: ExchangeRatesService,
+            useValue: {
+              getRates: jest
+                .fn()
+                .mockResolvedValue({
+                  base: 'USD',
+                  rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                  updatedAt: '2026-01-01T00:00:00.000Z',
+                }),
+            },
+          },
         ],
       }).compile();
 
       const service = module.get<FlutterwaveService>(FlutterwaveService);
-      jest.spyOn(service as any, 'request').mockRejectedValue(new Error('Flutterwave 400: amount should be between 0 and 3,719'));
+      jest
+        .spyOn(service as any, 'request')
+        .mockRejectedValue(
+          new Error('Flutterwave 400: amount should be between 0 and 3,719'),
+        );
 
-      await expect(service.createGbpBankCharge({
-        amount: 4000,
-        currency: 'GBP',
-        reference: 'DPT-GB-001',
-        userId: 'user-1',
-        walletId: 'wallet-1',
-        depositId: 'deposit-3',
-      })).rejects.toThrow(/GBP bank transfer amount must be between £0 and £3,719/i);
+      await expect(
+        service.createGbpBankCharge({
+          amount: 4000,
+          currency: 'GBP',
+          reference: 'DPT-GB-001',
+          userId: 'user-1',
+          walletId: 'wallet-1',
+          depositId: 'deposit-3',
+        }),
+      ).rejects.toThrow(
+        /GBP bank transfer amount must be between £0 and £3,719/i,
+      );
     } finally {
       if (originalSecretKey === undefined) {
         delete process.env.FLUTTERWAVE_SECRET_KEY;
@@ -327,13 +551,20 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
@@ -344,14 +575,18 @@ describe('FlutterwaveService webhook validation', () => {
       const service = module.get<FlutterwaveService>(FlutterwaveService);
       const requestSpy = jest.spyOn(service as any, 'request');
 
-      await expect(service.createGbpBankCharge({
-        amount: 5000,
-        currency: 'GBP',
-        reference: 'DPT-GB-002',
-        userId: 'user-1',
-        walletId: 'wallet-1',
-        depositId: 'deposit-4',
-      })).rejects.toThrow(/GBP bank transfer amount must be between £0 and £3,719/i);
+      await expect(
+        service.createGbpBankCharge({
+          amount: 5000,
+          currency: 'GBP',
+          reference: 'DPT-GB-002',
+          userId: 'user-1',
+          walletId: 'wallet-1',
+          depositId: 'deposit-4',
+        }),
+      ).rejects.toThrow(
+        /GBP bank transfer amount must be between £0 and £3,719/i,
+      );
 
       expect(requestSpy).not.toHaveBeenCalled();
     } finally {
@@ -371,13 +606,20 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
@@ -405,14 +647,16 @@ describe('FlutterwaveService webhook validation', () => {
         },
       });
 
-      await expect(service.createGbpBankCharge({
-        amount: 300,
-        currency: 'GBP',
-        reference: 'DPT-GB-300',
-        userId: 'user-1',
-        walletId: 'wallet-1',
-        depositId: 'deposit-5',
-      })).resolves.toMatchObject({
+      await expect(
+        service.createGbpBankCharge({
+          amount: 300,
+          currency: 'GBP',
+          reference: 'DPT-GB-300',
+          userId: 'user-1',
+          walletId: 'wallet-1',
+          depositId: 'deposit-5',
+        }),
+      ).resolves.toMatchObject({
         authorizationUrl: 'https://secure.flutterwave.com/authorize/abc123',
         providerReference: 'DPT-GB-300',
       });
@@ -433,13 +677,20 @@ describe('FlutterwaveService webhook validation', () => {
       const module: TestingModule = await Test.createTestingModule({
         providers: [
           FlutterwaveService,
-          { provide: PrismaService, useValue: { user: { findUnique: jest.fn().mockResolvedValue({
-            id: 'user-1',
-            email: 'alice@example.com',
-            phone: '08012345678',
-            firstName: 'Alice',
-            lastName: 'Jones',
-          }) } } },
+          {
+            provide: PrismaService,
+            useValue: {
+              user: {
+                findUnique: jest.fn().mockResolvedValue({
+                  id: 'user-1',
+                  email: 'alice@example.com',
+                  phone: '08012345678',
+                  firstName: 'Alice',
+                  lastName: 'Jones',
+                }),
+              },
+            },
+          },
           { provide: WalletsService, useValue: {} },
           { provide: CurrenciesService, useValue: {} },
           { provide: TransactionsService, useValue: {} },
@@ -462,20 +713,24 @@ describe('FlutterwaveService webhook validation', () => {
         meta: {
           authorization: {
             mode: 'redirect',
-            redirect: 'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
+            redirect:
+              'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
           },
         },
       });
 
-      await expect(service.createGbpBankCharge({
-        amount: 158,
-        currency: 'GBP',
-        reference: 'DPT-1788224193050-AYC1W39E',
-        userId: 'user-1',
-        walletId: 'wallet-1',
-        depositId: 'deposit-6',
-      })).resolves.toMatchObject({
-        authorizationUrl: 'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
+      await expect(
+        service.createGbpBankCharge({
+          amount: 158,
+          currency: 'GBP',
+          reference: 'DPT-1788224193050-AYC1W39E',
+          userId: 'user-1',
+          walletId: 'wallet-1',
+          depositId: 'deposit-6',
+        }),
+      ).resolves.toMatchObject({
+        authorizationUrl:
+          'https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaid/api/short-url/d974cc5a-b67e-420f-a1c6-291f758fc64c',
       });
     } finally {
       if (originalSecretKey === undefined) {
@@ -555,32 +810,39 @@ describe('DepositsService', () => {
       code: where.code,
       enabled: true,
       depositEnabled: true,
-      name: where.code === 'NGN' ? 'Nigerian Naira' : where.code === 'GBP' ? 'Pound Sterling' : 'Currency',
+      name:
+        where.code === 'NGN'
+          ? 'Nigerian Naira'
+          : where.code === 'GBP'
+            ? 'Pound Sterling'
+            : 'Currency',
       symbol: where.code === 'NGN' ? '₦' : where.code === 'GBP' ? '£' : '$',
     }));
 
-    prisma.$transaction.mockImplementation(async (handler) => handler({
-      deposit: {
-        create: jest.fn(),
-        findUnique: jest.fn(),
-        findFirst: jest.fn(),
-        update: jest.fn(),
-      },
-      transaction: {
-        create: jest.fn(),
-        update: jest.fn(),
-        findFirst: jest.fn(),
-        findUnique: jest.fn(),
-      },
-      walletBalance: {
-        upsert: jest.fn(),
-        findFirst: jest.fn(),
-        findUnique: jest.fn(),
-        update: jest.fn(),
-        create: jest.fn(),
-      },
-      ledgerEntry: { create: jest.fn() },
-    }));
+    prisma.$transaction.mockImplementation(async (handler) =>
+      handler({
+        deposit: {
+          create: jest.fn(),
+          findUnique: jest.fn(),
+          findFirst: jest.fn(),
+          update: jest.fn(),
+        },
+        transaction: {
+          create: jest.fn(),
+          update: jest.fn(),
+          findFirst: jest.fn(),
+          findUnique: jest.fn(),
+        },
+        walletBalance: {
+          upsert: jest.fn(),
+          findFirst: jest.fn(),
+          findUnique: jest.fn(),
+          update: jest.fn(),
+          create: jest.fn(),
+        },
+        ledgerEntry: { create: jest.fn() },
+      }),
+    );
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -591,11 +853,30 @@ describe('DepositsService', () => {
         { provide: TransactionsService, useValue: transactions },
         { provide: LedgerService, useValue: ledger },
         { provide: FlutterwaveService, useValue: flutterwave },
-        { provide: ExchangeRatesService, useValue: { getRates: jest.fn().mockResolvedValue({ base: 'USD', rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 }, updatedAt: '2026-01-01T00:00:00.000Z' }) } },
-        { provide: ConfigService, useValue: { get: jest.fn((key: string, fallback?: any) => ({
-          DEPOSIT_PROVIDER_FEE_PERCENT: 2,
-          DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
-        }[key] ?? fallback)) } },
+        {
+          provide: ExchangeRatesService,
+          useValue: {
+            getRates: jest
+              .fn()
+              .mockResolvedValue({
+                base: 'USD',
+                rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
+                updatedAt: '2026-01-01T00:00:00.000Z',
+              }),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn(
+              (key: string, fallback?: any) =>
+                ({
+                  DEPOSIT_PROVIDER_FEE_PERCENT: 2,
+                  DEPOSIT_NOBLECARDS_FEE_PERCENT: 1,
+                })[key] ?? fallback,
+            ),
+          },
+        },
       ],
     }).compile();
 
@@ -657,20 +938,45 @@ describe('DepositsService', () => {
   });
 
   it('does not credit the wallet when Flutterwave payment creation fails', async () => {
-    currencies.getCurrency.mockResolvedValue({ code: 'USD', enabled: true, depositEnabled: true, name: 'US Dollar', symbol: '$' });
+    currencies.getCurrency.mockResolvedValue({
+      code: 'USD',
+      enabled: true,
+      depositEnabled: true,
+      name: 'US Dollar',
+      symbol: '$',
+    });
     wallets.getOrCreateWallet.mockResolvedValue({ id: 'wallet-1' });
-    transactions.createPendingDepositTransaction.mockResolvedValue({ id: 'tx-1', reference: 'DPT-123', status: 'PENDING' });
+    transactions.createPendingDepositTransaction.mockResolvedValue({
+      id: 'tx-1',
+      reference: 'DPT-123',
+      status: 'PENDING',
+    });
     prisma.deposit.findFirst.mockResolvedValue(null);
-    prisma.deposit.create.mockResolvedValue({ id: 'deposit-1', status: 'PENDING', walletId: 'wallet-1', currencyCode: 'USD', amount: { toString: () => '100.00' }, fee: { toString: () => '0.00' }, netAmount: { toString: () => '100.00' }, provider: 'FLUTTERWAVE', metadata: {}, transaction: { id: 'tx-1', status: 'PENDING', reference: 'DPT-123' } });
-    flutterwave.createPayment.mockRejectedValue(new Error('Flutterwave request failed'));
-
-    await expect(service.createDeposit('user-1', {
-      amount: 100,
-      currency: 'USD',
-      paymentMethod: 'BANK_TRANSFER',
+    prisma.deposit.create.mockResolvedValue({
+      id: 'deposit-1',
+      status: 'PENDING',
+      walletId: 'wallet-1',
+      currencyCode: 'USD',
+      amount: { toString: () => '100.00' },
+      fee: { toString: () => '0.00' },
+      netAmount: { toString: () => '100.00' },
       provider: 'FLUTTERWAVE',
-      idempotencyKey: 'dep-fail',
-    })).rejects.toThrow('Flutterwave request failed');
+      metadata: {},
+      transaction: { id: 'tx-1', status: 'PENDING', reference: 'DPT-123' },
+    });
+    flutterwave.createPayment.mockRejectedValue(
+      new Error('Flutterwave request failed'),
+    );
+
+    await expect(
+      service.createDeposit('user-1', {
+        amount: 100,
+        currency: 'USD',
+        paymentMethod: 'BANK_TRANSFER',
+        provider: 'FLUTTERWAVE',
+        idempotencyKey: 'dep-fail',
+      }),
+    ).rejects.toThrow('Flutterwave request failed');
 
     expect(wallets.ensureBalance).not.toHaveBeenCalled();
   });
@@ -703,15 +1009,21 @@ describe('DepositsService', () => {
   });
 
   it('rejects incorrect amount before crediting the wallet', async () => {
-    flutterwave.verifyAndCreditDeposit.mockRejectedValue(new Error('Amount mismatch. Flutterwave transaction does not match the NobleCards deposit amount.'));
+    flutterwave.verifyAndCreditDeposit.mockRejectedValue(
+      new Error(
+        'Amount mismatch. Flutterwave transaction does not match the NobleCards deposit amount.',
+      ),
+    );
 
-    await expect(service.verifyAndCreditDeposit({
-      provider: 'FLUTTERWAVE',
-      providerReference: 'FLW-REF-1',
-      providerTransactionId: '12345',
-      amount: '90.00',
-      currency: 'USD',
-    })).rejects.toThrow('Amount mismatch');
+    await expect(
+      service.verifyAndCreditDeposit({
+        provider: 'FLUTTERWAVE',
+        providerReference: 'FLW-REF-1',
+        providerTransactionId: '12345',
+        amount: '90.00',
+        currency: 'USD',
+      }),
+    ).rejects.toThrow('Amount mismatch');
   });
 
   it('returns a provider verification failure without crediting the wallet', async () => {
@@ -788,41 +1100,76 @@ describe('DepositsService', () => {
     };
 
     const controller = {
-      webhook: async (signature: string | undefined, request: { body?: any; rawBody?: Buffer }) => {
-        const raw = request.rawBody ? request.rawBody.toString('utf8') : JSON.stringify(request.body ?? {});
+      webhook: async (
+        signature: string | undefined,
+        request: { body?: any; rawBody?: Buffer },
+      ) => {
+        const raw = request.rawBody
+          ? request.rawBody.toString('utf8')
+          : JSON.stringify(request.body ?? {});
         const isValid = await swagger.validateWebhookSignature(signature, raw);
         if (!isValid) {
-          return { ok: false, message: 'Invalid Flutterwave webhook signature.' };
+          return {
+            ok: false,
+            message: 'Invalid Flutterwave webhook signature.',
+          };
         }
         return swagger.processWebhookEvent(request.body);
       },
     };
 
-    const result = await controller.webhook(undefined, { body: { event: 'charge.completed' } });
+    const result = await controller.webhook(undefined, {
+      body: { event: 'charge.completed' },
+    });
 
-    expect(result).toEqual({ ok: false, message: 'Invalid Flutterwave webhook signature.' });
+    expect(result).toEqual({
+      ok: false,
+      message: 'Invalid Flutterwave webhook signature.',
+    });
     expect(swagger.processWebhookEvent).not.toHaveBeenCalled();
   });
 
   it('accepts a valid webhook payload after signature validation', async () => {
     const swagger = {
       validateWebhookSignature: jest.fn().mockResolvedValue(true),
-      processWebhookEvent: jest.fn().mockResolvedValue({ ok: true, processed: true, depositId: 'deposit-1' }),
+      processWebhookEvent: jest
+        .fn()
+        .mockResolvedValue({
+          ok: true,
+          processed: true,
+          depositId: 'deposit-1',
+        }),
     };
 
     const controller = {
-      webhook: async (signature: string | undefined, request: { body?: any; rawBody?: Buffer }) => {
-        const raw = request.rawBody ? request.rawBody.toString('utf8') : JSON.stringify(request.body ?? {});
+      webhook: async (
+        signature: string | undefined,
+        request: { body?: any; rawBody?: Buffer },
+      ) => {
+        const raw = request.rawBody
+          ? request.rawBody.toString('utf8')
+          : JSON.stringify(request.body ?? {});
         const isValid = await swagger.validateWebhookSignature(signature, raw);
         if (!isValid) {
-          return { ok: false, message: 'Invalid Flutterwave webhook signature.' };
+          return {
+            ok: false,
+            message: 'Invalid Flutterwave webhook signature.',
+          };
         }
         const processed = await swagger.processWebhookEvent(request.body);
-        return { ok: processed.ok, processed: processed.processed, event: request.body?.event ?? 'unknown', message: 'Webhook received and processed by the backend.', depositId: processed.depositId ?? null };
+        return {
+          ok: processed.ok,
+          processed: processed.processed,
+          event: request.body?.event ?? 'unknown',
+          message: 'Webhook received and processed by the backend.',
+          depositId: processed.depositId ?? null,
+        };
       },
     };
 
-    const result = await controller.webhook('valid-signature', { body: { event: 'charge.completed', data: { tx_ref: 'ref-1' } } });
+    const result = await controller.webhook('valid-signature', {
+      body: { event: 'charge.completed', data: { tx_ref: 'ref-1' } },
+    });
 
     expect(result.ok).toBe(true);
     expect(result.processed).toBe(true);
@@ -978,15 +1325,19 @@ describe('DepositsService', () => {
       transaction: { id: 'tx-2', status: 'PENDING', reference: 'DPT-fail' },
     });
 
-    flutterwave.createVirtualAccount.mockRejectedValue(new Error('Flutterwave API error: Unable to create virtual account'));
+    flutterwave.createVirtualAccount.mockRejectedValue(
+      new Error('Flutterwave API error: Unable to create virtual account'),
+    );
 
-    await expect(service.createDeposit('user-1', {
-      amount: 10000,
-      currency: 'NGN',
-      paymentMethod: 'BANK_TRANSFER',
-      provider: 'FLUTTERWAVE',
-      idempotencyKey: 'dep-fail-ngn',
-    })).rejects.toThrow('Flutterwave API error');
+    await expect(
+      service.createDeposit('user-1', {
+        amount: 10000,
+        currency: 'NGN',
+        paymentMethod: 'BANK_TRANSFER',
+        provider: 'FLUTTERWAVE',
+        idempotencyKey: 'dep-fail-ngn',
+      }),
+    ).rejects.toThrow('Flutterwave API error');
 
     expect(wallets.ensureBalance).not.toHaveBeenCalled();
   });

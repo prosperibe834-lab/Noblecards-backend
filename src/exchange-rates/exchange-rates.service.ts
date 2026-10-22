@@ -5,6 +5,7 @@ export interface ExchangeRatesResponse {
   base: string;
   rates: Record<string, number>;
   updatedAt: string;
+  validUntil: string;
 }
 
 @Injectable()
@@ -17,19 +18,37 @@ export class ExchangeRatesService {
   constructor(private readonly config: ConfigService) {}
 
   private getDefaultEndpoint() {
-    return this.config.get<string>('EXCHANGE_RATE_API_URL', 'https://open.er-api.com/v6/latest/USD');
+    return this.config.get<string>(
+      'EXCHANGE_RATE_API_URL',
+      'https://open.er-api.com/v6/latest/USD',
+    );
   }
 
   private getTimeoutMs() {
-    return Number(this.config.get<number | string>('EXCHANGE_RATE_TIMEOUT_MS', 15_000));
+    return Number(
+      this.config.get<number | string>('EXCHANGE_RATE_TIMEOUT_MS', 15_000),
+    );
   }
 
   private getCacheTtlMs() {
-    return Number(this.config.get<number | string>('EXCHANGE_RATE_CACHE_TTL_MS', 60 * 1000));
+    return Number(
+      this.config.get<number | string>('EXCHANGE_RATE_CACHE_TTL_MS', 60 * 1000),
+    );
   }
 
-  private isUsdBaseRateObject(raw: any): raw is { base_code?: string; rates?: Record<string, unknown>; time_last_update_utc?: string } {
-    return !!raw && typeof raw === 'object' && typeof raw.base_code === 'string' && typeof raw.rates === 'object' && raw.rates !== null;
+  private isUsdBaseRateObject(raw: any): raw is {
+    base_code?: string;
+    rates?: Record<string, unknown>;
+    time_last_update_utc?: string;
+    time_next_update_utc?: string;
+  } {
+    return (
+      !!raw &&
+      typeof raw === 'object' &&
+      typeof raw.base_code === 'string' &&
+      typeof raw.rates === 'object' &&
+      raw.rates !== null
+    );
   }
 
   private normalizeRateValue(value: unknown, currencyCode: string) {
@@ -44,7 +63,9 @@ export class ExchangeRatesService {
       }
     }
 
-    throw new Error(`Invalid exchange rate for ${currencyCode}: ${String(value)}`);
+    throw new Error(
+      `Invalid exchange rate for ${currencyCode}: ${String(value)}`,
+    );
   }
 
   private validateRates(base: string, rates: Record<string, unknown>) {
@@ -59,14 +80,20 @@ export class ExchangeRatesService {
     }
 
     if (Object.keys(normalized).length === 0) {
-      throw new Error('Exchange rate provider returned no supported currencies.');
+      throw new Error(
+        'Exchange rate provider returned no supported currencies.',
+      );
     }
 
     return normalized;
   }
 
   private isCacheValid() {
-    return this.cache !== null && Date.now() < this.cacheExpiresAt;
+    return (
+      this.cache !== null &&
+      Date.now() < this.cacheExpiresAt &&
+      Date.now() < Date.parse(this.cache.validUntil)
+    );
   }
 
   async fetchRatesFromProvider(): Promise<ExchangeRatesResponse> {
@@ -85,7 +112,9 @@ export class ExchangeRatesService {
       });
 
       if (!response.ok) {
-        throw new Error(`External FX API responded with status ${response.status}`);
+        throw new Error(
+          `External FX API responded with status ${response.status}`,
+        );
       }
 
       const payload = await response.json();
@@ -95,20 +124,45 @@ export class ExchangeRatesService {
 
       const baseCode = payload.base_code;
       if (!baseCode) {
-        throw new Error('Exchange-rate provider response is missing the base currency.');
+        throw new Error(
+          'Exchange-rate provider response is missing the base currency.',
+        );
+      }
+
+      const validUntil = payload.time_next_update_utc;
+      const validUntilMs = Date.parse(validUntil ?? '');
+      if (
+        !validUntil ||
+        !Number.isFinite(validUntilMs) ||
+        validUntilMs <= Date.now()
+      ) {
+        throw new Error(
+          'Exchange-rate provider returned stale exchange rates.',
+        );
       }
 
       const normalizedRates = this.validateRates(baseCode, payload.rates ?? {});
-      const updatedAt = payload.time_last_update_utc ?? new Date().toISOString();
+      const updatedAtValue =
+        payload.time_last_update_utc ?? new Date().toISOString();
+      const updatedAtMs = Date.parse(updatedAtValue);
+      if (!Number.isFinite(updatedAtMs)) {
+        throw new Error(
+          'Exchange-rate provider returned an invalid update timestamp.',
+        );
+      }
 
       const normalized: ExchangeRatesResponse = {
         base: 'USD',
         rates: normalizedRates,
-        updatedAt,
+        updatedAt: new Date(updatedAtMs).toISOString(),
+        validUntil: new Date(validUntilMs).toISOString(),
       };
 
       this.cache = normalized;
-      this.cacheExpiresAt = Date.now() + this.getCacheTtlMs();
+      this.cacheExpiresAt = Math.min(
+        Date.now() + this.getCacheTtlMs(),
+        validUntilMs,
+      );
       return normalized;
     } catch (error: unknown) {
       const failure = controller.signal.aborted

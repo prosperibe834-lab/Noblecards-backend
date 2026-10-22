@@ -30,7 +30,7 @@ const makePurchase = (overrides: Record<string, unknown> = {}) => ({
   userId: 'user-1',
   walletId: 'wallet-1',
   transactionId: 'tx-1',
-  provider: 'TOPUPMATE',
+  provider: 'TREMENDOUS',
   providerProductId: '14971',
   providerReference: null,
   redeemId: null,
@@ -64,6 +64,8 @@ function makeService(
     voucherCode: 'CODE-1',
     redeemDetails: { instructions: 'online' },
     providerAmount: '12.01',
+    settlementAmount: null,
+    settlementCurrencyCode: null,
     providerMetadata: {},
   },
   rateService?: any,
@@ -91,6 +93,9 @@ function makeService(
           ),
         ),
       findUnique: jest.fn(),
+    },
+    platformAccountingEntry: {
+      createMany: jest.fn().mockResolvedValue({ count: 2 }),
     },
   };
   const prisma = {
@@ -197,6 +202,191 @@ describe('BuyGiftCardService purchase flow', () => {
     expect(email.sendGiftCardPurchaseSuccessEmail).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(email.sendGiftCardPurchaseSuccessEmail.mock.calls)).not.toContain('CODE-1');
     expect(prisma.user.findUnique).toHaveBeenCalledTimes(2);
+  });
+
+  it('records documented USD settlement cost and actual platform margin only after an executed purchase', async () => {
+    const { service, tx, wallets } = makeService(
+      {
+        providerReference: 'order-1',
+        providerStatus: 'EXECUTED',
+        providerMessage: null,
+        redeemId: 'reward-1',
+        voucherCode: 'CODE-1',
+        redeemDetails: { amount: '25' },
+        providerAmount: '25',
+        settlementAmount: '10.13',
+        settlementCurrencyCode: 'USD',
+        providerMetadata: {
+          payment: {
+            subtotal: 10,
+            fees: 0.13,
+            total: 10.13,
+            currency_code: 'USD',
+          },
+        },
+      },
+      undefined,
+      undefined,
+      { USD: 1, EUR: 0.8 },
+    );
+    const createdPurchase = makePurchase({
+      provider: 'TREMENDOUS',
+      customerPrice: new Decimal('12.50'),
+    });
+    tx.giftCardPurchase.create.mockResolvedValue(createdPurchase);
+    tx.giftCardPurchase.update.mockImplementation(({ data }: any) =>
+      Promise.resolve(makePurchase({ ...createdPurchase, ...data })),
+    );
+
+    const result = await service.purchase('user-1', {
+      productId: '14971',
+      amount: 10,
+      quantity: 1,
+      idempotencyKey: 'request-settlement',
+    });
+
+    expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(wallets.finalizeHeldFunds).toHaveBeenCalledTimes(1);
+    expect(tx.platformAccountingEntry.createMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: [
+          expect.objectContaining({
+            idempotencyKey: expect.stringMatching(/:provider-cost$/),
+            entryType: 'PROVIDER_COST',
+            amount: new Decimal('10.13'),
+            currencyCode: 'USD',
+            usdAmount: new Decimal('10.13'),
+          }),
+          expect.objectContaining({
+            idempotencyKey: expect.stringMatching(/:platform-margin$/),
+            entryType: 'PLATFORM_MARGIN',
+            amount: new Decimal('2.37'),
+            currencyCode: 'USD',
+            usdAmount: new Decimal('2.37'),
+          }),
+        ],
+        skipDuplicates: true,
+      }),
+    );
+  });
+
+  it('does not record provider costs or margin for failed purchases', async () => {
+    const { service, tx, wallets } = makeService({
+      providerReference: null,
+      providerStatus: 'failed',
+      providerMessage: 'Rejected',
+      redeemId: null,
+      voucherCode: null,
+      redeemDetails: null,
+      providerAmount: null,
+      settlementAmount: '10.13',
+      settlementCurrencyCode: 'USD',
+      providerMetadata: {},
+    });
+
+    const result = await service.purchase('user-1', {
+      productId: '14971',
+      amount: 10,
+      quantity: 1,
+    });
+
+    expect(result.status).toBe(GiftCardPurchaseStatus.FAILED);
+    expect(wallets.releaseHeldFunds).toHaveBeenCalledTimes(1);
+    expect(tx.platformAccountingEntry.createMany).not.toHaveBeenCalled();
+  });
+
+  it('does not record a second settlement when the same idempotent purchase is retried', async () => {
+    const { service, prisma, provider, tx } = makeService({
+      providerReference: 'order-1',
+      providerStatus: 'EXECUTED',
+      providerMessage: null,
+      redeemId: 'reward-1',
+      voucherCode: 'CODE-1',
+      redeemDetails: null,
+      providerAmount: '25',
+      settlementAmount: '10.13',
+      settlementCurrencyCode: 'USD',
+      providerMetadata: {},
+    });
+    const input = {
+      productId: '14971',
+      amount: 10,
+      quantity: 1,
+      idempotencyKey: 'request-settlement-retry',
+    };
+
+    await service.purchase('user-1', input);
+    prisma.giftCardPurchase.findUnique.mockResolvedValue(
+      makePurchase({
+        userId: 'user-1',
+        provider: 'TREMENDOUS',
+        status: GiftCardPurchaseStatus.SUCCESSFUL,
+      }),
+    );
+    const retry = await service.purchase('user-1', input);
+
+    expect(retry.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(provider.purchase).toHaveBeenCalledTimes(1);
+    expect(prisma.$transaction).toHaveBeenCalledTimes(2);
+    expect(tx.platformAccountingEntry.createMany).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not guess settlement cost when the executed provider response omits it', async () => {
+    const { service, tx } = makeService({
+      providerReference: 'order-without-payment',
+      providerStatus: 'EXECUTED',
+      providerMessage: null,
+      redeemId: 'reward-1',
+      voucherCode: 'CODE-1',
+      redeemDetails: null,
+      providerAmount: '25',
+      settlementAmount: null,
+      settlementCurrencyCode: 'USD',
+      providerMetadata: {},
+    });
+
+    const result = await service.purchase('user-1', {
+      productId: '14971',
+      amount: 10,
+      quantity: 1,
+    });
+
+    expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(tx.platformAccountingEntry.createMany).not.toHaveBeenCalled();
+  });
+
+  it('does not convert provider costs in a non-USD organization currency using gift-card FX', async () => {
+    const { service, tx } = makeService(
+      {
+        providerReference: 'order-eur',
+        providerStatus: 'EXECUTED',
+        providerMessage: null,
+        redeemId: 'reward-1',
+        voucherCode: 'CODE-1',
+        redeemDetails: null,
+        providerAmount: '25',
+        settlementAmount: null,
+        settlementCurrencyCode: 'EUR',
+        providerMetadata: {
+          payment: {
+            total: 9.25,
+            currency_code: 'EUR',
+          },
+        },
+      },
+      undefined,
+      undefined,
+      { USD: 1, EUR: 0.8 },
+    );
+
+    const result = await service.purchase('user-1', {
+      productId: '14971',
+      amount: 10,
+      quantity: 1,
+    });
+
+    expect(result.status).toBe(GiftCardPurchaseStatus.SUCCESSFUL);
+    expect(tx.platformAccountingEntry.createMany).not.toHaveBeenCalled();
   });
 
   it('returns real voucher data only from the owned purchase-details endpoint', async () => {

@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Logger,
   NotFoundException,
   Optional,
 } from '@nestjs/common';
@@ -12,9 +13,15 @@ import { createHash, randomBytes, randomInt } from 'node:crypto';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateProfileDto } from './users.dto';
+import {
+  SecurityAuditEventInput,
+  writeSecurityAuditEvent,
+} from '../security-audit/security-audit.utils';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     @Optional() private readonly email?: EmailService,
@@ -452,56 +459,103 @@ export class UsersService {
       );
     }
 
-    return this.prisma.$transaction(async (transaction) => {
-      const rows = await transaction.$queryRaw<
-        Array<{
-          transactionPinHash: string | null;
-          transactionPinFailedAttempts: number;
-          transactionPinLockedUntil: Date | null;
-        }>
-      >`
-        SELECT "transactionPinHash", "transactionPinFailedAttempts", "transactionPinLockedUntil"
+    let role = 'USER';
+    try {
+      await this.prisma.$transaction(async (transaction) => {
+        const rows = await transaction.$queryRaw<
+          Array<{
+            transactionPinHash: string | null;
+            transactionPinFailedAttempts: number;
+            transactionPinLockedUntil: Date | null;
+            role: string;
+          }>
+        >`
+        SELECT "transactionPinHash", "transactionPinFailedAttempts", "transactionPinLockedUntil", "role"
         FROM "User"
         WHERE "id" = ${userId}
         FOR UPDATE
       `;
-      const user = rows[0];
-      if (!user) throw new NotFoundException('User not found.');
-      if (!user.transactionPinHash)
-        throw new BadRequestException('Transaction PIN is not configured.');
-      if (
-        user.transactionPinLockedUntil &&
-        user.transactionPinLockedUntil > new Date()
-      ) {
-        throw new HttpException(
-          'Transaction PIN is temporarily locked.',
-          HttpStatus.TOO_MANY_REQUESTS,
-        );
-      }
+        const user = rows[0];
+        if (!user) throw new NotFoundException('User not found.');
+        role = user.role;
+        if (!user.transactionPinHash)
+          throw new BadRequestException('Transaction PIN is not configured.');
+        if (
+          user.transactionPinLockedUntil &&
+          user.transactionPinLockedUntil > new Date()
+        ) {
+          throw new HttpException(
+            'Transaction PIN is temporarily locked.',
+            HttpStatus.TOO_MANY_REQUESTS,
+          );
+        }
 
-      const valid = await bcrypt.compare(pin, user.transactionPinHash);
-      if (valid) {
+        const valid = await bcrypt.compare(pin, user.transactionPinHash);
+        if (valid) {
+          await transaction.user.update({
+            where: { id: userId },
+            data: {
+              transactionPinFailedAttempts: 0,
+              transactionPinLockedUntil: null,
+            },
+          });
+          return;
+        }
+
+        const failedAttempts = user.transactionPinFailedAttempts + 1;
         await transaction.user.update({
           where: { id: userId },
           data: {
-            transactionPinFailedAttempts: 0,
-            transactionPinLockedUntil: null,
+            transactionPinFailedAttempts: failedAttempts,
+            transactionPinLockedUntil:
+              failedAttempts >= 5
+                ? new Date(Date.now() + 15 * 60 * 1000)
+                : null,
           },
         });
-        return true;
-      }
-
-      const failedAttempts = user.transactionPinFailedAttempts + 1;
-      await transaction.user.update({
-        where: { id: userId },
-        data: {
-          transactionPinFailedAttempts: failedAttempts,
-          transactionPinLockedUntil:
-            failedAttempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : null,
-        },
+        throw new BadRequestException('Invalid transaction PIN.');
       });
-      throw new BadRequestException('Invalid transaction PIN.');
-    });
+    } catch (error) {
+      if (
+        error instanceof BadRequestException &&
+        error.message === 'Invalid transaction PIN.'
+      ) {
+        await this.recordPinEvent(userId, role, 'FAILED');
+      }
+      throw error;
+    }
+    await this.recordPinEvent(userId, role, 'SUCCESS');
+    return true;
+  }
+
+  private async recordPinEvent(
+    userId: string,
+    role: string,
+    outcome: SecurityAuditEventInput['outcome'],
+  ) {
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'PIN',
+        event:
+          outcome === 'SUCCESS'
+            ? 'Transaction PIN Verified'
+            : 'Transaction PIN Verification Failed',
+        outcome,
+        actorType: role === 'ADMIN' ? 'ADMIN' : 'USER',
+        actorUserId: userId,
+        targetUserId: userId,
+        description:
+          outcome === 'SUCCESS'
+            ? 'Transaction PIN verification succeeded.'
+            : 'Transaction PIN verification failed.',
+      });
+    } catch (error) {
+      this.logger.error(
+        `Unable to persist transaction PIN audit event: ${
+          error instanceof Error ? error.message : 'unknown database error'
+        }`,
+      );
+    }
   }
 
   async requestTransactionPinReset(userId: string) {

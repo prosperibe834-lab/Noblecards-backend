@@ -71,8 +71,10 @@ describe('WithdrawalPayoutController', () => {
   it('delegates bank lookup, verification, and beneficiary creation for the authenticated user', async () => {
     const beneficiaries = {
       getBanksForUser: jest.fn().mockResolvedValue([{ code: '044', name: 'Access Bank' }]),
+      getBranchesForUser: jest.fn().mockResolvedValue([{ code: 'BR-01', name: 'Accra Central' }]),
       resolveAccountForUser: jest.fn().mockResolvedValue({ verificationStatus: 'VERIFIED', accountHolderName: 'Test User' }),
       createBeneficiary: jest.fn().mockResolvedValue({ id: 'beneficiary-1', verificationStatus: 'VERIFIED' }),
+      listBeneficiaries: jest.fn().mockResolvedValue([{ id: 'beneficiary-1', countryCode: 'NG', isActive: true }]),
     } as unknown as BeneficiaryService;
     const controller = new WithdrawalPayoutController(
       {} as WithdrawalPayoutService,
@@ -81,10 +83,24 @@ describe('WithdrawalPayoutController', () => {
     );
 
     await expect(controller.banks({ user: { userId: 'user-1' } }, 'NG', 'NGN')).resolves.toEqual({ banks: [{ code: '044', name: 'Access Bank' }] });
+    await expect(
+      controller.branches(
+        { user: { userId: 'user-1' } },
+        'bank-gh-1',
+      ),
+    ).resolves.toEqual({ branches: [{ code: 'BR-01', name: 'Accra Central' }] });
     await expect(controller.verifyBeneficiary({ user: { userId: 'user-1' } }, { countryCode: 'NG', currencyCode: 'NGN', method: 'BANK_TRANSFER' } as any)).resolves.toEqual(expect.objectContaining({ verificationStatus: 'VERIFIED' }));
     await expect(controller.createBeneficiary({ user: { userId: 'user-1' } }, { countryCode: 'NG', currencyCode: 'NGN', method: 'BANK_TRANSFER', type: 'BANK_ACCOUNT' } as any)).resolves.toEqual(expect.objectContaining({ id: 'beneficiary-1' }));
+    await expect(controller.listBeneficiaries({ user: { userId: 'user-1' } }, 'NG')).resolves.toEqual({ beneficiaries: [{ id: 'beneficiary-1', countryCode: 'NG', isActive: true }] });
     expect(beneficiaries.getBanksForUser).toHaveBeenCalledWith('user-1', 'NG', 'NGN');
+    expect(beneficiaries.getBranchesForUser).toHaveBeenCalledWith(
+      'user-1',
+      'GH',
+      'GHS',
+      'bank-gh-1',
+    );
     expect(beneficiaries.resolveAccountForUser).toHaveBeenCalledWith('user-1', expect.objectContaining({ method: 'BANK_TRANSFER' }));
     expect(beneficiaries.createBeneficiary).toHaveBeenCalledWith('user-1', expect.anything());
+    expect(beneficiaries.listBeneficiaries).toHaveBeenCalledWith('user-1');
   });
 });

@@ -194,6 +194,28 @@ export class TremendousProvider implements BuyGiftCardProvider {
     const root = this.isRecord(responseRoot.order)
       ? responseRoot.order
       : responseRoot;
+    const payment = this.isRecord(root.payment) ? root.payment : null;
+    const executed = this.stringValue(root, ['status'])?.toUpperCase() === 'EXECUTED';
+    const settlementTotal = payment?.total;
+    const settlementTotalNumber = Number(settlementTotal);
+    const settlementAmount =
+      executed &&
+      (typeof settlementTotal === 'string' ||
+        (typeof settlementTotal === 'number' &&
+          Number.isFinite(settlementTotal))) &&
+      Number.isFinite(settlementTotalNumber) &&
+      settlementTotalNumber > 0 &&
+      /^[+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(
+        String(settlementTotal),
+      )
+        ? String(settlementTotal)
+        : null;
+    const settlementCurrencyCode =
+      executed &&
+      typeof payment?.currency_code === 'string' &&
+      payment.currency_code.trim()
+        ? payment.currency_code.trim().toUpperCase()
+        : null;
     const reward =
       this.firstRecord(root.rewards) ?? this.firstRecord(root.reward) ?? root;
     const voucherCode = this.findString(reward, [
@@ -218,6 +240,9 @@ export class TremendousProvider implements BuyGiftCardProvider {
       voucherCode,
       redeemDetails: this.sanitizeReward(reward),
       providerAmount: this.findString(reward, ['amount', 'denomination']),
+      settlementAmount:
+        settlementCurrencyCode === 'USD' ? settlementAmount : null,
+      settlementCurrencyCode,
       providerMetadata: this.sanitize(root),
     };
   }
@@ -287,7 +312,10 @@ export class TremendousProvider implements BuyGiftCardProvider {
       Object.entries(value as Record<string, unknown>).flatMap(
         ([key, child]) => {
           if (
-            /code|pin|token|secret|password|authorization|link|url/i.test(key)
+            (/code|pin|token|secret|password|authorization|link|url/i.test(
+              key,
+            ) &&
+              key.toLowerCase() !== 'currency_code')
           )
             return [];
           return [

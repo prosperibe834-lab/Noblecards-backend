@@ -32,6 +32,40 @@ export class WithdrawalPayoutController {
     return this.beneficiaries.getBanksForUser(request.user.userId, countryCode, currencyCode).then((banks) => ({ banks }));
   }
 
+  @Get('banks/:bankId/branches')
+  branches(
+    @Req() request: { user: { userId: string } },
+    @Param('bankId') bankId: string,
+    @Query('countryCode') countryCode = 'GH',
+    @Query('currencyCode') currencyCode = 'GHS',
+  ) {
+    return this.beneficiaries
+      .getBranchesForUser(
+        request.user.userId,
+        countryCode,
+        currencyCode,
+        bankId,
+      )
+      .then((branches) => ({ branches }));
+  }
+
+  @Get('beneficiaries')
+  async listBeneficiaries(
+    @Req() request: { user: { userId: string } },
+    @Query('countryCode') countryCode?: string,
+  ) {
+    const beneficiaries = await this.beneficiaries.listBeneficiaries(request.user.userId);
+    if (countryCode) {
+      const normalized = countryCode.toUpperCase();
+      return {
+        beneficiaries: beneficiaries.filter((b) => b.countryCode === normalized && b.isActive),
+      };
+    }
+    return {
+      beneficiaries: beneficiaries.filter((b) => b.isActive),
+    };
+  }
+
   @Get(':withdrawalId')
   get(@Req() request: { user: { userId: string } }, @Param('withdrawalId') withdrawalId: string) {
     return this.withdrawals.getWithdrawal(request.user.userId, withdrawalId);

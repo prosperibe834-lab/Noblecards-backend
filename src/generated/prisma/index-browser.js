@@ -240,6 +240,8 @@ exports.Prisma.DepositScalarFieldEnum = {
   currencyCode: 'currencyCode',
   amount: 'amount',
   fee: 'fee',
+  nobleCardsFee: 'nobleCardsFee',
+  nobleCardsFeeUsd: 'nobleCardsFeeUsd',
   netAmount: 'netAmount',
   exchangeRate: 'exchangeRate',
   provider: 'provider',
@@ -254,6 +256,40 @@ exports.Prisma.DepositScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   transactionId: 'transactionId'
+};
+
+exports.Prisma.PlatformAccountingEntryScalarFieldEnum = {
+  id: 'id',
+  idempotencyKey: 'idempotencyKey',
+  sourceType: 'sourceType',
+  sourceId: 'sourceId',
+  entryType: 'entryType',
+  amount: 'amount',
+  currencyCode: 'currencyCode',
+  usdAmount: 'usdAmount',
+  occurredAt: 'occurredAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SecurityAuditEventScalarFieldEnum = {
+  id: 'id',
+  eventType: 'eventType',
+  event: 'event',
+  outcome: 'outcome',
+  actorType: 'actorType',
+  actorUserId: 'actorUserId',
+  targetUserId: 'targetUserId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  country: 'country',
+  city: 'city',
+  deviceType: 'deviceType',
+  operatingSystem: 'operatingSystem',
+  browser: 'browser',
+  risk: 'risk',
+  description: 'description',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.TransactionScalarFieldEnum = {
@@ -839,6 +875,8 @@ exports.Prisma.ModelName = {
   Currency: 'Currency',
   WalletBalance: 'WalletBalance',
   Deposit: 'Deposit',
+  PlatformAccountingEntry: 'PlatformAccountingEntry',
+  SecurityAuditEvent: 'SecurityAuditEvent',
   Transaction: 'Transaction',
   LedgerEntry: 'LedgerEntry',
   ReferralAttribution: 'ReferralAttribution',

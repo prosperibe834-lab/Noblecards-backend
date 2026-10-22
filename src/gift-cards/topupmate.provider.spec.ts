@@ -1,6 +1,33 @@
 import { TopupmateProvider } from './topupmate.provider';
 
 describe('TopupmateProvider', () => {
+  it('does not label ambiguous amount fields as actual provider settlement costs', async () => {
+    const client = {
+      purchase: jest.fn().mockResolvedValue({
+        data: {
+          status: 'success',
+          amount: '25.00',
+          senderAmount: '24.00',
+          reference: 'TOPUP-1',
+        },
+      }),
+    } as any;
+
+    const result = await new TopupmateProvider(client).purchase({
+      productId: 'product-1',
+      amount: 25,
+      currencyCode: 'USD',
+      email: 'buyer@example.com',
+      sender: 'Buyer',
+      units: 1,
+      reference: 'NC-BUY-TOPUP-1',
+    });
+
+    expect(result.providerAmount).toBe('25.00');
+    expect(result.settlementAmount).toBeNull();
+    expect(result.settlementCurrencyCode).toBeNull();
+  });
+
   it('normalizes provider products and preserves provider metadata', async () => {
     const client = {
       getAvailableGiftCards: jest.fn().mockResolvedValue({

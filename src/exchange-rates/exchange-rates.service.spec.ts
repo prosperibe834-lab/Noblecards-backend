@@ -4,7 +4,8 @@ import { ExchangeRatesService } from './exchange-rates.service';
 const ratesPayload = {
   base_code: 'USD',
   rates: { USD: 1, NGN: 1500, GBP: 0.79, EUR: 0.92, CAD: 1.36 },
-  time_last_update_utc: 'Wed, 30 Sep 2026 00:00:00 +0000',
+  time_last_update_utc: new Date().toUTCString(),
+  time_next_update_utc: new Date(Date.now() + 60 * 60 * 1000).toUTCString(),
 };
 
 function makeService(overrides: Record<string, string | number> = {}) {
@@ -47,8 +48,11 @@ describe('ExchangeRatesService', () => {
     expect(result).toEqual({
       base: 'USD',
       rates: ratesPayload.rates,
-      updatedAt: ratesPayload.time_last_update_utc,
+      updatedAt: new Date(ratesPayload.time_last_update_utc).toISOString(),
+      validUntil: new Date(ratesPayload.time_next_update_utc).toISOString(),
     });
+    expect(Date.parse(result.updatedAt)).not.toBeNaN();
+    expect(Date.parse(result.validUntil)).not.toBeNaN();
     expect(fetch).toHaveBeenCalledWith(
       'https://open.er-api.com/v6/latest/USD',
       expect.objectContaining({
@@ -154,6 +158,36 @@ describe('ExchangeRatesService', () => {
 
     await expect(service.getRates()).rejects.toThrow(
       'Unsupported exchange rate base: GBP',
+    );
+    expect(service.getCachedRates()).toBeNull();
+  });
+
+  it('rejects an upstream rate set after its published next-update time', async () => {
+    const service = makeService();
+    jest.spyOn(globalThis, 'fetch').mockResolvedValue(
+      providerResponse({
+        ...ratesPayload,
+        time_next_update_utc: new Date(Date.now() - 1000).toUTCString(),
+      }),
+    );
+
+    await expect(service.getRates()).rejects.toThrow(
+      'Exchange-rate provider returned stale exchange rates.',
+    );
+    expect(service.getCachedRates()).toBeNull();
+  });
+
+  it('rejects a malformed upstream update timestamp', async () => {
+    const service = makeService();
+    jest.spyOn(globalThis, 'fetch').mockResolvedValue(
+      providerResponse({
+        ...ratesPayload,
+        time_last_update_utc: 'not-a-timestamp',
+      }),
+    );
+
+    await expect(service.getRates()).rejects.toThrow(
+      'Exchange-rate provider returned an invalid update timestamp.',
     );
     expect(service.getCachedRates()).toBeNull();
   });

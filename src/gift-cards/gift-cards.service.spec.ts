@@ -1,4 +1,5 @@
 import { Decimal } from '@prisma/client-runtime-utils';
+import { NotFoundException } from '@nestjs/common';
 import { GiftCardSaleStatus, PaymentProvider } from '../generated/prisma';
 import { GiftCardsService } from './gift-cards.service';
 
@@ -44,6 +45,7 @@ describe('GiftCardsService', () => {
     const prisma = {
       giftCardSale: {
         findUnique: jest.fn().mockResolvedValue(null),
+        findFirst: jest.fn().mockResolvedValue(null),
         create: jest.fn().mockResolvedValue(makeSale()),
         update: jest.fn().mockResolvedValue(makeSale()),
       },
@@ -255,6 +257,80 @@ describe('GiftCardsService', () => {
     expect(prisma.giftCardSale.update).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ status: GiftCardSaleStatus.UNDER_REVIEW }),
     }));
+  });
+
+  it.each(['approved', 'paid'])(
+    'does not treat immediate %s submission status or payout amount as settled',
+    async (providerStatus) => {
+      const { service, prisma } = makeService({
+        data: {
+          id: 'trade-1',
+          reference: 'sogo-reference-1',
+          status: providerStatus,
+          payout_amount: { raw: 50200, currency: 'NGN' },
+        },
+      });
+
+      await service.submitSell('user-1', dto);
+
+      const update = prisma.giftCardSale.update.mock.calls[0][0].data;
+      expect(update.status).toBe(GiftCardSaleStatus.SUBMITTED);
+      expect(update.providerResponse.data.payout_amount).toEqual({
+        raw: 50200,
+        currency: 'NGN',
+      });
+      expect(update).not.toHaveProperty('finalPayoutAmount');
+      expect(update).not.toHaveProperty('providerFee');
+      expect(update).not.toHaveProperty('nobleCardsFee');
+    },
+  );
+
+  it('keeps the sale unfinalized when the submission response lacks settlement values', async () => {
+    const { service, prisma } = makeService({
+      data: { id: 'trade-1', reference: 'sogo-reference-1', status: 'pending' },
+    });
+
+    const result = await service.submitSell('user-1', dto);
+
+    expect(result.status).toBe(GiftCardSaleStatus.SUBMITTED);
+    const update = prisma.giftCardSale.update.mock.calls[0][0].data;
+    expect(update).not.toHaveProperty('finalPayoutAmount');
+    expect(update).not.toHaveProperty('providerFee');
+    expect(update).not.toHaveProperty('nobleCardsFee');
+  });
+
+  it('only returns sale details for the authenticated owner', async () => {
+    const { service, prisma } = makeService();
+
+    await expect(service.getUserSale('user-1', 'sale-1')).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(prisma.giftCardSale.findFirst).toHaveBeenCalledWith({
+      where: { id: 'sale-1', userId: 'user-1' },
+    });
+  });
+
+  it('does not classify approval as a successful payout', () => {
+    const { service } = makeService();
+
+    expect((service as any).adminStatuses('Successful')).toEqual([
+      GiftCardSaleStatus.PAID,
+    ]);
+    expect((service as any).adminStatuses('Approved')).toEqual([
+      GiftCardSaleStatus.APPROVED,
+    ]);
+    expect((service as any).adminStatusLabel(GiftCardSaleStatus.APPROVED)).toBe(
+      'Approved',
+    );
+    expect((service as any).getAdminStats([
+      { status: 'Approved' },
+      { status: 'Successful' },
+    ])).toEqual({
+      totalCards: 2,
+      pendingSales: 1,
+      successfulSales: 1,
+      failedSales: 0,
+    });
   });
 
   it('applies an active positive adjustment after selecting the Sogo provider rate', async () => {

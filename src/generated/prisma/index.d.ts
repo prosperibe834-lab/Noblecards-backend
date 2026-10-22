@@ -59,6 +59,16 @@ export type WalletBalance = $Result.DefaultSelection<Prisma.$WalletBalancePayloa
  */
 export type Deposit = $Result.DefaultSelection<Prisma.$DepositPayload>
 /**
+ * Model PlatformAccountingEntry
+ * 
+ */
+export type PlatformAccountingEntry = $Result.DefaultSelection<Prisma.$PlatformAccountingEntryPayload>
+/**
+ * Model SecurityAuditEvent
+ * 
+ */
+export type SecurityAuditEvent = $Result.DefaultSelection<Prisma.$SecurityAuditEventPayload>
+/**
  * Model Transaction
  * 
  */
@@ -681,6 +691,26 @@ export class PrismaClient<
     * ```
     */
   get deposit(): Prisma.DepositDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.platformAccountingEntry`: Exposes CRUD operations for the **PlatformAccountingEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlatformAccountingEntries
+    * const platformAccountingEntries = await prisma.platformAccountingEntry.findMany()
+    * ```
+    */
+  get platformAccountingEntry(): Prisma.PlatformAccountingEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.securityAuditEvent`: Exposes CRUD operations for the **SecurityAuditEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SecurityAuditEvents
+    * const securityAuditEvents = await prisma.securityAuditEvent.findMany()
+    * ```
+    */
+  get securityAuditEvent(): Prisma.SecurityAuditEventDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
@@ -1327,6 +1357,8 @@ export namespace Prisma {
     Currency: 'Currency',
     WalletBalance: 'WalletBalance',
     Deposit: 'Deposit',
+    PlatformAccountingEntry: 'PlatformAccountingEntry',
+    SecurityAuditEvent: 'SecurityAuditEvent',
     Transaction: 'Transaction',
     LedgerEntry: 'LedgerEntry',
     ReferralAttribution: 'ReferralAttribution',
@@ -1361,7 +1393,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "transactionPinResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "transaction" | "ledgerEntry" | "referralAttribution" | "referralReward" | "referralAuditEvent" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
+      modelProps: "user" | "pendingRegistration" | "passwordResetChallenge" | "transactionPinResetChallenge" | "refreshSession" | "wallet" | "currency" | "walletBalance" | "deposit" | "platformAccountingEntry" | "securityAuditEvent" | "transaction" | "ledgerEntry" | "referralAttribution" | "referralReward" | "referralAuditEvent" | "withdrawal" | "withdrawalQuote" | "beneficiary" | "payoutAttempt" | "providerWebhookEvent" | "giftCardSale" | "giftCardSellRateAdjustment" | "giftCardBuyRateAdjustment" | "giftCardBuyBaseRate" | "giftCardPurchase" | "adminGiftCardSandboxTest" | "supportTicket" | "supportMessage" | "supportAttachment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2028,6 +2060,154 @@ export namespace Prisma {
           count: {
             args: Prisma.DepositCountArgs<ExtArgs>
             result: $Utils.Optional<DepositCountAggregateOutputType> | number
+          }
+        }
+      }
+      PlatformAccountingEntry: {
+        payload: Prisma.$PlatformAccountingEntryPayload<ExtArgs>
+        fields: Prisma.PlatformAccountingEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlatformAccountingEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlatformAccountingEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.PlatformAccountingEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlatformAccountingEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          findMany: {
+            args: Prisma.PlatformAccountingEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>[]
+          }
+          create: {
+            args: Prisma.PlatformAccountingEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          createMany: {
+            args: Prisma.PlatformAccountingEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PlatformAccountingEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.PlatformAccountingEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          update: {
+            args: Prisma.PlatformAccountingEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlatformAccountingEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlatformAccountingEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PlatformAccountingEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.PlatformAccountingEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlatformAccountingEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.PlatformAccountingEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlatformAccountingEntry>
+          }
+          groupBy: {
+            args: Prisma.PlatformAccountingEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlatformAccountingEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PlatformAccountingEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<PlatformAccountingEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      SecurityAuditEvent: {
+        payload: Prisma.$SecurityAuditEventPayload<ExtArgs>
+        fields: Prisma.SecurityAuditEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SecurityAuditEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SecurityAuditEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          findFirst: {
+            args: Prisma.SecurityAuditEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SecurityAuditEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          findMany: {
+            args: Prisma.SecurityAuditEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>[]
+          }
+          create: {
+            args: Prisma.SecurityAuditEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          createMany: {
+            args: Prisma.SecurityAuditEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SecurityAuditEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>[]
+          }
+          delete: {
+            args: Prisma.SecurityAuditEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          update: {
+            args: Prisma.SecurityAuditEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.SecurityAuditEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SecurityAuditEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SecurityAuditEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.SecurityAuditEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SecurityAuditEventPayload>
+          }
+          aggregate: {
+            args: Prisma.SecurityAuditEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSecurityAuditEvent>
+          }
+          groupBy: {
+            args: Prisma.SecurityAuditEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SecurityAuditEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SecurityAuditEventCountArgs<ExtArgs>
+            result: $Utils.Optional<SecurityAuditEventCountAggregateOutputType> | number
           }
         }
       }
@@ -3569,6 +3749,8 @@ export namespace Prisma {
     currency?: CurrencyOmit
     walletBalance?: WalletBalanceOmit
     deposit?: DepositOmit
+    platformAccountingEntry?: PlatformAccountingEntryOmit
+    securityAuditEvent?: SecurityAuditEventOmit
     transaction?: TransactionOmit
     ledgerEntry?: LedgerEntryOmit
     referralAttribution?: ReferralAttributionOmit
@@ -14621,6 +14803,8 @@ export namespace Prisma {
   export type DepositAvgAggregateOutputType = {
     amount: Decimal | null
     fee: Decimal | null
+    nobleCardsFee: Decimal | null
+    nobleCardsFeeUsd: Decimal | null
     netAmount: Decimal | null
     exchangeRate: Decimal | null
   }
@@ -14628,6 +14812,8 @@ export namespace Prisma {
   export type DepositSumAggregateOutputType = {
     amount: Decimal | null
     fee: Decimal | null
+    nobleCardsFee: Decimal | null
+    nobleCardsFeeUsd: Decimal | null
     netAmount: Decimal | null
     exchangeRate: Decimal | null
   }
@@ -14639,6 +14825,8 @@ export namespace Prisma {
     currencyCode: string | null
     amount: Decimal | null
     fee: Decimal | null
+    nobleCardsFee: Decimal | null
+    nobleCardsFeeUsd: Decimal | null
     netAmount: Decimal | null
     exchangeRate: Decimal | null
     provider: $Enums.PaymentProvider | null
@@ -14661,6 +14849,8 @@ export namespace Prisma {
     currencyCode: string | null
     amount: Decimal | null
     fee: Decimal | null
+    nobleCardsFee: Decimal | null
+    nobleCardsFeeUsd: Decimal | null
     netAmount: Decimal | null
     exchangeRate: Decimal | null
     provider: $Enums.PaymentProvider | null
@@ -14683,6 +14873,8 @@ export namespace Prisma {
     currencyCode: number
     amount: number
     fee: number
+    nobleCardsFee: number
+    nobleCardsFeeUsd: number
     netAmount: number
     exchangeRate: number
     provider: number
@@ -14704,6 +14896,8 @@ export namespace Prisma {
   export type DepositAvgAggregateInputType = {
     amount?: true
     fee?: true
+    nobleCardsFee?: true
+    nobleCardsFeeUsd?: true
     netAmount?: true
     exchangeRate?: true
   }
@@ -14711,6 +14905,8 @@ export namespace Prisma {
   export type DepositSumAggregateInputType = {
     amount?: true
     fee?: true
+    nobleCardsFee?: true
+    nobleCardsFeeUsd?: true
     netAmount?: true
     exchangeRate?: true
   }
@@ -14722,6 +14918,8 @@ export namespace Prisma {
     currencyCode?: true
     amount?: true
     fee?: true
+    nobleCardsFee?: true
+    nobleCardsFeeUsd?: true
     netAmount?: true
     exchangeRate?: true
     provider?: true
@@ -14744,6 +14942,8 @@ export namespace Prisma {
     currencyCode?: true
     amount?: true
     fee?: true
+    nobleCardsFee?: true
+    nobleCardsFeeUsd?: true
     netAmount?: true
     exchangeRate?: true
     provider?: true
@@ -14766,6 +14966,8 @@ export namespace Prisma {
     currencyCode?: true
     amount?: true
     fee?: true
+    nobleCardsFee?: true
+    nobleCardsFeeUsd?: true
     netAmount?: true
     exchangeRate?: true
     provider?: true
@@ -14876,6 +15078,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal
     fee: Decimal
+    nobleCardsFee: Decimal | null
+    nobleCardsFeeUsd: Decimal | null
     netAmount: Decimal
     exchangeRate: Decimal | null
     provider: $Enums.PaymentProvider
@@ -14918,6 +15122,8 @@ export namespace Prisma {
     currencyCode?: boolean
     amount?: boolean
     fee?: boolean
+    nobleCardsFee?: boolean
+    nobleCardsFeeUsd?: boolean
     netAmount?: boolean
     exchangeRate?: boolean
     provider?: boolean
@@ -14946,6 +15152,8 @@ export namespace Prisma {
     currencyCode?: boolean
     amount?: boolean
     fee?: boolean
+    nobleCardsFee?: boolean
+    nobleCardsFeeUsd?: boolean
     netAmount?: boolean
     exchangeRate?: boolean
     provider?: boolean
@@ -14973,6 +15181,8 @@ export namespace Prisma {
     currencyCode?: boolean
     amount?: boolean
     fee?: boolean
+    nobleCardsFee?: boolean
+    nobleCardsFeeUsd?: boolean
     netAmount?: boolean
     exchangeRate?: boolean
     provider?: boolean
@@ -15000,6 +15210,8 @@ export namespace Prisma {
     currencyCode?: boolean
     amount?: boolean
     fee?: boolean
+    nobleCardsFee?: boolean
+    nobleCardsFeeUsd?: boolean
     netAmount?: boolean
     exchangeRate?: boolean
     provider?: boolean
@@ -15016,7 +15228,7 @@ export namespace Prisma {
     transactionId?: boolean
   }
 
-  export type DepositOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "walletId" | "currencyCode" | "amount" | "fee" | "netAmount" | "exchangeRate" | "provider" | "providerTransactionId" | "providerReference" | "paymentMethod" | "country" | "countryCode" | "status" | "idempotencyKey" | "metadata" | "createdAt" | "updatedAt" | "transactionId", ExtArgs["result"]["deposit"]>
+  export type DepositOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "walletId" | "currencyCode" | "amount" | "fee" | "nobleCardsFee" | "nobleCardsFeeUsd" | "netAmount" | "exchangeRate" | "provider" | "providerTransactionId" | "providerReference" | "paymentMethod" | "country" | "countryCode" | "status" | "idempotencyKey" | "metadata" | "createdAt" | "updatedAt" | "transactionId", ExtArgs["result"]["deposit"]>
   export type DepositInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     wallet?: boolean | WalletDefaultArgs<ExtArgs>
@@ -15053,6 +15265,8 @@ export namespace Prisma {
       currencyCode: string
       amount: Prisma.Decimal
       fee: Prisma.Decimal
+      nobleCardsFee: Prisma.Decimal | null
+      nobleCardsFeeUsd: Prisma.Decimal | null
       netAmount: Prisma.Decimal
       exchangeRate: Prisma.Decimal | null
       provider: $Enums.PaymentProvider
@@ -15501,6 +15715,8 @@ export namespace Prisma {
     readonly currencyCode: FieldRef<"Deposit", 'String'>
     readonly amount: FieldRef<"Deposit", 'Decimal'>
     readonly fee: FieldRef<"Deposit", 'Decimal'>
+    readonly nobleCardsFee: FieldRef<"Deposit", 'Decimal'>
+    readonly nobleCardsFeeUsd: FieldRef<"Deposit", 'Decimal'>
     readonly netAmount: FieldRef<"Deposit", 'Decimal'>
     readonly exchangeRate: FieldRef<"Deposit", 'Decimal'>
     readonly provider: FieldRef<"Deposit", 'PaymentProvider'>
@@ -15969,6 +16185,2274 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: DepositInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PlatformAccountingEntry
+   */
+
+  export type AggregatePlatformAccountingEntry = {
+    _count: PlatformAccountingEntryCountAggregateOutputType | null
+    _avg: PlatformAccountingEntryAvgAggregateOutputType | null
+    _sum: PlatformAccountingEntrySumAggregateOutputType | null
+    _min: PlatformAccountingEntryMinAggregateOutputType | null
+    _max: PlatformAccountingEntryMaxAggregateOutputType | null
+  }
+
+  export type PlatformAccountingEntryAvgAggregateOutputType = {
+    amount: Decimal | null
+    usdAmount: Decimal | null
+  }
+
+  export type PlatformAccountingEntrySumAggregateOutputType = {
+    amount: Decimal | null
+    usdAmount: Decimal | null
+  }
+
+  export type PlatformAccountingEntryMinAggregateOutputType = {
+    id: string | null
+    idempotencyKey: string | null
+    sourceType: string | null
+    sourceId: string | null
+    entryType: string | null
+    amount: Decimal | null
+    currencyCode: string | null
+    usdAmount: Decimal | null
+    occurredAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type PlatformAccountingEntryMaxAggregateOutputType = {
+    id: string | null
+    idempotencyKey: string | null
+    sourceType: string | null
+    sourceId: string | null
+    entryType: string | null
+    amount: Decimal | null
+    currencyCode: string | null
+    usdAmount: Decimal | null
+    occurredAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type PlatformAccountingEntryCountAggregateOutputType = {
+    id: number
+    idempotencyKey: number
+    sourceType: number
+    sourceId: number
+    entryType: number
+    amount: number
+    currencyCode: number
+    usdAmount: number
+    occurredAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PlatformAccountingEntryAvgAggregateInputType = {
+    amount?: true
+    usdAmount?: true
+  }
+
+  export type PlatformAccountingEntrySumAggregateInputType = {
+    amount?: true
+    usdAmount?: true
+  }
+
+  export type PlatformAccountingEntryMinAggregateInputType = {
+    id?: true
+    idempotencyKey?: true
+    sourceType?: true
+    sourceId?: true
+    entryType?: true
+    amount?: true
+    currencyCode?: true
+    usdAmount?: true
+    occurredAt?: true
+    createdAt?: true
+  }
+
+  export type PlatformAccountingEntryMaxAggregateInputType = {
+    id?: true
+    idempotencyKey?: true
+    sourceType?: true
+    sourceId?: true
+    entryType?: true
+    amount?: true
+    currencyCode?: true
+    usdAmount?: true
+    occurredAt?: true
+    createdAt?: true
+  }
+
+  export type PlatformAccountingEntryCountAggregateInputType = {
+    id?: true
+    idempotencyKey?: true
+    sourceType?: true
+    sourceId?: true
+    entryType?: true
+    amount?: true
+    currencyCode?: true
+    usdAmount?: true
+    occurredAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PlatformAccountingEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformAccountingEntry to aggregate.
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformAccountingEntries to fetch.
+     */
+    orderBy?: PlatformAccountingEntryOrderByWithRelationInput | PlatformAccountingEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlatformAccountingEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformAccountingEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformAccountingEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlatformAccountingEntries
+    **/
+    _count?: true | PlatformAccountingEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PlatformAccountingEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PlatformAccountingEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlatformAccountingEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlatformAccountingEntryMaxAggregateInputType
+  }
+
+  export type GetPlatformAccountingEntryAggregateType<T extends PlatformAccountingEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlatformAccountingEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlatformAccountingEntry[P]>
+      : GetScalarType<T[P], AggregatePlatformAccountingEntry[P]>
+  }
+
+
+
+
+  export type PlatformAccountingEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlatformAccountingEntryWhereInput
+    orderBy?: PlatformAccountingEntryOrderByWithAggregationInput | PlatformAccountingEntryOrderByWithAggregationInput[]
+    by: PlatformAccountingEntryScalarFieldEnum[] | PlatformAccountingEntryScalarFieldEnum
+    having?: PlatformAccountingEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlatformAccountingEntryCountAggregateInputType | true
+    _avg?: PlatformAccountingEntryAvgAggregateInputType
+    _sum?: PlatformAccountingEntrySumAggregateInputType
+    _min?: PlatformAccountingEntryMinAggregateInputType
+    _max?: PlatformAccountingEntryMaxAggregateInputType
+  }
+
+  export type PlatformAccountingEntryGroupByOutputType = {
+    id: string
+    idempotencyKey: string
+    sourceType: string
+    sourceId: string
+    entryType: string
+    amount: Decimal
+    currencyCode: string
+    usdAmount: Decimal
+    occurredAt: Date
+    createdAt: Date
+    _count: PlatformAccountingEntryCountAggregateOutputType | null
+    _avg: PlatformAccountingEntryAvgAggregateOutputType | null
+    _sum: PlatformAccountingEntrySumAggregateOutputType | null
+    _min: PlatformAccountingEntryMinAggregateOutputType | null
+    _max: PlatformAccountingEntryMaxAggregateOutputType | null
+  }
+
+  type GetPlatformAccountingEntryGroupByPayload<T extends PlatformAccountingEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlatformAccountingEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlatformAccountingEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlatformAccountingEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], PlatformAccountingEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlatformAccountingEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idempotencyKey?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    entryType?: boolean
+    amount?: boolean
+    currencyCode?: boolean
+    usdAmount?: boolean
+    occurredAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["platformAccountingEntry"]>
+
+  export type PlatformAccountingEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idempotencyKey?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    entryType?: boolean
+    amount?: boolean
+    currencyCode?: boolean
+    usdAmount?: boolean
+    occurredAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["platformAccountingEntry"]>
+
+  export type PlatformAccountingEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    idempotencyKey?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    entryType?: boolean
+    amount?: boolean
+    currencyCode?: boolean
+    usdAmount?: boolean
+    occurredAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["platformAccountingEntry"]>
+
+  export type PlatformAccountingEntrySelectScalar = {
+    id?: boolean
+    idempotencyKey?: boolean
+    sourceType?: boolean
+    sourceId?: boolean
+    entryType?: boolean
+    amount?: boolean
+    currencyCode?: boolean
+    usdAmount?: boolean
+    occurredAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type PlatformAccountingEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "idempotencyKey" | "sourceType" | "sourceId" | "entryType" | "amount" | "currencyCode" | "usdAmount" | "occurredAt" | "createdAt", ExtArgs["result"]["platformAccountingEntry"]>
+
+  export type $PlatformAccountingEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlatformAccountingEntry"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      idempotencyKey: string
+      sourceType: string
+      sourceId: string
+      entryType: string
+      amount: Prisma.Decimal
+      currencyCode: string
+      usdAmount: Prisma.Decimal
+      occurredAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["platformAccountingEntry"]>
+    composites: {}
+  }
+
+  type PlatformAccountingEntryGetPayload<S extends boolean | null | undefined | PlatformAccountingEntryDefaultArgs> = $Result.GetResult<Prisma.$PlatformAccountingEntryPayload, S>
+
+  type PlatformAccountingEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlatformAccountingEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlatformAccountingEntryCountAggregateInputType | true
+    }
+
+  export interface PlatformAccountingEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlatformAccountingEntry'], meta: { name: 'PlatformAccountingEntry' } }
+    /**
+     * Find zero or one PlatformAccountingEntry that matches the filter.
+     * @param {PlatformAccountingEntryFindUniqueArgs} args - Arguments to find a PlatformAccountingEntry
+     * @example
+     * // Get one PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlatformAccountingEntryFindUniqueArgs>(args: SelectSubset<T, PlatformAccountingEntryFindUniqueArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlatformAccountingEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlatformAccountingEntryFindUniqueOrThrowArgs} args - Arguments to find a PlatformAccountingEntry
+     * @example
+     * // Get one PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlatformAccountingEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, PlatformAccountingEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformAccountingEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryFindFirstArgs} args - Arguments to find a PlatformAccountingEntry
+     * @example
+     * // Get one PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlatformAccountingEntryFindFirstArgs>(args?: SelectSubset<T, PlatformAccountingEntryFindFirstArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlatformAccountingEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryFindFirstOrThrowArgs} args - Arguments to find a PlatformAccountingEntry
+     * @example
+     * // Get one PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlatformAccountingEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, PlatformAccountingEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlatformAccountingEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlatformAccountingEntries
+     * const platformAccountingEntries = await prisma.platformAccountingEntry.findMany()
+     * 
+     * // Get first 10 PlatformAccountingEntries
+     * const platformAccountingEntries = await prisma.platformAccountingEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const platformAccountingEntryWithIdOnly = await prisma.platformAccountingEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlatformAccountingEntryFindManyArgs>(args?: SelectSubset<T, PlatformAccountingEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlatformAccountingEntry.
+     * @param {PlatformAccountingEntryCreateArgs} args - Arguments to create a PlatformAccountingEntry.
+     * @example
+     * // Create one PlatformAccountingEntry
+     * const PlatformAccountingEntry = await prisma.platformAccountingEntry.create({
+     *   data: {
+     *     // ... data to create a PlatformAccountingEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlatformAccountingEntryCreateArgs>(args: SelectSubset<T, PlatformAccountingEntryCreateArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlatformAccountingEntries.
+     * @param {PlatformAccountingEntryCreateManyArgs} args - Arguments to create many PlatformAccountingEntries.
+     * @example
+     * // Create many PlatformAccountingEntries
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlatformAccountingEntryCreateManyArgs>(args?: SelectSubset<T, PlatformAccountingEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PlatformAccountingEntries and returns the data saved in the database.
+     * @param {PlatformAccountingEntryCreateManyAndReturnArgs} args - Arguments to create many PlatformAccountingEntries.
+     * @example
+     * // Create many PlatformAccountingEntries
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PlatformAccountingEntries and only return the `id`
+     * const platformAccountingEntryWithIdOnly = await prisma.platformAccountingEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PlatformAccountingEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, PlatformAccountingEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PlatformAccountingEntry.
+     * @param {PlatformAccountingEntryDeleteArgs} args - Arguments to delete one PlatformAccountingEntry.
+     * @example
+     * // Delete one PlatformAccountingEntry
+     * const PlatformAccountingEntry = await prisma.platformAccountingEntry.delete({
+     *   where: {
+     *     // ... filter to delete one PlatformAccountingEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlatformAccountingEntryDeleteArgs>(args: SelectSubset<T, PlatformAccountingEntryDeleteArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlatformAccountingEntry.
+     * @param {PlatformAccountingEntryUpdateArgs} args - Arguments to update one PlatformAccountingEntry.
+     * @example
+     * // Update one PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlatformAccountingEntryUpdateArgs>(args: SelectSubset<T, PlatformAccountingEntryUpdateArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlatformAccountingEntries.
+     * @param {PlatformAccountingEntryDeleteManyArgs} args - Arguments to filter PlatformAccountingEntries to delete.
+     * @example
+     * // Delete a few PlatformAccountingEntries
+     * const { count } = await prisma.platformAccountingEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlatformAccountingEntryDeleteManyArgs>(args?: SelectSubset<T, PlatformAccountingEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformAccountingEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlatformAccountingEntries
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlatformAccountingEntryUpdateManyArgs>(args: SelectSubset<T, PlatformAccountingEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlatformAccountingEntries and returns the data updated in the database.
+     * @param {PlatformAccountingEntryUpdateManyAndReturnArgs} args - Arguments to update many PlatformAccountingEntries.
+     * @example
+     * // Update many PlatformAccountingEntries
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PlatformAccountingEntries and only return the `id`
+     * const platformAccountingEntryWithIdOnly = await prisma.platformAccountingEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PlatformAccountingEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, PlatformAccountingEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PlatformAccountingEntry.
+     * @param {PlatformAccountingEntryUpsertArgs} args - Arguments to update or create a PlatformAccountingEntry.
+     * @example
+     * // Update or create a PlatformAccountingEntry
+     * const platformAccountingEntry = await prisma.platformAccountingEntry.upsert({
+     *   create: {
+     *     // ... data to create a PlatformAccountingEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlatformAccountingEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlatformAccountingEntryUpsertArgs>(args: SelectSubset<T, PlatformAccountingEntryUpsertArgs<ExtArgs>>): Prisma__PlatformAccountingEntryClient<$Result.GetResult<Prisma.$PlatformAccountingEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PlatformAccountingEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryCountArgs} args - Arguments to filter PlatformAccountingEntries to count.
+     * @example
+     * // Count the number of PlatformAccountingEntries
+     * const count = await prisma.platformAccountingEntry.count({
+     *   where: {
+     *     // ... the filter for the PlatformAccountingEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlatformAccountingEntryCountArgs>(
+      args?: Subset<T, PlatformAccountingEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlatformAccountingEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlatformAccountingEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlatformAccountingEntryAggregateArgs>(args: Subset<T, PlatformAccountingEntryAggregateArgs>): Prisma.PrismaPromise<GetPlatformAccountingEntryAggregateType<T>>
+
+    /**
+     * Group by PlatformAccountingEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlatformAccountingEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlatformAccountingEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlatformAccountingEntryGroupByArgs['orderBy'] }
+        : { orderBy?: PlatformAccountingEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlatformAccountingEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlatformAccountingEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlatformAccountingEntry model
+   */
+  readonly fields: PlatformAccountingEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlatformAccountingEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlatformAccountingEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlatformAccountingEntry model
+   */
+  interface PlatformAccountingEntryFieldRefs {
+    readonly id: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly idempotencyKey: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly sourceType: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly sourceId: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly entryType: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly amount: FieldRef<"PlatformAccountingEntry", 'Decimal'>
+    readonly currencyCode: FieldRef<"PlatformAccountingEntry", 'String'>
+    readonly usdAmount: FieldRef<"PlatformAccountingEntry", 'Decimal'>
+    readonly occurredAt: FieldRef<"PlatformAccountingEntry", 'DateTime'>
+    readonly createdAt: FieldRef<"PlatformAccountingEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlatformAccountingEntry findUnique
+   */
+  export type PlatformAccountingEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformAccountingEntry to fetch.
+     */
+    where: PlatformAccountingEntryWhereUniqueInput
+  }
+
+  /**
+   * PlatformAccountingEntry findUniqueOrThrow
+   */
+  export type PlatformAccountingEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformAccountingEntry to fetch.
+     */
+    where: PlatformAccountingEntryWhereUniqueInput
+  }
+
+  /**
+   * PlatformAccountingEntry findFirst
+   */
+  export type PlatformAccountingEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformAccountingEntry to fetch.
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformAccountingEntries to fetch.
+     */
+    orderBy?: PlatformAccountingEntryOrderByWithRelationInput | PlatformAccountingEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformAccountingEntries.
+     */
+    cursor?: PlatformAccountingEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformAccountingEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformAccountingEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformAccountingEntries.
+     */
+    distinct?: PlatformAccountingEntryScalarFieldEnum | PlatformAccountingEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformAccountingEntry findFirstOrThrow
+   */
+  export type PlatformAccountingEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformAccountingEntry to fetch.
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformAccountingEntries to fetch.
+     */
+    orderBy?: PlatformAccountingEntryOrderByWithRelationInput | PlatformAccountingEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlatformAccountingEntries.
+     */
+    cursor?: PlatformAccountingEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformAccountingEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformAccountingEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformAccountingEntries.
+     */
+    distinct?: PlatformAccountingEntryScalarFieldEnum | PlatformAccountingEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformAccountingEntry findMany
+   */
+  export type PlatformAccountingEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter, which PlatformAccountingEntries to fetch.
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlatformAccountingEntries to fetch.
+     */
+    orderBy?: PlatformAccountingEntryOrderByWithRelationInput | PlatformAccountingEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlatformAccountingEntries.
+     */
+    cursor?: PlatformAccountingEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlatformAccountingEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlatformAccountingEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlatformAccountingEntries.
+     */
+    distinct?: PlatformAccountingEntryScalarFieldEnum | PlatformAccountingEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PlatformAccountingEntry create
+   */
+  export type PlatformAccountingEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a PlatformAccountingEntry.
+     */
+    data: XOR<PlatformAccountingEntryCreateInput, PlatformAccountingEntryUncheckedCreateInput>
+  }
+
+  /**
+   * PlatformAccountingEntry createMany
+   */
+  export type PlatformAccountingEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlatformAccountingEntries.
+     */
+    data: PlatformAccountingEntryCreateManyInput | PlatformAccountingEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlatformAccountingEntry createManyAndReturn
+   */
+  export type PlatformAccountingEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many PlatformAccountingEntries.
+     */
+    data: PlatformAccountingEntryCreateManyInput | PlatformAccountingEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PlatformAccountingEntry update
+   */
+  export type PlatformAccountingEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a PlatformAccountingEntry.
+     */
+    data: XOR<PlatformAccountingEntryUpdateInput, PlatformAccountingEntryUncheckedUpdateInput>
+    /**
+     * Choose, which PlatformAccountingEntry to update.
+     */
+    where: PlatformAccountingEntryWhereUniqueInput
+  }
+
+  /**
+   * PlatformAccountingEntry updateMany
+   */
+  export type PlatformAccountingEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlatformAccountingEntries.
+     */
+    data: XOR<PlatformAccountingEntryUpdateManyMutationInput, PlatformAccountingEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformAccountingEntries to update
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * Limit how many PlatformAccountingEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformAccountingEntry updateManyAndReturn
+   */
+  export type PlatformAccountingEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update PlatformAccountingEntries.
+     */
+    data: XOR<PlatformAccountingEntryUpdateManyMutationInput, PlatformAccountingEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which PlatformAccountingEntries to update
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * Limit how many PlatformAccountingEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformAccountingEntry upsert
+   */
+  export type PlatformAccountingEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the PlatformAccountingEntry to update in case it exists.
+     */
+    where: PlatformAccountingEntryWhereUniqueInput
+    /**
+     * In case the PlatformAccountingEntry found by the `where` argument doesn't exist, create a new PlatformAccountingEntry with this data.
+     */
+    create: XOR<PlatformAccountingEntryCreateInput, PlatformAccountingEntryUncheckedCreateInput>
+    /**
+     * In case the PlatformAccountingEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlatformAccountingEntryUpdateInput, PlatformAccountingEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * PlatformAccountingEntry delete
+   */
+  export type PlatformAccountingEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+    /**
+     * Filter which PlatformAccountingEntry to delete.
+     */
+    where: PlatformAccountingEntryWhereUniqueInput
+  }
+
+  /**
+   * PlatformAccountingEntry deleteMany
+   */
+  export type PlatformAccountingEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlatformAccountingEntries to delete
+     */
+    where?: PlatformAccountingEntryWhereInput
+    /**
+     * Limit how many PlatformAccountingEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlatformAccountingEntry without action
+   */
+  export type PlatformAccountingEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlatformAccountingEntry
+     */
+    select?: PlatformAccountingEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlatformAccountingEntry
+     */
+    omit?: PlatformAccountingEntryOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SecurityAuditEvent
+   */
+
+  export type AggregateSecurityAuditEvent = {
+    _count: SecurityAuditEventCountAggregateOutputType | null
+    _min: SecurityAuditEventMinAggregateOutputType | null
+    _max: SecurityAuditEventMaxAggregateOutputType | null
+  }
+
+  export type SecurityAuditEventMinAggregateOutputType = {
+    id: string | null
+    eventType: string | null
+    event: string | null
+    outcome: string | null
+    actorType: string | null
+    actorUserId: string | null
+    targetUserId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    country: string | null
+    city: string | null
+    deviceType: string | null
+    operatingSystem: string | null
+    browser: string | null
+    risk: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type SecurityAuditEventMaxAggregateOutputType = {
+    id: string | null
+    eventType: string | null
+    event: string | null
+    outcome: string | null
+    actorType: string | null
+    actorUserId: string | null
+    targetUserId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    country: string | null
+    city: string | null
+    deviceType: string | null
+    operatingSystem: string | null
+    browser: string | null
+    risk: string | null
+    description: string | null
+    createdAt: Date | null
+  }
+
+  export type SecurityAuditEventCountAggregateOutputType = {
+    id: number
+    eventType: number
+    event: number
+    outcome: number
+    actorType: number
+    actorUserId: number
+    targetUserId: number
+    ipAddress: number
+    userAgent: number
+    country: number
+    city: number
+    deviceType: number
+    operatingSystem: number
+    browser: number
+    risk: number
+    description: number
+    metadata: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SecurityAuditEventMinAggregateInputType = {
+    id?: true
+    eventType?: true
+    event?: true
+    outcome?: true
+    actorType?: true
+    actorUserId?: true
+    targetUserId?: true
+    ipAddress?: true
+    userAgent?: true
+    country?: true
+    city?: true
+    deviceType?: true
+    operatingSystem?: true
+    browser?: true
+    risk?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type SecurityAuditEventMaxAggregateInputType = {
+    id?: true
+    eventType?: true
+    event?: true
+    outcome?: true
+    actorType?: true
+    actorUserId?: true
+    targetUserId?: true
+    ipAddress?: true
+    userAgent?: true
+    country?: true
+    city?: true
+    deviceType?: true
+    operatingSystem?: true
+    browser?: true
+    risk?: true
+    description?: true
+    createdAt?: true
+  }
+
+  export type SecurityAuditEventCountAggregateInputType = {
+    id?: true
+    eventType?: true
+    event?: true
+    outcome?: true
+    actorType?: true
+    actorUserId?: true
+    targetUserId?: true
+    ipAddress?: true
+    userAgent?: true
+    country?: true
+    city?: true
+    deviceType?: true
+    operatingSystem?: true
+    browser?: true
+    risk?: true
+    description?: true
+    metadata?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SecurityAuditEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityAuditEvent to aggregate.
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityAuditEvents to fetch.
+     */
+    orderBy?: SecurityAuditEventOrderByWithRelationInput | SecurityAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SecurityAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SecurityAuditEvents
+    **/
+    _count?: true | SecurityAuditEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SecurityAuditEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SecurityAuditEventMaxAggregateInputType
+  }
+
+  export type GetSecurityAuditEventAggregateType<T extends SecurityAuditEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateSecurityAuditEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSecurityAuditEvent[P]>
+      : GetScalarType<T[P], AggregateSecurityAuditEvent[P]>
+  }
+
+
+
+
+  export type SecurityAuditEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SecurityAuditEventWhereInput
+    orderBy?: SecurityAuditEventOrderByWithAggregationInput | SecurityAuditEventOrderByWithAggregationInput[]
+    by: SecurityAuditEventScalarFieldEnum[] | SecurityAuditEventScalarFieldEnum
+    having?: SecurityAuditEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SecurityAuditEventCountAggregateInputType | true
+    _min?: SecurityAuditEventMinAggregateInputType
+    _max?: SecurityAuditEventMaxAggregateInputType
+  }
+
+  export type SecurityAuditEventGroupByOutputType = {
+    id: string
+    eventType: string
+    event: string
+    outcome: string
+    actorType: string
+    actorUserId: string | null
+    targetUserId: string | null
+    ipAddress: string | null
+    userAgent: string | null
+    country: string | null
+    city: string | null
+    deviceType: string | null
+    operatingSystem: string | null
+    browser: string | null
+    risk: string | null
+    description: string
+    metadata: JsonValue | null
+    createdAt: Date
+    _count: SecurityAuditEventCountAggregateOutputType | null
+    _min: SecurityAuditEventMinAggregateOutputType | null
+    _max: SecurityAuditEventMaxAggregateOutputType | null
+  }
+
+  type GetSecurityAuditEventGroupByPayload<T extends SecurityAuditEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SecurityAuditEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SecurityAuditEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SecurityAuditEventGroupByOutputType[P]>
+            : GetScalarType<T[P], SecurityAuditEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SecurityAuditEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventType?: boolean
+    event?: boolean
+    outcome?: boolean
+    actorType?: boolean
+    actorUserId?: boolean
+    targetUserId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    country?: boolean
+    city?: boolean
+    deviceType?: boolean
+    operatingSystem?: boolean
+    browser?: boolean
+    risk?: boolean
+    description?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["securityAuditEvent"]>
+
+  export type SecurityAuditEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventType?: boolean
+    event?: boolean
+    outcome?: boolean
+    actorType?: boolean
+    actorUserId?: boolean
+    targetUserId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    country?: boolean
+    city?: boolean
+    deviceType?: boolean
+    operatingSystem?: boolean
+    browser?: boolean
+    risk?: boolean
+    description?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["securityAuditEvent"]>
+
+  export type SecurityAuditEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    eventType?: boolean
+    event?: boolean
+    outcome?: boolean
+    actorType?: boolean
+    actorUserId?: boolean
+    targetUserId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    country?: boolean
+    city?: boolean
+    deviceType?: boolean
+    operatingSystem?: boolean
+    browser?: boolean
+    risk?: boolean
+    description?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["securityAuditEvent"]>
+
+  export type SecurityAuditEventSelectScalar = {
+    id?: boolean
+    eventType?: boolean
+    event?: boolean
+    outcome?: boolean
+    actorType?: boolean
+    actorUserId?: boolean
+    targetUserId?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    country?: boolean
+    city?: boolean
+    deviceType?: boolean
+    operatingSystem?: boolean
+    browser?: boolean
+    risk?: boolean
+    description?: boolean
+    metadata?: boolean
+    createdAt?: boolean
+  }
+
+  export type SecurityAuditEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventType" | "event" | "outcome" | "actorType" | "actorUserId" | "targetUserId" | "ipAddress" | "userAgent" | "country" | "city" | "deviceType" | "operatingSystem" | "browser" | "risk" | "description" | "metadata" | "createdAt", ExtArgs["result"]["securityAuditEvent"]>
+
+  export type $SecurityAuditEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SecurityAuditEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      eventType: string
+      event: string
+      outcome: string
+      actorType: string
+      actorUserId: string | null
+      targetUserId: string | null
+      ipAddress: string | null
+      userAgent: string | null
+      country: string | null
+      city: string | null
+      deviceType: string | null
+      operatingSystem: string | null
+      browser: string | null
+      risk: string | null
+      description: string
+      metadata: Prisma.JsonValue | null
+      createdAt: Date
+    }, ExtArgs["result"]["securityAuditEvent"]>
+    composites: {}
+  }
+
+  type SecurityAuditEventGetPayload<S extends boolean | null | undefined | SecurityAuditEventDefaultArgs> = $Result.GetResult<Prisma.$SecurityAuditEventPayload, S>
+
+  type SecurityAuditEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SecurityAuditEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SecurityAuditEventCountAggregateInputType | true
+    }
+
+  export interface SecurityAuditEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SecurityAuditEvent'], meta: { name: 'SecurityAuditEvent' } }
+    /**
+     * Find zero or one SecurityAuditEvent that matches the filter.
+     * @param {SecurityAuditEventFindUniqueArgs} args - Arguments to find a SecurityAuditEvent
+     * @example
+     * // Get one SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SecurityAuditEventFindUniqueArgs>(args: SelectSubset<T, SecurityAuditEventFindUniqueArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SecurityAuditEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SecurityAuditEventFindUniqueOrThrowArgs} args - Arguments to find a SecurityAuditEvent
+     * @example
+     * // Get one SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SecurityAuditEventFindUniqueOrThrowArgs>(args: SelectSubset<T, SecurityAuditEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SecurityAuditEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventFindFirstArgs} args - Arguments to find a SecurityAuditEvent
+     * @example
+     * // Get one SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SecurityAuditEventFindFirstArgs>(args?: SelectSubset<T, SecurityAuditEventFindFirstArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SecurityAuditEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventFindFirstOrThrowArgs} args - Arguments to find a SecurityAuditEvent
+     * @example
+     * // Get one SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SecurityAuditEventFindFirstOrThrowArgs>(args?: SelectSubset<T, SecurityAuditEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SecurityAuditEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SecurityAuditEvents
+     * const securityAuditEvents = await prisma.securityAuditEvent.findMany()
+     * 
+     * // Get first 10 SecurityAuditEvents
+     * const securityAuditEvents = await prisma.securityAuditEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const securityAuditEventWithIdOnly = await prisma.securityAuditEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SecurityAuditEventFindManyArgs>(args?: SelectSubset<T, SecurityAuditEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SecurityAuditEvent.
+     * @param {SecurityAuditEventCreateArgs} args - Arguments to create a SecurityAuditEvent.
+     * @example
+     * // Create one SecurityAuditEvent
+     * const SecurityAuditEvent = await prisma.securityAuditEvent.create({
+     *   data: {
+     *     // ... data to create a SecurityAuditEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends SecurityAuditEventCreateArgs>(args: SelectSubset<T, SecurityAuditEventCreateArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SecurityAuditEvents.
+     * @param {SecurityAuditEventCreateManyArgs} args - Arguments to create many SecurityAuditEvents.
+     * @example
+     * // Create many SecurityAuditEvents
+     * const securityAuditEvent = await prisma.securityAuditEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SecurityAuditEventCreateManyArgs>(args?: SelectSubset<T, SecurityAuditEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SecurityAuditEvents and returns the data saved in the database.
+     * @param {SecurityAuditEventCreateManyAndReturnArgs} args - Arguments to create many SecurityAuditEvents.
+     * @example
+     * // Create many SecurityAuditEvents
+     * const securityAuditEvent = await prisma.securityAuditEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SecurityAuditEvents and only return the `id`
+     * const securityAuditEventWithIdOnly = await prisma.securityAuditEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SecurityAuditEventCreateManyAndReturnArgs>(args?: SelectSubset<T, SecurityAuditEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SecurityAuditEvent.
+     * @param {SecurityAuditEventDeleteArgs} args - Arguments to delete one SecurityAuditEvent.
+     * @example
+     * // Delete one SecurityAuditEvent
+     * const SecurityAuditEvent = await prisma.securityAuditEvent.delete({
+     *   where: {
+     *     // ... filter to delete one SecurityAuditEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SecurityAuditEventDeleteArgs>(args: SelectSubset<T, SecurityAuditEventDeleteArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SecurityAuditEvent.
+     * @param {SecurityAuditEventUpdateArgs} args - Arguments to update one SecurityAuditEvent.
+     * @example
+     * // Update one SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SecurityAuditEventUpdateArgs>(args: SelectSubset<T, SecurityAuditEventUpdateArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SecurityAuditEvents.
+     * @param {SecurityAuditEventDeleteManyArgs} args - Arguments to filter SecurityAuditEvents to delete.
+     * @example
+     * // Delete a few SecurityAuditEvents
+     * const { count } = await prisma.securityAuditEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SecurityAuditEventDeleteManyArgs>(args?: SelectSubset<T, SecurityAuditEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SecurityAuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SecurityAuditEvents
+     * const securityAuditEvent = await prisma.securityAuditEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SecurityAuditEventUpdateManyArgs>(args: SelectSubset<T, SecurityAuditEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SecurityAuditEvents and returns the data updated in the database.
+     * @param {SecurityAuditEventUpdateManyAndReturnArgs} args - Arguments to update many SecurityAuditEvents.
+     * @example
+     * // Update many SecurityAuditEvents
+     * const securityAuditEvent = await prisma.securityAuditEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SecurityAuditEvents and only return the `id`
+     * const securityAuditEventWithIdOnly = await prisma.securityAuditEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SecurityAuditEventUpdateManyAndReturnArgs>(args: SelectSubset<T, SecurityAuditEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SecurityAuditEvent.
+     * @param {SecurityAuditEventUpsertArgs} args - Arguments to update or create a SecurityAuditEvent.
+     * @example
+     * // Update or create a SecurityAuditEvent
+     * const securityAuditEvent = await prisma.securityAuditEvent.upsert({
+     *   create: {
+     *     // ... data to create a SecurityAuditEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SecurityAuditEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SecurityAuditEventUpsertArgs>(args: SelectSubset<T, SecurityAuditEventUpsertArgs<ExtArgs>>): Prisma__SecurityAuditEventClient<$Result.GetResult<Prisma.$SecurityAuditEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SecurityAuditEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventCountArgs} args - Arguments to filter SecurityAuditEvents to count.
+     * @example
+     * // Count the number of SecurityAuditEvents
+     * const count = await prisma.securityAuditEvent.count({
+     *   where: {
+     *     // ... the filter for the SecurityAuditEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends SecurityAuditEventCountArgs>(
+      args?: Subset<T, SecurityAuditEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SecurityAuditEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SecurityAuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SecurityAuditEventAggregateArgs>(args: Subset<T, SecurityAuditEventAggregateArgs>): Prisma.PrismaPromise<GetSecurityAuditEventAggregateType<T>>
+
+    /**
+     * Group by SecurityAuditEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SecurityAuditEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SecurityAuditEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SecurityAuditEventGroupByArgs['orderBy'] }
+        : { orderBy?: SecurityAuditEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SecurityAuditEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSecurityAuditEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SecurityAuditEvent model
+   */
+  readonly fields: SecurityAuditEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SecurityAuditEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SecurityAuditEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SecurityAuditEvent model
+   */
+  interface SecurityAuditEventFieldRefs {
+    readonly id: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly eventType: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly event: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly outcome: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly actorType: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly actorUserId: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly targetUserId: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly ipAddress: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly userAgent: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly country: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly city: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly deviceType: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly operatingSystem: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly browser: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly risk: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly description: FieldRef<"SecurityAuditEvent", 'String'>
+    readonly metadata: FieldRef<"SecurityAuditEvent", 'Json'>
+    readonly createdAt: FieldRef<"SecurityAuditEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SecurityAuditEvent findUnique
+   */
+  export type SecurityAuditEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter, which SecurityAuditEvent to fetch.
+     */
+    where: SecurityAuditEventWhereUniqueInput
+  }
+
+  /**
+   * SecurityAuditEvent findUniqueOrThrow
+   */
+  export type SecurityAuditEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter, which SecurityAuditEvent to fetch.
+     */
+    where: SecurityAuditEventWhereUniqueInput
+  }
+
+  /**
+   * SecurityAuditEvent findFirst
+   */
+  export type SecurityAuditEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter, which SecurityAuditEvent to fetch.
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityAuditEvents to fetch.
+     */
+    orderBy?: SecurityAuditEventOrderByWithRelationInput | SecurityAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityAuditEvents.
+     */
+    cursor?: SecurityAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityAuditEvents.
+     */
+    distinct?: SecurityAuditEventScalarFieldEnum | SecurityAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityAuditEvent findFirstOrThrow
+   */
+  export type SecurityAuditEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter, which SecurityAuditEvent to fetch.
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityAuditEvents to fetch.
+     */
+    orderBy?: SecurityAuditEventOrderByWithRelationInput | SecurityAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SecurityAuditEvents.
+     */
+    cursor?: SecurityAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityAuditEvents.
+     */
+    distinct?: SecurityAuditEventScalarFieldEnum | SecurityAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityAuditEvent findMany
+   */
+  export type SecurityAuditEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter, which SecurityAuditEvents to fetch.
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SecurityAuditEvents to fetch.
+     */
+    orderBy?: SecurityAuditEventOrderByWithRelationInput | SecurityAuditEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SecurityAuditEvents.
+     */
+    cursor?: SecurityAuditEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SecurityAuditEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SecurityAuditEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SecurityAuditEvents.
+     */
+    distinct?: SecurityAuditEventScalarFieldEnum | SecurityAuditEventScalarFieldEnum[]
+  }
+
+  /**
+   * SecurityAuditEvent create
+   */
+  export type SecurityAuditEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SecurityAuditEvent.
+     */
+    data: XOR<SecurityAuditEventCreateInput, SecurityAuditEventUncheckedCreateInput>
+  }
+
+  /**
+   * SecurityAuditEvent createMany
+   */
+  export type SecurityAuditEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SecurityAuditEvents.
+     */
+    data: SecurityAuditEventCreateManyInput | SecurityAuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityAuditEvent createManyAndReturn
+   */
+  export type SecurityAuditEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many SecurityAuditEvents.
+     */
+    data: SecurityAuditEventCreateManyInput | SecurityAuditEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SecurityAuditEvent update
+   */
+  export type SecurityAuditEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SecurityAuditEvent.
+     */
+    data: XOR<SecurityAuditEventUpdateInput, SecurityAuditEventUncheckedUpdateInput>
+    /**
+     * Choose, which SecurityAuditEvent to update.
+     */
+    where: SecurityAuditEventWhereUniqueInput
+  }
+
+  /**
+   * SecurityAuditEvent updateMany
+   */
+  export type SecurityAuditEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SecurityAuditEvents.
+     */
+    data: XOR<SecurityAuditEventUpdateManyMutationInput, SecurityAuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which SecurityAuditEvents to update
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * Limit how many SecurityAuditEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SecurityAuditEvent updateManyAndReturn
+   */
+  export type SecurityAuditEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * The data used to update SecurityAuditEvents.
+     */
+    data: XOR<SecurityAuditEventUpdateManyMutationInput, SecurityAuditEventUncheckedUpdateManyInput>
+    /**
+     * Filter which SecurityAuditEvents to update
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * Limit how many SecurityAuditEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SecurityAuditEvent upsert
+   */
+  export type SecurityAuditEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SecurityAuditEvent to update in case it exists.
+     */
+    where: SecurityAuditEventWhereUniqueInput
+    /**
+     * In case the SecurityAuditEvent found by the `where` argument doesn't exist, create a new SecurityAuditEvent with this data.
+     */
+    create: XOR<SecurityAuditEventCreateInput, SecurityAuditEventUncheckedCreateInput>
+    /**
+     * In case the SecurityAuditEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SecurityAuditEventUpdateInput, SecurityAuditEventUncheckedUpdateInput>
+  }
+
+  /**
+   * SecurityAuditEvent delete
+   */
+  export type SecurityAuditEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
+    /**
+     * Filter which SecurityAuditEvent to delete.
+     */
+    where: SecurityAuditEventWhereUniqueInput
+  }
+
+  /**
+   * SecurityAuditEvent deleteMany
+   */
+  export type SecurityAuditEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SecurityAuditEvents to delete
+     */
+    where?: SecurityAuditEventWhereInput
+    /**
+     * Limit how many SecurityAuditEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SecurityAuditEvent without action
+   */
+  export type SecurityAuditEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SecurityAuditEvent
+     */
+    select?: SecurityAuditEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SecurityAuditEvent
+     */
+    omit?: SecurityAuditEventOmit<ExtArgs> | null
   }
 
 
@@ -40466,6 +42950,8 @@ export namespace Prisma {
     currencyCode: 'currencyCode',
     amount: 'amount',
     fee: 'fee',
+    nobleCardsFee: 'nobleCardsFee',
+    nobleCardsFeeUsd: 'nobleCardsFeeUsd',
     netAmount: 'netAmount',
     exchangeRate: 'exchangeRate',
     provider: 'provider',
@@ -40483,6 +42969,46 @@ export namespace Prisma {
   };
 
   export type DepositScalarFieldEnum = (typeof DepositScalarFieldEnum)[keyof typeof DepositScalarFieldEnum]
+
+
+  export const PlatformAccountingEntryScalarFieldEnum: {
+    id: 'id',
+    idempotencyKey: 'idempotencyKey',
+    sourceType: 'sourceType',
+    sourceId: 'sourceId',
+    entryType: 'entryType',
+    amount: 'amount',
+    currencyCode: 'currencyCode',
+    usdAmount: 'usdAmount',
+    occurredAt: 'occurredAt',
+    createdAt: 'createdAt'
+  };
+
+  export type PlatformAccountingEntryScalarFieldEnum = (typeof PlatformAccountingEntryScalarFieldEnum)[keyof typeof PlatformAccountingEntryScalarFieldEnum]
+
+
+  export const SecurityAuditEventScalarFieldEnum: {
+    id: 'id',
+    eventType: 'eventType',
+    event: 'event',
+    outcome: 'outcome',
+    actorType: 'actorType',
+    actorUserId: 'actorUserId',
+    targetUserId: 'targetUserId',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent',
+    country: 'country',
+    city: 'city',
+    deviceType: 'deviceType',
+    operatingSystem: 'operatingSystem',
+    browser: 'browser',
+    risk: 'risk',
+    description: 'description',
+    metadata: 'metadata',
+    createdAt: 'createdAt'
+  };
+
+  export type SecurityAuditEventScalarFieldEnum = (typeof SecurityAuditEventScalarFieldEnum)[keyof typeof SecurityAuditEventScalarFieldEnum]
 
 
   export const TransactionScalarFieldEnum: {
@@ -42152,6 +44678,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"Deposit"> | string
     amount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     fee?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFilter<"Deposit"> | $Enums.PaymentProvider
@@ -42180,6 +44708,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrderInput | SortOrder
+    nobleCardsFeeUsd?: SortOrderInput | SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrderInput | SortOrder
     provider?: SortOrder
@@ -42213,6 +44743,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"Deposit"> | string
     amount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     fee?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFilter<"Deposit"> | $Enums.PaymentProvider
@@ -42240,6 +44772,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrderInput | SortOrder
+    nobleCardsFeeUsd?: SortOrderInput | SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrderInput | SortOrder
     provider?: SortOrder
@@ -42271,6 +44805,8 @@ export namespace Prisma {
     currencyCode?: StringWithAggregatesFilter<"Deposit"> | string
     amount?: DecimalWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     fee?: DecimalWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalNullableWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: DecimalNullableWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalNullableWithAggregatesFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderWithAggregatesFilter<"Deposit"> | $Enums.PaymentProvider
@@ -42285,6 +44821,202 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Deposit"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Deposit"> | Date | string
     transactionId?: StringNullableWithAggregatesFilter<"Deposit"> | string | null
+  }
+
+  export type PlatformAccountingEntryWhereInput = {
+    AND?: PlatformAccountingEntryWhereInput | PlatformAccountingEntryWhereInput[]
+    OR?: PlatformAccountingEntryWhereInput[]
+    NOT?: PlatformAccountingEntryWhereInput | PlatformAccountingEntryWhereInput[]
+    id?: StringFilter<"PlatformAccountingEntry"> | string
+    idempotencyKey?: StringFilter<"PlatformAccountingEntry"> | string
+    sourceType?: StringFilter<"PlatformAccountingEntry"> | string
+    sourceId?: StringFilter<"PlatformAccountingEntry"> | string
+    entryType?: StringFilter<"PlatformAccountingEntry"> | string
+    amount?: DecimalFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFilter<"PlatformAccountingEntry"> | string
+    usdAmount?: DecimalFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFilter<"PlatformAccountingEntry"> | Date | string
+    createdAt?: DateTimeFilter<"PlatformAccountingEntry"> | Date | string
+  }
+
+  export type PlatformAccountingEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    idempotencyKey?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    entryType?: SortOrder
+    amount?: SortOrder
+    currencyCode?: SortOrder
+    usdAmount?: SortOrder
+    occurredAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PlatformAccountingEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    idempotencyKey?: string
+    AND?: PlatformAccountingEntryWhereInput | PlatformAccountingEntryWhereInput[]
+    OR?: PlatformAccountingEntryWhereInput[]
+    NOT?: PlatformAccountingEntryWhereInput | PlatformAccountingEntryWhereInput[]
+    sourceType?: StringFilter<"PlatformAccountingEntry"> | string
+    sourceId?: StringFilter<"PlatformAccountingEntry"> | string
+    entryType?: StringFilter<"PlatformAccountingEntry"> | string
+    amount?: DecimalFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFilter<"PlatformAccountingEntry"> | string
+    usdAmount?: DecimalFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFilter<"PlatformAccountingEntry"> | Date | string
+    createdAt?: DateTimeFilter<"PlatformAccountingEntry"> | Date | string
+  }, "id" | "idempotencyKey">
+
+  export type PlatformAccountingEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    idempotencyKey?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    entryType?: SortOrder
+    amount?: SortOrder
+    currencyCode?: SortOrder
+    usdAmount?: SortOrder
+    occurredAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: PlatformAccountingEntryCountOrderByAggregateInput
+    _avg?: PlatformAccountingEntryAvgOrderByAggregateInput
+    _max?: PlatformAccountingEntryMaxOrderByAggregateInput
+    _min?: PlatformAccountingEntryMinOrderByAggregateInput
+    _sum?: PlatformAccountingEntrySumOrderByAggregateInput
+  }
+
+  export type PlatformAccountingEntryScalarWhereWithAggregatesInput = {
+    AND?: PlatformAccountingEntryScalarWhereWithAggregatesInput | PlatformAccountingEntryScalarWhereWithAggregatesInput[]
+    OR?: PlatformAccountingEntryScalarWhereWithAggregatesInput[]
+    NOT?: PlatformAccountingEntryScalarWhereWithAggregatesInput | PlatformAccountingEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    idempotencyKey?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    sourceType?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    sourceId?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    entryType?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    amount?: DecimalWithAggregatesFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringWithAggregatesFilter<"PlatformAccountingEntry"> | string
+    usdAmount?: DecimalWithAggregatesFilter<"PlatformAccountingEntry"> | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeWithAggregatesFilter<"PlatformAccountingEntry"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"PlatformAccountingEntry"> | Date | string
+  }
+
+  export type SecurityAuditEventWhereInput = {
+    AND?: SecurityAuditEventWhereInput | SecurityAuditEventWhereInput[]
+    OR?: SecurityAuditEventWhereInput[]
+    NOT?: SecurityAuditEventWhereInput | SecurityAuditEventWhereInput[]
+    id?: StringFilter<"SecurityAuditEvent"> | string
+    eventType?: StringFilter<"SecurityAuditEvent"> | string
+    event?: StringFilter<"SecurityAuditEvent"> | string
+    outcome?: StringFilter<"SecurityAuditEvent"> | string
+    actorType?: StringFilter<"SecurityAuditEvent"> | string
+    actorUserId?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    targetUserId?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    ipAddress?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    userAgent?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    country?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    city?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    deviceType?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    operatingSystem?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    browser?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    risk?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    description?: StringFilter<"SecurityAuditEvent"> | string
+    metadata?: JsonNullableFilter<"SecurityAuditEvent">
+    createdAt?: DateTimeFilter<"SecurityAuditEvent"> | Date | string
+  }
+
+  export type SecurityAuditEventOrderByWithRelationInput = {
+    id?: SortOrder
+    eventType?: SortOrder
+    event?: SortOrder
+    outcome?: SortOrder
+    actorType?: SortOrder
+    actorUserId?: SortOrderInput | SortOrder
+    targetUserId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    deviceType?: SortOrderInput | SortOrder
+    operatingSystem?: SortOrderInput | SortOrder
+    browser?: SortOrderInput | SortOrder
+    risk?: SortOrderInput | SortOrder
+    description?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityAuditEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SecurityAuditEventWhereInput | SecurityAuditEventWhereInput[]
+    OR?: SecurityAuditEventWhereInput[]
+    NOT?: SecurityAuditEventWhereInput | SecurityAuditEventWhereInput[]
+    eventType?: StringFilter<"SecurityAuditEvent"> | string
+    event?: StringFilter<"SecurityAuditEvent"> | string
+    outcome?: StringFilter<"SecurityAuditEvent"> | string
+    actorType?: StringFilter<"SecurityAuditEvent"> | string
+    actorUserId?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    targetUserId?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    ipAddress?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    userAgent?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    country?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    city?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    deviceType?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    operatingSystem?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    browser?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    risk?: StringNullableFilter<"SecurityAuditEvent"> | string | null
+    description?: StringFilter<"SecurityAuditEvent"> | string
+    metadata?: JsonNullableFilter<"SecurityAuditEvent">
+    createdAt?: DateTimeFilter<"SecurityAuditEvent"> | Date | string
+  }, "id">
+
+  export type SecurityAuditEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    eventType?: SortOrder
+    event?: SortOrder
+    outcome?: SortOrder
+    actorType?: SortOrder
+    actorUserId?: SortOrderInput | SortOrder
+    targetUserId?: SortOrderInput | SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    deviceType?: SortOrderInput | SortOrder
+    operatingSystem?: SortOrderInput | SortOrder
+    browser?: SortOrderInput | SortOrder
+    risk?: SortOrderInput | SortOrder
+    description?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: SecurityAuditEventCountOrderByAggregateInput
+    _max?: SecurityAuditEventMaxOrderByAggregateInput
+    _min?: SecurityAuditEventMinOrderByAggregateInput
+  }
+
+  export type SecurityAuditEventScalarWhereWithAggregatesInput = {
+    AND?: SecurityAuditEventScalarWhereWithAggregatesInput | SecurityAuditEventScalarWhereWithAggregatesInput[]
+    OR?: SecurityAuditEventScalarWhereWithAggregatesInput[]
+    NOT?: SecurityAuditEventScalarWhereWithAggregatesInput | SecurityAuditEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    eventType?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    event?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    outcome?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    actorType?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    actorUserId?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    targetUserId?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    ipAddress?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    country?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    city?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    deviceType?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    operatingSystem?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    browser?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    risk?: StringNullableWithAggregatesFilter<"SecurityAuditEvent"> | string | null
+    description?: StringWithAggregatesFilter<"SecurityAuditEvent"> | string
+    metadata?: JsonNullableWithAggregatesFilter<"SecurityAuditEvent">
+    createdAt?: DateTimeWithAggregatesFilter<"SecurityAuditEvent"> | Date | string
   }
 
   export type TransactionWhereInput = {
@@ -45535,6 +48267,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -45562,6 +48296,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -45583,6 +48319,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -45610,6 +48348,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -45634,6 +48374,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -45654,6 +48396,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -45676,6 +48420,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -45690,6 +48436,244 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PlatformAccountingEntryCreateInput = {
+    id?: string
+    idempotencyKey: string
+    sourceType: string
+    sourceId: string
+    entryType: string
+    amount: Decimal | DecimalJsLike | number | string
+    currencyCode: string
+    usdAmount: Decimal | DecimalJsLike | number | string
+    occurredAt: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PlatformAccountingEntryUncheckedCreateInput = {
+    id?: string
+    idempotencyKey: string
+    sourceType: string
+    sourceId: string
+    entryType: string
+    amount: Decimal | DecimalJsLike | number | string
+    currencyCode: string
+    usdAmount: Decimal | DecimalJsLike | number | string
+    occurredAt: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PlatformAccountingEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    entryType?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    usdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformAccountingEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    entryType?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    usdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformAccountingEntryCreateManyInput = {
+    id?: string
+    idempotencyKey: string
+    sourceType: string
+    sourceId: string
+    entryType: string
+    amount: Decimal | DecimalJsLike | number | string
+    currencyCode: string
+    usdAmount: Decimal | DecimalJsLike | number | string
+    occurredAt: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PlatformAccountingEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    entryType?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    usdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlatformAccountingEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    idempotencyKey?: StringFieldUpdateOperationsInput | string
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceId?: StringFieldUpdateOperationsInput | string
+    entryType?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyCode?: StringFieldUpdateOperationsInput | string
+    usdAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    occurredAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityAuditEventCreateInput = {
+    id?: string
+    eventType: string
+    event: string
+    outcome: string
+    actorType: string
+    actorUserId?: string | null
+    targetUserId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    country?: string | null
+    city?: string | null
+    deviceType?: string | null
+    operatingSystem?: string | null
+    browser?: string | null
+    risk?: string | null
+    description: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type SecurityAuditEventUncheckedCreateInput = {
+    id?: string
+    eventType: string
+    event: string
+    outcome: string
+    actorType: string
+    actorUserId?: string | null
+    targetUserId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    country?: string | null
+    city?: string | null
+    deviceType?: string | null
+    operatingSystem?: string | null
+    browser?: string | null
+    risk?: string | null
+    description: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type SecurityAuditEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    actorType?: StringFieldUpdateOperationsInput | string
+    actorUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    browser?: NullableStringFieldUpdateOperationsInput | string | null
+    risk?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityAuditEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    actorType?: StringFieldUpdateOperationsInput | string
+    actorUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    browser?: NullableStringFieldUpdateOperationsInput | string | null
+    risk?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityAuditEventCreateManyInput = {
+    id?: string
+    eventType: string
+    event: string
+    outcome: string
+    actorType: string
+    actorUserId?: string | null
+    targetUserId?: string | null
+    ipAddress?: string | null
+    userAgent?: string | null
+    country?: string | null
+    city?: string | null
+    deviceType?: string | null
+    operatingSystem?: string | null
+    browser?: string | null
+    risk?: string | null
+    description: string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type SecurityAuditEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    actorType?: StringFieldUpdateOperationsInput | string
+    actorUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    browser?: NullableStringFieldUpdateOperationsInput | string | null
+    risk?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SecurityAuditEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    eventType?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    outcome?: StringFieldUpdateOperationsInput | string
+    actorType?: StringFieldUpdateOperationsInput | string
+    actorUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    targetUserId?: NullableStringFieldUpdateOperationsInput | string | null
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    deviceType?: NullableStringFieldUpdateOperationsInput | string | null
+    operatingSystem?: NullableStringFieldUpdateOperationsInput | string | null
+    browser?: NullableStringFieldUpdateOperationsInput | string | null
+    risk?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: StringFieldUpdateOperationsInput | string
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TransactionCreateInput = {
@@ -49231,6 +52215,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrder
+    nobleCardsFeeUsd?: SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrder
     provider?: SortOrder
@@ -49250,6 +52236,8 @@ export namespace Prisma {
   export type DepositAvgOrderByAggregateInput = {
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrder
+    nobleCardsFeeUsd?: SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrder
   }
@@ -49261,6 +52249,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrder
+    nobleCardsFeeUsd?: SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrder
     provider?: SortOrder
@@ -49283,6 +52273,8 @@ export namespace Prisma {
     currencyCode?: SortOrder
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrder
+    nobleCardsFeeUsd?: SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrder
     provider?: SortOrder
@@ -49301,6 +52293,8 @@ export namespace Prisma {
   export type DepositSumOrderByAggregateInput = {
     amount?: SortOrder
     fee?: SortOrder
+    nobleCardsFee?: SortOrder
+    nobleCardsFeeUsd?: SortOrder
     netAmount?: SortOrder
     exchangeRate?: SortOrder
   }
@@ -49375,6 +52369,116 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedJsonNullableFilter<$PrismaModel>
     _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type PlatformAccountingEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    idempotencyKey?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    entryType?: SortOrder
+    amount?: SortOrder
+    currencyCode?: SortOrder
+    usdAmount?: SortOrder
+    occurredAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PlatformAccountingEntryAvgOrderByAggregateInput = {
+    amount?: SortOrder
+    usdAmount?: SortOrder
+  }
+
+  export type PlatformAccountingEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    idempotencyKey?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    entryType?: SortOrder
+    amount?: SortOrder
+    currencyCode?: SortOrder
+    usdAmount?: SortOrder
+    occurredAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PlatformAccountingEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    idempotencyKey?: SortOrder
+    sourceType?: SortOrder
+    sourceId?: SortOrder
+    entryType?: SortOrder
+    amount?: SortOrder
+    currencyCode?: SortOrder
+    usdAmount?: SortOrder
+    occurredAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PlatformAccountingEntrySumOrderByAggregateInput = {
+    amount?: SortOrder
+    usdAmount?: SortOrder
+  }
+
+  export type SecurityAuditEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    eventType?: SortOrder
+    event?: SortOrder
+    outcome?: SortOrder
+    actorType?: SortOrder
+    actorUserId?: SortOrder
+    targetUserId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    deviceType?: SortOrder
+    operatingSystem?: SortOrder
+    browser?: SortOrder
+    risk?: SortOrder
+    description?: SortOrder
+    metadata?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityAuditEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    eventType?: SortOrder
+    event?: SortOrder
+    outcome?: SortOrder
+    actorType?: SortOrder
+    actorUserId?: SortOrder
+    targetUserId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    deviceType?: SortOrder
+    operatingSystem?: SortOrder
+    browser?: SortOrder
+    risk?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SecurityAuditEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    eventType?: SortOrder
+    event?: SortOrder
+    outcome?: SortOrder
+    actorType?: SortOrder
+    actorUserId?: SortOrder
+    targetUserId?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    country?: SortOrder
+    city?: SortOrder
+    deviceType?: SortOrder
+    operatingSystem?: SortOrder
+    browser?: SortOrder
+    risk?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type EnumTransactionTypeFilter<$PrismaModel = never> = {
@@ -54887,6 +57991,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -54912,6 +58018,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -55933,6 +59041,8 @@ export namespace Prisma {
     currencyCode?: StringFilter<"Deposit"> | string
     amount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     fee?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFilter<"Deposit"> | Decimal | DecimalJsLike | number | string
     exchangeRate?: DecimalNullableFilter<"Deposit"> | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFilter<"Deposit"> | $Enums.PaymentProvider
@@ -57548,6 +60658,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -57573,6 +60685,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -58156,6 +61270,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -58181,6 +61297,8 @@ export namespace Prisma {
     walletId: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -59685,6 +62803,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -59711,6 +62831,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -60221,6 +63343,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -60247,6 +63371,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -61012,6 +64138,8 @@ export namespace Prisma {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -61038,6 +64166,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -61446,6 +64576,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -61472,6 +64604,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -66724,6 +69858,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -67122,6 +70258,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -67147,6 +70285,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -67170,6 +70310,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68106,6 +71248,8 @@ export namespace Prisma {
     currencyCode: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -68268,6 +71412,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68293,6 +71439,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68316,6 +71464,8 @@ export namespace Prisma {
     currencyCode?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68692,6 +71842,8 @@ export namespace Prisma {
     walletId: string
     amount: Decimal | DecimalJsLike | number | string
     fee?: Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: Decimal | DecimalJsLike | number | string | null
     netAmount: Decimal | DecimalJsLike | number | string
     exchangeRate?: Decimal | DecimalJsLike | number | string | null
     provider?: $Enums.PaymentProvider
@@ -68908,6 +72060,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68933,6 +72087,8 @@ export namespace Prisma {
     walletId?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider
@@ -68956,6 +72112,8 @@ export namespace Prisma {
     walletId?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     fee?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    nobleCardsFee?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    nobleCardsFeeUsd?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     netAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     exchangeRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     provider?: EnumPaymentProviderFieldUpdateOperationsInput | $Enums.PaymentProvider

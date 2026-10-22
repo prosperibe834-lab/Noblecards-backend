@@ -28,6 +28,7 @@ export type PayoutStatusResult = {
 export type WebhookVerificationResult = {
   valid: boolean;
   eventId?: string;
+  eventType?: string;
   status?: PayoutStatusResult['status'];
   providerReference?: string;
   providerTransactionId?: string;

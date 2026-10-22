@@ -455,7 +455,10 @@ Official sandbox guidance states:
 - `X-Scenario-Key: scenario:successful` simulates success.
 - Other documented scenarios include `reversed`, `failed`, `account_verification_failed`, transfer limit failures, `disabled_transfer`, `duplicate_reference`, `insufficient_balance`, and `payout_creation_failed`.
 
-No sandbox API request was performed because no safe sandbox credentials were verified in the repository. No real or test beneficiary details were sent to Flutterwave.
+No sandbox transfer or payout API request was performed. The only provider
+requests were the read-only fee lookups documented below; no beneficiary details
+were sent to Flutterwave. A fee lookup does not verify payout-route or merchant
+eligibility.
 
 ## Merchant Account Requirements
 
@@ -540,3 +543,51 @@ Critical blockers:
 ## No-Execution Statement
 
 Phase 7B performed no provider API calls, no payout initiation, no recipient creation, no wallet mutation, no PayoutAttempt creation, no provider identifier persistence, and no withdrawal financial-state transition.
+
+## V3 Transfer-Fee Endpoint Verification
+
+Read-only TEST-account diagnostics were run on 2026-10-21 against
+`GET https://api.flutterwave.com/v3/transfers/rates` and
+`GET https://api.flutterwave.com/v3/transfers/fee`. Rate requests used the
+documented `amount`, `source_currency`, and `destination_currency` parameters;
+fee requests used `amount`, `currency`, and `type=account`. No transfer was
+initiated.
+
+| Destination | Rates HTTP/status | Rate (destination per USD) | Fee lookup amount | Fee HTTP/status | Fee record |
+|---|---|---:|---:|---|---|
+| GB / GBP | 200 / `success` | 0.73222832 | GBP 71 | 200 / `success` | GBP, `percentage`, `0.005` |
+| US / USD | 200 / `success` | 1 | USD 97 | 200 / `success` | USD, `percentage`, `0.005` |
+| CA / CAD | 200 / `success` | 1.32862415 | CAD 129 | 200 / `success` | No CAD fee record |
+
+The GBP and USD response used `fee_type=percentage`, while Flutterwave's
+published transfer-pricing page lists GBP 35 and USD 40 bank-transfer fees.
+Those published prices are not configured in the calculation and are not
+treated as confirmed fees for this TEST account. The V3 fee response does not
+document a usable percentage basis for `0.005`; the preview reports this raw
+record as ambiguous and does not calculate provider-fee totals or a recipient
+amount. CAD has no fee record. The prior GBP/USD flat-fee assumptions and CAD
+provisional amount have been removed from active configuration and calculation.
+
+For a USD 100 preview, the NobleCards 3% fee is USD 3, leaving an estimated USD
+97 principal for conversion. Using the rates returned above, the gross
+destination estimates are GBP 73.22, USD 100.00, and CAD 132.86; the indicative
+principals after the NobleCards fee are GBP 71.03, USD 97.00, and CAD 128.88.
+These are currency-conversion estimates only. They are not beneficiary receive
+amounts, and no final total cost can be stated while provider fees remain
+ambiguous or missing.
+
+Flutterwave documents the principal debit currency separately from the
+transfer-currency fee wallet. Therefore the preview does not subtract a
+provider fee from the principal. Actual merchant wallet funding and fee
+settlement are not verified. No international quote is persisted, and no
+international withdrawal can be created from a preview.
+
+Flutterwave's supported-transfer-currency page includes CAD, but that does not
+establish a CAD bank-transfer route or merchant eligibility. CAD has no fee
+record in the V3 lookup, and the international bank-transfer guide documents
+USD, GBP, and EUR rather than CAD. CAD payout execution remains disabled pending
+route-specific provider confirmation and merchant verification. No support
+email establishing CAD eligibility was present in the reviewed workspace.
+UK and US execution also remain disabled: these preview results do not
+establish merchant payout eligibility, complete beneficiary-field readiness, or
+the required transfer-currency wallet funding.

@@ -12,6 +12,8 @@ describe('FlutterwaveService verified deposit credit', () => {
       currencyCode: 'NGN',
       amount: 137258.56,
       netAmount: 100,
+      nobleCardsFee: 1372.59,
+      nobleCardsFeeUsd: 1,
       exchangeRate: 1372.5856,
       status: depositStatus,
       provider: 'FLUTTERWAVE',
@@ -57,6 +59,9 @@ describe('FlutterwaveService verified deposit credit', () => {
         }),
       },
       transaction: { update: jest.fn().mockResolvedValue({}) },
+      platformAccountingEntry: {
+        createMany: jest.fn().mockResolvedValue({ count: 1 }),
+      },
     };
     const prisma = {
       deposit: {
@@ -131,6 +136,20 @@ describe('FlutterwaveService verified deposit credit', () => {
     expect(balance).toBe(100);
     expect(ledgerCreated).toBe(true);
     expect(ledgerCurrency).toBe('USD');
+    expect(tx.platformAccountingEntry.createMany).toHaveBeenCalledTimes(1);
+    expect(tx.platformAccountingEntry.createMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: [
+          expect.objectContaining({
+            idempotencyKey: 'DEPOSIT:ab15b3e1-3e54-4d4d-8727-85a411584cb8:fee-revenue',
+            amount: expect.anything(),
+            currencyCode: 'NGN',
+            usdAmount: expect.anything(),
+          }),
+        ],
+        skipDuplicates: true,
+      }),
+    );
     expect(prisma.deposit.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: {
@@ -199,6 +218,9 @@ describe('FlutterwaveService verified deposit credit', () => {
           }),
         },
         transaction: { update: jest.fn().mockResolvedValue({}) },
+        platformAccountingEntry: {
+          createMany: jest.fn().mockResolvedValue({ count: 1 }),
+        },
       };
       const prisma = {
         deposit: {
@@ -265,6 +287,58 @@ describe('FlutterwaveService verified deposit credit', () => {
       expect(balance).toBe(100);
       expect(ledgerCreated).toBe(true);
       expect(currencies.getCurrency).toHaveBeenCalledWith('USD');
+      expect(tx.platformAccountingEntry.createMany).not.toHaveBeenCalled();
     },
   );
+
+  it('does not record deposit earnings when provider verification fails', async () => {
+    const deposit = {
+      id: 'deposit-failed',
+      walletId: 'wallet-1',
+      currencyCode: 'NGN',
+      amount: { toString: () => '10300.00' },
+      netAmount: { toString: () => '100.00' },
+      nobleCardsFee: { toString: () => '100.00' },
+      nobleCardsFeeUsd: { toString: () => '1.00' },
+      status: 'PENDING',
+      provider: 'FLUTTERWAVE',
+      providerReference: 'DPT-failed',
+      transactionId: 'transaction-failed',
+      metadata: {},
+      transaction: { id: 'transaction-failed', status: 'PENDING' },
+    };
+    const prisma = {
+      deposit: {
+        findFirst: jest.fn().mockResolvedValue(deposit),
+        updateMany: jest.fn().mockResolvedValue({ count: 1 }),
+        update: jest.fn().mockResolvedValue({}),
+      },
+      $transaction: jest.fn(),
+    };
+    const service = new FlutterwaveService(
+      prisma as any,
+      {} as any,
+      { getCurrency: jest.fn() } as any,
+      {} as any,
+      {} as any,
+    );
+    jest.spyOn(service, 'verifyTransaction').mockResolvedValue({
+      status: 'FAILED',
+      verified: false,
+      providerReference: 'DPT-failed',
+      providerTransactionId: 'charge-failed',
+      amount: '10300.00',
+      currency: 'NGN',
+      raw: {},
+    });
+
+    const result = await service.verifyAndCreditDeposit({
+      provider: 'FLUTTERWAVE',
+      providerTransactionId: 'charge-failed',
+      providerReference: 'DPT-failed',
+    });
+
+    expect(result.status).toBe('FAILED');
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
 });

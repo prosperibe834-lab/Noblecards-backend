@@ -76,6 +76,105 @@ describe('TremendousProvider', () => {
     expect(result.providerMetadata).not.toHaveProperty('rewards.0.code');
   });
 
+  it('uses the documented executed-order payment total as settlement cost, not reward denomination', async () => {
+    const client = {
+      getProducts: jest.fn(),
+      createOrder: jest.fn().mockResolvedValue({
+        order: {
+          id: 'ORDER-EXECUTED',
+          status: 'EXECUTED',
+          payment: {
+            subtotal: 25,
+            fees: 0.75,
+            total: 25.75,
+            currency_code: 'USD',
+          },
+          rewards: [
+            { id: 'REWARD-EXECUTED', amount: '25', value: { denomination: 25 } },
+          ],
+        },
+      }),
+      getOrder: jest.fn(),
+    } as any;
+
+    const result = await new TremendousProvider(client).purchase({
+      productId: 'PRODUCT-1',
+      amount: 25,
+      currencyCode: 'USD',
+      email: 'buyer@example.com',
+      sender: 'Buyer',
+      units: 1,
+      reference: 'NC-BUY-EXECUTED',
+    });
+
+    expect(result).toMatchObject({
+      providerStatus: 'EXECUTED',
+      providerAmount: '25',
+      settlementAmount: '25.75',
+      settlementCurrencyCode: 'USD',
+      providerMetadata: {
+        payment: {
+          subtotal: 25,
+          fees: 0.75,
+          total: 25.75,
+          currency_code: 'USD',
+        },
+      },
+    });
+  });
+
+  it.each([
+    {
+      name: 'pending order',
+      order: {
+        status: 'PENDING_APPROVAL',
+        payment: { total: 25.75, currency_code: 'USD' },
+      },
+    },
+    {
+      name: 'executed order with no payment total',
+      order: { status: 'EXECUTED', payment: { currency_code: 'USD' } },
+    },
+    {
+      name: 'executed order with non-USD organization currency',
+      order: {
+        status: 'EXECUTED',
+        payment: { total: 25.75, currency_code: 'EUR' },
+      },
+    },
+  ])('does not expose an unsupported settlement amount for $name', async ({ order }) => {
+    const client = {
+      getProducts: jest.fn(),
+      createOrder: jest.fn().mockResolvedValue({
+        order: {
+          id: 'ORDER-NO-USD-SETTLEMENT',
+          ...order,
+          rewards: [{ amount: 25 }],
+        },
+      }),
+      getOrder: jest.fn(),
+    } as any;
+
+    const result = await new TremendousProvider(client).purchase({
+      productId: 'PRODUCT-1',
+      amount: 25,
+      currencyCode: 'USD',
+      email: 'buyer@example.com',
+      sender: 'Buyer',
+      units: 1,
+      reference: 'NC-BUY-NO-SETTLEMENT',
+    });
+
+    expect(result.settlementAmount).toBeNull();
+    if (order.status === 'EXECUTED' && order.payment.currency_code === 'EUR') {
+      expect(result.settlementCurrencyCode).toBe('EUR');
+    } else if (order.status === 'EXECUTED') {
+      expect(result.settlementCurrencyCode).toBe('USD');
+    } else {
+      expect(result.settlementCurrencyCode).toBeNull();
+    }
+  });
+
   it('preserves the PIN in redeemDetails while stripping the actual secret code from provider metadata', async () => {
     const client = {
       getProducts: jest.fn(),

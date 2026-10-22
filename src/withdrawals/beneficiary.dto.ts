@@ -1,5 +1,12 @@
 import { BeneficiaryType, PaymentMethod } from '../generated/prisma';
-import { IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class ResolveBeneficiaryAccountDto {
   @IsString()
@@ -24,6 +31,12 @@ export class ResolveBeneficiaryAccountDto {
   @MinLength(2)
   @MaxLength(128)
   institutionName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(64)
+  branchCode?: string;
 
   @IsOptional()
   @IsString()
@@ -85,6 +98,12 @@ export class CreateBeneficiaryDto {
 
   @IsOptional()
   @IsString()
+  @MinLength(1)
+  @MaxLength(64)
+  branchCode?: string;
+
+  @IsOptional()
+  @IsString()
   @MinLength(2)
   @MaxLength(128)
   accountHolderName?: string;
@@ -117,4 +136,59 @@ export class CreateBeneficiaryDto {
   @IsString()
   @MaxLength(64)
   label?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(16)
+  accountType?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(16)
+  institutionNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(16)
+  transitNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(16)
+  swiftCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(256)
+  beneficiaryAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  streetNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(128)
+  streetName?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(128)
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(128)
+  state?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(32)
+  postalCode?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(180)
+  transferReason?: string;
 }

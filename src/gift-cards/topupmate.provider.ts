@@ -46,6 +46,8 @@ export class TopupmateProvider implements BuyGiftCardProvider {
       voucherCode,
       redeemDetails,
       providerAmount: this.stringValue(data, ['amount', 'senderAmount', 'sender_amount']),
+      settlementAmount: null,
+      settlementCurrencyCode: null,
       providerMetadata: this.sanitize(root),
     };
   }

@@ -12,6 +12,11 @@ import {
   ResetPasswordDto,
 } from './auth.dto';
 
+type RequestContext = {
+  ip?: string;
+  headers: { 'user-agent'?: string | string[] };
+};
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -19,20 +24,26 @@ export class AuthController {
   @Post('register') register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
-  @Post('verify-email') verifyEmail(@Body() dto: EmailCodeDto) {
-    return this.authService.verifyEmail(dto);
+  @Post('verify-email') verifyEmail(
+    @Body() dto: EmailCodeDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.verifyEmail(dto, this.requestContext(request));
   }
   @Post('resend-otp') resendOtp(@Body() dto: ResendOtpDto) {
     return this.authService.resendOtp(dto);
   }
-  @Post('login') login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  @Post('login') login(@Body() dto: LoginDto, @Req() request: RequestContext) {
+    return this.authService.login(dto, this.requestContext(request));
   }
   @Post('forgot-password') forgotPassword(@Body() dto: EmailDto) {
     return this.authService.forgotPassword(dto);
   }
-  @Post('reset-password') resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto);
+  @Post('reset-password') resetPassword(
+    @Body() dto: ResetPasswordDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.resetPassword(dto, this.requestContext(request));
   }
   @Post('refresh') refresh(@Body() dto: RefreshDto) {
     return this.authService.refresh(dto.refreshToken);
@@ -40,8 +51,15 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('logout')
-  logout(@Req() request: { user: { sessionId: string } }) {
-    return this.authService.logout(request.user.sessionId);
+  logout(
+    @Req()
+    request: RequestContext & { user: { userId: string; sessionId: string } },
+  ) {
+    return this.authService.logout(
+      request.user.sessionId,
+      request.user.userId,
+      this.requestContext(request),
+    );
   }
 
   @UseGuards(AuthGuard)
@@ -53,7 +71,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Post('change-password')
   changePassword(
-    @Req() request: { user: { userId: string; sessionId: string } },
+    @Req()
+    request: RequestContext & { user: { userId: string; sessionId: string } },
     @Body() dto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(
@@ -61,6 +80,17 @@ export class AuthController {
       request.user.sessionId,
       dto.currentPassword,
       dto.newPassword,
+      this.requestContext(request),
     );
+  }
+
+  private requestContext(request: RequestContext) {
+    const userAgent = request.headers['user-agent'];
+    return {
+      ipAddress: request.ip ?? null,
+      userAgent: Array.isArray(userAgent)
+        ? (userAgent[0] ?? null)
+        : (userAgent ?? null),
+    };
   }
 }

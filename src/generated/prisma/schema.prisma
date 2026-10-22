@@ -187,6 +187,8 @@ model Deposit {
   currencyCode          String
   amount                Decimal              @db.Decimal(18, 2)
   fee                   Decimal              @default(0.00) @db.Decimal(18, 2)
+  nobleCardsFee         Decimal?             @db.Decimal(18, 2)
+  nobleCardsFeeUsd      Decimal?             @db.Decimal(18, 8)
   netAmount             Decimal              @db.Decimal(18, 2)
   exchangeRate          Decimal?             @db.Decimal(18, 8)
   provider              PaymentProvider      @default(FLUTTERWAVE)
@@ -212,6 +214,49 @@ model Deposit {
   @@index([walletId, status])
   @@index([provider, providerTransactionId])
   @@index([currencyCode, status])
+}
+
+model PlatformAccountingEntry {
+  id             String   @id @default(uuid())
+  idempotencyKey String   @unique
+  sourceType     String
+  sourceId       String
+  entryType      String
+  amount         Decimal  @db.Decimal(20, 8)
+  currencyCode   String
+  usdAmount      Decimal  @db.Decimal(20, 8)
+  occurredAt     DateTime
+  createdAt      DateTime @default(now())
+
+  @@index([occurredAt, entryType])
+  @@index([sourceType, sourceId])
+}
+
+model SecurityAuditEvent {
+  id              String   @id @default(uuid())
+  eventType       String
+  event           String
+  outcome         String
+  actorType       String
+  actorUserId     String?
+  targetUserId    String?
+  ipAddress       String?
+  userAgent       String?
+  country         String?
+  city            String?
+  deviceType      String?
+  operatingSystem String?
+  browser         String?
+  risk            String?
+  description     String
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([eventType, createdAt])
+  @@index([outcome, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([ipAddress, createdAt])
 }
 
 model Transaction {

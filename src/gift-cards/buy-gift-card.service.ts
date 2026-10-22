@@ -21,6 +21,7 @@ import { BuyGiftCardRateService } from './buy-gift-card-rate.service';
 import { ExchangeRatesService } from '../exchange-rates/exchange-rates.service';
 import { EmailService } from '../email/email.service';
 import { ReferralsService } from '../referrals/referrals.service';
+import { recordPlatformBuySettlement } from '../dashboard/platform-accounting';
 import {
   BUY_GIFT_CARD_PROVIDER,
   BuyGiftCardCatalogFilters,
@@ -675,6 +676,8 @@ export class BuyGiftCardService {
           voucherCode: null,
           redeemDetails: null,
           providerAmount: null,
+          settlementAmount: null,
+          settlementCurrencyCode: null,
           providerMetadata: {},
         },
         GiftCardPurchaseStatus.UNDER_REVIEW,
@@ -753,6 +756,20 @@ export class BuyGiftCardService {
       });
       if (status === GiftCardPurchaseStatus.SUCCESSFUL) {
         await this.referrals?.recordSuccessfulPurchase(tx, updatedPurchase);
+        if (
+          updatedPurchase.provider === PaymentProvider.TREMENDOUS &&
+          result.providerStatus?.toUpperCase() === 'EXECUTED' &&
+          result.settlementCurrencyCode === 'USD' &&
+          result.settlementAmount &&
+          updatedPurchase.currencyCode === 'USD'
+        ) {
+          await recordPlatformBuySettlement(tx, {
+            sourceId: updatedPurchase.id,
+            customerAmountUsd: updatedPurchase.customerPrice,
+            providerCostUsd: result.settlementAmount,
+            occurredAt: updatedPurchase.completedAt ?? new Date(),
+          });
+        }
       }
       return updatedPurchase;
     });
