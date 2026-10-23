@@ -24,11 +24,17 @@ async function bootstrap() {
     express.raw({ type: '*/*', limit: '1mb' }),
     preserveRawBody,
   );
+  app.use(
+    '/webhooks/flutterwave',
+    express.raw({ type: '*/*', limit: '1mb' }),
+    preserveRawBody,
+  );
   app.use(express.json({
     verify: (req: any, _res, buffer) => {
       if (
         req.originalUrl === '/flutterwave/webhook' ||
-        req.originalUrl === '/withdrawals/webhooks/flutterwave'
+        req.originalUrl === '/withdrawals/webhooks/flutterwave' ||
+        req.originalUrl === '/webhooks/flutterwave'
       ) {
         req.rawBody = buffer;
       }

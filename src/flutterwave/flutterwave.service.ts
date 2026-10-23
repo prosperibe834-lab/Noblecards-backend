@@ -14,6 +14,7 @@ import { TransactionsService } from '../transactions/transactions.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { ReferralsService } from '../referrals/referrals.service';
 import { recordPlatformEarning } from '../dashboard/platform-accounting';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class FlutterwaveService {
@@ -28,6 +29,7 @@ export class FlutterwaveService {
     private readonly transactions: TransactionsService,
     private readonly ledger: LedgerService,
     @Optional() private readonly referrals?: ReferralsService,
+    @Optional() private readonly email?: EmailService,
   ) {}
 
   private getSecretKey() {
@@ -595,6 +597,7 @@ export class FlutterwaveService {
       expiryMonth: string;
       expiryYear: string;
       cardHolderName: string;
+      pin?: string;
     };
   }) {
     const user = await this.prisma.user.findUnique({
@@ -603,7 +606,7 @@ export class FlutterwaveService {
     if (!user)
       throw new NotFoundException('User not found for card payment creation.');
 
-    const cardPayload = {
+    const cardPayload: Record<string, any> = {
       card_number: input.card.cardNumber,
       cvv: input.card.cvv,
       expiry_month: input.card.expiryMonth,
@@ -623,6 +626,13 @@ export class FlutterwaveService {
         user_id: input.userId,
         internal_reference: input.reference,
       },
+      ...(input.card.pin && {
+        pin: input.card.pin,
+        authorization: {
+          mode: 'pin',
+          pin: input.card.pin,
+        },
+      }),
     };
     const encryptedCardPayload = this.encryptCardPayload(cardPayload);
 
@@ -668,8 +678,24 @@ export class FlutterwaveService {
         reference: input.reference,
         provider: 'FLUTTERWAVE',
         authorizationUrl,
+        flwRef: chargeData.flw_ref ?? null,
       },
     };
+  }
+
+  async validateChargeOtp(flwRef: string, otp: string) {
+    if (!flwRef || !otp) {
+      throw new BadRequestException('FLW reference and OTP are required.');
+    }
+    const response = await this.request<{
+      status?: string;
+      message?: string;
+      data?: any;
+    }>('/validate-charge', 'POST', {
+      otp: otp.trim(),
+      flw_ref: flwRef.trim(),
+    });
+    return response.data ?? response;
   }
 
   async createGbpBankCharge(input: {
@@ -1160,26 +1186,34 @@ export class FlutterwaveService {
     );
 
     if (!verification.verified) {
+      const isStillPending =
+        verification.status?.toLowerCase() === 'pending';
+      const newStatus = isStillPending ? 'PENDING' : 'FAILED';
       await prisma.deposit.update({
         where: { id: deposit.id },
         data: {
-          status: 'FAILED',
+          status: newStatus,
           metadata: {
             ...((deposit.metadata as Record<string, unknown>) ?? {}),
             flutterwave: {
               verifiedAt: new Date().toISOString(),
               amount: verification.amount,
               currency: verification.currency,
-              failure: 'Provider verification returned unsuccessful.',
+              status: verification.status,
+              failure: isStillPending
+                ? undefined
+                : 'Provider verification returned unsuccessful.',
             },
           },
         },
       });
       return {
         id: deposit.id,
-        status: 'FAILED',
+        status: newStatus,
         alreadyProcessed: false,
-        message: 'Flutterwave verification returned unsuccessful.',
+        message: isStillPending
+          ? 'Flutterwave deposit is still pending authorization.'
+          : 'Flutterwave verification returned unsuccessful.',
       };
     }
 
@@ -1372,6 +1406,27 @@ export class FlutterwaveService {
         ...currentDeposit,
         status: 'SUCCESSFUL',
       });
+
+      try {
+        const user =
+          currentDeposit.user ??
+          (await (this.prisma as any).user?.findUnique?.({
+            where: { id: currentDeposit.userId },
+            select: { email: true, firstName: true },
+          }));
+        if (user?.email && this.email) {
+          await this.email.sendDepositSuccessEmail(user.email, {
+            firstName: user.firstName,
+            amount: currentDeposit.amount.toString(),
+            currency: currentDeposit.currencyCode,
+            walletCreditAmount: Number(currentDeposit.netAmount.toString()).toFixed(2),
+            reference: currentDeposit.transaction?.reference || currentDeposit.providerReference || currentDeposit.id,
+            completedAt: new Date(),
+          });
+        }
+      } catch (emailErr: any) {
+        this.logger.warn(`Failed to send deposit success email: ${emailErr?.message}`);
+      }
 
       return {
         id: currentDeposit.id,

@@ -15,6 +15,8 @@ describe('DepositsService card deposits', () => {
     ['NGN', 1500, 154500],
     ['GHS', 12.5, 1287.5],
     ['GBP', 0.79, 81.37],
+    ['USD', 1, 103],
+    ['CAD', 1.4, 144.2],
   ] as const;
 
   function createService(currencyCode: string, rate: number) {

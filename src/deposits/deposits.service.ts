@@ -77,7 +77,7 @@ export class DepositsService {
       this.config.get<number | string>('DEPOSIT_PROVIDER_FEE_PERCENT', 2),
     );
     const noblePercent = Number(
-      this.config.get<number | string>('DEPOSIT_NOBLECARDS_FEE_PERCENT', 1),
+      this.config.get<number | string>('DEPOSIT_NOBLECARDS_FEE_PERCENT', 3),
     );
 
     if (!Number.isFinite(providerPercent) || providerPercent < 0) {
@@ -148,7 +148,7 @@ export class DepositsService {
     }
 
     const normalizedCode = currencyCode.toUpperCase();
-    const supportedCodes = ['USD', 'NGN', 'GBP', 'GHS'];
+    const supportedCodes = ['USD', 'NGN', 'GBP', 'GHS', 'CAD'];
     if (!supportedCodes.includes(normalizedCode)) {
       throw new BadRequestException(
         `Currency ${normalizedCode} is not supported by the configured Flutterwave account for deposits. Supported Flutterwave currencies: ${supportedCodes.join(', ')}.`,
@@ -548,9 +548,9 @@ export class DepositsService {
 
   async createCardDeposit(userId: string, dto: CreateCardDepositDto) {
     const currencyCode = dto.currency.toUpperCase();
-    if (!['NGN', 'GHS', 'GBP'].includes(currencyCode)) {
+    if (!['NGN', 'GHS', 'GBP', 'USD', 'CAD'].includes(currencyCode)) {
       throw new BadRequestException(
-        'Card deposits support NGN, GHS, and GBP only.',
+        'Card deposits support NGN, GHS, GBP, USD, and CAD only.',
       );
     }
     if (
@@ -589,7 +589,9 @@ export class DepositsService {
       requestedAmount,
       new Decimal(String(rate)),
     );
-    if (!payableAmount.eq(feeBreakdown.customerPayableAmount)) {
+    const diff = payableAmount.minus(feeBreakdown.customerPayableAmount).abs();
+    const allowedTolerance = feeBreakdown.customerPayableAmount.mul(0.05).plus(1);
+    if (diff.gt(allowedTolerance)) {
       throw new BadRequestException(
         'Card payable amount does not match the current exchange rate and fee calculation.',
       );
@@ -737,6 +739,7 @@ export class DepositsService {
     filters: { status?: string; currency?: string; provider?: string },
   ) {
     const prisma = this.prisma as any;
+    await this.reconcilePendingUserDeposits(userId).catch(() => undefined);
     const deposits = await prisma.deposit.findMany({
       where: {
         userId,
@@ -810,12 +813,116 @@ export class DepositsService {
 
   async getDeposit(userId: string, id: string) {
     const prisma = this.prisma as any;
-    const deposit = await prisma.deposit.findFirst({
+    let deposit = await prisma.deposit.findFirst({
       where: { id, userId },
       include: { transaction: true },
     });
     if (!deposit) throw new NotFoundException('Deposit not found.');
+    if (deposit.status === 'PENDING' || deposit.status === 'PROCESSING') {
+      await this.reconcileDeposit(deposit).catch(() => undefined);
+      deposit = await prisma.deposit.findFirst({
+        where: { id, userId },
+        include: { transaction: true },
+      });
+    }
     return deposit;
+  }
+
+  async reconcileDeposit(deposit: any) {
+    if (deposit.status !== 'PENDING' && deposit.status !== 'PROCESSING') {
+      return deposit;
+    }
+    if (deposit.provider !== 'FLUTTERWAVE') {
+      return deposit;
+    }
+    const identifier =
+      deposit.providerTransactionId ||
+      deposit.providerReference ||
+      deposit.transaction?.reference;
+    if (!identifier) {
+      return deposit;
+    }
+
+    try {
+      const verification = await this.flutterwave.verifyTransaction(
+        identifier,
+        deposit.providerReference,
+      );
+      if (verification.verified) {
+        await this.flutterwave.verifyAndCreditDeposit({
+          provider: 'FLUTTERWAVE',
+          providerTransactionId:
+            verification.providerTransactionId || deposit.providerTransactionId,
+          providerReference:
+            verification.providerReference || deposit.providerReference,
+          amount: deposit.amount.toString(),
+          currency: deposit.currencyCode,
+        });
+      } else if (
+        verification.status?.toLowerCase() === 'failed' ||
+        verification.status?.toLowerCase() === 'cancelled'
+      ) {
+        const prisma = this.prisma as any;
+        await prisma.deposit.update({
+          where: { id: deposit.id },
+          data: { status: 'FAILED' },
+        });
+        if (deposit.transactionId) {
+          await prisma.transaction.update({
+            where: { id: deposit.transactionId },
+            data: { status: 'FAILED' },
+          });
+        }
+      }
+    } catch {
+      // Ignore transient network errors during reconciliation
+    }
+  }
+
+  async reconcilePendingUserDeposits(userId: string) {
+    const prisma = this.prisma as any;
+    const pendingDeposits = await prisma.deposit.findMany({
+      where: {
+        userId,
+        status: { in: ['PENDING', 'PROCESSING'] },
+        provider: 'FLUTTERWAVE',
+      },
+      include: { transaction: true },
+      take: 10,
+      orderBy: { createdAt: 'desc' },
+    });
+    for (const d of pendingDeposits) {
+      await this.reconcileDeposit(d).catch(() => undefined);
+    }
+  }
+
+  async validateDepositOtp(userId: string, depositId: string, otp: string) {
+    const deposit = await this.getDeposit(userId, depositId);
+    const meta = (deposit.metadata as Record<string, any>) ?? {};
+    const flwRef =
+      meta.flwRef ??
+      meta.flutterwave?.flwRef ??
+      meta.flutterwave?.providerTransactionId ??
+      deposit.providerTransactionId ??
+      meta.providerTransactionId;
+
+    if (!flwRef) {
+      throw new BadRequestException(
+        'Transaction reference is not available for OTP validation.',
+      );
+    }
+
+    await this.flutterwave.validateChargeOtp(flwRef, otp);
+
+    await this.flutterwave.verifyAndCreditDeposit({
+      provider: 'FLUTTERWAVE',
+      providerTransactionId: deposit.providerTransactionId ?? '',
+      providerReference: deposit.providerReference ?? undefined,
+      amount: deposit.amount.toString(),
+      currency: deposit.currencyCode,
+    });
+
+    return this.getDeposit(userId, depositId);
   }
 
   async verifyAndCreditDeposit(input: {

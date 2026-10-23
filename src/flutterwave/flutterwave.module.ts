@@ -7,6 +7,7 @@ import { LedgerModule } from '../ledger/ledger.module';
 import { FlutterwaveController } from './flutterwave.controller';
 import { FlutterwaveService } from './flutterwave.service';
 import { ReferralsModule } from '../referrals/referrals.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ReferralsModule } from '../referrals/referrals.module';
     TransactionsModule,
     LedgerModule,
     ReferralsModule,
+    EmailModule,
   ],
   controllers: [FlutterwaveController],
   providers: [FlutterwaveService],

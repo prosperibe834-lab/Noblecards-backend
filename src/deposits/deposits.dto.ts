@@ -70,6 +70,10 @@ export class CardDetailsDto {
   @IsString()
   @Length(2, 120)
   cardHolderName!: string;
+
+  @IsOptional()
+  @IsString()
+  pin?: string;
 }
 
 export class CreateCardDepositDto {
@@ -85,7 +89,7 @@ export class CreateCardDepositDto {
 
   @IsString()
   @Length(3, 3)
-  @Matches(/^(NGN|GHS|GBP)$/)
+  @Matches(/^(NGN|GHS|GBP|USD|CAD)$/)
   currency!: string;
 
   @ValidateNested()

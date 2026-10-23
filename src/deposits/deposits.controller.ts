@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Logger, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { CreateCardDepositDto, CreateDepositDto } from './deposits.dto';
 import { DepositsService } from './deposits.service';
@@ -49,13 +49,61 @@ export class DepositsController {
 
   @Post(':id/verify')
   async verifyDeposit(@Req() request: { user: { userId: string } }, @Param('id') id: string) {
-    const deposit = await this.depositsService.getDeposit(request.user.userId, id);
-    return this.depositsService.verifyAndCreditDeposit({
+    let deposit = await this.depositsService.getDeposit(request.user.userId, id);
+    if (deposit.status !== 'SUCCESSFUL') {
+      await this.depositsService.reconcileDeposit(deposit);
+      deposit = await this.depositsService.getDeposit(request.user.userId, id);
+    }
+    return {
+      id: deposit.id,
+      status: deposit.status,
       provider: deposit.provider,
-      providerTransactionId: deposit.providerTransactionId ?? '',
-      providerReference: deposit.providerReference ?? undefined,
-      amount: deposit.amount.toString(),
       currency: deposit.currencyCode,
-    });
+      amount: deposit.amount.toString(),
+      fee: deposit.fee ? deposit.fee.toString() : '0.00',
+      netAmount: deposit.netAmount ? deposit.netAmount.toString() : '0.00',
+      walletId: deposit.walletId,
+      providerReference: deposit.providerReference,
+      providerTransactionId: deposit.providerTransactionId,
+      transaction: deposit.transaction
+        ? {
+            id: deposit.transaction.id,
+            status: deposit.transaction.status,
+            reference: deposit.transaction.reference,
+          }
+        : null,
+    };
+  }
+
+  @Post(':id/validate-otp')
+  async validateOtp(
+    @Req() request: { user: { userId: string } },
+    @Param('id') id: string,
+    @Body() body: { otp: string },
+  ) {
+    if (!body?.otp) {
+      throw new BadRequestException('OTP is required.');
+    }
+    const deposit = await this.depositsService.validateDepositOtp(request.user.userId, id, body.otp);
+    return {
+      id: deposit.id,
+      status: deposit.status,
+      provider: deposit.provider,
+      currency: deposit.currencyCode,
+      amount: deposit.amount.toString(),
+      fee: deposit.fee ? deposit.fee.toString() : '0.00',
+      netAmount: deposit.netAmount ? deposit.netAmount.toString() : '0.00',
+      walletId: deposit.walletId,
+      providerReference: deposit.providerReference,
+      providerTransactionId: deposit.providerTransactionId,
+      transaction: deposit.transaction
+        ? {
+            id: deposit.transaction.id,
+            status: deposit.transaction.status,
+            reference: deposit.transaction.reference,
+          }
+        : null,
+    };
   }
 }
+

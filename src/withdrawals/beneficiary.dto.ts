@@ -1,5 +1,6 @@
 import { BeneficiaryType, PaymentMethod } from '../generated/prisma';
 import {
+  IsBoolean,
   IsEnum,
   IsOptional,
   IsString,
@@ -191,4 +192,8 @@ export class CreateBeneficiaryDto {
   @IsString()
   @MaxLength(180)
   transferReason?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  saveAccount?: boolean;
 }

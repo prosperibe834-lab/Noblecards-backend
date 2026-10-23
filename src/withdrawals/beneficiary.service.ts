@@ -67,6 +67,7 @@ export type CreateBeneficiaryInput = {
   transferReason?: string;
   mobileMoneyNumber?: string;
   label?: string;
+  saveAccount?: boolean;
 };
 
 @Injectable()
@@ -518,26 +519,14 @@ export class BeneficiaryService {
     });
 
     if (existing) {
-      if (
-        existing.isActive &&
-        existing.verificationStatus ===
-          (verification.verificationStatus === 'VERIFIED'
-            ? BeneficiaryVerificationStatus.VERIFIED
-            : BeneficiaryVerificationStatus.UNVERIFIED) &&
-        existing.countryCode === normalizedCountryCode &&
-        existing.currencyCode === normalizedCurrencyCode &&
-        existing.paymentMethod === normalizedMethod &&
-        existing.type ===
-          (dto.type === 'BANK_ACCOUNT'
-            ? BeneficiaryType.BANK_ACCOUNT
-            : BeneficiaryType.MOBILE_MONEY) &&
-        existing.providerBankCode === dto.institutionCode
-      ) {
-        return this.getSafePayload(existing);
+      if (dto.saveAccount === true && !existing.isActive) {
+        const updated = await prisma.beneficiary.update({
+          where: { id: existing.id },
+          data: { isActive: true },
+        });
+        return this.getSafePayload(updated);
       }
-      throw new ConflictException(
-        'This beneficiary already exists for this user.',
-      );
+      return this.getSafePayload(existing);
     }
 
     const encryptedDetails = this.encryption.encrypt({
@@ -596,7 +585,7 @@ export class BeneficiaryService {
             : BeneficiaryVerificationStatus.UNVERIFIED,
         verifiedAt:
           verification.verificationStatus === 'VERIFIED' ? new Date() : null,
-        isActive: true,
+        isActive: dto.saveAccount !== false,
       } as any,
     });
 

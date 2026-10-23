@@ -75,6 +75,33 @@ export class EmailService {
     `);
   }
 
+  async sendDepositSuccessEmail(email: string, details: {
+    firstName: string | null;
+    amount: string;
+    currency: string;
+    walletCreditAmount: string;
+    reference: string;
+    completedAt: Date;
+  }): Promise<void> {
+    const escape = (value: string) => value.replace(/[&<>"']/g, (character) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    })[character]!);
+    const firstName = escape(details.firstName?.trim() || 'there');
+    await this.send(email, 'Your NobleCards Deposit Was Successful', `
+      <div style="font-family:Arial,sans-serif;color:#202124;max-width:600px;margin:0 auto;line-height:1.6">
+        <h1 style="color:#18794e">NobleCards</h1>
+        <p>Hello ${firstName},</p>
+        <p>Your deposit has been completed successfully and your wallet has been credited.</p>
+        <p><strong>Amount Paid:</strong> ${escape(details.amount)} ${escape(details.currency)}</p>
+        <p><strong>Wallet Credited:</strong> $${escape(details.walletCreditAmount)} USD</p>
+        <p><strong>Reference:</strong> ${escape(details.reference)}</p>
+        <p><strong>Completed:</strong> ${escape(details.completedAt.toISOString())}</p>
+        <p><strong>Status:</strong> Successful</p>
+        <p>Thank you for choosing NobleCards.</p>
+      </div>
+    `);
+  }
+
   async sendGiftCardPurchaseSuccessEmail(email: string, details: {
     firstName: string | null;
     brand: string;

@@ -1,13 +1,13 @@
 import { Controller, Headers, Logger, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { FlutterwaveService } from './flutterwave.service';
 
-@Controller('flutterwave')
+@Controller()
 export class FlutterwaveController {
   private readonly logger = new Logger(FlutterwaveController.name);
 
   constructor(private readonly flutterwave: FlutterwaveService) {}
 
-  @Post('webhook')
+  @Post(['flutterwave/webhook', 'webhooks/flutterwave'])
   async webhook(
     @Headers('verif-hash') signature: string | undefined,
     @Req() request: { rawBody?: Buffer; body?: unknown },
