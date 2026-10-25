@@ -136,6 +136,7 @@ exports.Prisma.UserScalarFieldEnum = {
   bio: 'bio',
   address: 'address',
   profileImageUrl: 'profileImageUrl',
+  preferredLanguage: 'preferredLanguage',
   isEmailVerified: 'isEmailVerified',
   isProfileComplete: 'isProfileComplete',
   isVerified: 'isVerified',

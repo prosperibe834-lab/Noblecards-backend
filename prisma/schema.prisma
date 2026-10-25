@@ -23,6 +23,7 @@ model User {
   bio                          String?
   address                      String?
   profileImageUrl              String?
+  preferredLanguage            String?                        @default("1")
   isEmailVerified              Boolean                        @default(false)
   isProfileComplete            Boolean                        @default(false)
   isVerified                   Boolean                        @default(false)

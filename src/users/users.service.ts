@@ -750,6 +750,9 @@ export class UsersService {
         ...(dto.profileImageUrl !== undefined
           ? { profileImageUrl: dto.profileImageUrl.trim() || null }
           : {}),
+        ...(dto.preferredLanguage !== undefined
+          ? { preferredLanguage: dto.preferredLanguage.trim() || '1' }
+          : {}),
       },
     });
     return this.recalculateProfileCompletion(updated);
@@ -824,6 +827,7 @@ export class UsersService {
     bio?: string | null;
     address?: string | null;
     profileImageUrl?: string | null;
+    preferredLanguage?: string | null;
     role: string;
     isEmailVerified: boolean;
     isProfileComplete?: boolean;
@@ -845,6 +849,7 @@ export class UsersService {
       bio: user.bio ?? null,
       address: user.address ?? null,
       profileImageUrl: user.profileImageUrl ?? null,
+      preferredLanguage: user.preferredLanguage ?? '1',
       role: user.role,
       isEmailVerified: user.isEmailVerified,
       isProfileComplete: user.isProfileComplete ?? false,

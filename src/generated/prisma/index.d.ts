@@ -4483,6 +4483,7 @@ export namespace Prisma {
     bio: string | null
     address: string | null
     profileImageUrl: string | null
+    preferredLanguage: string | null
     isEmailVerified: boolean | null
     isProfileComplete: boolean | null
     isVerified: boolean | null
@@ -4512,6 +4513,7 @@ export namespace Prisma {
     bio: string | null
     address: string | null
     profileImageUrl: string | null
+    preferredLanguage: string | null
     isEmailVerified: boolean | null
     isProfileComplete: boolean | null
     isVerified: boolean | null
@@ -4541,6 +4543,7 @@ export namespace Prisma {
     bio: number
     address: number
     profileImageUrl: number
+    preferredLanguage: number
     isEmailVerified: number
     isProfileComplete: number
     isVerified: number
@@ -4580,6 +4583,7 @@ export namespace Prisma {
     bio?: true
     address?: true
     profileImageUrl?: true
+    preferredLanguage?: true
     isEmailVerified?: true
     isProfileComplete?: true
     isVerified?: true
@@ -4609,6 +4613,7 @@ export namespace Prisma {
     bio?: true
     address?: true
     profileImageUrl?: true
+    preferredLanguage?: true
     isEmailVerified?: true
     isProfileComplete?: true
     isVerified?: true
@@ -4638,6 +4643,7 @@ export namespace Prisma {
     bio?: true
     address?: true
     profileImageUrl?: true
+    preferredLanguage?: true
     isEmailVerified?: true
     isProfileComplete?: true
     isVerified?: true
@@ -4754,6 +4760,7 @@ export namespace Prisma {
     bio: string | null
     address: string | null
     profileImageUrl: string | null
+    preferredLanguage: string | null
     isEmailVerified: boolean
     isProfileComplete: boolean
     isVerified: boolean
@@ -4802,6 +4809,7 @@ export namespace Prisma {
     bio?: boolean
     address?: boolean
     profileImageUrl?: boolean
+    preferredLanguage?: boolean
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -4854,6 +4862,7 @@ export namespace Prisma {
     bio?: boolean
     address?: boolean
     profileImageUrl?: boolean
+    preferredLanguage?: boolean
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -4883,6 +4892,7 @@ export namespace Prisma {
     bio?: boolean
     address?: boolean
     profileImageUrl?: boolean
+    preferredLanguage?: boolean
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -4912,6 +4922,7 @@ export namespace Prisma {
     bio?: boolean
     address?: boolean
     profileImageUrl?: boolean
+    preferredLanguage?: boolean
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -4925,7 +4936,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "referralCode" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "preferredLanguage" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "referralCode" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
     transactionPinResets?: boolean | User$transactionPinResetsArgs<ExtArgs>
@@ -4996,6 +5007,7 @@ export namespace Prisma {
       bio: string | null
       address: string | null
       profileImageUrl: string | null
+      preferredLanguage: string | null
       isEmailVerified: boolean
       isProfileComplete: boolean
       isVerified: boolean
@@ -5467,6 +5479,7 @@ export namespace Prisma {
     readonly bio: FieldRef<"User", 'String'>
     readonly address: FieldRef<"User", 'String'>
     readonly profileImageUrl: FieldRef<"User", 'String'>
+    readonly preferredLanguage: FieldRef<"User", 'String'>
     readonly isEmailVerified: FieldRef<"User", 'Boolean'>
     readonly isProfileComplete: FieldRef<"User", 'Boolean'>
     readonly isVerified: FieldRef<"User", 'Boolean'>
@@ -42822,6 +42835,7 @@ export namespace Prisma {
     bio: 'bio',
     address: 'address',
     profileImageUrl: 'profileImageUrl',
+    preferredLanguage: 'preferredLanguage',
     isEmailVerified: 'isEmailVerified',
     isProfileComplete: 'isProfileComplete',
     isVerified: 'isVerified',
@@ -43883,6 +43897,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
     profileImageUrl?: StringNullableFilter<"User"> | string | null
+    preferredLanguage?: StringNullableFilter<"User"> | string | null
     isEmailVerified?: BoolFilter<"User"> | boolean
     isProfileComplete?: BoolFilter<"User"> | boolean
     isVerified?: BoolFilter<"User"> | boolean
@@ -43934,6 +43949,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    preferredLanguage?: SortOrderInput | SortOrder
     isEmailVerified?: SortOrder
     isProfileComplete?: SortOrder
     isVerified?: SortOrder
@@ -43989,6 +44005,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     address?: StringNullableFilter<"User"> | string | null
     profileImageUrl?: StringNullableFilter<"User"> | string | null
+    preferredLanguage?: StringNullableFilter<"User"> | string | null
     isEmailVerified?: BoolFilter<"User"> | boolean
     isProfileComplete?: BoolFilter<"User"> | boolean
     isVerified?: BoolFilter<"User"> | boolean
@@ -44039,6 +44056,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    preferredLanguage?: SortOrderInput | SortOrder
     isEmailVerified?: SortOrder
     isProfileComplete?: SortOrder
     isVerified?: SortOrder
@@ -44076,6 +44094,7 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     address?: StringNullableWithAggregatesFilter<"User"> | string | null
     profileImageUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    preferredLanguage?: StringNullableWithAggregatesFilter<"User"> | string | null
     isEmailVerified?: BoolWithAggregatesFilter<"User"> | boolean
     isProfileComplete?: BoolWithAggregatesFilter<"User"> | boolean
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
@@ -47347,6 +47366,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -47398,6 +47418,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -47449,6 +47470,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -47500,6 +47522,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -47551,6 +47574,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -47580,6 +47604,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -47609,6 +47634,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -51604,6 +51630,7 @@ export namespace Prisma {
     bio?: SortOrder
     address?: SortOrder
     profileImageUrl?: SortOrder
+    preferredLanguage?: SortOrder
     isEmailVerified?: SortOrder
     isProfileComplete?: SortOrder
     isVerified?: SortOrder
@@ -51637,6 +51664,7 @@ export namespace Prisma {
     bio?: SortOrder
     address?: SortOrder
     profileImageUrl?: SortOrder
+    preferredLanguage?: SortOrder
     isEmailVerified?: SortOrder
     isProfileComplete?: SortOrder
     isVerified?: SortOrder
@@ -51666,6 +51694,7 @@ export namespace Prisma {
     bio?: SortOrder
     address?: SortOrder
     profileImageUrl?: SortOrder
+    preferredLanguage?: SortOrder
     isEmailVerified?: SortOrder
     isProfileComplete?: SortOrder
     isVerified?: SortOrder
@@ -59669,6 +59698,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -59719,6 +59749,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -59785,6 +59816,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -59835,6 +59867,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -59885,6 +59918,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -59935,6 +59969,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60001,6 +60036,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60051,6 +60087,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60101,6 +60138,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60151,6 +60189,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60217,6 +60256,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60267,6 +60307,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60317,6 +60358,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60367,6 +60409,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60433,6 +60476,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60483,6 +60527,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -60533,6 +60578,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -60583,6 +60629,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -61015,6 +61062,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -61065,6 +61113,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -62070,6 +62119,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -62120,6 +62170,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -62348,6 +62399,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -62398,6 +62450,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -62634,6 +62687,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -62684,6 +62738,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -63156,6 +63211,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -63206,6 +63262,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -63940,6 +63997,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -63990,6 +64048,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -64045,6 +64104,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -64095,6 +64155,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -64366,6 +64427,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -64416,6 +64478,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -64477,6 +64540,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -64527,6 +64591,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -64819,6 +64884,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -64869,6 +64935,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -64974,6 +65041,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -65024,6 +65092,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -65107,6 +65176,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -65157,6 +65227,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -65262,6 +65333,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -65312,6 +65384,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -65362,6 +65435,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -65412,6 +65486,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -65834,6 +65909,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -65884,6 +65960,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -66317,6 +66394,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -66367,6 +66445,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -66599,6 +66678,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -66649,6 +66729,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -66821,6 +66902,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -66871,6 +66953,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -67056,6 +67139,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -67106,6 +67190,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -67505,6 +67590,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -67555,6 +67641,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -67674,6 +67761,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -67724,6 +67812,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -67833,6 +67922,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -67883,6 +67973,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68064,6 +68155,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68114,6 +68206,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68297,6 +68390,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68347,6 +68441,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68413,6 +68508,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68463,6 +68559,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68513,6 +68610,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68563,6 +68661,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68618,6 +68717,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68668,6 +68768,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -68768,6 +68869,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68818,6 +68920,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68879,6 +68982,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -68929,6 +69033,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69032,6 +69137,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69082,6 +69188,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69227,6 +69334,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69277,6 +69385,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69372,6 +69481,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69422,6 +69532,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69477,6 +69588,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69527,6 +69639,7 @@ export namespace Prisma {
     bio?: string | null
     address?: string | null
     profileImageUrl?: string | null
+    preferredLanguage?: string | null
     isEmailVerified?: boolean
     isProfileComplete?: boolean
     isVerified?: boolean
@@ -69628,6 +69741,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69678,6 +69792,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69739,6 +69854,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean
@@ -69789,6 +69905,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     isEmailVerified?: BoolFieldUpdateOperationsInput | boolean
     isProfileComplete?: BoolFieldUpdateOperationsInput | boolean
     isVerified?: BoolFieldUpdateOperationsInput | boolean

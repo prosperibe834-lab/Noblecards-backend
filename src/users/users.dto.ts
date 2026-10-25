@@ -20,6 +20,7 @@ export class UpdateProfileDto {
   @IsOptional() @IsString() @MaxLength(500) bio?: string;
   @IsOptional() @IsString() @MaxLength(250) address?: string;
   @IsOptional() @IsString() @MaxLength(500) profileImageUrl?: string;
+  @IsOptional() @IsString() @MaxLength(50) preferredLanguage?: string;
 }
 
 export class CreateOrUpdateTransactionPinDto {
