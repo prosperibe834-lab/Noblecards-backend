@@ -10,7 +10,7 @@ const dto = {
   cardCurrency: 'USD',
   payoutCurrency: 'NGN',
   cardAmount: 100,
-  additionalInfo: 'masked-test-reference',
+  additionalInfo: 'AQ-masked-test-reference',
   idempotencyKey: 'sale-key-1',
 };
 
@@ -192,7 +192,7 @@ describe('GiftCardsService', () => {
 
     const result = await service.submitSell('user-1', {
       ...dto,
-      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'masked-test-reference' }] }),
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'AQ-masked-test-reference' }] }),
     });
 
     expect(sogo.submitSell).toHaveBeenCalledWith(expect.objectContaining({
@@ -201,7 +201,7 @@ describe('GiftCardsService', () => {
       card_type: 'ecode',
       card_currency: 'USD',
       card_amount: 100,
-      additional_info: 'masked-test-reference',
+      additional_info: 'AQ-masked-test-reference',
       idempotencyKey: 'sale-key-1',
     }));
     expect(prisma.giftCardSale.create).toHaveBeenCalledWith(expect.objectContaining({
@@ -436,6 +436,100 @@ describe('GiftCardsService', () => {
         status: GiftCardSaleStatus.FAILED,
         providerResponse: providerError,
       }),
+    }));
+  });
+
+  it('normalizes sandbox codes for Xbox, Steam, PlayStation, Apple, and Amazon', async () => {
+    const { service, prisma, sogo } = makeService();
+    sogo.getSellRates.mockResolvedValue({
+      data: [
+        { slug: 'xbox', rates: { USD: { ecode: { NGN: 820 } } } },
+        { slug: 'steam', rates: { USD: { ecode: { NGN: 750 } } } },
+        { slug: 'playstation', rates: { USD: { ecode: { NGN: 600 } } } },
+        { slug: 'apple', rates: { USD: { ecode: { NGN: 1020 } } } },
+        { slug: 'amazon', rates: { USD: { physical: { NGN: { cash_receipt: 605 } }, ecode: { NGN: 502 } } } },
+      ],
+    });
+
+    // Xbox: 25 characters
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'xbox',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'XBOX-GIFT-USA-TEST-123456' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'xbox',
+      additional_info: 'XBOXGIFTUSATEST1234560000',
+    }));
+
+    // Steam: 15 characters
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'steam',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'STEAM-GIFT-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'steam',
+      additional_info: 'STEAMGIFT123400',
+    }));
+
+    // PlayStation: 12 characters
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'playstation',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'PLAY-USA-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'playstation',
+      additional_info: 'PLAYUSA12340',
+    }));
+
+    // Apple: starts with X
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'apple',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'X-GIFT-USA-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'apple',
+      additional_info: 'X-GIFT-USA-1234',
+    }));
+
+    // Amazon: starts with AQ or AS
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'amazon',
+      cardType: 'physical',
+      receiptType: 'cash_receipt',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'AQ-GIFT-USA-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'amazon',
+      additional_info: 'AQ-GIFT-USA-1234',
+      sub_type: 'cash_receipt',
+    }));
+
+    // Apple: auto-prefix if missing X
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'apple',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'GIFT-USA-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'apple',
+      additional_info: 'X-GIFT-USA-1234',
+    }));
+
+    // Amazon: auto-prefix if missing AQ/AS
+    await service.submitSell('user-1', {
+      ...dto,
+      slug: 'amazon',
+      cardType: 'ecode',
+      additionalInfo: JSON.stringify({ cards: [{ amount: 100, code: 'GIFT-USA-1234' }] }),
+    });
+    expect(sogo.submitSell).toHaveBeenLastCalledWith(expect.objectContaining({
+      slug: 'amazon',
+      additional_info: 'AQ-GIFT-USA-1234',
     }));
   });
 });

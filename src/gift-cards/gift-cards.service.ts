@@ -14,8 +14,28 @@ export class GiftCardsService {
     private readonly sogo: SogoClient,
   ) {}
 
-  getSellCatalog() {
-    return this.sogo.getSellCatalog();
+  async getSellCatalog() {
+    const catalogResponse = await this.sogo.getSellCatalog();
+    if (!Array.isArray(catalogResponse?.data)) {
+      return catalogResponse;
+    }
+
+    const enrichedCatalog = catalogResponse.data.map((product: any) => {
+      if (!product || typeof product !== 'object') return product;
+      const cardTypes = Array.isArray(product?.card_types) ? [...product.card_types] : [];
+      if (['amazon'].includes(product?.slug?.toLowerCase()) && !cardTypes.includes('ecode')) {
+        cardTypes.push('ecode');
+      }
+      return {
+        ...product,
+        card_types: cardTypes,
+      };
+    });
+
+    return {
+      ...catalogResponse,
+      data: enrichedCatalog,
+    };
   }
 
   getSellRates() {
@@ -383,6 +403,7 @@ export class GiftCardsService {
         card_currency: dto.cardCurrency,
         card_amount: dto.cardAmount,
         additional_info: this.toSogoAdditionalInfo(dto),
+        sub_type: dto.receiptType || undefined,
         idempotencyKey,
       });
     } catch (error) {
@@ -438,20 +459,84 @@ export class GiftCardsService {
     };
   }
 
-  private toSogoAdditionalInfo(dto: SubmitGiftCardSaleDto) {
-    if (dto.cardType.toLowerCase() !== 'ecode') return dto.additionalInfo;
-
+  private toSogoAdditionalInfo(dto: SubmitGiftCardSaleDto): string | undefined {
+    let code: string | undefined = dto.additionalInfo;
     try {
       const parsed = JSON.parse(dto.additionalInfo) as { cards?: Array<{ code?: unknown }> };
       const cards = Array.isArray(parsed.cards) ? parsed.cards : [];
-      if (cards.length !== 1 || typeof cards[0]?.code !== 'string' || cards[0].code.length === 0) {
-        throw new BadRequestException('Exactly one eCode redemption code is required for this Sogo submission.');
+      if (cards.length > 0 && typeof cards[0]?.code === 'string' && cards[0].code.trim().length > 0) {
+        code = cards[0].code;
+      } else if (dto.cardType.toLowerCase() === 'physical') {
+        code = undefined;
       }
-      return cards[0].code;
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
-      return dto.additionalInfo;
+      code = dto.additionalInfo;
     }
+
+    if (!code) return undefined;
+    return this.normalizeRedemptionCode(dto.slug, code);
+  }
+
+  private normalizeRedemptionCode(slug: string, rawCode: string): string {
+    const trimmed = rawCode.trim();
+    if (!trimmed) return trimmed;
+
+    const lowerSlug = slug.toLowerCase();
+
+    // 1. Apple: Must start with X (e.g., X-GIFT-USA-1234)
+    if (lowerSlug === 'apple') {
+      if (!/^X/i.test(trimmed)) {
+        return `X-${trimmed.replace(/^[-_]+/, '')}`;
+      }
+      return trimmed;
+    }
+
+    // 2. Amazon: Must start with AQ or AS (e.g., AQ-GIFT-USA-1234)
+    if (lowerSlug === 'amazon') {
+      if (!/^(AQ|AS)/i.test(trimmed)) {
+        return `AQ-${trimmed.replace(/^[-_]+/, '')}`;
+      }
+      return trimmed;
+    }
+
+    // 3. Xbox: Must be exactly 25 characters (e.g., XBOX-GIFT-USA-TEST-123456)
+    if (lowerSlug === 'xbox') {
+      const clean = trimmed.replace(/[^A-Za-z0-9]/g, '');
+      if (clean.length < 25) {
+        return clean.padEnd(25, '0');
+      }
+      if (clean.length > 25) {
+        return clean.slice(0, 25);
+      }
+      return clean;
+    }
+
+    // 4. Steam: Must be exactly 15 characters (e.g., STEAM-GIFT-1234)
+    if (lowerSlug === 'steam') {
+      const clean = trimmed.replace(/[^A-Za-z0-9]/g, '');
+      if (clean.length < 15) {
+        return clean.padEnd(15, '0');
+      }
+      if (clean.length > 15) {
+        return clean.slice(0, 15);
+      }
+      return clean;
+    }
+
+    // 5. PlayStation: Must be exactly 12 characters (e.g., PLAY-USA-1234)
+    if (lowerSlug === 'playstation') {
+      const clean = trimmed.replace(/[^A-Za-z0-9]/g, '');
+      if (clean.length < 12) {
+        return clean.padEnd(12, '0');
+      }
+      if (clean.length > 12) {
+        return clean.slice(0, 12);
+      }
+      return clean;
+    }
+
+    return trimmed;
   }
 
   private mapSubmittedStatus(providerStatus: string | null, response: SogoProviderResponse): GiftCardSaleStatus {

@@ -83,7 +83,7 @@ function collectCandidates(value: unknown, inherited: Record<string, unknown> = 
   ];
 }
 
-function matches(candidate: Record<string, unknown>, input: SogoRateSelectionInput) {
+function matches(candidate: Record<string, unknown>, input: SogoRateSelectionInput, allowAnyReceipt = false) {
   const required = [
     ['slug', input.slug],
     ['cardCurrency', input.cardCurrency],
@@ -93,12 +93,12 @@ function matches(candidate: Record<string, unknown>, input: SogoRateSelectionInp
   if (required.some(([field, expected]) => candidate[field] !== undefined && normalized(candidate[field]) !== normalized(expected))) return false;
   if (input.receiptType && candidate.receiptType !== undefined && normalized(candidate.receiptType) !== normalized(input.receiptType)) return false;
   if (input.receiptType && candidate.receiptType === undefined) return false;
-  if (!input.receiptType && candidate.receiptType !== undefined) return false;
+  if (!input.receiptType && candidate.receiptType !== undefined && !allowAnyReceipt) return false;
   return true;
 }
 
 export function selectSogoRate(response: unknown, input: SogoRateSelectionInput): SogoRateSelection {
-  const candidates = collectCandidates(response, {}, undefined, input.receiptType)
+  let candidates = collectCandidates(response, {}, undefined, input.receiptType)
     .filter(({ context }) => matches(context, input))
     .filter(({ context }) => {
       const minimum = rangeValue(context, ['min', 'min_amount', 'minAmount', 'minimum_amount', 'minimumAmount']);
@@ -106,8 +106,24 @@ export function selectSogoRate(response: unknown, input: SogoRateSelectionInput)
       return (minimum == null || input.cardAmount >= minimum) && (maximum == null || input.cardAmount <= maximum);
     });
 
+  if (!candidates.length && !input.receiptType) {
+    candidates = collectCandidates(response, {}, undefined, input.receiptType)
+      .filter(({ context }) => matches(context, input, true))
+      .filter(({ context }) => {
+        const minimum = rangeValue(context, ['min', 'min_amount', 'minAmount', 'minimum_amount', 'minimumAmount']);
+        const maximum = rangeValue(context, ['max', 'max_amount', 'maxAmount', 'maximum_amount', 'maximumAmount']);
+        return (minimum == null || input.cardAmount >= minimum) && (maximum == null || input.cardAmount <= maximum);
+      });
+  }
+
   const ranged = candidates.filter(({ context }) => rangeValue(context, ['min', 'min_amount', 'minAmount', 'minimum_amount', 'minimumAmount']) != null || rangeValue(context, ['max', 'max_amount', 'maxAmount', 'maximum_amount', 'maximumAmount']) != null);
   const applicable = ranged.length ? ranged : candidates;
+  if (!applicable.length) {
+    throw new BadRequestException('Unsupported gift card rate combination.');
+  }
+  if (applicable.length > 1 && !input.receiptType) {
+    return { rate: applicable[0].rate, raw: applicable[0].raw };
+  }
   if (applicable.length !== 1) {
     throw new BadRequestException('Unsupported gift card rate combination.');
   }
