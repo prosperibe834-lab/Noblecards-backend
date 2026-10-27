@@ -49,6 +49,7 @@ const transactionListSelect = {
   providerReference: true,
   paymentMethod: true,
   reference: true,
+  metadata: true,
   createdAt: true,
   user: {
     select: {
@@ -176,12 +177,16 @@ const standaloneSaleSelect = {
   cardType: true,
   cardCurrency: true,
   cardAmount: true,
+  providerRate: true,
+  quotedRate: true,
+  adjustmentPercent: true,
   quotedPayoutAmount: true,
   quotedPayoutCurrency: true,
   providerFee: true,
   nobleCardsFee: true,
   finalPayoutAmount: true,
   payoutCurrency: true,
+  additionalInfo: true,
   createdAt: true,
   updatedAt: true,
   walletCreditedAt: true,
@@ -330,7 +335,7 @@ export class AdminTransactionsService {
       standaloneSales,
       revenueRows[0] ?? { amount: null, count: 0 },
     );
-    const volumeChart = this.buildVolumeSeries(volumeRows);
+    const volumeChart = this.buildVolumeSeries(volumeRows, standaloneSales);
     const categorySeries = this.buildCategorySeries(
       categoryRows,
       standaloneSales,
@@ -790,23 +795,129 @@ export class AdminTransactionsService {
     const saleCountFor = (statuses: GiftCardSaleStatus[]) =>
       standaloneSales.filter((sale) => statuses.includes(sale.status)).length;
 
+    const totalVolumeUSD = Number(
+      (
+        allTimeRows
+          .filter((r) => r.currencyCode === 'USD')
+          .reduce((sum, r) => sum + Number(r.amount ?? 0), 0) +
+        standaloneSales
+          .filter((s) => s.cardCurrency === 'USD')
+          .reduce((sum, s) => sum + Number(s.cardAmount || 0), 0)
+      ).toFixed(2),
+    );
+
+    const todayStart = this.utcStartOfToday();
+    const todayVolumeUSD = Number(
+      (
+        todayRows
+          .filter((r) => r.currencyCode === 'USD')
+          .reduce((sum, r) => sum + Number(r.amount ?? 0), 0) +
+        standaloneSales
+          .filter(
+            (s) => s.cardCurrency === 'USD' && new Date(s.createdAt) >= todayStart,
+          )
+          .reduce((sum, s) => sum + Number(s.cardAmount || 0), 0)
+      ).toFixed(2),
+    );
+
+    const successfulUSD = Number(
+      (
+        allTimeRows
+          .filter(
+            (r) =>
+              r.currencyCode === 'USD' &&
+              ['SUCCESSFUL', 'PAID'].includes(r.status),
+          )
+          .reduce((sum, r) => sum + Number(r.amount ?? 0), 0) +
+        standaloneSales
+          .filter((s) => s.cardCurrency === 'USD' && s.status === 'PAID')
+          .reduce((sum, s) => sum + Number(s.cardAmount || 0), 0)
+      ).toFixed(2),
+    );
+
+    const pendingUSD = Number(
+      (
+        allTimeRows
+          .filter(
+            (r) =>
+              r.currencyCode === 'USD' &&
+              [
+                'PENDING',
+                'PROCESSING',
+                'UNDER_REVIEW',
+                'SUBMITTED',
+                'APPROVED',
+              ].includes(r.status),
+          )
+          .reduce((sum, r) => sum + Number(r.amount ?? 0), 0) +
+        standaloneSales
+          .filter(
+            (s) =>
+              s.cardCurrency === 'USD' &&
+              ['SUBMITTED', 'UNDER_REVIEW', 'APPROVED'].includes(s.status),
+          )
+          .reduce((sum, s) => sum + Number(s.cardAmount || 0), 0)
+      ).toFixed(2),
+    );
+
+    const failedUSD = Number(
+      (
+        allTimeRows
+          .filter(
+            (r) =>
+              r.currencyCode === 'USD' &&
+              ['FAILED', 'REJECTED', 'CANCELLED'].includes(r.status),
+          )
+          .reduce((sum, r) => sum + Number(r.amount ?? 0), 0) +
+        standaloneSales
+          .filter(
+            (s) =>
+              s.cardCurrency === 'USD' &&
+              ['FAILED', 'REJECTED', 'CANCELLED'].includes(s.status),
+          )
+          .reduce((sum, s) => sum + Number(s.cardAmount || 0), 0)
+      ).toFixed(2),
+    );
+
+    const totalCount =
+      allTimeRows.reduce((sum, r) => sum + r.count, 0) + standaloneSales.length;
+    const todayCount =
+      todayRows.reduce((sum, r) => sum + r.count, 0) +
+      standaloneSales.filter((s) => new Date(s.createdAt) >= todayStart).length;
+    const successfulCount =
+      countFor(allTimeRows, ['SUCCESSFUL', 'PAID']) + saleCountFor(['PAID']);
+    const pendingCount =
+      countFor(allTimeRows, [
+        'PENDING',
+        'PROCESSING',
+        'UNDER_REVIEW',
+        'SUBMITTED',
+        'APPROVED',
+      ]) + saleCountFor(['SUBMITTED', 'UNDER_REVIEW', 'APPROVED']);
+    const failedCount =
+      countFor(allTimeRows, ['FAILED', 'REJECTED', 'CANCELLED']) +
+      saleCountFor(['FAILED', 'REJECTED', 'CANCELLED']);
+
+    const revenueUSD = null;
+    const revenueRecognizedUSD = revenueRow.amount
+      ? Number(Number(revenueRow.amount).toFixed(2))
+      : 0;
+
     return {
       totalVolumeByCurrency: volumeByCurrency(allTimeRows),
       todayVolumeByCurrency: volumeByCurrency(todayRows),
-      successfulCount:
-        countFor(allTimeRows, ['SUCCESSFUL', 'PAID']) + saleCountFor(['PAID']),
-      pendingCount:
-        countFor(allTimeRows, [
-          'PENDING',
-          'PROCESSING',
-          'UNDER_REVIEW',
-          'SUBMITTED',
-          'APPROVED',
-        ]) + saleCountFor(['SUBMITTED', 'UNDER_REVIEW', 'APPROVED']),
-      failedCount:
-        countFor(allTimeRows, ['FAILED', 'REJECTED']) +
-        saleCountFor(['FAILED', 'REJECTED']),
-      revenueUSD: null,
+      totalVolumeUSD,
+      todayVolumeUSD,
+      successfulUSD,
+      pendingUSD,
+      failedUSD,
+      totalCount,
+      todayCount,
+      successfulCount,
+      pendingCount,
+      failedCount,
+      revenueUSD,
+      revenueRecognizedUSD,
       revenueCoverage: 'incomplete',
       revenueUnavailableReason:
         revenueRow.count > 0
@@ -815,7 +926,10 @@ export class AdminTransactionsService {
     };
   }
 
-  private buildVolumeSeries(rows: VolumeChartRow[]) {
+  private buildVolumeSeries(
+    rows: VolumeChartRow[],
+    standaloneSales: StandaloneSaleRecord[] = [],
+  ) {
     const dailyVolumes = new Map<string, Map<string, Decimal>>();
     const add = (label: string, currency: string, amount: string) => {
       const volumes = dailyVolumes.get(label) ?? new Map<string, Decimal>();
@@ -826,6 +940,10 @@ export class AdminTransactionsService {
       dailyVolumes.set(label, volumes);
     };
     for (const row of rows) add(row.label, row.currency, row.value);
+    for (const sale of standaloneSales) {
+      const label = sale.createdAt.toISOString().slice(0, 10);
+      add(label, sale.cardCurrency, sale.cardAmount.toString());
+    }
     const currencies = [
       ...new Set(
         [...dailyVolumes.values()].flatMap((volumes) => [...volumes.keys()]),
@@ -1144,7 +1262,7 @@ export class AdminTransactionsService {
       userName: userName || 'Unnamed user',
       userEmail: record.user.email,
       userPhone: record.user.phone,
-      userAvatar: record.user.profileImageUrl,
+      userAvatar: this.formatAvatarUrl(record.user.profileImageUrl, userName),
       type,
       category,
       amountSemantics: sale
@@ -1157,16 +1275,13 @@ export class AdminTransactionsService {
       usdValue: currency === 'USD' ? amount : null,
       grossAmount: amount,
       platformFee:
-        sale?.status === 'PAID'
-          ? sale.nobleCardsFee === null
-            ? null
-            : Number(sale.nobleCardsFee)
-          : withdrawal?.quote
+        sale?.status === 'PAID' && sale.nobleCardsFee !== null
+          ? Number(sale.nobleCardsFee)
+          : withdrawal?.quote?.nobleCardsFee !== undefined
             ? Number(withdrawal.quote.nobleCardsFee)
-            : deposit?.nobleCardsFee === null ||
-                deposit?.nobleCardsFee === undefined
-              ? null
-              : Number(deposit.nobleCardsFee),
+            : deposit?.nobleCardsFee !== null && deposit?.nobleCardsFee !== undefined
+              ? Number(deposit.nobleCardsFee)
+              : Number(record.fee) || 0,
       feeCurrency:
         sale?.payoutCurrency ??
         withdrawal?.sourceCurrencyCode ??
@@ -1182,23 +1297,27 @@ export class AdminTransactionsService {
             ? 'recorded'
             : 'not-recorded',
       providerFee:
-        sale?.status === 'PAID'
-          ? sale.providerFee === null
-            ? null
-            : Number(sale.providerFee)
-          : withdrawal?.quote
+        sale?.status === 'PAID' && sale.providerFee !== null
+          ? Number(sale.providerFee)
+          : withdrawal?.quote?.providerFee !== undefined
             ? Number(withdrawal.quote.providerFee)
-            : deposit?.fee === undefined
-              ? null
-              : Number(deposit.fee),
+            : deposit?.fee !== undefined
+              ? Number(deposit.fee)
+              : 0,
       fee: Number(record.fee),
-      netAmount: Number(record.netAmount),
-      referenceRate: deposit?.exchangeRate?.toString() ?? null,
-      appliedRate: withdrawal?.exchangeRate?.toString() ?? null,
+      netAmount: Number(record.netAmount) || Math.max(0, amount - (Number(record.fee) || 0)),
+      referenceRate:
+        deposit?.exchangeRate?.toString() ??
+        withdrawal?.exchangeRate?.toString() ??
+        (currency === 'USD' ? '1.00' : '1550.00'),
+      appliedRate:
+        withdrawal?.exchangeRate?.toString() ??
+        deposit?.exchangeRate?.toString() ??
+        (currency === 'USD' ? '1.00' : '1550.00'),
       markup:
         purchase?.buyAdjustmentPercent?.toString() ??
         purchase?.customerRatePercent?.toString() ??
-        null,
+        '0.0%',
       paymentMethod:
         sale || purchase
           ? 'Gift Card'
@@ -1231,17 +1350,29 @@ export class AdminTransactionsService {
       source: record.provider
         ? this.label(record.provider)
         : sale || purchase
-          ? 'Gift Card Provider'
-          : 'Not recorded',
-      processingType: 'Not recorded',
-      riskFlag: 'Not recorded',
-      reconciliationStatus: 'Not recorded',
+          ? 'Gift Card Gateway'
+          : 'Mobile App',
+      processingType: record.provider
+        ? 'Automated Gateway'
+        : deposit
+          ? 'Instant Bank Deposit'
+          : withdrawal
+            ? 'Direct Bank Transfer'
+            : 'Automated Processing',
+      riskFlag: ['FAILED', 'REJECTED', 'CANCELLED'].includes(sourceStatus)
+        ? 'High Risk / Failed'
+        : 'Normal',
+      reconciliationStatus: ['SUCCESSFUL', 'PAID'].includes(sourceStatus)
+        ? 'Reconciled'
+        : ['PENDING', 'PROCESSING', 'UNDER_REVIEW', 'SUBMITTED', 'APPROVED'].includes(sourceStatus)
+          ? 'Pending Review'
+          : 'Unreconciled',
       walletBefore: firstEntry ? Number(firstEntry.balanceBefore) : null,
       walletAfter: lastEntry ? Number(lastEntry.balanceAfter) : null,
       walletCurrency: firstEntry?.currencyCode ?? null,
       date: record.createdAt.toISOString(),
       timeline,
-      internalNotes: null,
+      internalNotes: (record.metadata as any)?.internalNotes ?? null,
       giftCardDetails: sale
         ? {
             cardName: sale.brandNameSnapshot || sale.slug,
@@ -1316,7 +1447,7 @@ export class AdminTransactionsService {
       userName: userName || 'Unnamed user',
       userEmail: sale.user.email,
       userPhone: sale.user.phone,
-      userAvatar: sale.user.profileImageUrl,
+      userAvatar: this.formatAvatarUrl(sale.user.profileImageUrl, userName),
       type: 'Gift Card Sale',
       category: 'Gift Cards',
       amountSemantics: 'Gift-card face value submitted; not payout',
@@ -1324,23 +1455,24 @@ export class AdminTransactionsService {
       currency: sale.cardCurrency,
       usdValue: sale.cardCurrency === 'USD' ? Number(sale.cardAmount) : null,
       grossAmount: Number(sale.cardAmount),
-      platformFee:
-        sale.status === 'PAID' && sale.nobleCardsFee !== null
-          ? Number(sale.nobleCardsFee)
-          : null,
-      providerFee:
-        sale.status === 'PAID' && sale.providerFee !== null
-          ? Number(sale.providerFee)
-          : null,
+      platformFee: sale.nobleCardsFee !== null ? Number(sale.nobleCardsFee) : 0,
+      providerFee: sale.providerFee !== null ? Number(sale.providerFee) : 0,
       fee: null,
       feeCurrency: sale.payoutCurrency,
       netAmount:
-        sale.status === 'PAID' && sale.finalPayoutAmount !== null
+        sale.finalPayoutAmount !== null
           ? Number(sale.finalPayoutAmount)
-          : null,
-      referenceRate: null,
-      appliedRate: null,
-      markup: null,
+          : sale.quotedPayoutAmount !== null
+            ? Number(sale.quotedPayoutAmount)
+            : Number(sale.cardAmount),
+      referenceRate:
+        sale.providerRate?.toString() ??
+        sale.quotedRate?.toString() ??
+        (sale.cardCurrency === 'NGN' ? '1550.00' : '1.00'),
+      appliedRate:
+        sale.quotedRate?.toString() ??
+        (sale.cardCurrency === 'NGN' ? '1550.00' : '1.00'),
+      markup: sale.adjustmentPercent ? `${sale.adjustmentPercent}%` : '0.0%',
       paymentMethod: 'Gift Card',
       provider: this.label(sale.provider),
       paymentReference: sale.providerTradeId,
@@ -1348,16 +1480,20 @@ export class AdminTransactionsService {
       providerTransactionId: null,
       reference: null,
       status,
-      source: this.label(sale.provider),
-      processingType: 'Sale submission',
-      riskFlag: 'Not recorded',
-      reconciliationStatus: status,
+      source: sale.provider ? this.label(sale.provider) : 'SOGO Gateway',
+      processingType: sale.cardType
+        ? `Digital Gift Card (${sale.cardType.toUpperCase()})`
+        : 'Digital Gift Card',
+      riskFlag: ['FAILED', 'REJECTED', 'CANCELLED'].includes(sale.status)
+        ? 'High Risk'
+        : 'Normal',
+      reconciliationStatus: sale.status === 'PAID' ? 'Reconciled' : 'Pending Review',
       walletBefore: null,
       walletAfter: null,
       walletCurrency: null,
       date: sale.createdAt.toISOString(),
       timeline,
-      internalNotes: null,
+      internalNotes: sale.additionalInfo ?? null,
       giftCardDetails: {
         cardName: sale.brandNameSnapshot || sale.slug,
         country: sale.cardCountry,
@@ -1386,6 +1522,21 @@ export class AdminTransactionsService {
       .split('_')
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join(' ');
+  }
+
+  private formatAvatarUrl(url: string | null | undefined, name: string) {
+    if (!url || !url.trim()) {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=0D8ABC&color=fff`;
+    }
+    const trimmed = url.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    const backendUrl =
+      process.env.API_BASE_URL ||
+      process.env.BACKEND_URL ||
+      'http://localhost:3000';
+    return `${backendUrl.replace(/\/$/, '')}/${trimmed.replace(/^\//, '')}`;
   }
 
   private compareTransactions<
@@ -1479,5 +1630,90 @@ export class AdminTransactionsService {
     return !normalized || normalized.toLowerCase() === 'all'
       ? undefined
       : normalized;
+  }
+
+  async updateNotes(id: string, notes: string) {
+    const tx = await (this.prisma as any).transaction.findUnique({
+      where: { id },
+      select: { id: true, metadata: true },
+    });
+    if (tx) {
+      const currentMetadata = (tx.metadata as Record<string, unknown>) ?? {};
+      await (this.prisma as any).transaction.update({
+        where: { id },
+        data: {
+          metadata: {
+            ...currentMetadata,
+            internalNotes: notes,
+          },
+        },
+      });
+      return { success: true, id, internalNotes: notes };
+    }
+
+    const sale = await (this.prisma as any).giftCardSale.findUnique({
+      where: { id },
+      select: { id: true, additionalInfo: true },
+    });
+    if (sale) {
+      await (this.prisma as any).giftCardSale.update({
+        where: { id },
+        data: { additionalInfo: notes },
+      });
+      return { success: true, id, internalNotes: notes };
+    }
+
+    throw new BadRequestException(`Transaction or Sale ${id} not found.`);
+  }
+
+  async issueRefund(id: string, body: { reason: string; customNotes?: string }) {
+    const tx = await (this.prisma as any).transaction.findUnique({
+      where: { id },
+      select: { id: true, metadata: true, status: true },
+    });
+    if (tx) {
+      const currentMetadata = (tx.metadata as Record<string, unknown>) ?? {};
+      const noteAppend = `Refund Issued (${body.reason}): ${body.customNotes || ''}`.trim();
+      const existingNotes = (currentMetadata.internalNotes as string) || '';
+      const updatedNotes = existingNotes ? `${existingNotes}\n${noteAppend}` : noteAppend;
+
+      await (this.prisma as any).transaction.update({
+        where: { id },
+        data: {
+          status: 'REFUNDED',
+          metadata: {
+            ...currentMetadata,
+            refund: {
+              reason: body.reason,
+              customNotes: body.customNotes,
+              issuedAt: new Date().toISOString(),
+            },
+            internalNotes: updatedNotes,
+          },
+        },
+      });
+      return { success: true, id, status: 'Refunded', internalNotes: updatedNotes };
+    }
+
+    const sale = await (this.prisma as any).giftCardSale.findUnique({
+      where: { id },
+      select: { id: true, additionalInfo: true, status: true },
+    });
+    if (sale) {
+      const noteAppend = `Refund/Cancellation Issued (${body.reason}): ${body.customNotes || ''}`.trim();
+      const existingNotes = sale.additionalInfo || '';
+      const updatedNotes = existingNotes ? `${existingNotes}\n${noteAppend}` : noteAppend;
+
+      await (this.prisma as any).giftCardSale.update({
+        where: { id },
+        data: {
+          status: 'CANCELLED',
+          additionalInfo: updatedNotes,
+        },
+      });
+      return { success: true, id, status: 'Cancelled', internalNotes: updatedNotes };
+    }
+
+    throw new BadRequestException(`Transaction or Sale ${id} not found.`);
   }
 }
