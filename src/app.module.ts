@@ -21,6 +21,7 @@ import { ReferralsModule } from './referrals/referrals.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SecurityAuditModule } from './security-audit/security-audit.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     DashboardModule,
     SecurityAuditModule,
     NotificationsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
