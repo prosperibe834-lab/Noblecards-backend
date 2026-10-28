@@ -669,6 +669,63 @@ exports.Prisma.SupportAttachmentScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  category: 'category',
+  icon: 'icon',
+  iconBgColor: 'iconBgColor',
+  iconColor: 'iconColor',
+  actionKey: 'actionKey',
+  details: 'details',
+  isRead: 'isRead',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationBroadcastScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  audience: 'audience',
+  targetCountry: 'targetCountry',
+  channels: 'channels',
+  status: 'status',
+  delivered: 'delivered',
+  read: 'read',
+  createdBy: 'createdBy',
+  scheduleType: 'scheduleType',
+  scheduleDate: 'scheduleDate',
+  sentDate: 'sentDate',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationTriggerScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  group: 'group',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationPreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sound: 'sound',
+  inAppEnabled: 'inAppEnabled',
+  emailEnabled: 'emailEnabled',
+  pushEnabled: 'pushEnabled',
+  smsEnabled: 'smsEnabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -896,7 +953,11 @@ exports.Prisma.ModelName = {
   AdminGiftCardSandboxTest: 'AdminGiftCardSandboxTest',
   SupportTicket: 'SupportTicket',
   SupportMessage: 'SupportMessage',
-  SupportAttachment: 'SupportAttachment'
+  SupportAttachment: 'SupportAttachment',
+  Notification: 'Notification',
+  NotificationBroadcast: 'NotificationBroadcast',
+  NotificationTrigger: 'NotificationTrigger',
+  NotificationPreference: 'NotificationPreference'
 };
 
 /**

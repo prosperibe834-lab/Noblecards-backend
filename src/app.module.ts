@@ -20,6 +20,7 @@ import { WithdrawalsModule } from './withdrawals/withdrawals.module';
 import { ReferralsModule } from './referrals/referrals.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SecurityAuditModule } from './security-audit/security-audit.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SecurityAuditModule } from './security-audit/security-audit.module';
     ReferralsModule,
     DashboardModule,
     SecurityAuditModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

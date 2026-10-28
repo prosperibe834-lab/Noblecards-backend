@@ -282,6 +282,91 @@ export class AuthService {
       throw new UnauthorizedException('This account is inactive.');
     }
     const session = await this.issueSession(user);
+    
+    // Security check: Detect login from different IP
+    if (context?.ipAddress) {
+      try {
+        const lastLogin = await (this.prisma as any).securityAuditEvent.findFirst({
+          where: {
+            actorUserId: user.id,
+            eventType: 'Login',
+            event: 'Successful Login',
+            outcome: 'SUCCESS',
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        if (lastLogin?.ipAddress && lastLogin.ipAddress !== context.ipAddress) {
+          this.logger.warn(
+            `New login IP detected for ${user.email}: previous ${lastLogin.ipAddress}, current ${context.ipAddress}`,
+          );
+
+          // Check trigger in DB
+          const trigger = await (this.prisma as any).notificationTrigger.findUnique({
+            where: { id: 'TR-4001' },
+          });
+
+          if (!trigger || trigger.active) {
+            // 1. Send Security Email to Gmail
+            const isRealEmail =
+              !user.email.endsWith('@test.com') &&
+              !user.email.endsWith('.test') &&
+              !user.email.endsWith('@example.com');
+            if (isRealEmail) {
+              await this.email.sendNewLoginAlertEmail(user.email, {
+                firstName: user.firstName,
+                ipAddress: context.ipAddress,
+                userAgent: context.userAgent || 'NobleCards App',
+                location: user.country || 'Unknown Location',
+                timestamp: new Date(),
+              });
+            }
+
+            // 2. Create in-app notification
+            await (this.prisma as any).notification.create({
+              data: {
+                userId: user.id,
+                title: 'New Login Detected',
+                description: `We noticed a sign-in from an unrecognized device or IP address (${context.ipAddress}). If this wasn't you, secure your account.`,
+                type: 'securityAlert',
+                category: 'security',
+                icon: 'shield',
+                iconBgColor: '#EF4444',
+                iconColor: '#FFFFFF',
+                actionKey: 'security',
+                details: [
+                  { label: 'IP Address', value: context.ipAddress },
+                  { label: 'Time', value: new Date().toLocaleTimeString() },
+                  { label: 'Status', value: 'Delivered' },
+                ],
+                isRead: false,
+                isPinned: true,
+              },
+            });
+
+            // 3. Record in NotificationBroadcast
+            await (this.prisma as any).notificationBroadcast.create({
+              data: {
+                id: `NT-${Date.now().toString().slice(-6)}`,
+                type: 'Security',
+                title: 'New Login Detected',
+                message: `We noticed a login from an unrecognized device or IP address (${context.ipAddress}).`,
+                audience: 'Specific User',
+                channels: ['Email', 'In-App'],
+                status: 'Delivered',
+                delivered: '100%',
+                read: '0%',
+                createdBy: 'Security Team',
+                sentDate: new Date(),
+              },
+            });
+          }
+        }
+      } catch (loginSecErr: any) {
+        this.logger.warn(`Failed checking login IP security: ${loginSecErr?.message}`);
+      }
+    }
+
     await this.recordSecurityEvent({
       eventType: 'Login',
       event: 'Successful Login',

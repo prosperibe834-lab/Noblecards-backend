@@ -358,4 +358,45 @@ describe('ReferralsService', () => {
       }),
     });
   });
+
+  it('provides referral program settings and updates commission rate with audit log', async () => {
+    prisma.referralAttribution = { groupBy: jest.fn().mockResolvedValue([]) };
+    const initial = await service.getSettings();
+    expect(initial.settings.commissionRate).toBe(1.5);
+    expect(initial.settings.programActive).toBe(true);
+
+    const updated = await service.updateCommissionRate(
+      2.5,
+      'Promotion increase',
+      'admin-99',
+    );
+    expect(updated.success).toBe(true);
+    expect(updated.settings.commissionRate).toBe(2.5);
+    expect(updated.auditLogs[0]).toMatchObject({
+      admin: 'admin-99',
+      previousValue: '1.5%',
+      newValue: '2.5%',
+      reason: 'Promotion increase',
+    });
+
+    const toggled = await service.toggleProgramStatus(false, 'admin-99');
+    expect(toggled.success).toBe(true);
+    expect(toggled.active).toBe(false);
+  });
+
+  it('provides qrCode and qrData in customer summary', async () => {
+    prisma.user = {
+      findUnique: jest.fn().mockResolvedValue({ referralCode: 'QRTEST123' }),
+    };
+    prisma.referralAttribution = { findMany: jest.fn().mockResolvedValue([]) };
+    prisma.referralReward = { findMany: jest.fn().mockResolvedValue([]) };
+    prisma.walletBalance = { findFirst: jest.fn().mockResolvedValue(null) };
+
+    const summary = await service.getCustomerSummary('user-qr');
+    expect(summary.code).toBe('QRTEST123');
+    expect(summary.link).toContain('QRTEST123');
+    expect(summary.qrCode).toBe(summary.link);
+    expect(summary.qrData).toBe(summary.link);
+  });
 });
+
