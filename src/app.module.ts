@@ -22,6 +22,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { SecurityAuditModule } from './security-audit/security-audit.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
     SecurityAuditModule,
     NotificationsModule,
     AnalyticsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

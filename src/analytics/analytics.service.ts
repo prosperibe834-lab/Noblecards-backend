@@ -261,7 +261,7 @@ export class AnalyticsService {
     const chartPoints: ChartDataPointDto[] = [];
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    if (period.toUpperCase() === '7D' || (!customStart && !['30D', '3M', '6M', '1Y'].includes(period.toUpperCase()))) {
+    if (!customStart && (period.toUpperCase() === '7D' || !['30D', '3M', '6M', '1Y'].includes(period.toUpperCase()))) {
       // 7 Daily Points
       for (let i = 6; i >= 0; i--) {
         const bucketStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i, 0, 0, 0);
@@ -318,13 +318,23 @@ export class AnalyticsService {
       }
     } else {
       // Monthly / Interval Points
-      const numBuckets = period.toUpperCase() === '3M' ? 3 : period.toUpperCase() === '6M' ? 6 : 4;
+      const numBuckets = customStart
+        ? (duration <= 10 * 86400000 ? Math.min(7, Math.max(2, Math.round(duration / 86400000))) : 4)
+        : (period.toUpperCase() === '3M' ? 3 : period.toUpperCase() === '6M' ? 6 : 4);
       const step = duration / numBuckets;
 
       for (let b = 0; b < numBuckets; b++) {
         const bucketStart = new Date(currentStart.getTime() + b * step);
         const bucketEnd = new Date(currentStart.getTime() + (b + 1) * step);
-        const label = period.toUpperCase() === '1Y' ? `Q${b + 1}` : months[bucketStart.getMonth()];
+        const label = customStart
+          ? (duration <= 2 * 86400000
+              ? `${bucketStart.getHours().toString().padStart(2, '0')}:00`
+              : duration <= 10 * 86400000
+                ? `${months[bucketStart.getMonth()]} ${bucketStart.getDate()}`
+                : duration <= 60 * 86400000
+                  ? `Week ${b + 1}`
+                  : months[bucketStart.getMonth()])
+          : (period.toUpperCase() === '1Y' ? `Q${b + 1}` : months[bucketStart.getMonth()]);
 
         const depSum = currentDeposits
           .filter(d => d.createdAt >= bucketStart && d.createdAt < bucketEnd)
@@ -445,7 +455,7 @@ export class AnalyticsService {
     rawActivities.sort((a, b) => b.rawDate.getTime() - a.rawDate.getTime());
 
     // Clean out internal rawDate before returning
-    const finalActivities: RecentActivityItemDto[] = rawActivities.slice(0, 10).map(item => ({
+    const finalActivities: RecentActivityItemDto[] = rawActivities.slice(0, 5).map(item => ({
       id: item.id,
       title: item.title,
       subtitle: item.subtitle,
