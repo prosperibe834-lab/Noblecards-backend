@@ -44,6 +44,7 @@ export class UsersService {
       100,
     );
     const search = query.search?.trim();
+    const cleanSearch = search ? search.replace(/^@/, '') : '';
     const status =
       query.status && query.status !== 'All' ? query.status : undefined;
     const kycStatus =
@@ -77,8 +78,8 @@ export class UsersService {
             OR: [
               { firstName: { contains: search, mode: 'insensitive' as const } },
               { lastName: { contains: search, mode: 'insensitive' as const } },
-              { username: { contains: search, mode: 'insensitive' as const } },
-              { email: { contains: search, mode: 'insensitive' as const } },
+              { username: { contains: cleanSearch || search, mode: 'insensitive' as const } },
+              { email: { contains: cleanSearch || search, mode: 'insensitive' as const } },
               { phone: { contains: search, mode: 'insensitive' as const } },
               { id: { contains: search, mode: 'insensitive' as const } },
               { country: { contains: search, mode: 'insensitive' as const } },
@@ -89,7 +90,7 @@ export class UsersService {
         ? { country: { equals: country, mode: 'insensitive' as const } }
         : {}),
       ...(dateStart ? { createdAt: { gte: dateStart } } : {}),
-      ...(status === 'Active' ? { isActive: true } : {}),
+      ...(status === 'Active' ? { isActive: true, isEmailVerified: true } : {}),
       ...(status === 'Suspended' || status === 'Banned'
         ? { isActive: false }
         : {}),
@@ -98,7 +99,9 @@ export class UsersService {
       ...(kycStatus === 'Pending'
         ? { isEmailVerified: true, isVerified: false }
         : {}),
-      ...(kycStatus === 'Not Submitted' ? { isEmailVerified: false } : {}),
+      ...(kycStatus === 'Not Submitted' || kycStatus === 'Not Verified'
+        ? { isEmailVerified: false }
+        : {}),
       ...(kycStatus === 'Rejected'
         ? { isActive: false, isVerified: false }
         : {}),
@@ -151,7 +154,11 @@ export class UsersService {
         }),
         this.prisma.$queryRaw<Array<{ userId: string; count: bigint }>>`
         SELECT "userId", COUNT(*)::bigint AS "count"
-        FROM "GiftCardSale"
+        FROM (
+          SELECT "userId" FROM "GiftCardSale"
+          UNION ALL
+          SELECT "userId" FROM "GiftCardPurchase"
+        ) cards
         GROUP BY "userId"
       `,
         this.prisma.$queryRaw<Array<{ userId: string; balance: string }>>`
@@ -183,12 +190,14 @@ export class UsersService {
       });
     }
     return {
-      users: mappedUsers.slice((page - 1) * pageSize, page * pageSize),
+      users: derivedSort
+        ? mappedUsers.slice((page - 1) * pageSize, page * pageSize)
+        : mappedUsers,
       pagination: {
         page,
         pageSize,
         total,
-        totalPages: Math.ceil(total / pageSize),
+        totalPages: Math.max(Math.ceil(total / pageSize), 1),
       },
       stats,
       countries: countryRows
@@ -227,29 +236,49 @@ export class UsersService {
     const fullName = String(body.fullName ?? '')
       .trim()
       .split(/\s+/);
-    const user = await this.prisma.user.create({
-      data: {
-        email,
-        passwordHash: await bcrypt.hash(password, 12),
-        firstName: fullName.shift() ?? '',
-        lastName: fullName.join(' '),
-        referralCode: randomBytes(6).toString('hex').slice(0, 10).toUpperCase(),
-        username: this.optionalString(body.username)?.replace(/^@/, '') || null,
-        phone: this.optionalString(body.phone),
-        country: this.optionalString(body.country),
-        gender: this.optionalString(body.gender),
-        isEmailVerified: body.kycStatus === 'Verified',
-        isActive: body.status !== 'Suspended' && body.status !== 'Banned',
-      },
-      select: { id: true },
-    });
-    return { id: user.id, created: true };
+    const isVerified = body.kycStatus === 'Verified';
+    const isEmailVerified = isVerified || body.kycStatus === 'Pending' || body.status !== 'Pending';
+    const isActive = body.status !== 'Suspended' && body.status !== 'Banned';
+
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          email,
+          passwordHash: await bcrypt.hash(password, 12),
+          firstName: fullName.shift() ?? '',
+          lastName: fullName.join(' '),
+          referralCode: randomBytes(6).toString('hex').slice(0, 10).toUpperCase(),
+          username: this.optionalString(body.username)?.replace(/^@/, '') || null,
+          phone: this.optionalString(body.phone),
+          country: this.optionalString(body.country),
+          gender: this.optionalString(body.gender),
+          dateOfBirth: body.dateOfBirth ? new Date(String(body.dateOfBirth)) : null,
+          address: this.optionalString(body.address),
+          isEmailVerified,
+          isVerified,
+          isActive,
+        },
+        select: { id: true },
+      });
+      return { id: user.id, created: true };
+    } catch (error: any) {
+      if (error?.code === 'P2002') {
+        const target = error?.meta?.target;
+        const field = Array.isArray(target) ? target.join(', ') : 'field';
+        throw new BadRequestException(`A user with this ${field} already exists.`);
+      }
+      throw error;
+    }
   }
 
   async updateAdminUser(id: string, body: Record<string, unknown>) {
     const fullName = String(body.fullName ?? '')
       .trim()
       .split(/\s+/);
+    const isVerified = body.kycStatus === 'Verified';
+    const isEmailVerified = isVerified || body.kycStatus === 'Pending' || body.status !== 'Pending';
+    const isActive = body.status !== 'Suspended' && body.status !== 'Banned';
+
     const data: Record<string, unknown> = {
       firstName: fullName.shift() ?? '',
       lastName: fullName.join(' '),
@@ -257,17 +286,38 @@ export class UsersService {
       phone: this.optionalString(body.phone),
       country: this.optionalString(body.country),
       gender: this.optionalString(body.gender),
-      isEmailVerified: body.kycStatus === 'Verified',
-      isActive: body.status !== 'Suspended' && body.status !== 'Banned',
+      isEmailVerified,
+      isVerified,
+      isActive,
     };
-    if (body.password)
+    if (body.email) {
+      data.email = String(body.email).trim().toLowerCase();
+    }
+    if (body.dateOfBirth !== undefined) {
+      data.dateOfBirth = body.dateOfBirth ? new Date(String(body.dateOfBirth)) : null;
+    }
+    if (body.address !== undefined) {
+      data.address = this.optionalString(body.address);
+    }
+    if (body.password) {
       data.passwordHash = await bcrypt.hash(String(body.password), 12);
-    const user = await this.prisma.user.update({
-      where: { id },
-      data,
-      select: { id: true },
-    });
-    return { id: user.id, updated: true };
+    }
+
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
+        select: { id: true },
+      });
+      return { id: user.id, updated: true };
+    } catch (error: any) {
+      if (error?.code === 'P2002') {
+        const target = error?.meta?.target;
+        const field = Array.isArray(target) ? target.join(', ') : 'field';
+        throw new BadRequestException(`A user with this ${field} already exists.`);
+      }
+      throw error;
+    }
   }
 
   async deactivateAdminUser(id: string) {
@@ -287,31 +337,80 @@ export class UsersService {
   private async getAdminUserStats() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
     const [
       totalUsers,
+      totalUsersThirtyDaysAgo,
       activeUsers,
+      activeUsersThirtyDaysAgo,
       newUsersToday,
+      newUsersYesterday,
       pendingVerification,
       suspendedUsers,
     ] = await Promise.all([
       this.prisma.user.count(),
+      this.prisma.user.count({ where: { createdAt: { lt: thirtyDaysAgo } } }),
       this.prisma.user.count({ where: { isActive: true } }),
+      this.prisma.user.count({ where: { isActive: true, createdAt: { lt: thirtyDaysAgo } } }),
       this.prisma.user.count({ where: { createdAt: { gte: today } } }),
+      this.prisma.user.count({ where: { createdAt: { gte: yesterday, lt: today } } }),
       this.prisma.user.count({ where: { isVerified: false } }),
       this.prisma.user.count({ where: { isActive: false } }),
     ]);
-    const stat = (count: number) => ({
-      count,
-      change: '',
-      isPositive: true,
-      period: 'current',
-    });
+
+    const calculateChange = (current: number, previous: number) => {
+      if (previous === 0) {
+        return current > 0 ? { change: '+100%', isPositive: true } : { change: '0%', isPositive: true };
+      }
+      const diff = ((current - previous) / previous) * 100;
+      const formatted = Math.abs(diff).toFixed(1);
+      return {
+        change: `${diff >= 0 ? '+' : '-'}${formatted}%`,
+        isPositive: diff >= 0,
+      };
+    };
+
+    const totalChange = calculateChange(totalUsers, totalUsersThirtyDaysAgo);
+    const activeChange = calculateChange(activeUsers, activeUsersThirtyDaysAgo);
+    const todayChange = calculateChange(newUsersToday, newUsersYesterday);
+
     return {
-      totalUsers: stat(totalUsers),
-      activeUsers: stat(activeUsers),
-      newUsersToday: stat(newUsersToday),
-      pendingVerification: stat(pendingVerification),
-      suspendedUsers: stat(suspendedUsers),
+      totalUsers: {
+        count: totalUsers,
+        change: totalChange.change,
+        isPositive: totalChange.isPositive,
+        period: 'last month',
+      },
+      activeUsers: {
+        count: activeUsers,
+        change: activeChange.change,
+        isPositive: activeChange.isPositive,
+        period: 'last month',
+      },
+      newUsersToday: {
+        count: newUsersToday,
+        change: todayChange.change,
+        isPositive: todayChange.isPositive,
+        period: 'yesterday',
+      },
+      pendingVerification: {
+        count: pendingVerification,
+        change: '',
+        isPositive: pendingVerification === 0,
+        period: 'live',
+      },
+      suspendedUsers: {
+        count: suspendedUsers,
+        change: '',
+        isPositive: suspendedUsers === 0,
+        period: 'live',
+      },
     };
   }
 
@@ -328,7 +427,9 @@ export class UsersService {
       country: user.country ?? 'N/A',
       gender: user.gender ?? 'N/A',
       dateOfBirth: user.dateOfBirth
-        ? user.dateOfBirth.toISOString().slice(0, 10)
+        ? (user.dateOfBirth instanceof Date
+            ? user.dateOfBirth.toISOString().slice(0, 10)
+            : String(user.dateOfBirth).slice(0, 10))
         : 'N/A',
       address: user.address ?? 'N/A',
       kycStatus: user.isVerified
@@ -343,11 +444,24 @@ export class UsersService {
         : user.isActive
           ? 'Active'
           : 'Suspended',
-      joinedDate: user.createdAt.toISOString().slice(0, 10),
-      avatar:
-        user.profileImageUrl ||
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}`,
+      joinedDate: (user.createdAt instanceof Date ? user.createdAt : new Date(user.createdAt)).toISOString().slice(0, 10),
+      avatar: this.formatAvatarUrl(user.profileImageUrl, fullName),
     };
+  }
+
+  private formatAvatarUrl(url: string | null | undefined, name: string) {
+    if (!url || !url.trim()) {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=0D8ABC&color=fff`;
+    }
+    const trimmed = url.trim();
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    const backendUrl =
+      process.env.API_BASE_URL ||
+      process.env.BACKEND_URL ||
+      'http://localhost:3000';
+    return `${backendUrl.replace(/\/$/, '')}/${trimmed.replace(/^\//, '')}`;
   }
 
   async hasTransactionPin(userId: string) {

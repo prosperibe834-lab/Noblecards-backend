@@ -82,7 +82,11 @@ export class AuthGuard implements CanActivate {
     }
 
     await this.recordRejectedRequest(request);
-    throw new UnauthorizedException('Authentication required.');
+    throw new UnauthorizedException(
+      isAdminRoute
+        ? 'Your admin session has expired. Please sign in again.'
+        : 'Authentication required.',
+    );
   }
 
   private async recordRejectedRequest(request: RequestWithAuth) {
