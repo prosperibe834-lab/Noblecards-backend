@@ -36,6 +36,22 @@ export class EmailDto {
 
 export class LoginDto extends EmailDto {
   @IsString() @MinLength(1) password!: string;
+  @IsOptional() @IsString() adminPin?: string;
+}
+
+export class AdminRegisterDto {
+  @IsEmail() email!: string;
+  @IsString() @MinLength(8) password!: string;
+  @IsString() @MinLength(1) firstName!: string;
+  @IsString() @MinLength(1) lastName!: string;
+  @IsOptional() @IsString() phone?: string;
+  @IsString() adminPin!: string;
+}
+
+export class AdminVerifyOtpDto {
+  @IsEmail() email!: string;
+  @Matches(/^\d{6}$/) otp!: string;
+  @IsString() adminPin!: string;
 }
 
 export class ChangePasswordDto {

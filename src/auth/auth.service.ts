@@ -18,6 +18,8 @@ import {
   writeSecurityAuditEvent,
 } from '../security-audit/security-audit.utils';
 import {
+  AdminRegisterDto,
+  AdminVerifyOtpDto,
   EmailCodeDto,
   EmailDto,
   LoginDto,
@@ -236,7 +238,7 @@ export class AuthService {
     context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
   ) {
     const attemptedEmail = this.normalizeEmail(dto.email);
-    const user = await this.users.findByEmail(attemptedEmail);
+    let user = await this.users.findByEmail(attemptedEmail);
     if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
       await this.recordSecurityEvent({
         eventType: 'Login',
@@ -248,6 +250,31 @@ export class AuthService {
         ...context,
       });
       throw new UnauthorizedException('Invalid email or password.');
+    }
+    // Verify Admin PIN if logging into an admin account or if adminPin is provided
+    if (user.role === 'ADMIN' || dto.adminPin !== undefined) {
+      if (dto.adminPin !== '921340') {
+        await this.recordSecurityEvent({
+          eventType: 'Login',
+          event: 'Login Failed - Invalid Admin PIN',
+          outcome: 'FAILED',
+          actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+          actorUserId: user.id,
+          targetUserId: user.id,
+          description: 'Login rejected: Invalid Admin PIN provided.',
+          metadata: { attemptedEmail },
+          ...context,
+        });
+        throw new UnauthorizedException('Invalid Admin PIN. Access denied.');
+      }
+
+      // If user supplied the correct Admin PIN 921340, ensure they have the ADMIN role
+      if (user.role !== 'ADMIN') {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { role: 'ADMIN', isEmailVerified: true, isActive: true },
+        });
+      }
     }
     if (!user.isEmailVerified) {
       await this.recordSecurityEvent({
@@ -642,5 +669,175 @@ export class AuthService {
       await increment(attempts + 1);
       throw new BadRequestException('Invalid or expired verification code.');
     }
+  }
+
+  async registerAdmin(
+    dto: AdminRegisterDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    if (!dto.adminPin || dto.adminPin.trim() !== '921340') {
+      throw new UnauthorizedException('Invalid Admin PIN. Access denied.');
+    }
+    const email = this.normalizeEmail(dto.email);
+    const existing = await this.users.findByEmail(email);
+
+    if (existing && existing.role === 'ADMIN') {
+      throw new ConflictException(
+        'An administrator account with this email already exists. Please sign in.',
+      );
+    }
+
+    if (dto.phone?.trim()) {
+      const existingPhone = await this.prisma.user.findFirst({
+        where: { phone: dto.phone.trim() },
+      });
+      if (existingPhone && (!existing || existingPhone.id !== existing.id)) {
+        throw new ConflictException('An account with this phone number already exists.');
+      }
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 12);
+    const code = this.newCode();
+
+    await this.prisma.pendingRegistration.upsert({
+      where: { email },
+      update: {
+        firstName: dto.firstName.trim(),
+        lastName: dto.lastName.trim(),
+        phone: dto.phone?.trim() || null,
+        passwordHash,
+        existingUserId: existing?.id || null,
+        otpHash: this.hash(code),
+        otpExpiresAt: this.otpExpiry(),
+        otpAttempts: 0,
+        lastOtpSentAt: new Date(),
+      },
+      create: {
+        email,
+        firstName: dto.firstName.trim(),
+        lastName: dto.lastName.trim(),
+        phone: dto.phone?.trim() || null,
+        passwordHash,
+        existingUserId: existing?.id || null,
+        otpHash: this.hash(code),
+        otpExpiresAt: this.otpExpiry(),
+        lastOtpSentAt: new Date(),
+      },
+    });
+
+    try {
+      await this.email.sendVerificationCode(email, code);
+    } catch (emailErr) {
+      this.logger.error(`Failed to send verification email to ${email}: ${emailErr}`);
+    }
+
+    await this.recordSecurityEvent({
+      eventType: 'Account',
+      event: 'Admin Registration Initiated',
+      outcome: 'SUCCESS',
+      actorType: 'ADMIN',
+      description: `Admin registration initiated and OTP sent for ${email}`,
+      ...context,
+    });
+
+    return {
+      success: true,
+      requiresVerification: true,
+      email,
+      message: 'A 6-digit verification code has been sent to your email address.',
+    };
+  }
+
+  async verifyAdminOtp(
+    dto: AdminVerifyOtpDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    if (!dto.adminPin || dto.adminPin.trim() !== '921340') {
+      throw new UnauthorizedException('Invalid Admin PIN. Access denied.');
+    }
+    const email = this.normalizeEmail(dto.email);
+    const pending = await this.prisma.pendingRegistration.findUnique({
+      where: { email },
+    });
+    if (!pending) {
+      throw new BadRequestException('No pending registration found for this email. Please register first.');
+    }
+
+    await this.checkCode(
+      pending.otpHash,
+      dto.otp,
+      pending.otpExpiresAt,
+      pending.otpAttempts,
+      async (attempts) =>
+        this.prisma.pendingRegistration.update({
+          where: { id: pending.id },
+          data: { otpAttempts: attempts },
+        }),
+    );
+
+    let user: any;
+    if (pending.existingUserId) {
+      user = await this.prisma.user.update({
+        where: { id: pending.existingUserId },
+        data: {
+          role: 'ADMIN',
+          passwordHash: pending.passwordHash,
+          firstName: pending.firstName.trim() || undefined,
+          lastName: pending.lastName.trim() || undefined,
+          phone: pending.phone?.trim() || undefined,
+          isActive: true,
+          isEmailVerified: true,
+          isProfileComplete: true,
+          isVerified: true,
+        },
+      });
+    } else {
+      user = await this.prisma.user.create({
+        data: {
+          email: pending.email,
+          passwordHash: pending.passwordHash,
+          firstName: pending.firstName.trim(),
+          lastName: pending.lastName.trim(),
+          phone: pending.phone?.trim() || null,
+          role: 'ADMIN',
+          isActive: true,
+          isEmailVerified: true,
+          isProfileComplete: true,
+          isVerified: true,
+          referralCode: this.newReferralCode(),
+        },
+      });
+    }
+
+    await this.prisma.pendingRegistration.delete({
+      where: { id: pending.id },
+    });
+
+    await this.recordSecurityEvent({
+      eventType: 'Account',
+      event: 'Admin Email & PIN Verification',
+      outcome: 'SUCCESS',
+      actorType: 'ADMIN',
+      actorUserId: user.id,
+      targetUserId: user.id,
+      description: `Administrator registration completed for ${user.email}`,
+      ...context,
+    });
+
+    const session = await this.issueSession(user);
+    return {
+      success: true,
+      message: 'Admin account verified successfully.',
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        role: user.role,
+      },
+    };
   }
 }

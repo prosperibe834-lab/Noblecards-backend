@@ -29,23 +29,6 @@ export class AuthGuard implements CanActivate {
     const isNotificationRoute = url.startsWith('/notifications');
     const isAnalyticsRoute = url.startsWith('/analytics');
 
-    // Admin portal session authorization
-    if (
-      token === 'mock-jwt-noblecards-token-2026' ||
-      (isAdminRoute && (!token || token === 'null' || token === 'undefined'))
-    ) {
-      const adminUser = await this.prisma.user.findFirst({
-        where: { role: 'ADMIN', isActive: true },
-        select: { id: true },
-      });
-      if (adminUser) {
-        request.user = {
-          userId: adminUser.id,
-          sessionId: 'admin-portal-session',
-        };
-        return true;
-      }
-    }
 
     // Standard JWT verification
     if (token && token !== 'null' && token !== 'undefined') {

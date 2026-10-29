@@ -201,11 +201,11 @@ export class SecurityAuditService {
       type: string;
       risk: string;
       time: string;
-      userId: string;
+      userId: string | null;
       userName: string;
       location: string;
       ipAddress: string;
-      phone: string;
+      phone: string | null;
       device: string;
       logId: string;
       description: string;
@@ -250,63 +250,36 @@ export class SecurityAuditService {
         LIMIT 1
       `);
 
-      if (failedLogin && failedLogin.length > 0 && failedLogin[0].ipAddress) {
+      if (failedLogin && failedLogin.length > 0 && failedLogin[0].ipAddress && (failedLogin[0].cnt || 0) >= 2) {
         const row = failedLogin[0];
-        const city = row.city || 'Lagos';
-        const country = row.country || 'Nigeria';
-        const devName = row.deviceType ? `${row.deviceType} (${row.os || 'iOS 17.4'}, ${row.browser || 'Safari'})` : 'iPhone 15 Pro (iOS 17.4)';
+        const city = row.city || 'Unknown City';
+        const country = row.country || 'Unknown Country';
+        const devName = row.deviceType ? `${row.deviceType} (${row.os || 'OS'}, ${row.browser || 'Browser'})` : 'Unknown Device';
         alerts.push({
-          id: 'ALT-9001',
+          id: `ALT-${row.id.slice(0, 8)}`,
           type: 'Multiple Failed Logins',
           risk: 'HIGH',
           time: this.formatTimestamp(row.createdAt),
-          userId: row.userId ? (row.userId.startsWith('NC-') ? row.userId : `NC-00${row.userId.slice(0, 4)}`) : 'NC-004829',
-          userName: row.userName || 'John Doe',
+          userId: row.userId ? (row.userId.startsWith('NC-') ? row.userId : `NC-00${row.userId.slice(0, 4)}`) : null,
+          userName: row.userName || 'Unknown User',
           location: `${city}, ${country}`,
-          ipAddress: row.ipAddress || '102.89.23.41',
-          phone: row.phone || '+234 803 482 9102',
+          ipAddress: row.ipAddress,
+          phone: row.phone || null,
           device: devName,
           logId: row.id,
-          description: `${Math.max(5, row.cnt || 8)} failed login attempts detected from IP ${row.ipAddress} within 3 minutes.`,
-        });
-      } else {
-        alerts.push({
-          id: 'ALT-9001',
-          type: 'Multiple Failed Logins',
-          risk: 'HIGH',
-          time: new Date(Date.now() - 15 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-          userId: 'NC-004829',
-          userName: 'John Doe',
-          location: 'Lagos, Nigeria',
-          ipAddress: '102.89.23.41',
-          phone: '+234 803 482 9102',
-          device: 'iPhone 15 Pro (iOS 17.4)',
-          logId: 'SEC-10001',
-          description: '8 failed login attempts detected from IP 102.89.23.41 within 3 minutes.',
+          description: `${row.cnt} failed login attempts detected from IP ${row.ipAddress}.`,
         });
       }
     } catch (_) {
-      alerts.push({
-        id: 'ALT-9001',
-        type: 'Multiple Failed Logins',
-        risk: 'HIGH',
-        time: new Date(Date.now() - 15 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: 'NC-004829',
-        userName: 'John Doe',
-        location: 'Lagos, Nigeria',
-        ipAddress: '102.89.23.41',
-        phone: '+234 803 482 9102',
-        device: 'iPhone 15 Pro (iOS 17.4)',
-        logId: 'SEC-10001',
-        description: '8 failed login attempts detected from IP 102.89.23.41 within 3 minutes.',
-      });
+      // Ignore database errors, do not inject fake demo alerts
     }
 
     // 2. Unusual Withdrawal Activity Alert
     try {
       const topWithdrawal = await this.prisma.withdrawal.findFirst({
         where: {
-          status: { in: ['PENDING', 'PROCESSING', 'UNDER_REVIEW', 'SUCCESSFUL'] as any },
+          status: { in: ['UNDER_REVIEW', 'PENDING'] as any },
+          sourceAmount: { gte: 1000 },
         },
         include: { user: true },
         orderBy: { sourceAmount: 'desc' },
@@ -314,97 +287,57 @@ export class SecurityAuditService {
 
       if (topWithdrawal) {
         const u = topWithdrawal.user;
-        const uName = u ? `${u.firstName || ''} ${u.lastName || ''}`.trim() || 'Chidi Okafor' : 'Chidi Okafor';
-        const loc = u?.country ? (u?.country.toLowerCase().includes('nigeria') ? 'Abuja, Nigeria' : `Accra, ${u.country}`) : 'Abuja, Nigeria';
+        const uName = u ? `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email : 'Unknown User';
+        const loc = u?.country || 'Unknown Country';
         alerts.push({
-          id: 'ALT-9002',
+          id: `ALT-${topWithdrawal.id.slice(0, 8)}`,
           type: 'Unusual Withdrawal Activity',
           risk: 'CRITICAL',
           time: this.formatTimestamp(topWithdrawal.createdAt),
-          userId: u?.id ? (u.id.startsWith('NC-') ? u.id : `NC-00${u.id.slice(0, 4)}`) : 'NC-001284',
+          userId: u?.id ? (u.id.startsWith('NC-') ? u.id : `NC-00${u.id.slice(0, 4)}`) : null,
           userName: uName,
           location: loc,
-          ipAddress: '197.210.44.12',
-          phone: u?.phone || '+234 814 291 0394',
-          device: 'Samsung Galaxy S24 Ultra (Android 14)',
+          ipAddress: (topWithdrawal.metadata as any)?.ipAddress || 'Unknown IP',
+          phone: u?.phone || null,
+          device: (topWithdrawal.metadata as any)?.device || 'Unknown Device',
           logId: topWithdrawal.id,
-          description: `High-value withdrawal request of $${Number(topWithdrawal.sourceAmount).toLocaleString()} initiated from a new device.`,
-        });
-      } else {
-        alerts.push({
-          id: 'ALT-9002',
-          type: 'Unusual Withdrawal Activity',
-          risk: 'CRITICAL',
-          time: new Date(Date.now() - 45 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-          userId: 'NC-001284',
-          userName: 'Chidi Okafor',
-          location: 'Abuja, Nigeria',
-          ipAddress: '197.210.44.12',
-          phone: '+234 814 291 0394',
-          device: 'Samsung Galaxy S24 Ultra (Android 14)',
-          logId: 'SEC-10005',
-          description: 'High-value withdrawal request of ₦2,500,000 initiated from a new device.',
+          description: `High-value withdrawal request of $${Number(topWithdrawal.sourceAmount).toLocaleString()} under review.`,
         });
       }
     } catch (_) {
-      alerts.push({
-        id: 'ALT-9002',
-        type: 'Unusual Withdrawal Activity',
-        risk: 'CRITICAL',
-        time: new Date(Date.now() - 45 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: 'NC-001284',
-        userName: 'Chidi Okafor',
-        location: 'Abuja, Nigeria',
-        ipAddress: '197.210.44.12',
-        phone: '+234 814 291 0394',
-        device: 'Samsung Galaxy S24 Ultra (Android 14)',
-        logId: 'SEC-10005',
-        description: 'High-value withdrawal request of ₦2,500,000 initiated from a new device.',
-      });
+      // Ignore errors, do not inject fake demo alerts
     }
 
     // 3. Admin Rate Change Alert
     try {
       const adminEvent = await this.prisma.securityAuditEvent.findFirst({
-        where: { actorType: 'ADMIN' },
+        where: { actorType: 'ADMIN', eventType: { contains: 'RATE', mode: 'insensitive' } },
         orderBy: { createdAt: 'desc' },
       });
-      const adminUser = await this.prisma.user.findFirst({
-        where: { role: 'ADMIN' },
-        select: { id: true, firstName: true, lastName: true, phone: true, country: true },
-      });
 
-      alerts.push({
-        id: 'ALT-9003',
-        type: 'Admin Rate Change',
-        risk: 'MEDIUM',
-        time: adminEvent
-          ? this.formatTimestamp(adminEvent.createdAt)
-          : new Date(Date.now() - 120 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: adminEvent?.actorUserId || adminUser?.id || 'ADM-001',
-        userName: adminUser ? `${adminUser.firstName} ${adminUser.lastName}`.trim() : 'Admin Sarah',
-        location: adminUser?.country ? (adminUser.country.toLowerCase().includes('nigeria') ? 'Port Harcourt, Nigeria' : adminUser.country) : 'Port Harcourt, Nigeria',
-        ipAddress: adminEvent?.ipAddress || '102.90.12.88',
-        phone: adminUser?.phone || '+234 802 918 3491',
-        device: 'Desktop Chrome (Windows 11)',
-        logId: adminEvent?.id || 'SEC-10012',
-        description: adminEvent?.description || 'USD/NGN Gift Card buy rate updated from ₦1,450 to ₦1,485.',
-      });
+      if (adminEvent) {
+        const adminUser = adminEvent.actorUserId ? await this.prisma.user.findUnique({
+          where: { id: adminEvent.actorUserId },
+          select: { id: true, firstName: true, lastName: true, phone: true, country: true, email: true },
+        }) : null;
+
+        alerts.push({
+          id: `ALT-${adminEvent.id.slice(0, 8)}`,
+          type: 'Admin Rate Change',
+          risk: 'MEDIUM',
+          time: this.formatTimestamp(adminEvent.createdAt),
+          userId: adminEvent.actorUserId || 'ADMIN',
+          userName: adminUser ? `${adminUser.firstName} ${adminUser.lastName}`.trim() || adminUser.email : 'Admin',
+          location: adminUser?.country || 'Unknown Location',
+          ipAddress: adminEvent.ipAddress || 'Unknown IP',
+          phone: adminUser?.phone || null,
+          device: adminEvent.deviceType || 'Desktop',
+          logId: adminEvent.id,
+          description: adminEvent.description || 'Administrative exchange rate modified.',
+        });
+      }
     } catch (_) {
-      alerts.push({
-        id: 'ALT-9003',
-        type: 'Admin Rate Change',
-        risk: 'MEDIUM',
-        time: new Date(Date.now() - 120 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: 'ADM-001',
-        userName: 'Admin Sarah',
-        location: 'Port Harcourt, Nigeria',
-        ipAddress: '102.90.12.88',
-        phone: '+234 802 918 3491',
-        device: 'Desktop Chrome (Windows 11)',
-        logId: 'SEC-10012',
-        description: 'USD/NGN Gift Card buy rate updated from ₦1,450 to ₦1,485.',
-      });
+      // Ignore errors, do not inject fake demo alerts
     }
 
     // 4. Multiple Accounts / Same Device Alert
@@ -414,54 +347,31 @@ export class SecurityAuditService {
         FROM "SecurityAuditEvent" e
         WHERE e."ipAddress" IS NOT NULL AND e."actorUserId" IS NOT NULL
         GROUP BY e."ipAddress"
-        HAVING COUNT(DISTINCT e."actorUserId") >= 2
+        HAVING COUNT(DISTINCT e."actorUserId") >= 3
         LIMIT 1
       `);
 
-      const otherUser = await this.prisma.user.findFirst({
-        where: { role: 'USER' },
-        skip: 1,
-        select: { id: true, firstName: true, lastName: true, phone: true, country: true },
-      });
-
-      const ip = sharedIp[0]?.ipAddress || '102.88.19.102';
-      const cnt = sharedIp[0]?.cnt || 4;
-      const uName = otherUser ? `${otherUser.firstName} ${otherUser.lastName}`.trim() : 'Amina Yusuf';
-      const uId = otherUser ? (otherUser.id.startsWith('NC-') ? otherUser.id : `NC-00${otherUser.id.slice(0, 4)}`) : 'NC-008392';
-      const loc = otherUser?.country ? (otherUser.country.toLowerCase().includes('nigeria') ? 'Kano, Nigeria' : otherUser.country) : 'Kano, Nigeria';
-
-      alerts.push({
-        id: 'ALT-9004',
-        type: 'Multiple Accounts / Same Device',
-        risk: 'HIGH',
-        time: new Date(Date.now() - 360 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: uId,
-        userName: uName,
-        location: loc,
-        ipAddress: ip,
-        phone: otherUser?.phone || '+234 706 829 1042',
-        device: 'Infinix Note 30 (Android 13)',
-        logId: 'SEC-10020',
-        description: `Same device hardware fingerprint used across ${cnt} different NobleCards accounts.`,
-      });
+      if (sharedIp && sharedIp.length > 0 && sharedIp[0].cnt >= 3) {
+        const ip = sharedIp[0].ipAddress;
+        const cnt = sharedIp[0].cnt;
+        alerts.push({
+          id: `ALT-MULT-${ip.replace(/[^a-zA-Z0-9]/g, '')}`,
+          type: 'Multiple Accounts / Same Device',
+          risk: 'HIGH',
+          time: new Date().toISOString().replace('T', ' ').slice(0, 19),
+          userId: null,
+          userName: `${cnt} Linked Accounts`,
+          location: 'Multiple Locations',
+          ipAddress: ip,
+          phone: null,
+          device: 'Shared Network / Device',
+          logId: ip,
+          description: `Same IP or device hardware fingerprint detected across ${cnt} different NobleCards accounts.`,
+        });
+      }
     } catch (_) {
-      alerts.push({
-        id: 'ALT-9004',
-        type: 'Multiple Accounts / Same Device',
-        risk: 'HIGH',
-        time: new Date(Date.now() - 360 * 60000).toISOString().replace('T', ' ').slice(0, 19),
-        userId: 'NC-008392',
-        userName: 'Amina Yusuf',
-        location: 'Kano, Nigeria',
-        ipAddress: '102.88.19.102',
-        phone: '+234 706 829 1042',
-        device: 'Infinix Note 30 (Android 13)',
-        logId: 'SEC-10020',
-        description: 'Same device hardware fingerprint used across 4 different NobleCards accounts.',
-      });
+      // Ignore errors, do not inject fake demo alerts
     }
-
-    return alerts;
 
     return alerts;
   }
@@ -712,21 +622,21 @@ export class SecurityAuditService {
       row.actorUserId ||
       row.targetUserId ||
       (row.metadata?.userId as string) ||
-      (actorType === 'ADMIN' ? 'ADM-001' : `NC-00${Math.abs(this.hashCode(row.id) % 9000 + 1000)}`);
+      (actorType === 'ADMIN' ? 'ADMIN' : (row.id ? `NC-00${Math.abs(this.hashCode(row.id) % 9000 + 1000)}` : 'N/A'));
 
     const safeUserName =
       row.actorName ||
       row.targetName ||
       (row.metadata?.userName as string) ||
-      (row.actorEmail ? row.actorEmail.split('@')[0] : (actorType === 'ADMIN' ? 'Admin Sarah' : 'NobleCards User'));
+      (row.actorEmail ? row.actorEmail.split('@')[0] : (actorType === 'ADMIN' ? 'Admin' : 'System'));
 
-    const safeEmail = row.actorEmail ?? row.targetEmail ?? attemptedEmail ?? 'security@noblecards.com';
-    const safeIp = row.ipAddress || (row.metadata?.ipAddress as string) || '102.89.23.41';
-    const safeCountry = row.country || (row.metadata?.country as string) || 'Nigeria';
-    const safeCity = row.city || (row.metadata?.city as string) || 'Lagos';
+    const safeEmail = row.actorEmail ?? row.targetEmail ?? attemptedEmail ?? null;
+    const safeIp = row.ipAddress || (row.metadata?.ipAddress as string) || 'N/A';
+    const safeCountry = row.country || (row.metadata?.country as string) || 'N/A';
+    const safeCity = row.city || (row.metadata?.city as string) || 'N/A';
     const safeDevice = row.deviceType || (row.metadata?.deviceType as string) || (row.userAgent?.includes('Mobile') ? 'Mobile' : 'Desktop');
-    const safeOs = row.operatingSystem || (row.metadata?.os as string) || (row.userAgent?.includes('Android') ? 'Android 14' : row.userAgent?.includes('iPhone') ? 'iOS 17' : 'Windows 11');
-    const safeBrowser = row.browser || (row.metadata?.browser as string) || (row.userAgent?.includes('Safari') ? 'Safari 17' : 'Chrome 126');
+    const safeOs = row.operatingSystem || (row.metadata?.os as string) || (row.userAgent?.includes('Android') ? 'Android' : row.userAgent?.includes('iPhone') ? 'iOS' : 'Desktop OS');
+    const safeBrowser = row.browser || (row.metadata?.browser as string) || (row.userAgent?.includes('Safari') ? 'Safari' : 'Browser');
 
     return {
       id: row.id,
@@ -737,9 +647,9 @@ export class SecurityAuditService {
       actorType,
       actorId: safeUserId,
       actorName: safeUserName,
-      actorUsername: row.actorUsername || safeUserName.toLowerCase().replace(/\s+/g, '_'),
+      actorUsername: row.actorUsername || (safeUserName ? safeUserName.toLowerCase().replace(/\s+/g, '_') : 'unknown'),
       actorEmail: safeEmail,
-      actorPhone: row.actorPhone || '+2348012345678',
+      actorPhone: row.actorPhone || row.targetPhone || null,
       targetUserId: row.targetUserId || safeUserId,
       targetUserName: row.targetName || safeUserName,
       targetUsername: row.targetUsername,
@@ -747,15 +657,15 @@ export class SecurityAuditService {
       targetUserPhone: row.targetPhone,
       userId: safeUserId,
       userName: safeUserName,
-      username: row.actorUsername || safeUserName.toLowerCase().replace(/\s+/g, '_'),
+      username: row.actorUsername || (safeUserName ? safeUserName.toLowerCase().replace(/\s+/g, '_') : 'unknown'),
       userEmail: safeEmail,
-      userPhone: row.actorPhone || '+2348012345678',
+      userPhone: row.actorPhone || row.targetPhone || null,
       adminId: actorType === 'ADMIN' ? safeUserId : null,
       adminName: actorType === 'ADMIN' ? safeUserName : null,
       ipAddress: safeIp,
       country: safeCountry,
       city: safeCity,
-      isp: 'MTN Nigeria / Starlink',
+      isp: 'Broadband / Cellular',
       isVpn: false,
       isTor: false,
       deviceType: safeDevice,

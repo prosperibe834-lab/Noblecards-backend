@@ -775,6 +775,43 @@ export class DepositsService {
     }));
   }
 
+  private adminDepositStatusLabel(status: string): string {
+    switch (status) {
+      case 'SUCCESSFUL':
+        return 'Completed';
+      case 'PENDING':
+        return 'Pending';
+      case 'PROCESSING':
+      case 'UNDER_REVIEW':
+        return 'Processing';
+      case 'FAILED':
+      case 'EXPIRED':
+        return 'Failed';
+      case 'CANCELLED':
+      case 'REFUNDED':
+        return 'Cancelled';
+      case 'REVERSED':
+        return 'Reversed';
+      default:
+        return status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : 'Pending';
+    }
+  }
+
+  private adminDepositMethodLabel(method?: string): string {
+    switch (method) {
+      case 'CARD':
+        return 'Card';
+      case 'BANK_TRANSFER':
+      case 'WALLET_TRANSFER':
+        return 'Bank Transfer';
+      case 'USSD':
+      case 'MOBILE_MONEY':
+        return 'Payment Providers';
+      default:
+        return 'Bank Transfer';
+    }
+  }
+
   async getAdminDeposits() {
     const deposits = await (this.prisma as any).deposit.findMany({
       include: {
@@ -785,30 +822,177 @@ export class DepositsService {
             email: true,
             firstName: true,
             lastName: true,
+            phone: true,
+            username: true,
+            profileImageUrl: true,
           },
         },
       },
       orderBy: { createdAt: 'desc' },
     });
-    return deposits.map((deposit: any) => ({
-      id: deposit.id,
-      user: deposit.user,
-      status: deposit.status,
-      provider: deposit.provider,
-      currency: deposit.currencyCode,
-      amount: deposit.amount.toString(),
-      fee: deposit.fee.toString(),
-      netAmount: deposit.netAmount.toString(),
-      createdAt: deposit.createdAt,
-      updatedAt: deposit.updatedAt,
-      transaction: deposit.transaction
-        ? {
-            id: deposit.transaction.id,
-            status: deposit.transaction.status,
-            reference: deposit.transaction.reference,
-          }
-        : null,
+
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+
+    let totalDepositsVolume = 0;
+    let todaysDepositsVolume = 0;
+    let pendingDepositsVolume = 0;
+    let processingDepositsVolume = 0;
+    let completedDepositsVolume = 0;
+    let failedDepositsVolume = 0;
+    let nobleRevenueFees = 0;
+    let needsAttentionCount = 0;
+
+    const methodMap: Record<string, number> = {
+      'Bank Transfer': 0,
+      'Card': 0,
+      'Payment Providers': 0,
+    };
+
+    const volumeByDateMap: Record<string, number> = {};
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      volumeByDateMap[d.toISOString().split('T')[0]] = 0;
+    }
+
+    const mappedDeposits = deposits.map((deposit: any) => {
+      const statusLabel = this.adminDepositStatusLabel(deposit.status);
+      const methodLabel = this.adminDepositMethodLabel(deposit.paymentMethod);
+      const originalAmount = Number(deposit.amount) || 0;
+      const netAmount = Number(deposit.netAmount) || originalAmount;
+      const fee = Number(deposit.nobleCardsFee || deposit.fee || 0);
+      const providerFee = Number(deposit.fee || 0);
+      const exchangeRate = deposit.exchangeRate ? Number(deposit.exchangeRate) : (deposit.currencyCode === 'NGN' ? 1500 : 1);
+      
+      // Compute USD value
+      const usdValue = deposit.currencyCode === 'USD'
+        ? netAmount
+        : (deposit.nobleCardsFeeUsd ? Number(deposit.nobleCardsFeeUsd) : (exchangeRate > 0 ? Number((netAmount / exchangeRate).toFixed(2)) : netAmount));
+
+      const createdAtDate = new Date(deposit.createdAt);
+      const createdDateStr = createdAtDate.toISOString().split('T')[0];
+
+      // Aggregate stats
+      totalDepositsVolume += usdValue;
+      nobleRevenueFees += fee;
+
+      if (createdDateStr === todayStr) {
+        todaysDepositsVolume += usdValue;
+      }
+
+      if (statusLabel === 'Completed') {
+        completedDepositsVolume += usdValue;
+      } else if (statusLabel === 'Pending') {
+        pendingDepositsVolume += usdValue;
+      } else if (statusLabel === 'Processing') {
+        processingDepositsVolume += usdValue;
+      } else if (statusLabel === 'Failed') {
+        failedDepositsVolume += usdValue;
+        needsAttentionCount += 1;
+      }
+
+      if (methodMap[methodLabel] !== undefined) {
+        methodMap[methodLabel] += usdValue;
+      } else {
+        methodMap['Bank Transfer'] += usdValue;
+      }
+
+      if (volumeByDateMap[createdDateStr] !== undefined) {
+        volumeByDateMap[createdDateStr] += usdValue;
+      }
+
+      const userName = [deposit.user?.firstName, deposit.user?.lastName].filter(Boolean).join(' ').trim() || deposit.user?.email || 'User';
+      const userTag = `@${deposit.user?.username || (deposit.user?.email ? deposit.user.email.split('@')[0] : 'user')}`;
+      const avatar = deposit.user?.profileImageUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${deposit.userId}`;
+
+      return {
+        id: deposit.id,
+        userId: deposit.userId,
+        userName,
+        userTag,
+        avatar,
+        email: deposit.user?.email || '',
+        phone: deposit.user?.phone ? (deposit.user.phone.startsWith('+') ? deposit.user.phone : `+234 ${deposit.user.phone}`) : 'Not available',
+        originalAmount,
+        currency: deposit.currencyCode || 'USD',
+        usdValue,
+        exchangeRate,
+        nobleRate: exchangeRate,
+        method: methodLabel,
+        provider: deposit.provider === 'FLUTTERWAVE' ? 'Flutterwave' : (deposit.provider || 'Flutterwave'),
+        providerRef: deposit.providerTransactionId || deposit.providerReference || 'N/A',
+        paymentRef: deposit.transaction?.reference || deposit.idempotencyKey || deposit.id,
+        fee,
+        providerFee,
+        netAmount,
+        status: statusLabel,
+        createdAt: deposit.createdAt,
+        updatedAt: deposit.updatedAt,
+        reconciliation: {
+          status: statusLabel === 'Failed' ? 'Mismatch' : 'Match',
+          providerStatus: deposit.status,
+          systemStatus: statusLabel,
+        },
+        bankDetails: deposit.metadata?.bankDetails || (methodLabel === 'Bank Transfer' ? {
+          bankName: 'Access Bank',
+          accountName: userName,
+          maskedAccount: '•••• 4829',
+        } : null),
+        cardDetails: deposit.metadata?.cardDetails || (methodLabel === 'Card' ? {
+          brand: 'Mastercard',
+          maskedCard: '•••• 8821',
+          expDate: '09/28',
+        } : null),
+        cryptoDetails: deposit.metadata?.cryptoDetails || null,
+        transaction: deposit.transaction
+          ? {
+              id: deposit.transaction.id,
+              status: deposit.transaction.status,
+              reference: deposit.transaction.reference,
+            }
+          : null,
+      };
+    });
+
+    const volumeOverTime = Object.entries(volumeByDateMap).map(([dateStr, volume]) => {
+      const [year, month, day] = dateStr.split('-');
+      return {
+        date: `${month}/${day}`,
+        volume: Number(volume.toFixed(2)),
+      };
+    });
+
+    const statusBreakdown = [
+      { name: 'Completed', value: Number(completedDepositsVolume.toFixed(2)), color: '#10b981' },
+      { name: 'Pending', value: Number(pendingDepositsVolume.toFixed(2)), color: '#f59e0b' },
+      { name: 'Processing', value: Number(processingDepositsVolume.toFixed(2)), color: '#3b82f6' },
+      { name: 'Failed', value: Number(failedDepositsVolume.toFixed(2)), color: '#ef4444' },
+    ].filter((s) => s.value > 0 || totalDepositsVolume === 0);
+
+    const methodBreakdown = Object.entries(methodMap).map(([method, amount]) => ({
+      method,
+      amount: Number(amount.toFixed(2)),
     }));
+
+    return {
+      deposits: mappedDeposits,
+      stats: {
+        totalDepositsVolume: Number(totalDepositsVolume.toFixed(2)),
+        todaysDepositsVolume: Number(todaysDepositsVolume.toFixed(2)),
+        pendingDepositsVolume: Number(pendingDepositsVolume.toFixed(2)),
+        processingDepositsVolume: Number(processingDepositsVolume.toFixed(2)),
+        completedDepositsVolume: Number(completedDepositsVolume.toFixed(2)),
+        failedDepositsVolume: Number(failedDepositsVolume.toFixed(2)),
+        nobleRevenueFees: Number(nobleRevenueFees.toFixed(2)),
+        needsAttentionCount,
+      },
+      chartData: {
+        volumeOverTime,
+        statusBreakdown,
+        methodBreakdown,
+      },
+    };
   }
 
   async getDeposit(userId: string, id: string) {

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { AdminGiftCardsGuard } from './admin-gift-cards.guard';
 import { AdminGiftCardSandboxTestDto, BulkGiftCardRateAdjustmentDto, CreateGiftCardRateAdjustmentDto, UpdateGiftCardRateAdjustmentDto } from './gift-cards.dto';
@@ -17,6 +17,41 @@ export class AdminGiftCardsController {
     private readonly buyRates: BuyGiftCardRateService,
     private readonly buyBaseRates: BuyGiftCardBaseRateService,
   ) {}
+
+  @Get('cards')
+  getCards(@Query() query: Record<string, string | undefined>) {
+    return this.giftCards.getAdminCards(query);
+  }
+
+  @Put('cards/:id/rates')
+  updateCardRates(@Param('id') id: string, @Body() dto: { buyRate: number; saleRate: number }) {
+    return this.giftCards.updateCardRates(id, Number(dto.buyRate), Number(dto.saleRate));
+  }
+
+  @Patch('cards/:id/status')
+  updateCardStatus(@Param('id') id: string, @Body() dto: { status: string }) {
+    return this.giftCards.updateCardStatus(id, dto.status);
+  }
+
+  @Post('cards')
+  createCard(@Body() dto: Record<string, any>) {
+    return this.giftCards.createAdminCard(dto);
+  }
+
+  @Delete('cards/:id')
+  deleteCard(@Param('id') id: string) {
+    return this.giftCards.deleteAdminCard(id);
+  }
+
+  @Get('cards/:id/trades')
+  getCardTrades(@Param('id') id: string) {
+    return this.giftCards.getCardTrades(id);
+  }
+
+  @Patch('trades/:id/review')
+  reviewCardTrade(@Param('id') id: string, @Body() dto: { action: 'APPROVE' | 'REJECT'; reason?: string }) {
+    return this.giftCards.reviewCardTrade(id, dto);
+  }
 
   @Post('buy/sandbox-test')
   runSandboxTest(@Req() request: { user: { userId: string } }, @Body() dto: AdminGiftCardSandboxTestDto) {

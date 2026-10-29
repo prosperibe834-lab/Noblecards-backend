@@ -80,6 +80,11 @@ export class AdminSupportController {
     return this.supportService.getAdminTickets(query as Record<string, string | undefined>);
   }
 
+  @Get('analytics')
+  async getAnalytics() {
+    return this.supportService.getAdminSupportAnalytics();
+  }
+
   @Get('tickets/:id')
   async getTicket(@Param('id') id: string) {
     return this.supportService.getAdminTicket(id);

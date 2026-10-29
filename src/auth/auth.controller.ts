@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import {
+  AdminRegisterDto,
+  AdminVerifyOtpDto,
   ChangePasswordDto,
   EmailCodeDto,
   EmailDto,
@@ -20,6 +22,20 @@ type RequestContext = {
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post('admin/register') registerAdmin(
+    @Body() dto: AdminRegisterDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.registerAdmin(dto, this.requestContext(request));
+  }
+
+  @Post('admin/verify-otp') verifyAdminOtp(
+    @Body() dto: AdminVerifyOtpDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.verifyAdminOtp(dto, this.requestContext(request));
+  }
 
   @Post('register') register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);

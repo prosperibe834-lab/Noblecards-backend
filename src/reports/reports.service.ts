@@ -55,7 +55,6 @@ export interface CountryReportDto {
   volume: number;
   revenue: number;
 }
-
 export interface CurrencyReportDto {
   name: string;
   deposit: number;
@@ -75,7 +74,7 @@ export interface ReportsResponseDto {
   currencies: CurrencyReportDto[];
 }
 
-export interface ScheduleReportDto {
+export class ScheduleReportDto {
   reportType?: string;
   frequency?: 'daily' | 'weekly' | 'monthly';
   email: string;

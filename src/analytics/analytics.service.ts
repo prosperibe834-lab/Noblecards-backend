@@ -414,8 +414,8 @@ export class AnalyticsService {
       take: 10,
     });
     for (const p of latestPurchases) {
-      const isCompleted = p.status === 'SUCCESSFUL' || p.status === 'COMPLETED';
-      const isPending = p.status === 'PENDING' || p.status === 'PROCESSING';
+      const isCompleted = (p.status as any) === 'SUCCESSFUL' || (p.status as any) === 'COMPLETED';
+      const isPending = (p.status as any) === 'PENDING' || (p.status as any) === 'PROCESSING';
       rawActivities.push({
         id: `buy-${p.id}`,
         title: 'Gift Card Purchase',
@@ -436,8 +436,8 @@ export class AnalyticsService {
       take: 10,
     });
     for (const s of latestSales) {
-      const isCompleted = s.status === 'PAID' || s.status === 'APPROVED' || s.status === 'COMPLETED' || s.status === 'SUCCESSFUL';
-      const isPending = s.status === 'SUBMITTED' || s.status === 'PENDING' || s.status === 'UNDER_REVIEW';
+      const isCompleted = (s.status as any) === 'PAID' || (s.status as any) === 'APPROVED' || (s.status as any) === 'COMPLETED' || (s.status as any) === 'SUCCESSFUL';
+      const isPending = (s.status as any) === 'SUBMITTED' || (s.status as any) === 'PENDING' || (s.status as any) === 'UNDER_REVIEW';
       rawActivities.push({
         id: `sell-${s.id}`,
         title: 'Gift Card Sale',

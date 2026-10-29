@@ -26,8 +26,12 @@ export class AdminSupportGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<AdminRequest>();
+    const userId = request.user?.userId || (request.user as any)?.sub;
+    if (!userId) {
+      throw new ForbiddenException('Admin access required.');
+    }
     const user = await this.prisma.user.findUnique({
-      where: { id: request.user.userId },
+      where: { id: userId },
       select: { role: true, isActive: true },
     });
     if (!user?.isActive || user.role !== 'ADMIN') {

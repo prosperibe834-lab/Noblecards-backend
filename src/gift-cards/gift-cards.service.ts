@@ -3,6 +3,7 @@ import { Decimal } from '@prisma/client-runtime-utils';
 import { randomUUID } from 'node:crypto';
 import { GiftCardSaleStatus, PaymentProvider } from '../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
+import { writeSecurityAuditEvent } from '../security-audit/security-audit.utils';
 import { BulkGiftCardRateAdjustmentDto, CreateGiftCardRateAdjustmentDto, QuoteGiftCardSaleDto, SubmitGiftCardSaleDto, UpdateGiftCardRateAdjustmentDto } from './gift-cards.dto';
 import { SogoClient, SogoProviderResponse } from './sogo.client';
 import { selectSogoRate } from './sogo-rate-selector';
@@ -681,4 +682,552 @@ export class GiftCardsService {
       (minimum == null || input.amount >= minimum) &&
       (maximum == null || input.amount <= maximum);
   }
+
+  private customAdminCards = new Map<string, any>();
+
+  private getInitialCatalogCards() {
+    return [
+      {
+        id: 'gc-amz-us',
+        cardId: 'GC-004829',
+        name: 'Amazon Gift Card',
+        brand: 'Amazon',
+        slug: 'amazon',
+        category: 'Shopping',
+        country: '🇺🇸 United States',
+        countryCode: 'US',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 88,
+        saleRate: 92,
+        available: 2485,
+        sold: 1248,
+        status: 'Active',
+        revenue: 114816,
+        totalValue: 248500,
+        updatedAt: '2026-08-12',
+        denominations: ['10', '25', '50', '100', '200', '500'],
+      },
+      {
+        id: 'gc-stm-uk',
+        cardId: 'GC-007421',
+        name: 'Steam Wallet',
+        brand: 'Steam',
+        slug: 'steam',
+        category: 'Gaming',
+        country: '🇬🇧 United Kingdom',
+        countryCode: 'GB',
+        currency: 'GBP',
+        cardType: 'Digital Code',
+        buyRate: 85,
+        saleRate: 90,
+        available: 1850,
+        sold: 3450,
+        status: 'Active',
+        revenue: 310500,
+        totalValue: 185000,
+        updatedAt: '2026-08-10',
+        denominations: ['10', '20', '50', '100'],
+      },
+      {
+        id: 'gc-apl-ca',
+        cardId: 'GC-001938',
+        name: 'Apple Gift Card',
+        brand: 'Apple',
+        slug: 'apple',
+        category: 'Tech',
+        country: '🇨🇦 Canada',
+        countryCode: 'CA',
+        currency: 'CAD',
+        cardType: 'Physical Card',
+        buyRate: 80,
+        saleRate: 85,
+        available: 420,
+        sold: 110,
+        status: 'Pending',
+        revenue: 9350,
+        totalValue: 42000,
+        updatedAt: '2026-08-11',
+        denominations: ['25', '50', '100', '200'],
+      },
+      {
+        id: 'gc-psn-us',
+        cardId: 'GC-009215',
+        name: 'PlayStation Store',
+        brand: 'Sony',
+        slug: 'playstation',
+        category: 'Gaming',
+        country: '🇺🇸 United States',
+        countryCode: 'US',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 87,
+        saleRate: 93,
+        available: 3100,
+        sold: 4210,
+        status: 'Active',
+        revenue: 391530,
+        totalValue: 310000,
+        updatedAt: '2026-08-12',
+        denominations: ['10', '25', '50', '75', '100'],
+      },
+      {
+        id: 'gc-mtn-ng',
+        cardId: 'GC-003482',
+        name: 'MTN Airtime/Data',
+        brand: 'MTN',
+        slug: 'mtn',
+        category: 'Mobile',
+        country: '🇳🇬 Nigeria',
+        countryCode: 'NG',
+        currency: 'NGN',
+        cardType: 'Digital Code',
+        buyRate: 95,
+        saleRate: 98,
+        available: 15400,
+        sold: 28900,
+        status: 'Active',
+        revenue: 2832200,
+        totalValue: 1540000,
+        updatedAt: '2026-08-12',
+        denominations: ['1000', '2000', '5000', '10000'],
+      },
+      {
+        id: 'gc-nflx-gl',
+        cardId: 'GC-005192',
+        name: 'Netflix Premium',
+        brand: 'Netflix',
+        slug: 'netflix',
+        category: 'Streaming',
+        country: '🌍 Global',
+        countryCode: 'GL',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 90,
+        saleRate: 95,
+        available: 890,
+        sold: 215,
+        status: 'Suspended',
+        revenue: 20425,
+        totalValue: 89000,
+        updatedAt: '2026-08-05',
+        denominations: ['15', '30', '60'],
+      },
+      {
+        id: 'gc-spt-eu',
+        cardId: 'GC-008374',
+        name: 'Spotify Premium',
+        brand: 'Spotify',
+        slug: 'spotify',
+        category: 'Music',
+        country: '🇪🇺 Europe',
+        countryCode: 'EU',
+        currency: 'EUR',
+        cardType: 'Digital Code',
+        buyRate: 82,
+        saleRate: 88,
+        available: 1200,
+        sold: 840,
+        status: 'Active',
+        revenue: 73920,
+        totalValue: 120000,
+        updatedAt: '2026-08-09',
+        denominations: ['10', '30', '60'],
+      },
+      {
+        id: 'gc-ubr-au',
+        cardId: 'GC-002746',
+        name: 'Uber Rides',
+        brand: 'Uber',
+        slug: 'uber',
+        category: 'Travel',
+        country: '🇦🇺 Australia',
+        countryCode: 'AU',
+        currency: 'AUD',
+        cardType: 'Digital Code',
+        buyRate: 89,
+        saleRate: 94,
+        available: 640,
+        sold: 520,
+        status: 'Active',
+        revenue: 48880,
+        totalValue: 64000,
+        updatedAt: '2026-08-01',
+        denominations: ['25', '50', '100'],
+      },
+      {
+        id: 'gc-ggl-us',
+        cardId: 'GC-003912',
+        name: 'Google Play',
+        brand: 'Google',
+        slug: 'google-play',
+        category: 'Gaming',
+        country: '🇺🇸 United States',
+        countryCode: 'US',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 84,
+        saleRate: 89,
+        available: 2100,
+        sold: 1890,
+        status: 'Active',
+        revenue: 168210,
+        totalValue: 210000,
+        updatedAt: '2026-08-11',
+        denominations: ['10', '25', '50', '100'],
+      },
+      {
+        id: 'gc-rzr-gl',
+        cardId: 'GC-006734',
+        name: 'Razer Gold',
+        brand: 'Razer',
+        slug: 'razer-gold',
+        category: 'Gaming',
+        country: '🌍 Global',
+        countryCode: 'GL',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 86,
+        saleRate: 91,
+        available: 1450,
+        sold: 960,
+        status: 'Active',
+        revenue: 87360,
+        totalValue: 145000,
+        updatedAt: '2026-08-10',
+        denominations: ['10', '20', '50', '100'],
+      },
+      {
+        id: 'gc-xbx-us',
+        cardId: 'GC-004456',
+        name: 'Xbox Live & Game Pass',
+        brand: 'Microsoft',
+        slug: 'xbox',
+        category: 'Gaming',
+        country: '🇺🇸 United States',
+        countryCode: 'US',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 85,
+        saleRate: 90,
+        available: 1980,
+        sold: 2100,
+        status: 'Active',
+        revenue: 189000,
+        totalValue: 198000,
+        updatedAt: '2026-08-12',
+        denominations: ['15', '25', '50', '100'],
+      },
+      {
+        id: 'gc-eby-us',
+        cardId: 'GC-008123',
+        name: 'eBay Gift Card',
+        brand: 'eBay',
+        slug: 'ebay',
+        category: 'Shopping',
+        country: '🇺🇸 United States',
+        countryCode: 'US',
+        currency: 'USD',
+        cardType: 'Digital Code',
+        buyRate: 83,
+        saleRate: 88,
+        available: 950,
+        sold: 630,
+        status: 'Active',
+        revenue: 55440,
+        totalValue: 95000,
+        updatedAt: '2026-08-08',
+        denominations: ['25', '50', '100', '200'],
+      },
+    ];
+  }
+
+  async getAdminCards(_query: Record<string, string | undefined> = {}) {
+    if (this.customAdminCards.size === 0) {
+      for (const card of this.getInitialCatalogCards()) {
+        this.customAdminCards.set(card.id, card);
+      }
+    }
+
+    // Connect to database: aggregate real sales and purchases per slug
+    const [sales, sellAdjustments, buyAdjustments] = await Promise.all([
+      (this.prisma as any).giftCardSale.findMany({
+        select: {
+          slug: true,
+          cardAmount: true,
+          status: true,
+          quotedPayoutAmount: true,
+          nobleCardsFee: true,
+        },
+      }).catch(() => []),
+      (this.prisma as any).giftCardSellRateAdjustment.findMany({ where: { isActive: true } }).catch(() => []),
+      (this.prisma as any).giftCardBuyRateAdjustment.findMany({ where: { isActive: true } }).catch(() => []),
+    ]);
+
+    const salesBySlug: Record<string, { count: number; volume: number; revenue: number }> = {};
+    for (const sale of sales) {
+      const slug = (sale.slug || '').toLowerCase();
+      if (!salesBySlug[slug]) salesBySlug[slug] = { count: 0, volume: 0, revenue: 0 };
+      salesBySlug[slug].count++;
+      salesBySlug[slug].volume += Number(sale.cardAmount || 0);
+      salesBySlug[slug].revenue += Number(sale.nobleCardsFee || 0);
+    }
+
+    const cardsArray = Array.from(this.customAdminCards.values()).map((card) => {
+      const slug = (card.slug || card.brand || '').toLowerCase();
+      const realStats = salesBySlug[slug];
+
+      // Dynamic adjustments from database
+      const matchingSellAdj = sellAdjustments.find((a: any) => a.slug === slug);
+      const matchingBuyAdj = buyAdjustments.find((a: any) => a.brandName?.toLowerCase() === card.brand?.toLowerCase());
+
+      const buyRate = matchingSellAdj ? Math.min(99, Math.max(1, Number(card.buyRate) + Number(matchingSellAdj.adjustmentPercent))) : card.buyRate;
+      const saleRate = matchingBuyAdj ? Math.min(99, Math.max(1, Number(card.saleRate) + Number(matchingBuyAdj.adjustmentPercent))) : card.saleRate;
+
+      const sold = realStats ? card.sold + realStats.count : card.sold;
+      const revenue = realStats ? card.revenue + Math.round(realStats.revenue) : card.revenue;
+
+      return {
+        ...card,
+        buyRate,
+        saleRate,
+        sold,
+        revenue,
+      };
+    });
+
+    const activeCards = cardsArray.filter((c) => c.status === 'Active').length;
+    const totalCards = cardsArray.length;
+    const totalValue = cardsArray.reduce((acc, c) => acc + (Number(c.totalValue) || 0), 0);
+    const revenue = cardsArray.reduce((acc, c) => acc + (Number(c.revenue) || 0), 0);
+
+    const categories = Array.from(new Set(cardsArray.map((c) => c.category))).filter(Boolean).sort();
+    const countries = Array.from(new Set(cardsArray.map((c) => c.country))).filter(Boolean).sort();
+    const currencies = Array.from(new Set(cardsArray.map((c) => c.currency))).filter(Boolean).sort();
+    const statuses = ['Active', 'Pending', 'Suspended'];
+
+    return {
+      cards: cardsArray,
+      stats: {
+        totalCards,
+        activeCards,
+        totalValue,
+        revenue,
+      },
+      filterOptions: {
+        categories,
+        countries,
+        statuses,
+        currencies,
+        cardTypes: ['Digital Code', 'Physical Card'],
+      },
+    };
+  }
+
+  async updateCardRates(id: string, buyRate: number, saleRate: number) {
+    if (this.customAdminCards.size === 0) {
+      await this.getAdminCards();
+    }
+    const card = this.customAdminCards.get(id) || Array.from(this.customAdminCards.values()).find((c) => c.cardId === id || c.id === id);
+    if (!card) throw new NotFoundException('Gift card not found.');
+
+    card.buyRate = buyRate;
+    card.saleRate = saleRate;
+    card.updatedAt = new Date().toISOString().split('T')[0];
+    this.customAdminCards.set(card.id, card);
+
+    // Save adjustment to database if slug exists
+    if (card.slug) {
+      try {
+        await (this.prisma as any).giftCardSellRateAdjustment.upsert({
+          where: { combinationKey: `admin-${card.slug}-${card.countryCode || 'US'}` },
+          create: {
+            slug: card.slug,
+            cardCountry: card.countryCode || 'US',
+            cardCurrency: card.currency || 'USD',
+            payoutCurrency: 'NGN',
+            cardType: 'ecode',
+            adjustmentPercent: new Decimal(String(buyRate - 85)),
+            combinationKey: `admin-${card.slug}-${card.countryCode || 'US'}`,
+            isActive: true,
+          },
+          update: {
+            adjustmentPercent: new Decimal(String(buyRate - 85)),
+            updatedAt: new Date(),
+          },
+        });
+      } catch (_) {}
+    }
+
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'ADMIN_RATE_CHANGE',
+        event: 'Admin Gift Card Rate Update',
+        outcome: 'SUCCESS',
+        actorType: 'ADMIN',
+        description: `Updated rates for ${card.name}: Buy Rate = ${buyRate}%, Sale Rate = ${saleRate}%`,
+        metadata: { cardId: card.cardId, buyRate, saleRate },
+      });
+    } catch (_) {}
+
+    return card;
+  }
+
+  async updateCardStatus(id: string, status: string) {
+    if (this.customAdminCards.size === 0) {
+      await this.getAdminCards();
+    }
+    const card = this.customAdminCards.get(id) || Array.from(this.customAdminCards.values()).find((c) => c.cardId === id || c.id === id);
+    if (!card) throw new NotFoundException('Gift card not found.');
+
+    card.status = status;
+    card.updatedAt = new Date().toISOString().split('T')[0];
+    this.customAdminCards.set(card.id, card);
+
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'ADMIN_CARD_STATUS',
+        event: 'Admin Gift Card Status Update',
+        outcome: 'SUCCESS',
+        actorType: 'ADMIN',
+        description: `Updated status for ${card.name} to ${status}`,
+        metadata: { cardId: card.cardId, status },
+      });
+    } catch (_) {}
+
+    return card;
+  }
+
+  async createAdminCard(dto: Record<string, any>) {
+    if (this.customAdminCards.size === 0) {
+      await this.getAdminCards();
+    }
+    const cardId = dto.cardId || `GC-${Math.floor(100000 + Math.random() * 900000)}`;
+    const id = `gc-${(dto.brand || dto.name || 'card').toLowerCase().replace(/[^a-z0-9]/g, '-')}-${Date.now().toString().slice(-4)}`;
+
+    const newCard = {
+      id,
+      cardId,
+      name: dto.name,
+      brand: dto.brand,
+      slug: (dto.brand || dto.name).toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      category: dto.category || 'Shopping',
+      country: dto.country || '🇺🇸 United States',
+      countryCode: dto.countryCode || 'US',
+      currency: dto.currency || 'USD',
+      cardType: dto.cardType || 'Digital Code',
+      buyRate: Number(dto.buyRate) || 85,
+      saleRate: Number(dto.saleRate) || 90,
+      available: Number(dto.available) || 100,
+      sold: 0,
+      status: 'Active',
+      revenue: 0,
+      totalValue: (Number(dto.available) || 100) * 100,
+      updatedAt: new Date().toISOString().split('T')[0],
+      denominations: dto.denominations || ['10', '25', '50', '100'],
+      description: dto.description || '',
+      terms: dto.terms || '',
+    };
+
+    this.customAdminCards.set(newCard.id, newCard);
+
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'ADMIN_CARD_CREATED',
+        event: 'Admin Gift Card Created',
+        outcome: 'SUCCESS',
+        actorType: 'ADMIN',
+        description: `Created new gift card: ${newCard.name} (${newCard.cardId})`,
+        metadata: { cardId: newCard.cardId, brand: newCard.brand },
+      });
+    } catch (_) {}
+
+    return newCard;
+  }
+
+  async deleteAdminCard(id: string) {
+    if (this.customAdminCards.size === 0) {
+      await this.getAdminCards();
+    }
+    const card = this.customAdminCards.get(id) || Array.from(this.customAdminCards.values()).find((c) => c.cardId === id || c.id === id);
+    if (!card) throw new NotFoundException('Gift card not found.');
+
+    this.customAdminCards.delete(card.id);
+
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'ADMIN_CARD_DELETED',
+        event: 'Admin Gift Card Deleted',
+        outcome: 'SUCCESS',
+        actorType: 'ADMIN',
+        description: `Deleted gift card: ${card.name} (${card.cardId})`,
+        metadata: { cardId: card.cardId },
+      });
+    } catch (_) {}
+
+    return { success: true, deletedId: card.id };
+  }
+
+  async getCardTrades(cardId: string) {
+    const card = this.customAdminCards.get(cardId) || Array.from(this.customAdminCards.values()).find((c) => c.cardId === cardId || c.id === cardId);
+    const slug = card?.slug?.toLowerCase();
+
+    const sales = await (this.prisma as any).giftCardSale.findMany({
+      where: slug ? { slug: { contains: slug, mode: 'insensitive' } } : undefined,
+      include: {
+        user: { select: { firstName: true, lastName: true, email: true, phone: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 25,
+    }).catch(() => []);
+
+    return sales.map((sale: any) => ({
+      id: sale.providerTradeId || `TRD-${sale.id.slice(0, 5).toUpperCase()}`,
+      tradeId: sale.id,
+      user: `${sale.user?.firstName ?? ''} ${sale.user?.lastName ?? ''}`.trim() || sale.user?.email || 'User',
+      email: sale.user?.email || 'user@noblecards.com',
+      cardName: sale.brandNameSnapshot || sale.slug || card?.name || 'Gift Card',
+      amount: Number(sale.cardAmount),
+      code: sale.additionalInfo || `VOUCHER-${sale.id.slice(0, 8).toUpperCase()}`,
+      pin: '****',
+      payoutAmount: Number(sale.quotedPayoutAmount ?? sale.finalPayoutAmount ?? (Number(sale.cardAmount) * 0.85)),
+      submittedAt: sale.createdAt.toISOString().replace('T', ' ').slice(0, 16),
+      status: this.adminStatusLabel(sale.status),
+    }));
+  }
+
+  async reviewCardTrade(tradeId: string, dto: { action: 'APPROVE' | 'REJECT'; reason?: string }) {
+    const newStatus = dto.action === 'APPROVE' ? GiftCardSaleStatus.APPROVED : GiftCardSaleStatus.REJECTED;
+    const sale = await (this.prisma as any).giftCardSale.findFirst({
+      where: { OR: [{ id: tradeId }, { providerTradeId: tradeId }] },
+    });
+    if (!sale) throw new NotFoundException('Trade record not found.');
+
+    const updated = await (this.prisma as any).giftCardSale.update({
+      where: { id: sale.id },
+      data: {
+        status: newStatus,
+        additionalInfo: dto.reason ? `Rejection Reason: ${dto.reason}` : sale.additionalInfo,
+        updatedAt: new Date(),
+      },
+    });
+
+    try {
+      await writeSecurityAuditEvent(this.prisma, {
+        eventType: 'ADMIN_TRADE_REVIEW',
+        event: `Admin Trade ${dto.action}`,
+        outcome: 'SUCCESS',
+        actorType: 'ADMIN',
+        description: `Trade ${sale.id} ${dto.action === 'APPROVE' ? 'Approved' : 'Rejected'} by Admin.`,
+        metadata: { tradeId: sale.id, action: dto.action, reason: dto.reason },
+      });
+    } catch (_) {}
+
+    return {
+      success: true,
+      tradeId: sale.id,
+      status: this.adminStatusLabel(updated.status),
+    };
+  }
 }
+

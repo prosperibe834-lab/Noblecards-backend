@@ -23,6 +23,7 @@ import { SecurityAuditModule } from './security-audit/security-audit.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { ReportsModule } from './reports/reports.module';
+import { SupportModule } from './support/support.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { ReportsModule } from './reports/reports.module';
     NotificationsModule,
     AnalyticsModule,
     ReportsModule,
+    SupportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
