@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsOptional,
   IsString,
   Length,
@@ -59,3 +60,26 @@ export class CompleteTransactionPinResetDto {
   @Matches(/^\d{4}$/)
   confirmPin!: string;
 }
+
+export class UpdateBiometricSettingsDto {
+  @IsOptional()
+  @IsBoolean()
+  biometricLoginEnabled?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  biometricTransactionEnabled?: boolean;
+
+  @IsOptional()
+  @IsString()
+  biometricType?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  rememberDevice?: boolean;
+
+  @IsOptional()
+  @IsString()
+  autoLockTime?: string;
+}
+

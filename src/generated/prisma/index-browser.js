@@ -146,6 +146,11 @@ exports.Prisma.UserScalarFieldEnum = {
   transactionPinHash: 'transactionPinHash',
   transactionPinFailedAttempts: 'transactionPinFailedAttempts',
   transactionPinLockedUntil: 'transactionPinLockedUntil',
+  biometricLoginEnabled: 'biometricLoginEnabled',
+  biometricTransactionEnabled: 'biometricTransactionEnabled',
+  biometricType: 'biometricType',
+  rememberDevice: 'rememberDevice',
+  autoLockTime: 'autoLockTime',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

@@ -8,6 +8,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import {
   CompleteTransactionPinResetDto,
   CreateOrUpdateTransactionPinDto,
+  UpdateBiometricSettingsDto,
   UpdateProfileDto,
   VerifyTransactionPinDto,
   VerifyTransactionPinResetCodeDto,
@@ -28,9 +29,72 @@ export class UsersController {
     return { user: user ? this.users.toPublicUser(user) : null };
   }
 
+  @Get('account-tier')
+  async getAccountTier(@Req() request: { user: { userId: string } }) {
+    return this.users.getUserAccountTier(request.user.userId);
+  }
+
+  @Get('profile-stats')
+  async getProfileStats(@Req() request: { user: { userId: string } }) {
+    return this.users.getUserProfileStats(request.user.userId);
+  }
+
   @Get('transaction-pin')
   async getTransactionPinStatus(@Req() request: { user: { userId: string } }) {
     return { hasTransactionPin: await this.users.hasTransactionPin(request.user.userId) };
+  }
+
+  @Get('biometrics')
+  async getBiometricSettings(@Req() request: { user: { userId: string } }) {
+    return this.users.getBiometricSettings(request.user.userId);
+  }
+
+  @Patch('biometrics')
+  async updateBiometricSettings(
+    @Req()
+    request: {
+      user: { userId: string };
+      ip?: string;
+      headers: { 'user-agent'?: string | string[] };
+    },
+    @Body() dto: UpdateBiometricSettingsDto,
+  ) {
+    const userAgent = request.headers?.['user-agent'];
+    const context = {
+      ipAddress: request.ip ?? null,
+      userAgent: Array.isArray(userAgent)
+        ? (userAgent[0] ?? null)
+        : (userAgent ?? null),
+    };
+    return this.users.updateBiometricSettings(request.user.userId, dto, context);
+  }
+
+  @Post('biometrics/verify-pin')
+  async verifyPinForBiometrics(
+    @Req() request: { user: { userId: string } },
+    @Body() dto: VerifyTransactionPinDto,
+  ) {
+    await this.users.verifyTransactionPin(request.user.userId, dto.pin);
+    return { verified: true };
+  }
+
+  @Post('biometrics/authorize-transaction')
+  async authorizeBiometricTransaction(
+    @Req()
+    request: {
+      user: { userId: string };
+      ip?: string;
+      headers: { 'user-agent'?: string | string[] };
+    },
+  ) {
+    const userAgent = request.headers?.['user-agent'];
+    const context = {
+      ipAddress: request.ip ?? null,
+      userAgent: Array.isArray(userAgent)
+        ? (userAgent[0] ?? null)
+        : (userAgent ?? null),
+    };
+    return this.users.authorizeBiometricTransaction(request.user.userId, context);
   }
 
   @Post('transaction-pin')
@@ -103,4 +167,10 @@ export class UsersController {
   async deleteImage(@Req() request: { user: { userId: string } }) {
     return { user: this.users.toPublicUser(await this.users.setProfileImage(request.user.userId, null)) };
   }
+
+  @Delete()
+  async deleteAccount(@Req() request: { user: { userId: string } }) {
+    return this.users.deleteAccount(request.user.userId);
+  }
 }
+

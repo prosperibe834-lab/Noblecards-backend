@@ -2,8 +2,10 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import {
+  AdminLoginDto,
   AdminRegisterDto,
   AdminVerifyOtpDto,
+  BiometricLoginDto,
   ChangePasswordDto,
   EmailCodeDto,
   EmailDto,
@@ -37,6 +39,13 @@ export class AuthController {
     return this.authService.verifyAdminOtp(dto, this.requestContext(request));
   }
 
+  @Post('admin/login') loginAdmin(
+    @Body() dto: AdminLoginDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.loginAdmin(dto, this.requestContext(request));
+  }
+
   @Post('register') register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
   }
@@ -63,6 +72,22 @@ export class AuthController {
   }
   @Post('refresh') refresh(@Body() dto: RefreshDto) {
     return this.authService.refresh(dto.refreshToken);
+  }
+
+  @Post('biometric-login')
+  biometricLogin(
+    @Body() dto: BiometricLoginDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.biometricLogin(dto, this.requestContext(request));
+  }
+
+  @Post('biometric/login')
+  biometricLoginAlias(
+    @Body() dto: BiometricLoginDto,
+    @Req() request: RequestContext,
+  ) {
+    return this.authService.biometricLogin(dto, this.requestContext(request));
   }
 
   @UseGuards(AuthGuard)

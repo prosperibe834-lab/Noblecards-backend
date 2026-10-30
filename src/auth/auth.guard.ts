@@ -28,6 +28,11 @@ export class AuthGuard implements CanActivate {
     const isAdminRoute = url.startsWith('/admin/');
     const isNotificationRoute = url.startsWith('/notifications');
     const isAnalyticsRoute = url.startsWith('/analytics');
+    const isMarketRatesRoute = url.startsWith('/gift-cards/market-rates');
+
+    if (isMarketRatesRoute) {
+      return true;
+    }
 
 
     // Standard JWT verification

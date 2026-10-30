@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Headers, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Headers, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { Public } from '../auth/public.decorator';
 import { CreateWithdrawalDto } from './withdrawals.dto';
@@ -66,6 +66,14 @@ export class WithdrawalPayoutController {
     };
   }
 
+  @Delete('beneficiaries/:id')
+  deleteBeneficiary(
+    @Req() request: { user: { userId: string } },
+    @Param('id') id: string,
+  ) {
+    return this.beneficiaries.deactivateBeneficiary(request.user.userId, id);
+  }
+
   @Get(':withdrawalId')
   get(@Req() request: { user: { userId: string } }, @Param('withdrawalId') withdrawalId: string) {
     return this.withdrawals.getWithdrawal(request.user.userId, withdrawalId);
@@ -80,6 +88,7 @@ export class WithdrawalPayoutController {
   createBeneficiary(@Req() request: { user: { userId: string } }, @Body() dto: CreateBeneficiaryDto) {
     return this.beneficiaries.createBeneficiary(request.user.userId, dto);
   }
+
 
   @Post(':withdrawalId/execute')
   execute(@Req() request: { user: { userId: string } }, @Param('withdrawalId') withdrawalId: string) {

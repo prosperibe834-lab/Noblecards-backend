@@ -49,6 +49,7 @@ async function bootstrap() {
       'http://10.0.2.2:3000',
       'http://10.0.2.2:8080',
       'http://10.0.2.2:5173',
+      'https://gloater-departure-stitch.ngrok-free.dev',
     ];
   const configuredOrigins = Array.from(new Set([
     ...defaultOrigins,
@@ -59,7 +60,9 @@ async function bootstrap() {
       if (
         !origin ||
         configuredOrigins.includes(origin) ||
-        /^https?:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2):\d+$/.test(origin)
+        /^https?:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2|192\.168\.\d+\.\d+)(:\d+)?$/.test(origin) ||
+        origin.endsWith('.ngrok-free.dev') ||
+        origin.endsWith('.ngrok-free.app')
       ) {
         callback(null, true);
         return;

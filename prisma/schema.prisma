@@ -33,6 +33,11 @@ model User {
   transactionPinHash           String?
   transactionPinFailedAttempts Int                            @default(0)
   transactionPinLockedUntil    DateTime?
+  biometricLoginEnabled        Boolean                        @default(false)
+  biometricTransactionEnabled  Boolean                        @default(false)
+  biometricType                String?
+  rememberDevice               Boolean                        @default(false)
+  autoLockTime                 String                         @default("5 Minutes")
   createdAt                    DateTime                       @default(now())
   updatedAt                    DateTime                       @updatedAt
   passwordResets               PasswordResetChallenge[]

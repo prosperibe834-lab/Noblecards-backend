@@ -48,6 +48,11 @@ export class GiftCardsController {
     return this.buyGiftCards.getRedemptionLink(request.user.userId, id);
   }
 
+  @Get('market-rates')
+  getMarketRates() {
+    return this.giftCards.getMarketRates();
+  }
+
   @Get('sell/catalog')
   getSellCatalog() {
     return this.giftCards.getSellCatalog();

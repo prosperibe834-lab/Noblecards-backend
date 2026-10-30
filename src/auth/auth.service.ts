@@ -18,8 +18,10 @@ import {
   writeSecurityAuditEvent,
 } from '../security-audit/security-audit.utils';
 import {
+  AdminLoginDto,
   AdminRegisterDto,
   AdminVerifyOtpDto,
+  BiometricLoginDto,
   EmailCodeDto,
   EmailDto,
   LoginDto,
@@ -250,31 +252,6 @@ export class AuthService {
         ...context,
       });
       throw new UnauthorizedException('Invalid email or password.');
-    }
-    // Verify Admin PIN if logging into an admin account or if adminPin is provided
-    if (user.role === 'ADMIN' || dto.adminPin !== undefined) {
-      if (dto.adminPin !== '921340') {
-        await this.recordSecurityEvent({
-          eventType: 'Login',
-          event: 'Login Failed - Invalid Admin PIN',
-          outcome: 'FAILED',
-          actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
-          actorUserId: user.id,
-          targetUserId: user.id,
-          description: 'Login rejected: Invalid Admin PIN provided.',
-          metadata: { attemptedEmail },
-          ...context,
-        });
-        throw new UnauthorizedException('Invalid Admin PIN. Access denied.');
-      }
-
-      // If user supplied the correct Admin PIN 921340, ensure they have the ADMIN role
-      if (user.role !== 'ADMIN') {
-        user = await this.prisma.user.update({
-          where: { id: user.id },
-          data: { role: 'ADMIN', isEmailVerified: true, isActive: true },
-        });
-      }
     }
     if (!user.isEmailVerified) {
       await this.recordSecurityEvent({
@@ -542,6 +519,56 @@ export class AuthService {
     return this.issueSession(session.user);
   }
 
+  async biometricLogin(
+    dto: BiometricLoginDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    const session = await this.prisma.refreshSession.findUnique({
+      where: { tokenHash: this.hash(dto.refreshToken) },
+      include: { user: true },
+    });
+    if (!session || session.revokedAt || session.expiresAt <= new Date()) {
+      throw new UnauthorizedException(
+        'Biometric session expired. Please log in with your credentials.',
+      );
+    }
+    const user = session.user;
+    if (!user.isActive) {
+      throw new UnauthorizedException('Account is inactive.');
+    }
+    if (!user.biometricLoginEnabled) {
+      throw new BadRequestException(
+        'Biometric login is not enabled on this account. Please log in with your credentials and enable it in Settings.',
+      );
+    }
+
+    await this.prisma.refreshSession.update({
+      where: { id: session.id },
+      data: { revokedAt: new Date() },
+    });
+
+    if (dto.biometricType && dto.biometricType !== user.biometricType) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { biometricType: dto.biometricType },
+      });
+      user.biometricType = dto.biometricType;
+    }
+
+    await this.recordSecurityEvent({
+      eventType: 'Login',
+      event: 'Biometric Login',
+      outcome: 'SUCCESS',
+      actorType: user.role === 'ADMIN' ? 'ADMIN' : 'USER',
+      actorUserId: user.id,
+      targetUserId: user.id,
+      description: `Biometric login succeeded (${dto.biometricType ?? user.biometricType ?? 'biometrics'}).`,
+      ...context,
+    });
+
+    return this.issueSession(user);
+  }
+
   async logout(
     sessionId: string,
     userId?: string,
@@ -671,6 +698,90 @@ export class AuthService {
     }
   }
 
+  async loginAdmin(
+    dto: AdminLoginDto,
+    context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
+  ) {
+    if (!dto.adminPin || dto.adminPin.trim() !== '921340') {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Admin Login Failed - Invalid Admin PIN',
+        outcome: 'FAILED',
+        actorType: 'ADMIN',
+        description: 'Admin login rejected: Invalid Admin PIN provided.',
+        metadata: { attemptedEmail: dto.email },
+        ...context,
+      });
+      throw new UnauthorizedException('Invalid Admin PIN. Access denied.');
+    }
+
+    const attemptedEmail = this.normalizeEmail(dto.email);
+    const user = await this.users.findByEmail(attemptedEmail);
+    if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Admin Login Failed',
+        outcome: 'FAILED',
+        actorType: 'ADMIN',
+        description: 'Admin authentication credentials were not verified.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
+      throw new UnauthorizedException('Invalid email or password.');
+    }
+
+    if (user.role !== 'ADMIN') {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Admin Login Failed - Not Admin',
+        outcome: 'FAILED',
+        actorType: 'USER',
+        actorUserId: user.id,
+        targetUserId: user.id,
+        description: 'Non-admin user attempted to access the admin portal.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
+      throw new UnauthorizedException(
+        'Access denied. Administrator privileges required.',
+      );
+    }
+
+    if (!user.isActive) {
+      await this.recordSecurityEvent({
+        eventType: 'Login',
+        event: 'Admin Login Failed - Inactive',
+        outcome: 'FAILED',
+        actorType: 'ADMIN',
+        actorUserId: user.id,
+        targetUserId: user.id,
+        description:
+          'Authentication was rejected because administrator account is inactive.',
+        metadata: { attemptedEmail },
+        ...context,
+      });
+      throw new UnauthorizedException(
+        'This administrator account is inactive.',
+      );
+    }
+
+    const session = await this.issueSession(user);
+
+    await this.recordSecurityEvent({
+      eventType: 'Login',
+      event: 'Successful Admin Login',
+      outcome: 'SUCCESS',
+      actorType: 'ADMIN',
+      actorUserId: user.id,
+      targetUserId: user.id,
+      description: 'Administrator authenticated successfully.',
+      metadata: { attemptedEmail },
+      ...context,
+    });
+
+    return session;
+  }
+
   async registerAdmin(
     dto: AdminRegisterDto,
     context?: Pick<SecurityAuditEventInput, 'ipAddress' | 'userAgent'>,
@@ -681,9 +792,11 @@ export class AuthService {
     const email = this.normalizeEmail(dto.email);
     const existing = await this.users.findByEmail(email);
 
-    if (existing && existing.role === 'ADMIN') {
+    if (existing) {
       throw new ConflictException(
-        'An administrator account with this email already exists. Please sign in.',
+        existing.role === 'ADMIN'
+          ? 'An administrator account with this email already exists. Please sign in.'
+          : 'An account with this email already exists as a user account. Admin registration requires a distinct email.',
       );
     }
 
@@ -691,7 +804,7 @@ export class AuthService {
       const existingPhone = await this.prisma.user.findFirst({
         where: { phone: dto.phone.trim() },
       });
-      if (existingPhone && (!existing || existingPhone.id !== existing.id)) {
+      if (existingPhone) {
         throw new ConflictException('An account with this phone number already exists.');
       }
     }
@@ -706,7 +819,6 @@ export class AuthService {
         lastName: dto.lastName.trim(),
         phone: dto.phone?.trim() || null,
         passwordHash,
-        existingUserId: existing?.id || null,
         otpHash: this.hash(code),
         otpExpiresAt: this.otpExpiry(),
         otpAttempts: 0,
@@ -718,7 +830,6 @@ export class AuthService {
         lastName: dto.lastName.trim(),
         phone: dto.phone?.trim() || null,
         passwordHash,
-        existingUserId: existing?.id || null,
         otpHash: this.hash(code),
         otpExpiresAt: this.otpExpiry(),
         lastOtpSentAt: new Date(),
@@ -775,39 +886,21 @@ export class AuthService {
         }),
     );
 
-    let user: any;
-    if (pending.existingUserId) {
-      user = await this.prisma.user.update({
-        where: { id: pending.existingUserId },
-        data: {
-          role: 'ADMIN',
-          passwordHash: pending.passwordHash,
-          firstName: pending.firstName.trim() || undefined,
-          lastName: pending.lastName.trim() || undefined,
-          phone: pending.phone?.trim() || undefined,
-          isActive: true,
-          isEmailVerified: true,
-          isProfileComplete: true,
-          isVerified: true,
-        },
-      });
-    } else {
-      user = await this.prisma.user.create({
-        data: {
-          email: pending.email,
-          passwordHash: pending.passwordHash,
-          firstName: pending.firstName.trim(),
-          lastName: pending.lastName.trim(),
-          phone: pending.phone?.trim() || null,
-          role: 'ADMIN',
-          isActive: true,
-          isEmailVerified: true,
-          isProfileComplete: true,
-          isVerified: true,
-          referralCode: this.newReferralCode(),
-        },
-      });
-    }
+    const user = await this.prisma.user.create({
+      data: {
+        email: pending.email,
+        passwordHash: pending.passwordHash,
+        firstName: pending.firstName.trim(),
+        lastName: pending.lastName.trim(),
+        phone: pending.phone?.trim() || null,
+        role: 'ADMIN',
+        isActive: true,
+        isEmailVerified: true,
+        isProfileComplete: true,
+        isVerified: true,
+        referralCode: this.newReferralCode(),
+      },
+    });
 
     await this.prisma.pendingRegistration.delete({
       where: { id: pending.id },

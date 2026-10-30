@@ -4866,6 +4866,11 @@ export namespace Prisma {
     transactionPinHash: string | null
     transactionPinFailedAttempts: number | null
     transactionPinLockedUntil: Date | null
+    biometricLoginEnabled: boolean | null
+    biometricTransactionEnabled: boolean | null
+    biometricType: string | null
+    rememberDevice: boolean | null
+    autoLockTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4896,6 +4901,11 @@ export namespace Prisma {
     transactionPinHash: string | null
     transactionPinFailedAttempts: number | null
     transactionPinLockedUntil: Date | null
+    biometricLoginEnabled: boolean | null
+    biometricTransactionEnabled: boolean | null
+    biometricType: string | null
+    rememberDevice: boolean | null
+    autoLockTime: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4926,6 +4936,11 @@ export namespace Prisma {
     transactionPinHash: number
     transactionPinFailedAttempts: number
     transactionPinLockedUntil: number
+    biometricLoginEnabled: number
+    biometricTransactionEnabled: number
+    biometricType: number
+    rememberDevice: number
+    autoLockTime: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4966,6 +4981,11 @@ export namespace Prisma {
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
+    biometricLoginEnabled?: true
+    biometricTransactionEnabled?: true
+    biometricType?: true
+    rememberDevice?: true
+    autoLockTime?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4996,6 +5016,11 @@ export namespace Prisma {
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
+    biometricLoginEnabled?: true
+    biometricTransactionEnabled?: true
+    biometricType?: true
+    rememberDevice?: true
+    autoLockTime?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5026,6 +5051,11 @@ export namespace Prisma {
     transactionPinHash?: true
     transactionPinFailedAttempts?: true
     transactionPinLockedUntil?: true
+    biometricLoginEnabled?: true
+    biometricTransactionEnabled?: true
+    biometricType?: true
+    rememberDevice?: true
+    autoLockTime?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5143,6 +5173,11 @@ export namespace Prisma {
     transactionPinHash: string | null
     transactionPinFailedAttempts: number
     transactionPinLockedUntil: Date | null
+    biometricLoginEnabled: boolean
+    biometricTransactionEnabled: boolean
+    biometricType: string | null
+    rememberDevice: boolean
+    autoLockTime: string
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -5192,6 +5227,11 @@ export namespace Prisma {
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: boolean
+    rememberDevice?: boolean
+    autoLockTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
@@ -5247,6 +5287,11 @@ export namespace Prisma {
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: boolean
+    rememberDevice?: boolean
+    autoLockTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -5277,6 +5322,11 @@ export namespace Prisma {
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: boolean
+    rememberDevice?: boolean
+    autoLockTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -5307,11 +5357,16 @@ export namespace Prisma {
     transactionPinHash?: boolean
     transactionPinFailedAttempts?: boolean
     transactionPinLockedUntil?: boolean
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: boolean
+    rememberDevice?: boolean
+    autoLockTime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "preferredLanguage" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "referralCode" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "firstName" | "lastName" | "username" | "displayName" | "phone" | "country" | "countryCode" | "gender" | "dateOfBirth" | "bio" | "address" | "profileImageUrl" | "preferredLanguage" | "isEmailVerified" | "isProfileComplete" | "isVerified" | "isActive" | "role" | "referralCode" | "transactionPinHash" | "transactionPinFailedAttempts" | "transactionPinLockedUntil" | "biometricLoginEnabled" | "biometricTransactionEnabled" | "biometricType" | "rememberDevice" | "autoLockTime" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     passwordResets?: boolean | User$passwordResetsArgs<ExtArgs>
     transactionPinResets?: boolean | User$transactionPinResetsArgs<ExtArgs>
@@ -5396,6 +5451,11 @@ export namespace Prisma {
       transactionPinHash: string | null
       transactionPinFailedAttempts: number
       transactionPinLockedUntil: Date | null
+      biometricLoginEnabled: boolean
+      biometricTransactionEnabled: boolean
+      biometricType: string | null
+      rememberDevice: boolean
+      autoLockTime: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -5870,6 +5930,11 @@ export namespace Prisma {
     readonly transactionPinHash: FieldRef<"User", 'String'>
     readonly transactionPinFailedAttempts: FieldRef<"User", 'Int'>
     readonly transactionPinLockedUntil: FieldRef<"User", 'DateTime'>
+    readonly biometricLoginEnabled: FieldRef<"User", 'Boolean'>
+    readonly biometricTransactionEnabled: FieldRef<"User", 'Boolean'>
+    readonly biometricType: FieldRef<"User", 'String'>
+    readonly rememberDevice: FieldRef<"User", 'Boolean'>
+    readonly autoLockTime: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -47712,6 +47777,11 @@ export namespace Prisma {
     transactionPinHash: 'transactionPinHash',
     transactionPinFailedAttempts: 'transactionPinFailedAttempts',
     transactionPinLockedUntil: 'transactionPinLockedUntil',
+    biometricLoginEnabled: 'biometricLoginEnabled',
+    biometricTransactionEnabled: 'biometricTransactionEnabled',
+    biometricType: 'biometricType',
+    rememberDevice: 'rememberDevice',
+    autoLockTime: 'autoLockTime',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -48843,6 +48913,11 @@ export namespace Prisma {
     transactionPinHash?: StringNullableFilter<"User"> | string | null
     transactionPinFailedAttempts?: IntFilter<"User"> | number
     transactionPinLockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
+    biometricLoginEnabled?: BoolFilter<"User"> | boolean
+    biometricTransactionEnabled?: BoolFilter<"User"> | boolean
+    biometricType?: StringNullableFilter<"User"> | string | null
+    rememberDevice?: BoolFilter<"User"> | boolean
+    autoLockTime?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
@@ -48897,6 +48972,11 @@ export namespace Prisma {
     transactionPinHash?: SortOrderInput | SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrderInput | SortOrder
+    biometricLoginEnabled?: SortOrder
+    biometricTransactionEnabled?: SortOrder
+    biometricType?: SortOrderInput | SortOrder
+    rememberDevice?: SortOrder
+    autoLockTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     passwordResets?: PasswordResetChallengeOrderByRelationAggregateInput
@@ -48954,6 +49034,11 @@ export namespace Prisma {
     transactionPinHash?: StringNullableFilter<"User"> | string | null
     transactionPinFailedAttempts?: IntFilter<"User"> | number
     transactionPinLockedUntil?: DateTimeNullableFilter<"User"> | Date | string | null
+    biometricLoginEnabled?: BoolFilter<"User"> | boolean
+    biometricTransactionEnabled?: BoolFilter<"User"> | boolean
+    biometricType?: StringNullableFilter<"User"> | string | null
+    rememberDevice?: BoolFilter<"User"> | boolean
+    autoLockTime?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     passwordResets?: PasswordResetChallengeListRelationFilter
@@ -49008,6 +49093,11 @@ export namespace Prisma {
     transactionPinHash?: SortOrderInput | SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrderInput | SortOrder
+    biometricLoginEnabled?: SortOrder
+    biometricTransactionEnabled?: SortOrder
+    biometricType?: SortOrderInput | SortOrder
+    rememberDevice?: SortOrder
+    autoLockTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -49046,6 +49136,11 @@ export namespace Prisma {
     transactionPinHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     transactionPinFailedAttempts?: IntWithAggregatesFilter<"User"> | number
     transactionPinLockedUntil?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    biometricLoginEnabled?: BoolWithAggregatesFilter<"User"> | boolean
+    biometricTransactionEnabled?: BoolWithAggregatesFilter<"User"> | boolean
+    biometricType?: StringNullableWithAggregatesFilter<"User"> | string | null
+    rememberDevice?: BoolWithAggregatesFilter<"User"> | boolean
+    autoLockTime?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -52657,6 +52752,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -52711,6 +52811,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -52765,6 +52870,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -52819,6 +52929,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -52873,6 +52988,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -52903,6 +53023,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52933,6 +53058,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -57341,6 +57471,11 @@ export namespace Prisma {
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
+    biometricLoginEnabled?: SortOrder
+    biometricTransactionEnabled?: SortOrder
+    biometricType?: SortOrder
+    rememberDevice?: SortOrder
+    autoLockTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57375,6 +57510,11 @@ export namespace Prisma {
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
+    biometricLoginEnabled?: SortOrder
+    biometricTransactionEnabled?: SortOrder
+    biometricType?: SortOrder
+    rememberDevice?: SortOrder
+    autoLockTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -57405,6 +57545,11 @@ export namespace Prisma {
     transactionPinHash?: SortOrder
     transactionPinFailedAttempts?: SortOrder
     transactionPinLockedUntil?: SortOrder
+    biometricLoginEnabled?: SortOrder
+    biometricTransactionEnabled?: SortOrder
+    biometricType?: SortOrder
+    rememberDevice?: SortOrder
+    autoLockTime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -65836,6 +65981,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -65889,6 +66039,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -65958,6 +66113,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -66011,6 +66171,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -66064,6 +66229,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionPinResets?: TransactionPinResetChallengeCreateNestedManyWithoutUserInput
@@ -66117,6 +66287,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     transactionPinResets?: TransactionPinResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -66186,6 +66361,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionPinResets?: TransactionPinResetChallengeUpdateManyWithoutUserNestedInput
@@ -66239,6 +66419,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transactionPinResets?: TransactionPinResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -66292,6 +66477,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -66345,6 +66535,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -66414,6 +66609,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -66467,6 +66667,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -66520,6 +66725,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -66573,6 +66783,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -66642,6 +66857,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -66695,6 +66915,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -66748,6 +66973,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -66801,6 +67031,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -67236,6 +67471,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -67289,6 +67529,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -68297,6 +68542,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -68350,6 +68600,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -68581,6 +68836,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -68634,6 +68894,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -68873,6 +69138,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -68926,6 +69196,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -69401,6 +69676,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -69454,6 +69734,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -70191,6 +70476,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -70244,6 +70534,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -70302,6 +70597,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -70355,6 +70655,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -70629,6 +70934,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -70682,6 +70992,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -70746,6 +71061,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -70799,6 +71119,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -71094,6 +71419,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -71147,6 +71477,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -71255,6 +71590,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -71308,6 +71648,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -71394,6 +71739,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -71447,6 +71797,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -71555,6 +71910,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -71608,6 +71968,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -71661,6 +72026,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -71714,6 +72084,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -72139,6 +72514,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -72192,6 +72572,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -72628,6 +73013,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -72681,6 +73071,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -72916,6 +73311,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -72969,6 +73369,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -73144,6 +73549,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -73197,6 +73607,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -73385,6 +73800,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -73438,6 +73858,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -73840,6 +74265,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -73893,6 +74323,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -74015,6 +74450,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -74068,6 +74508,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -74180,6 +74625,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -74233,6 +74683,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -74417,6 +74872,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -74470,6 +74930,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -74656,6 +75121,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -74709,6 +75179,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -74778,6 +75253,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -74831,6 +75311,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -74884,6 +75369,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -74937,6 +75427,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -74995,6 +75490,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -75048,6 +75548,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -75151,6 +75656,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -75204,6 +75714,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -75268,6 +75783,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -75321,6 +75841,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -75427,6 +75952,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -75480,6 +76010,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -75628,6 +76163,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -75681,6 +76221,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -75779,6 +76324,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -75832,6 +76382,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -75890,6 +76445,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -75943,6 +76503,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -76047,6 +76612,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -76100,6 +76670,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -76164,6 +76739,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -76217,6 +76797,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -76270,6 +76855,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -76323,6 +76913,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -76392,6 +76987,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -76445,6 +77045,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput
@@ -76498,6 +77103,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeCreateNestedManyWithoutUserInput
@@ -76551,6 +77161,11 @@ export namespace Prisma {
     transactionPinHash?: string | null
     transactionPinFailedAttempts?: number
     transactionPinLockedUntil?: Date | string | null
+    biometricLoginEnabled?: boolean
+    biometricTransactionEnabled?: boolean
+    biometricType?: string | null
+    rememberDevice?: boolean
+    autoLockTime?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     passwordResets?: PasswordResetChallengeUncheckedCreateNestedManyWithoutUserInput
@@ -76620,6 +77235,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUpdateManyWithoutUserNestedInput
@@ -76673,6 +77293,11 @@ export namespace Prisma {
     transactionPinHash?: NullableStringFieldUpdateOperationsInput | string | null
     transactionPinFailedAttempts?: IntFieldUpdateOperationsInput | number
     transactionPinLockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    biometricLoginEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricTransactionEnabled?: BoolFieldUpdateOperationsInput | boolean
+    biometricType?: NullableStringFieldUpdateOperationsInput | string | null
+    rememberDevice?: BoolFieldUpdateOperationsInput | boolean
+    autoLockTime?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passwordResets?: PasswordResetChallengeUncheckedUpdateManyWithoutUserNestedInput

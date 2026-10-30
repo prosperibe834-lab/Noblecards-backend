@@ -36,7 +36,11 @@ export class EmailDto {
 
 export class LoginDto extends EmailDto {
   @IsString() @MinLength(1) password!: string;
-  @IsOptional() @IsString() adminPin?: string;
+}
+
+export class AdminLoginDto extends EmailDto {
+  @IsString() @MinLength(1) password!: string;
+  @IsString() adminPin!: string;
 }
 
 export class AdminRegisterDto {
@@ -71,3 +75,10 @@ export class ResendOtpDto extends EmailDto {
   @IsOptional() @IsIn(['signup', 'password-recovery']) purpose?:
     'signup' | 'password-recovery';
 }
+
+export class BiometricLoginDto {
+  @IsString() @MinLength(20) refreshToken!: string;
+  @IsOptional() @IsString() deviceId?: string;
+  @IsOptional() @IsString() biometricType?: string;
+}
+
